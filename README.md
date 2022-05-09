@@ -1,2 +1,2 @@
-# companion-module-[replace with module name]
+# companion-module-zoom-zoomosc
 See [HELP.md](./HELP.md) and [LICENSE](./LICENSE)
