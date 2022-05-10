@@ -43,7 +43,8 @@ class ZoomInstance extends instance_skel<Config> {
 	// We use ZoomID as idex
 	public ZoomUserData!: {
 		zoomId: number
-		username: string
+		userName: string
+		targetIndex: number
 		galleryIndex: number
 		mute?: boolean
 		videoOn?: boolean
