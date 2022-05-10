@@ -8,6 +8,8 @@ export interface ZoomActions {
 	AddPin: ZoomAction<UserActionCallback>
 	Mute: ZoomAction<UserActionCallback>
 	Unmute: ZoomAction<UserActionCallback>
+	UserVideoOnOutputOutput: ZoomAction<UserActionCallback>
+	UserVideoOffOutputOutput: ZoomAction<UserActionCallback>
 	// Global Actions
 	EnableUsersUnmute: ZoomAction<GlobalActionCallback>
 	// Index signature
@@ -59,11 +61,13 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '', label: 'no users' }]
+	let CHOICES_USERS_DEFAULT = '0'
 	if (instance.ZoomUserData.length !== 0) {
 		CHOICES_USERS = instance.ZoomUserData.filter((n) => n).map((id) => ({
 			id: id.zoomId.toString(),
 			label: id.username,
 		}))
+		CHOICES_USERS_DEFAULT = CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : '0'
 	}
 
 	const sendUserActionCommand = (
@@ -86,7 +90,6 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 
 	return {
 		// User Actions
-
 		Pin: {
 			label: 'Pin User',
 			options: [
@@ -94,7 +97,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : 'no user yet',
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 			],
@@ -116,7 +119,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : 'no user yet',
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 			],
@@ -138,7 +141,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : 'no user yet',
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 			],
@@ -160,7 +163,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : 'no user yet',
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 			],
@@ -173,6 +176,50 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					},
 				}
 				sendUserActionCommand(Unmute)
+			},
+		},
+		UserVideoOnOutputOutput: {
+			label: 'Camera on for user',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'User',
+					id: 'user',
+					default: CHOICES_USERS_DEFAULT,
+					choices: CHOICES_USERS,
+				},
+			],
+			callback: (action) => {
+				const UserVideoOnOutputOutput: any = {
+					id: 'UserVideoOnOutputOutput',
+					options: {
+						user:  { type: 'i', value: action.options.user},
+						command: command.UserVideoOnOutputOutput,
+					},
+				}
+				sendUserActionCommand(UserVideoOnOutputOutput)
+			},
+		},
+		UserVideoOffOutputOutput: {
+			label: 'Camera on for user',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'User',
+					id: 'user',
+					default: CHOICES_USERS_DEFAULT,
+					choices: CHOICES_USERS,
+				},
+			],
+			callback: (action) => {
+				const UserVideoOffOutputOutput: any = {
+					id: 'UserVideoOffOutputOutput',
+					options: {
+						user:  { type: 'i', value: action.options.user},
+						command: command.UserVideoOffOutputOutput,
+					},
+				}
+				sendUserActionCommand(UserVideoOffOutputOutput)
 			},
 		},
 		// Global actions
