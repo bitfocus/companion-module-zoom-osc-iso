@@ -19,6 +19,7 @@ type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
 
 export interface Options {
 	mute: EnforceDefault<CompanionInputFieldDropdown, number>
+	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
 	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
 	foregroundColorBlack: EnforceDefault<CompanionInputFieldColor, number>
@@ -41,10 +42,13 @@ export const rgb = (red: number, green: number, blue: number): number => {
 	return ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff)
 }
 
+	
 /**
  * @description Common Action and Feedback options
  */
 export const options: Options = {
+
+
 	mute: {
 		type: 'dropdown',
 		label: 'Mute',
@@ -64,6 +68,17 @@ export const options: Options = {
 		choices: [
 			{ id: 0, label: 'off' },
 			{ id: 1, label: 'on' },
+		],
+	},
+
+	handRaised: {
+		type: 'dropdown',
+		label: 'Handraise or lower',
+		id: 'handRaised',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'lowered' },
+			{ id: 1, label: 'raised' },
 		],
 	},
 

@@ -139,5 +139,29 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				else return
 			},
 		},
+		handRaised: {
+			type: 'advanced',
+			label: 'hand raised',
+			description: 'Indicates when hand is raised',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'User',
+					id: 'user',
+					default: instance.ZoomUserData.find((element) => element !== undefined)
+						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
+						: 'no user yet',
+					choices: CHOICES_USERS,
+				},
+				options.handRaised,
+				options.foregroundColor,
+				options.backgroundColorYellow,
+			],
+			callback: (feedback) => {
+				if (instance.ZoomUserData[feedback.options.user].handRaised === (feedback.options.handRaised == 1 ? true : false))
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
 	}
 }
