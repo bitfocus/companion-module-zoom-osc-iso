@@ -1,6 +1,7 @@
 import { CompanionActionEventInfo, CompanionActionEvent, SomeCompanionInputField } from '../../../instance_skel_types'
 import ZoomInstance from './index'
-const command = require('./osccommands').commands
+const UserActions = require('./osccommands').UserActions
+const GlobalActions = require('./osccommands').GlobalActions
 
 export interface ZoomActions {
 	// UserAction
@@ -53,11 +54,6 @@ export interface ZoomAction<T> {
 }
 
 export function getActions(instance: ZoomInstance): ZoomActions {
-	/**
-	 * @param action Action callback object
-	 * @param _info Unused
-	 * @description Sends functions/params from actions that don't require complex logic
-	 */
 
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '', label: 'no users' }]
@@ -65,9 +61,11 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 	if (instance.ZoomUserData.length !== 0) {
 		CHOICES_USERS = instance.ZoomUserData.filter((n) => n).map((id) => ({
 			id: id.zoomId.toString(),
-			label: id.username,
+			label: id.userName,
 		}))
-		CHOICES_USERS_DEFAULT = CHOICES_USERS.find(element=>element!==undefined) ? CHOICES_USERS.find(element=>element!==undefined)!.id : '0'
+		CHOICES_USERS_DEFAULT = CHOICES_USERS.find((element) => element !== undefined)
+			? CHOICES_USERS.find((element) => element !== undefined)!.id
+			: '0'
 	}
 
 	const sendUserActionCommand = (
@@ -79,6 +77,8 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 		let args = action.options.user
 		if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 	}
+
+
 	const sendGlobalActionCommand = (
 		action: Readonly<GlobalActionCallbacks>,
 		_info?: CompanionActionEventInfo | null
@@ -89,7 +89,6 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 	}
 
 	return {
-		// User Actions
 		Pin: {
 			label: 'Pin User',
 			options: [
@@ -106,7 +105,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					id: 'Pin',
 					options: {
 						user: action.options.user,
-						command: command.Pin,
+						command: UserActions.Pin,
 					},
 				}
 				sendUserActionCommand(Pin)
@@ -128,7 +127,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 					id: 'AddPin',
 					options: {
 						user: action.options.user,
-						command: command.AddPin,
+						command: UserActions.AddPin,
 					},
 				}
 				sendUserActionCommand(AddPin)
@@ -149,8 +148,8 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				const Mute: any = {
 					id: 'Mute',
 					options: {
-						user: { type: 'i', value: action.options.user},
-						command: command.Mute,
+						user: { type: 'i', value: action.options.user },
+						command: UserActions.Mute,
 					},
 				}
 				sendUserActionCommand(Mute)
@@ -171,8 +170,8 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				const Unmute: any = {
 					id: 'Unmute',
 					options: {
-						user:  { type: 'i', value: action.options.user},
-						command: command.Unmute,
+						user: { type: 'i', value: action.options.user },
+						command: UserActions.Unmute,
 					},
 				}
 				sendUserActionCommand(Unmute)
@@ -193,15 +192,15 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				const UserVideoOnOutputOutput: any = {
 					id: 'UserVideoOnOutputOutput',
 					options: {
-						user:  { type: 'i', value: action.options.user},
-						command: command.UserVideoOnOutputOutput,
+						user: { type: 'i', value: action.options.user },
+						command: UserActions.UserVideoOnOutputOutput,
 					},
 				}
 				sendUserActionCommand(UserVideoOnOutputOutput)
 			},
 		},
 		UserVideoOffOutputOutput: {
-			label: 'Camera on for user',
+			label: 'Camera off for user',
 			options: [
 				{
 					type: 'dropdown',
@@ -215,8 +214,8 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				const UserVideoOffOutputOutput: any = {
 					id: 'UserVideoOffOutputOutput',
 					options: {
-						user:  { type: 'i', value: action.options.user},
-						command: command.UserVideoOffOutputOutput,
+						user: { type: 'i', value: action.options.user },
+						command: UserActions.UserVideoOffOutputOutput,
 					},
 				}
 				sendUserActionCommand(UserVideoOffOutputOutput)
@@ -230,7 +229,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				const EnableUsersToUnmute: any = {
 					id: 'EnableUsersUnmute',
 					options: {
-						command: command.EnableUsersToUnmute,
+						command: GlobalActions.EnableUsersToUnmute,
 					},
 				}
 				sendGlobalActionCommand(EnableUsersToUnmute)
