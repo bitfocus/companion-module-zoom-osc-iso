@@ -12,23 +12,13 @@ interface ZoomOSCResponse {
 
 export class OSC {
 	private readonly instance: ZoomInstance
-	private oscHost: string
-	private oscTXPort: number
-	private oscRXPort: number
-	private keepAliveInterval: NodeJS.Timer | undefined
-	private udpPort
+	private oscHost: string = ''
+	private oscTXPort: number = 9099
+	private oscRXPort: number = 1234
+	private udpPort: any
 
 	constructor(instance: ZoomInstance) {
 		this.instance = instance
-		this.oscHost = instance.config.host
-		this.oscTXPort = instance.config.tx_port
-		this.oscRXPort = instance.config.rx_port
-
-		this.udpPort = new osc.UDPPort({
-			localAddress: '0.0.0.0',
-			localPort: this.oscRXPort,
-			metadata: true,
-		})
 
 		this.instance.ZoomClientDataObj = {
 			last_ping: 0,
@@ -46,33 +36,16 @@ export class OSC {
 		}
 		this.instance.ZoomUserData = []
 
-		// Listen for incoming OSC messages.
-		this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
-			this.processData(oscMsg)
-			this.instance.status(this.instance.STATUS_OK)
-		})
-		this.udpPort.on('error', (err: { code: string; message: string }) => {
-			if (err.code === 'EADDRINUSE') {
-				console.log('error', 'Error: Selected port in use.' + err.message)
-			}
-		})
-
-		// Open the socket.
-		this.udpPort.open()
-
-		// When the port is read
-		this.udpPort.on('ready', () => {
-			console.log('OSC listener active')
-			// this.variables = new Variables(this)
-			this.instance.log('debug', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
-			// Subscribe to ZoomOSC
-			this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.config.subscribeMode })
-			this.sendCommand('/zoom/ping')
-			// Send this to fetch initial data
-			this.sendCommand('/zoom/list')
-		})
-
-		this.init()
+		// Connect to ZoomOSC
+		this.Connect()
+			.then(() => {
+				this.instance.status(this.instance.STATUS_WARNING, 'Listening')
+				console.log('ZoomOSC listener active')
+			})
+			.catch(() => {
+				this.instance.log('warn', `Unable to connect, please configure a host and port in the instance configuration`)
+				this.instance.status(this.instance.STATUS_ERROR, 'wrong settings')
+			})
 	}
 
 	/**
@@ -86,11 +59,48 @@ export class OSC {
 	/**
 	 * @description Create a OSC connection to Zoom
 	 */
-	public readonly init = (): void => {
-		if (this.oscHost === undefined || this.oscTXPort === undefined) {
-			this.instance.log('warn', `Unable to connect, please configure a host and port in the instance configuration`)
-			return
-		}
+	public readonly Connect = () => {
+		let p = new Promise((resolve, reject) => {
+			if (this.oscHost === undefined || this.oscTXPort === undefined) {
+				reject('no host or port in database')
+			}
+			this.oscHost = this.instance.config.host
+			this.oscTXPort = this.instance.config.tx_port
+			this.oscRXPort = this.instance.config.rx_port
+
+			this.udpPort = new osc.UDPPort({
+				localAddress: '0.0.0.0',
+				localPort: this.oscRXPort,
+				metadata: true,
+			})
+
+			// Listen for incoming OSC messages.
+			this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
+				this.processData(oscMsg)
+			})
+			this.udpPort.on('error', (err: { code: string; message: string }) => {
+				if (err.code === 'EADDRINUSE') {
+					console.log('error', 'Error: Selected port in use.' + err.message)
+					reject('port in use')
+				}
+			})
+
+			// Open the socket.
+			this.udpPort.open()
+
+			// When the port is read
+			this.udpPort.on('ready', () => {
+				// this.variables = new Variables(this)
+				this.instance.log('debug', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
+				// Subscribe to ZoomOSC
+				this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.config.subscribeMode })
+				this.sendCommand('/zoom/ping')
+				// Send this to fetch initial data
+				this.sendCommand('/zoom/list')
+				resolve('ready for OSC')
+			})
+		})
+		return p
 	}
 
 	/**
@@ -135,6 +145,7 @@ export class OSC {
 
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
+			this.instance.status(this.instance.STATUS_OK)
 			switch (zoomPart2) {
 				case 'me':
 				// let isMe = true
@@ -246,6 +257,7 @@ export class OSC {
 					console.log('/zoomosc/galleryShape', data.args)
 					this.instance.ZoomClientDataObj.galleryShape[0] = data.args[0].value
 					this.instance.ZoomClientDataObj.galleryShape[1] = data.args[1].value
+					this.instance.variables?.updateVariables()
 					break
 
 				case 'galleryOrder':
@@ -308,20 +320,15 @@ export class OSC {
 	public readonly update = (): void => {
 		const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
 		if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
-			console.log('update config')
 			this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
-			this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
+			// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
 		}
 		if (hostCheck) {
 			this.oscHost = this.instance.config.host
 			this.oscRXPort = this.instance.config.rx_port
 			this.oscTXPort = this.instance.config.tx_port
 			this.instance.config = this.instance.config
-			if (this.keepAliveInterval != undefined) clearInterval(this.keepAliveInterval)
-
-			let ready = true
-
-			if (ready) this.init()
+			this.Connect()
 		}
 	}
 }
