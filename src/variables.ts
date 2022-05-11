@@ -54,12 +54,18 @@ export class Variables {
 		const globalSettings: Set<InstanceVariableDefinition> = new Set([
 			// Status
 			{ label: 'zoomOSC version', name: 'zoomOSCversion' },
-			{ label: 'callStatus', name: 'callStatus' }
+			{ label: 'call status', name: 'callStatus' },
+		])
+		const gallery: Set<InstanceVariableDefinition> = new Set([
+			// Status
+			{ label: 'gallery shape X', name: 'galleryShapeX' },
+			{ label: 'gallery shape Y', name: 'galleryShapeY' },
 		])
 
 		
 		let filteredVariables = [
 			...globalSettings,
+			...gallery
 		]
 
 		this.instance.setVariableDefinitions(filteredVariables)
@@ -72,7 +78,9 @@ export class Variables {
 		const newVariables: InstanceVariableValue = {}
 
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
-		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus
+		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
+		newVariables['galleryShapeX'] = this.instance.ZoomClientDataObj.galleryShape[0]
+		newVariables['galleryShapeY'] = this.instance.ZoomClientDataObj.galleryShape[1]
 	
 		this.set(newVariables)
 
