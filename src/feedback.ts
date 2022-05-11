@@ -86,7 +86,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	if (instance.ZoomUserData.length !== 0) {
 		CHOICES_USERS = instance.ZoomUserData.filter((n) => n).map((id) => ({
 			id: id.zoomId.toString(),
-			label: id.username,
+			label: id.userName,
 		}))
 	}
 
