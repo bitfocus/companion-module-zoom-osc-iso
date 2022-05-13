@@ -245,6 +245,18 @@ export class OSC {
 							console.log('receiving', data)
 							this.createZoomUser(data)
 							break
+						case 'chat':
+							console.log('receiving', data)
+							if (this.instance.ZoomUserData[zoomId]) {
+								// Last chat message variable?
+							} else {this.createZoomUser(data)}
+							break
+						case 'roleChanged':
+							console.log('receiving', data)
+							if (this.instance.ZoomUserData[zoomId]) {
+								this.instance.ZoomUserData[zoomId].userRole = data.args[5].value
+							} else {this.createZoomUser(data)}
+							break
 
 						default:
 							console.log('No Case provided for: ' + data.address)

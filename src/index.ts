@@ -49,6 +49,7 @@ class ZoomInstance extends instance_skel<Config> {
 		mute?: boolean
 		videoOn?: boolean
 		handRaised?: boolean
+		userRole?: number
 	}[]
 
 	public connected = false
