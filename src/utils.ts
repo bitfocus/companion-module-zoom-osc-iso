@@ -1,7 +1,4 @@
-import {
-	CompanionInputFieldColor,
-	CompanionInputFieldDropdown,
-} from '../../../instance_skel_types'
+import { CompanionInputFieldColor, CompanionInputFieldDropdown, CompanionInputFieldTextWithVariablesInput } from '../../../instance_skel_types'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
@@ -19,6 +16,7 @@ type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
 
 export interface Options {
 	mute: EnforceDefault<CompanionInputFieldDropdown, number>
+	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
 	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
@@ -42,82 +40,161 @@ export const rgb = (red: number, green: number, blue: number): number => {
 	return ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff)
 }
 
-	
+export const options: Options = {
+		message: {
+			type: 'textwithvariables',
+			label: 'Message',
+			id: 'msg',
+			default: ''
+		},
+		mute: {
+			type: 'dropdown',
+			label: 'Mute',
+			id: 'mute',
+			default: 0,
+			choices: [
+				{ id: 0, label: 'unmute' },
+				{ id: 1, label: 'mute' },
+			],
+		},
+
+		video: {
+			type: 'dropdown',
+			label: 'Camera on/of',
+			id: 'video',
+			default: 0,
+			choices: [
+				{ id: 0, label: 'off' },
+				{ id: 1, label: 'on' },
+			],
+		},
+
+		handRaised: {
+			type: 'dropdown',
+			label: 'Handraise or lower',
+			id: 'handRaised',
+			default: 0,
+			choices: [
+				{ id: 0, label: 'lowered' },
+				{ id: 1, label: 'raised' },
+			],
+		},
+
+		foregroundColor: {
+			type: 'colorpicker',
+			label: 'Foreground color',
+			id: 'fg',
+			default: rgb(255, 255, 255),
+		},
+
+		foregroundColorBlack: {
+			type: 'colorpicker',
+			label: 'Foreground color',
+			id: 'fg',
+			default: rgb(0, 0, 0),
+		},
+
+		backgroundColorPreview: {
+			type: 'colorpicker',
+			label: 'Background color when in preview',
+			id: 'bg_pvw',
+			default: rgb(0, 255, 0),
+		},
+
+		backgroundColorProgram: {
+			type: 'colorpicker',
+			label: 'Background color when in grogram',
+			id: 'bg',
+			default: rgb(255, 0, 0),
+		},
+
+		backgroundColorYellow: {
+			type: 'colorpicker',
+			label: 'Background color',
+			id: 'bg',
+			default: rgb(255, 255, 0),
+		},
+}
 /**
  * @description Common Action and Feedback options
  */
-export const options: Options = {
+// export const options: Options = {
+// 	users: {
+// 		type: 'dropdown',
+// 		label: 'User',
+// 		id: 'user',
+// 		default: CHOICES_USERS_DEFAULT,
+// 		choices: CHOICES_USERS,
+// 	},
 
+// 	mute: {
+// 		type: 'dropdown',
+// 		label: 'Mute',
+// 		id: 'mute',
+// 		default: 0,
+// 		choices: [
+// 			{ id: 0, label: 'unmute' },
+// 			{ id: 1, label: 'mute' },
+// 		],
+// 	},
 
-	mute: {
-		type: 'dropdown',
-		label: 'Mute',
-		id: 'mute',
-		default: 0,
-		choices: [
-			{ id: 0, label: 'unmute' },
-			{ id: 1, label: 'mute' },
-		],
-	},
+// 	video: {
+// 		type: 'dropdown',
+// 		label: 'Camera on/of',
+// 		id: 'video',
+// 		default: 0,
+// 		choices: [
+// 			{ id: 0, label: 'off' },
+// 			{ id: 1, label: 'on' },
+// 		],
+// 	},
 
-	video: {
-		type: 'dropdown',
-		label: 'Camera on/of',
-		id: 'video',
-		default: 0,
-		choices: [
-			{ id: 0, label: 'off' },
-			{ id: 1, label: 'on' },
-		],
-	},
+// 	handRaised: {
+// 		type: 'dropdown',
+// 		label: 'Handraise or lower',
+// 		id: 'handRaised',
+// 		default: 0,
+// 		choices: [
+// 			{ id: 0, label: 'lowered' },
+// 			{ id: 1, label: 'raised' },
+// 		],
+// 	},
 
-	handRaised: {
-		type: 'dropdown',
-		label: 'Handraise or lower',
-		id: 'handRaised',
-		default: 0,
-		choices: [
-			{ id: 0, label: 'lowered' },
-			{ id: 1, label: 'raised' },
-		],
-	},
+// 	foregroundColor: {
+// 		type: 'colorpicker',
+// 		label: 'Foreground color',
+// 		id: 'fg',
+// 		default: rgb(255, 255, 255),
+// 	},
 
-	foregroundColor: {
-		type: 'colorpicker',
-		label: 'Foreground color',
-		id: 'fg',
-		default: rgb(255, 255, 255),
-	},
+// 	foregroundColorBlack: {
+// 		type: 'colorpicker',
+// 		label: 'Foreground color',
+// 		id: 'fg',
+// 		default: rgb(0, 0, 0),
+// 	},
 
-	foregroundColorBlack: {
-		type: 'colorpicker',
-		label: 'Foreground color',
-		id: 'fg',
-		default: rgb(0, 0, 0),
-	},
+// 	backgroundColorPreview: {
+// 		type: 'colorpicker',
+// 		label: 'Background color when in preview',
+// 		id: 'bg_pvw',
+// 		default: rgb(0, 255, 0),
+// 	},
 
-	backgroundColorPreview: {
-		type: 'colorpicker',
-		label: 'Background color when in preview',
-		id: 'bg_pvw',
-		default: rgb(0, 255, 0),
-	},
+// 	backgroundColorProgram: {
+// 		type: 'colorpicker',
+// 		label: 'Background color when in grogram',
+// 		id: 'bg',
+// 		default: rgb(255, 0, 0),
+// 	},
 
-	backgroundColorProgram: {
-		type: 'colorpicker',
-		label: 'Background color when in grogram',
-		id: 'bg',
-		default: rgb(255, 0, 0),
-	},
-
-	backgroundColorYellow: {
-		type: 'colorpicker',
-		label: 'Background color',
-		id: 'bg',
-		default: rgb(255, 255, 0),
-	},
-
-}
+// 	backgroundColorYellow: {
+// 		type: 'colorpicker',
+// 		label: 'Background color',
+// 		id: 'bg',
+// 		default: rgb(255, 255, 0),
+// 	},
+// }
 
 /**
  * @param time Time in miliseconds or seconds
