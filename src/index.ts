@@ -29,6 +29,7 @@ class ZoomInstance extends instance_skel<Config> {
 	public ZoomClientDataObj!: {
 		last_ping: number
 		subscribeMode: number
+		selectedCallers: [number]
 		galleryShape: [ number, number ]
 		oldgalleryShape: [number, number]
 		activeSpeaker: string
@@ -93,6 +94,7 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public readonly destroy = (): void => {
 		this.log('debug', `Instance destroyed: ${this.id}`)
+		this.OSC?.destroy()
 	}
 
 	/**

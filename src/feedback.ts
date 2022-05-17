@@ -14,6 +14,8 @@ export interface ZoomFeedbacks {
 	microphoneMute: ZoomFeedback<microphoneMuteCallback>
 	// Video
 	camera: ZoomFeedback<cameraCallback>
+	handRaised: ZoomFeedback<handRaisedCallback>
+	selectedUser: ZoomFeedback<selectedUserCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
@@ -38,9 +40,26 @@ interface cameraCallback {
 		user: number
 	}>
 }
+interface handRaisedCallback {
+	type: ' handRaised'
+	options: Readonly<{
+		fg: number
+		bg: number
+		user: number
+		handRaised: number
+	}>
+}
+interface selectedUserCallback {
+	type: 'selectedUser'
+	options: Readonly<{
+		fg: number
+		bg: number
+		user: number
+	}>
+}
 
 // Callback type for Presets
-export type FeedbackCallbacks = microphoneMuteCallback | cameraCallback
+export type FeedbackCallbacks = microphoneMuteCallback | cameraCallback | selectedUserCallback | handRaisedCallback
 
 // Force options to have a default to prevent sending undefined values
 type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
@@ -159,6 +178,29 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (instance.ZoomUserData[feedback.options.user].handRaised === (feedback.options.handRaised == 1 ? true : false))
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
+		selectedUser: {
+			type: 'advanced',
+			label: 'Selected user',
+			description: 'Indicate if a user is pre-selected for a command/action',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'User',
+					id: 'user',
+					default: instance.ZoomUserData.find((element) => element !== undefined)
+						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
+						: 'no user yet',
+					choices: CHOICES_USERS,
+				},
+				options.foregroundColor,
+				options.backgroundColorYellow,
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.selectedCallers[0] === (feedback.options.user))
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},

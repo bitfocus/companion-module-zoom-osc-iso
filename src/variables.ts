@@ -55,6 +55,7 @@ export class Variables {
 			// Status
 			{ label: 'zoomOSC version', name: 'zoomOSCversion' },
 			{ label: 'call status', name: 'callStatus' },
+			// { label: 'Selected caller(s)', name: 'selectedCallers' },
 		])
 		const gallery: Set<InstanceVariableDefinition> = new Set([
 			// Status
@@ -76,7 +77,7 @@ export class Variables {
 	 */
 	public readonly updateVariables = (): void => {
 		const newVariables: InstanceVariableValue = {}
-
+		// newVariables['selectedCallers'] = this.instance.ZoomClientDataObj.selectedCallers.toString()
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['galleryShapeX'] = this.instance.ZoomClientDataObj.galleryShape[0]

@@ -22,6 +22,7 @@ export class OSC {
 
 		this.instance.ZoomClientDataObj = {
 			last_ping: 0,
+			selectedCallers: [0],
 			subscribeMode: 0,
 			galleryShape: [0, 0],
 			oldgalleryShape: [0, 0],
