@@ -1,4 +1,4 @@
-import { CompanionInputFieldColor, CompanionInputFieldDropdown, CompanionInputFieldTextWithVariablesInput } from '../../../instance_skel_types'
+import { SomeCompanionConfigField, CompanionInputFieldColor, CompanionInputFieldDropdown, CompanionInputFieldNumber, CompanionInputFieldTextWithVariablesInput } from '../../../instance_skel_types'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
@@ -17,6 +17,16 @@ type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
 export interface Options {
 	mute: EnforceDefault<CompanionInputFieldDropdown, number>
 	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	userSelectedInfo: SomeCompanionConfigField
+	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	intX: EnforceDefault<CompanionInputFieldNumber, number>
+	intY: EnforceDefault<CompanionInputFieldNumber, number>
+	level: EnforceDefault<CompanionInputFieldNumber, number>
+	mode: EnforceDefault<CompanionInputFieldNumber, number>
+	id: EnforceDefault<CompanionInputFieldNumber, number>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
 	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
@@ -41,10 +51,81 @@ export const rgb = (red: number, green: number, blue: number): number => {
 }
 
 export const options: Options = {
+		userSelectedInfo: {
+			type: 'text',
+			id: 'info',
+			width: 12,
+			label: 'Make sure you select a user or a group first, via presets',
+			value: ''
+		},
 		message: {
 			type: 'textwithvariables',
 			label: 'Message',
 			id: 'msg',
+			default: ''
+		},
+		name: {
+			type: 'textwithvariables',
+			label: 'Name',
+			id: 'name',
+			default: ''
+		},
+		meetingID: {
+			type: 'textwithvariables',
+			label: 'Meeting ID',
+			id: 'meetingID',
+			default: ''
+		},
+		intX: {
+			type: 'number',
+			label: 'int X',
+			id: 'intX',
+			min: 0,
+			max: 5000,
+			default: 0
+		},
+		intY: {
+			type: 'number',
+			label: 'int X',
+			id: 'intX',
+			min: 0,
+			max: 5000,
+			default: 0
+		},
+		level: {
+			type: 'number',
+			label: 'Level',
+			id: 'level',
+			min: 0,
+			max: 5,
+			default: 0
+		},
+		mode: {
+			type: 'number',
+			label: 'Mode',
+			id: 'mode',
+			min: 0,
+			max: 5,
+			default: 0
+		},
+		id: {
+			type: 'number',
+			label: 'ID',
+			id: 'id',
+			min: 0,
+			max: 99999999,
+			default: 0
+		},
+		password: {
+			type: 'textwithvariables',
+			label: 'Password(optional)',
+			id: 'password',
+			default: ''
+		},
+		zak: {
+			type: 'textwithvariables',
+			label: 'Zak',
+			id: 'zak',
 			default: ''
 		},
 		mute: {
@@ -57,7 +138,6 @@ export const options: Options = {
 				{ id: 1, label: 'mute' },
 			],
 		},
-
 		video: {
 			type: 'dropdown',
 			label: 'Camera on/of',
