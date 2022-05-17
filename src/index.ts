@@ -3,14 +3,14 @@ import {
 	CompanionActions,
 	CompanionConfigField,
 	CompanionFeedbacks,
+	CompanionPreset,
 	CompanionSystem,
-	// CompanionPreset,
 } from '../../../instance_skel_types'
 import { Config } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
-// import { getPresets } from './presets'
+import { getPresets } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
@@ -85,7 +85,7 @@ class ZoomInstance extends instance_skel<Config> {
 	public updateConfig(config: Config): void {
 		this.config = config
 		this.updateInstance()
-		// this.setPresetDefinitions(getPresets(this) as CompanionPreset[])
+		this.setPresetDefinitions(getPresets(this) as CompanionPreset[])
 		if (this.variables) this.variables.updateDefinitions()
 	}
 
@@ -105,11 +105,11 @@ class ZoomInstance extends instance_skel<Config> {
 		const actions = getActions(this) as CompanionActions
 		
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		// const presets = getPresets(this) as CompanionPreset[]
+		const presets = getPresets(this) as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)
-		// this.setPresetDefinitions(presets)
+		this.setPresetDefinitions(presets)
 	}
 }
 
