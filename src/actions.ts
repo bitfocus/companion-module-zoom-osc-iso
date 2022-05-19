@@ -1,24 +1,24 @@
-import { CompanionActionEventInfo, CompanionActionEvent, SomeCompanionInputField } from '../../../instance_skel_types'
+import { CompanionActionEventInfo, CompanionActionEvent, SomeCompanionInputField, CompanionActions } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { options } from './utils'
 
 const {UserActions, GlobalActions, SpecialActions} = require('./osccommands')
 
-export interface ZoomActions {
-	// UserAction
-	Pin: ZoomAction<UserActionCallback>
-	AddPin: ZoomAction<UserActionCallback>
-	Mute: ZoomAction<UserActionCallback>
-	Unmute: ZoomAction<UserActionCallback>
-	SelectUser: ZoomAction<UserActionCallback>
-	SendAChatViaDM: ZoomAction<UserActionCallback>
-	UserVideoOnOutputOutput: ZoomAction<UserActionCallback>
-	UserVideoOffOutputOutput: ZoomAction<UserActionCallback>
-	// Global Actions
-	EnableUsersUnmute: ZoomAction<GlobalActionCallback>
-	// Index signature
-	[key: string]: ZoomAction<any>
-}
+// export interface ZoomActions {
+// 	// UserAction
+// 	Pin: ZoomAction<UserActionCallback>
+// 	AddPin: ZoomAction<UserActionCallback>
+// 	Mute: ZoomAction<UserActionCallback>
+// 	Unmute: ZoomAction<UserActionCallback>
+// 	SelectUser: ZoomAction<UserActionCallback>
+// 	SendAChatViaDM: ZoomAction<UserActionCallback>
+// 	UserVideoOnOutputOutput: ZoomAction<UserActionCallback>
+// 	UserVideoOffOutputOutput: ZoomAction<UserActionCallback>
+// 	// Global Actions
+// 	EnableUsersUnmute: ZoomAction<GlobalActionCallback>
+// 	// Index signature
+// 	[key: string]: ZoomAction<any>
+// }
 
 // UserAction
 interface UserActionCallback {
@@ -60,7 +60,7 @@ export interface ZoomAction<T> {
 	unsubscribe?: (action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>) => void
 }
 
-export function getActions(instance: ZoomInstance): ZoomActions {
+export function getActions(instance: ZoomInstance): CompanionActions {
 	let selectedCallers = instance.ZoomClientDataObj.selectedCallers
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '', label: 'no users' }]
@@ -383,6 +383,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 			options: [userOption],
 			callback: (action: { options: { user: number } }) => {
 				instance.ZoomClientDataObj.selectedCallers[0] = action.options.user
+				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
 			},
 		},
