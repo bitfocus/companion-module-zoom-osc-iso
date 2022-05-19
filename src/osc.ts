@@ -242,9 +242,17 @@ export class OSC {
 							}
 							break
 						case 'online':
-							// New user coming online, Call list?
+							// New user coming online
 							console.log('receiving', data)
-							this.createZoomUser(data)
+							this.createZoomUser(data).then(() => {
+								this.instance.updatePresets()
+							})
+							break
+						case 'offline':
+							// User offline
+							console.log('receiving', data)
+							delete this.instance.ZoomUserData[data.args[3].value]
+							this.instance.updatePresets()
 							break
 						case 'chat':
 							console.log('receiving', data)
