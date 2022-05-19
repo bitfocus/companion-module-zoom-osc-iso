@@ -2,8 +2,7 @@ import { CompanionActionEventInfo, CompanionActionEvent, SomeCompanionInputField
 import ZoomInstance from './index'
 import { options } from './utils'
 
-const UserActions = require('./osccommands').UserActions
-const GlobalActions = require('./osccommands').GlobalActions
+const {UserActions, GlobalActions, SpecialActions} = require('./osccommands')
 
 export interface ZoomActions {
 	// UserAction
@@ -189,6 +188,7 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 				// No arguments so just a userOption
 				element.options = [options.userSelectedInfo]
 				element.callback = () => {
+					if(selectedCallers[0] === 0) throw new Error("Select user first");
 					const sendToCommand: any = {
 						id: element.shortDescription,
 						options: {
@@ -346,6 +346,35 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 			}
 		}
 	}
+	// Create all Special actions
+	let returningSpecialActionsObj = SpecialActions
+	for (const key in returningSpecialActionsObj) {
+		if (Object.prototype.hasOwnProperty.call(returningSpecialActionsObj, key)) {
+			const element = returningSpecialActionsObj[key]
+			element.label = element.description
+			if (element.args) {
+				// There are arguments, lets check them
+				switch (element.args) {
+
+					default:
+						console.log('Missed an argument in osc commands (global)', element.args)
+						break
+				}
+			} else {
+				// No arguments
+				element.options = []
+				element.callback = () => {
+					const sendToCommand: any = {
+						id: element.shortDescription,
+						options: {
+							command: element.command,
+						},
+					}
+					sendGlobalActionCommand(sendToCommand)
+				}
+			}
+		}
+	}
 
 	let extraActions = {
 		// User Actions
@@ -359,5 +388,5 @@ export function getActions(instance: ZoomInstance): ZoomActions {
 		},
 	}
 
-	return { ...extraActions, ...returningUserActionsObj, ...returningGlobalActionsObj }
+	return { ...extraActions, ...returningUserActionsObj, ...returningGlobalActionsObj, ...returningSpecialActionsObj }
 }
