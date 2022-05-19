@@ -10,7 +10,7 @@ import { Config } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
-import { getPresets } from './presets'
+import { getUserPresets, getGlobalPresets, getSelectUsersPresets, getSpecialPresets } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
@@ -85,7 +85,7 @@ class ZoomInstance extends instance_skel<Config> {
 	public updateConfig(config: Config): void {
 		this.config = config
 		this.updateInstance()
-		this.setPresetDefinitions(getPresets(this) as CompanionPreset[])
+		this.setPresetDefinitions([...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[])
 		if (this.variables) this.variables.updateDefinitions()
 	}
 
@@ -98,14 +98,21 @@ class ZoomInstance extends instance_skel<Config> {
 	}
 
 	/**
-	 * @description sets actions and feedbacks available for this instance
+	 * @description sets actions, presets and feedbacks available for this instance
+	 */
+	public updatePresets(): void {
+		const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
+		this.setPresetDefinitions(presets)
+	}
+
+	/**
+	 * @description sets actions, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActions
-		
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = getPresets(this) as CompanionPreset[]
+		const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)
