@@ -57,15 +57,26 @@ export class Variables {
 			{ label: 'call status', name: 'callStatus' },
 			{ label: 'Selected caller(s)', name: 'selectedCallers' },
 		])
+		let userVariables = []
+		// Which users in a group
+		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+			userVariables.push({ label: `Inside group`, name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}` })
+		}
+		for (let index = 0; index < this.instance.ZoomUserData.length; index++) {
+			userVariables.push({ label: `name`, name: this.instance.ZoomUserData[index].zoomId.toString() })
+		}
+		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([
 			// Status
 			{ label: 'gallery shape X', name: 'galleryShapeX' },
 			{ label: 'gallery shape Y', name: 'galleryShapeY' },
+			{ label: 'gallery count', name: 'galleryCount' },
 		])
 
 		
 		let filteredVariables = [
 			...globalSettings,
+			...userVariablesDef,
 			...gallery
 		]
 
@@ -77,11 +88,19 @@ export class Variables {
 	 */
 	public readonly updateVariables = (): void => {
 		const newVariables: InstanceVariableValue = {}
-		newVariables['selectedCallers'] = this.instance.ZoomClientDataObj.selectedCallers.toString()
+		// newVariables['selectedCallers'] = this.instance.ZoomClientDataObj.selectedCallers.toString()
+		newVariables['selectedCallers'] = this.instance.ZoomUserData[this.instance.ZoomClientDataObj.selectedCallers[0]] ? this.instance.ZoomUserData[this.instance.ZoomClientDataObj.selectedCallers[0]].userName : 'no selection'
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
+		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] = this.instance.ZoomUserData[index].users?.toString()
+		}
+		for (let index = 0; index < this.instance.ZoomUserData.length; index++) {
+			newVariables[this.instance.ZoomUserData[index].zoomId.toString()] = this.instance.ZoomUserData[index].userName
+		}
 		newVariables['galleryShapeX'] = this.instance.ZoomClientDataObj.galleryShape[0]
 		newVariables['galleryShapeY'] = this.instance.ZoomClientDataObj.galleryShape[1]
+		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
 	
 		this.set(newVariables)
 

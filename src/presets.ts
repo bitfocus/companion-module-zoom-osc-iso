@@ -27,37 +27,52 @@ export type ZoomGlobalPreset = Exclude<CompanionPreset, 'category' | 'actions' |
 
 export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[] {
 	let presets: CompanionPreset[] = []
-	if (instance.ZoomUserData.length === 0) {
+
+	instance.ZoomUserData.forEach((user) => {
+
 		presets.push({
 			category: 'Select Callers',
-			label: 'no callers yet',
+			label: user.userName,
 			bank: {
 				style: 'text',
-				text: 'no callers yet',
+				text: `Select\\n$(zoomosc:${user.zoomId})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
+				bgcolor: instance.rgb(125, 125, 125),
 			},
-			actions: [],
+			actions: [{ action: 'SelectUser', options: { user: user.zoomId } }],
+			feedbacks: [
+				{
+					type: 'selectedUser',
+					options: {
+						user: user.zoomId,
+						fg: instance.rgb(0, 0, 0),
+						bg: instance.rgb(255, 255, 0),
+					},
+				},
+				{
+					type: 'microphoneLive',
+					options: {
+						user: user.zoomId,
+						bg: instance.rgb(255, 0, 0),
+					},
+				},
+			],
+		})
+		presets.push({
+			category: 'Rename',
+			label: user.userName,
+			bank: {
+				style: 'text',
+				text: `Rename\\n$(zoomosc:${user.zoomId})`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(125, 125, 125),
+			},
+			actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
 			feedbacks: [],
 		})
-	} else {
-		instance.ZoomUserData.forEach((user) => {
-			presets.push({
-				category: 'Select Callers',
-				label: user.userName,
-				bank: {
-					style: 'text',
-					text: `Select\n${user.userName}`,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
-				},
-				actions: [{ action: 'SelectUser', options: { user: user.zoomId } }],
-				feedbacks: [],
-			})
-		})
-	}
+	})
 
 	return presets
 }
