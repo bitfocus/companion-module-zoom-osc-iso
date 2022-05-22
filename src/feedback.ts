@@ -11,7 +11,7 @@ import { options } from './utils'
 
 export interface ZoomFeedbacks {
 	// Audio
-	microphoneMute: ZoomFeedback<microphoneMuteCallback>
+	microphoneLive: ZoomFeedback<microphoneMuteCallback>
 	// Video
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
@@ -110,27 +110,25 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	}
 
 	return {
-		microphoneMute: {
+		microphoneLive: {
 			type: 'advanced',
-			label: 'Mute microphone',
-			description: 'Indicates if a user has muted their microphone',
+			label: 'Microphone live',
+			description: 'Indicates if a user has their microphone on',
 			options: [
 				{
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: instance.ZoomUserData.find((element) => element !== undefined)
-						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
-						: 'no user yet',
+					default: CHOICES_USERS[0].id,
 					choices: CHOICES_USERS,
 				},
-				options.mute,
-				options.foregroundColor,
-				options.backgroundColorProgram,
+				options.backgroundColorMicLive,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[feedback.options.user].mute === (feedback.options.mute == 1 ? true : false))
-					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				console.log(instance.ZoomUserData[feedback.options.user]);
+				
+				if (instance.ZoomUserData[feedback.options.user].mute === false)
+					return { bgcolor: feedback.options.bg }
 				else return
 			},
 		},
@@ -143,9 +141,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: instance.ZoomUserData.find((element) => element !== undefined)
-						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
-						: 'no user yet',
+					default: CHOICES_USERS[0].id,
 					choices: CHOICES_USERS,
 				},
 				options.video,
@@ -167,9 +163,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: instance.ZoomUserData.find((element) => element !== undefined)
-						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
-						: 'no user yet',
+					default: CHOICES_USERS[0].id,
 					choices: CHOICES_USERS,
 				},
 				options.handRaised,
@@ -191,9 +185,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: instance.ZoomUserData.find((element) => element !== undefined)
-						? instance.ZoomUserData.find((element) => element !== undefined)!.zoomId
-						: 'no user yet',
+					default: CHOICES_USERS[0].id,
 					choices: CHOICES_USERS,
 				},
 				options.foregroundColor,
