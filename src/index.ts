@@ -27,19 +27,18 @@ class ZoomInstance extends instance_skel<Config> {
 	public combinedTransitionsArray!: Array<string>
 	public combinedSnapshotsArray!: Array<string>
 	public ZoomClientDataObj!: {
-		last_ping: number
 		subscribeMode: number
 		selectedCallers: [number]
 		galleryShape: [ number, number ]
-		oldgalleryShape: [number, number]
 		activeSpeaker: string
 		zoomOSCVersion: string | number
-		galTrackMode: number
 		callStatus: string | number
-		numberOfTargets: number
 		numberOfUsersInCall: number
-		listIndexOffset: number
-		numberOfSelectedUsers: number
+		galleryCount: number
+		numberOfTargets: number
+		galTrackMode: number
+		last_ping: number
+		numberOfGroups: number
 	}
 	// We use ZoomID as idex
 	public ZoomUserData!: {
@@ -51,6 +50,13 @@ class ZoomInstance extends instance_skel<Config> {
 		videoOn?: boolean
 		handRaised?: boolean
 		userRole?: number
+		users: number[]
+	}[]
+
+	// Use index as ZoomID to see selected
+	public ZoomGroupData!: {
+		groupName: string
+		users: number[]
 	}[]
 
 	public connected = false
@@ -101,8 +107,14 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description sets actions, presets and feedbacks available for this instance
 	 */
 	public updatePresets(): void {
-		const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
-		this.setPresetDefinitions(presets)
+				// Cast actions and feedbacks from Zoom types to Companion types
+				const actions = getActions(this) as CompanionActions
+				const feedbacks = getFeedbacks(this) as CompanionFeedbacks
+				const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
+				
+				this.setActions(actions)
+				this.setFeedbackDefinitions(feedbacks)
+				this.setPresetDefinitions(presets)
 	}
 
 	/**
