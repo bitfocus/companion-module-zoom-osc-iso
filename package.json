@@ -1,5 +1,5 @@
 {
-	"name": "zoom-zoomosc",
+	"name": "zoom-api",
 	"version": "1.0.0",
 	"api_version": "1.0.0",
 	"main": "dist/index.js",
