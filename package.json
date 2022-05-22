@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bitfocus/companion-module-zoom-zoomosc.git"
+		"url": "git+https://github.com/bitfocus/companion-module-zoom-api.git"
 	},
 	"scripts": {
 		"dev": "yarn build:watch",
@@ -17,14 +17,16 @@
 		"test": "jest"
 	},
 	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-zoom-zoomosc/issues"
+		"url": "https://github.com/bitfocus/companion-module-zoom-api/issues"
 	},
 	"manufacturer": "Liminal/Zoom",
-	"product": "ZoomOSC",
+	"product": ["ZoomOSC","ZoomISO"],
 	"shortname": "zoomosc",
 	"description": "zoomOSC plugin for companion ",
 	"keywords": [
-		"zoom"
+		"zoom",
+		"ZoomOSC",
+		"ZoomISO"
 	],
 	"author": "JeffreyDavidsz <jeffrey.davidsz@vicreo.eu>",
 	"license": "MIT",
