@@ -90,6 +90,7 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateConfig(config: Config): void {
 		this.config = config
+		if(config.numberOfGroups !== this.config.numberOfGroups) this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
 		this.updateInstance()
 		this.setPresetDefinitions([...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[])
 		if (this.variables) this.variables.updateDefinitions()

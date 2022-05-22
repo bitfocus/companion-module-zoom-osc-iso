@@ -6,6 +6,7 @@ export interface Config {
 	tx_port: number
 	rx_port: number
 	subscribeMode: number
+	numberOfGroups: number
 }
 enum SubscribeMode {
 	None = 0,
@@ -55,6 +56,15 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 				{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
 			],
 			default: SubscribeMode.All,
+			width: 6,
+		},
+		{
+			type: 'number',
+			id: 'groups',
+			label: 'Number of selectable groups',
+			min: 1,
+			max: 100,
+			default: 2,
 			width: 6,
 		},
 		// {
