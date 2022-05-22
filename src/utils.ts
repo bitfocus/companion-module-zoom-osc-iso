@@ -33,6 +33,7 @@ export interface Options {
 	foregroundColorBlack: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorPreview: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorProgram: EnforceDefault<CompanionInputFieldColor, number>
+	backgroundColorMicLive: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorYellow: EnforceDefault<CompanionInputFieldColor, number>
 }
 
@@ -184,6 +185,13 @@ export const options: Options = {
 		backgroundColorProgram: {
 			type: 'colorpicker',
 			label: 'Background color when in grogram',
+			id: 'bg',
+			default: rgb(255, 0, 0),
+		},
+
+		backgroundColorMicLive: {
+			type: 'colorpicker',
+			label: 'Background color when microphone is live',
 			id: 'bg',
 			default: rgb(255, 0, 0),
 		},
