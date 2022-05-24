@@ -625,7 +625,7 @@ const SpecialActions = {
 		description: 'Global Action: Set ZoomOSC Subscribe Level',
 		shortDescription: 'SetZoomOSCSubscribeLevel',
 		command: '/zoom/subscribe',
-		args: 'level',
+		args: 'subscribeLevel',
 	},
 	RequestOrderOfGalleryView: {
 		description: 'Global Action: Request Order Of GalleryView',

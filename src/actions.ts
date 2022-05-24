@@ -386,8 +386,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						}
 						break
 
-					case 'level':
-						element.options = [options.level]
+					case 'subscribeLevel':
+						element.options = [options.subscribeLevel]
 						element.callback = (action: { options: { level: number } }) => {
 							const sendToCommand: any = {
 								id: element.shortDescription,

@@ -14,6 +14,14 @@ type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 // Force options to have a default to prevent sending undefined values
 type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
 
+enum SubscribeMode {
+	None = 0,
+	TargetList = 1,
+	All = 2,
+	Panelists = 3,
+	OnlyGallery = 4,
+}
+
 export interface Options {
 	mute: EnforceDefault<CompanionInputFieldDropdown, number>
 	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
@@ -25,6 +33,7 @@ export interface Options {
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
+	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
 	id: EnforceDefault<CompanionInputFieldNumber, number>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
@@ -100,6 +109,19 @@ export const options: Options = {
 			min: 0,
 			max: 5,
 			default: 0
+		},
+		subscribeLevel: {
+			type: 'dropdown',
+			label: 'Subscribtion level',
+			id: 'level',
+			choices: [
+				{ id: SubscribeMode.None, label: 'None' },
+				{ id: SubscribeMode.TargetList, label: 'Target List' },
+				{ id: SubscribeMode.All, label: 'All' },
+				{ id: SubscribeMode.Panelists, label: 'Panelists' },
+				{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
+			],
+			default: SubscribeMode.All,
 		},
 		mode: {
 			type: 'number',
