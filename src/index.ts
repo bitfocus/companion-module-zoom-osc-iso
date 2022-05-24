@@ -53,12 +53,6 @@ class ZoomInstance extends instance_skel<Config> {
 		users: number[]
 	}[]
 
-	// Use index as ZoomID to see selected
-	public ZoomGroupData!: {
-		groupName: string
-		users: number[]
-	}[]
-
 	public connected = false
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
@@ -71,9 +65,9 @@ class ZoomInstance extends instance_skel<Config> {
 		this.log('info', `Welcome, Zoom module is loading`)
 		this.status(this.STATUS_WARNING, 'Connecting')
 		this.variables = new Variables(this)
+		this.variables.updateDefinitions()
 		this.OSC = new OSC(this)
 		this.updateInstance()
-		this.variables.updateDefinitions()
 	}
 
 	/**
@@ -111,11 +105,19 @@ class ZoomInstance extends instance_skel<Config> {
 				// Cast actions and feedbacks from Zoom types to Companion types
 				const actions = getActions(this) as CompanionActions
 				const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-				const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
+				const presets = [...getSelectUsersPresets(this), ...getUserPresets(this), ...getGlobalPresets(this), ...getSpecialPresets(this)] as CompanionPreset[]
 				
 				this.setActions(actions)
 				this.setFeedbackDefinitions(feedbacks)
 				this.setPresetDefinitions(presets)
+	}
+
+	/**
+	 * @description Create and update variables
+	 */
+	public updateVariables(): void {
+		this.variables?.updateDefinitions()
+		this.variables?.updateVariables()
 	}
 
 	/**
@@ -125,7 +127,7 @@ class ZoomInstance extends instance_skel<Config> {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActions
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = [...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[]
+		const presets = [...getSelectUsersPresets(this), ...getUserPresets(this), ...getGlobalPresets(this), ...getSpecialPresets(this)] as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)

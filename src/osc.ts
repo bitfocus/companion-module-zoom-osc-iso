@@ -41,11 +41,11 @@ export class OSC {
 			// this.instance.ZoomGroupData[index] = { groupName: 'Group ' + index, users: [0]}
 			this.instance.ZoomUserData[index] = { zoomId: index, userName: `Group ${index}`, targetIndex: -1, galleryIndex: -1, users: [0]}
 		}
-	
+		this.instance.updateVariables()
 		// Connect to ZoomOSC
 		this.Connect()
 			.then(() => {
-				this.instance.status(this.instance.STATUS_WARNING, 'Listening')
+				this.instance.status(this.instance.STATUS_WARNING, 'Listening for first command')
 				console.log('ZoomOSC listener active')
 			})
 			.catch(() => {
@@ -141,6 +141,8 @@ export class OSC {
 			} else {
 				reject('wrong number of arguments:' + data)
 			}
+			// update it all
+			this.instance.updateVariables()
 			resolve('finished')
 		})
 		return p
@@ -316,6 +318,7 @@ export class OSC {
 					break
 
 				case 'pong':
+					console.log('receiving', data)
 					// {any pingArg (zero if none sent)}
 					// {str zoomOSCversion}
 					// {int subscribeMode}
