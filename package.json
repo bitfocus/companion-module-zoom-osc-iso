@@ -19,7 +19,7 @@
 	"bugs": {
 		"url": "https://github.com/bitfocus/companion-module-zoom-api/issues"
 	},
-	"manufacturer": "Liminal/Zoom",
+	"manufacturer": "Zoom",
 	"product": ["ZoomOSC","ZoomISO"],
 	"shortname": "zoomosc",
 	"description": "zoomOSC plugin for companion ",
