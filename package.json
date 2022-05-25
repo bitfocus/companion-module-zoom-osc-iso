@@ -1,11 +1,11 @@
 {
-	"name": "zoom-api",
+	"name": "zoom-osc-iso",
 	"version": "1.0.0",
 	"api_version": "1.0.0",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bitfocus/companion-module-zoom-api.git"
+		"url": "git+https://github.com/bitfocus/companion-module-zoom-osc-iso.git"
 	},
 	"scripts": {
 		"dev": "yarn build:watch",
@@ -17,12 +17,12 @@
 		"test": "jest"
 	},
 	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-zoom-api/issues"
+		"url": "https://github.com/bitfocus/companion-module-zoom-osc-iso/issues"
 	},
 	"manufacturer": "Zoom",
 	"product": ["ZoomOSC","ZoomISO"],
 	"shortname": "zoomosc",
-	"description": "zoomOSC plugin for companion ",
+	"description": "ZoomOSC plugin for companion ",
 	"keywords": [
 		"zoom",
 		"ZoomOSC",
