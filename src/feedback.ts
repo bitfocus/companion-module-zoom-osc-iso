@@ -102,11 +102,14 @@ export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	let CHOICES_USERS = [{ id: '', label: 'no users' }]
-	if (instance.ZoomUserData.length !== 0) {
-		CHOICES_USERS = instance.ZoomUserData.filter((n) => n).map((id) => ({
-			id: id.zoomId.toString(),
-			label: id.userName,
-		}))
+	if (instance.ZoomUserData) {
+		CHOICES_USERS.length = 0
+		for (const key in instance.ZoomUserData) {
+			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+				const user = instance.ZoomUserData[key]
+				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
+			}
+		}
 	}
 
 	return {
@@ -125,10 +128,9 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorMicLive,
 			],
 			callback: (feedback) => {
-				console.log(instance.ZoomUserData[feedback.options.user]);
-				
-				if (instance.ZoomUserData[feedback.options.user].mute === false)
-					return { bgcolor: feedback.options.bg }
+				console.log(instance.ZoomUserData[feedback.options.user])
+
+				if (instance.ZoomUserData[feedback.options.user].mute === false) return { bgcolor: feedback.options.bg }
 				else return
 			},
 		},
@@ -171,7 +173,9 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorYellow,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[feedback.options.user].handRaised === (feedback.options.handRaised == 1 ? true : false))
+				if (
+					instance.ZoomUserData[feedback.options.user].handRaised === (feedback.options.handRaised == 1 ? true : false)
+				)
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},
@@ -192,7 +196,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorYellow,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedCallers[0] === (feedback.options.user))
+				if (instance.ZoomClientDataObj.selectedCaller === feedback.options.user)
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},

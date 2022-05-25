@@ -60,18 +60,18 @@ export class Variables {
 		])
 		let userVariables = []
 		// Which users in a group
-		if (this.instance.ZoomClientDataObj) {
-			let filteredZoomUserData = this.instance.ZoomUserData.filter((n) => n)
 			for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 				userVariables.push({
 					label: `Inside group`,
-					name: `Inside${filteredZoomUserData[index].zoomId.toString()}`,
+					name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}`,
 				})
 			}
-			for (let index = 0; index < filteredZoomUserData.length; index++) {
-				userVariables.push({ label: `name`, name: filteredZoomUserData[index].zoomId.toString() })
+			for (const key in this.instance.ZoomUserData) {
+				if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
+					const user = this.instance.ZoomUserData[key]
+					userVariables.push({ label: `name`, name: user.zoomId.toString() })
+				}
 			}
-		}
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([
 			// Status
@@ -90,21 +90,24 @@ export class Variables {
 	 */
 	public readonly updateVariables = (): void => {
 		const newVariables: InstanceVariableValue = {}
-		let filteredZoomUserData = this.instance.ZoomUserData.filter((n) => n)
-		// newVariables['selectedCallers'] = this.instance.ZoomClientDataObj.selectedCallers.toString()
-		newVariables['selectedCallers'] = filteredZoomUserData[this.instance.ZoomClientDataObj.selectedCallers[0]]
-			? filteredZoomUserData[this.instance.ZoomClientDataObj.selectedCallers[0]].userName
-			: 'no selection'
+		newVariables['selectedCaller'] = this.instance.ZoomUserData[this.instance.ZoomClientDataObj.selectedCaller]?.userName
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
+		
 		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
-			newVariables[`Inside${filteredZoomUserData[index].zoomId.toString()}`] =
-			filteredZoomUserData[index].users?.toString()
+			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] =
+			this.instance.ZoomUserData[index].users?.toString()
 		}
-		filteredZoomUserData.forEach(element => {
-			newVariables[element.zoomId.toString()] = element.userName
-		})
+		for (const key in this.instance.ZoomUserData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
+				const user = this.instance.ZoomUserData[key]
+				newVariables[user.zoomId.toString()] = user.userName
+			}
+		}
+		// this.instance.ZoomUserData.forEach(element => {
+		// 	newVariables[element.zoomId.toString()] = element.userName
+		// })
 		newVariables['galleryShapeX'] = this.instance.ZoomClientDataObj.galleryShape[0]
 		newVariables['galleryShapeY'] = this.instance.ZoomClientDataObj.galleryShape[1]
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount

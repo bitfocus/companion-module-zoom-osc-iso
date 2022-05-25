@@ -66,18 +66,20 @@ export interface ZoomAction<T> {
 }
 
 export function getActions(instance: ZoomInstance): CompanionActions {
-	let selectedCallers = instance.ZoomClientDataObj.selectedCallers
+	let selectedCaller = instance.ZoomClientDataObj.selectedCaller
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_USERS_DEFAULT = '0'
-	if (instance.ZoomUserData.length !== 0) {
-		CHOICES_USERS = instance.ZoomUserData.filter((n) => n).map((id) => ({
-			id: id.zoomId.toString(),
-			label: id.userName,
-		}))
-		CHOICES_USERS_DEFAULT = CHOICES_USERS.find((element) => element !== undefined)
-			? CHOICES_USERS.find((element) => element !== undefined)!.id
-			: '0'
+	if (instance.ZoomUserData) {
+		// Empty array
+		CHOICES_USERS.length = 0
+		for (const key in instance.ZoomUserData) {
+			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+				const user = instance.ZoomUserData[key];
+				CHOICES_USERS.push({id: user.zoomId.toString(),	label: user.userName})
+			}
+		}
+		CHOICES_USERS_DEFAULT = CHOICES_USERS[0].id
 	}
 	let CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 
@@ -201,11 +203,11 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				// No arguments so just a userOption
 				element.options = [options.userSelectedInfo]
 				element.callback = () => {
-					if (selectedCallers[0] === 0) throw new Error('Select user first')
+					if (selectedCaller === 0) throw new Error('Select user first')
 					const sendToCommand: any = {
 						id: element.shortDescription,
 						options: {
-							args: { type: 'i', value: selectedCallers },
+							args: { type: 'i', value: selectedCaller },
 							command: element.command,
 						},
 					}
@@ -426,7 +428,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Preselect user',
 			options: [userOption],
 			callback: (action: { options: { user: number } }) => {
-				instance.ZoomClientDataObj.selectedCallers[0] = action.options.user
+				instance.ZoomClientDataObj.selectedCaller = action.options.user
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
 			},

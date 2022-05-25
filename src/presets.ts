@@ -28,51 +28,54 @@ export type ZoomGlobalPreset = Exclude<CompanionPreset, 'category' | 'actions' |
 export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[] {
 	let presets: CompanionPreset[] = []
 
-	instance.ZoomUserData.forEach((user) => {
+	for (const key in instance.ZoomUserData) {
+		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+			const user = instance.ZoomUserData[key]
 
-		presets.push({
-			category: 'Select Callers',
-			label: user.userName,
-			bank: {
-				style: 'text',
-				text: `Select\\n$(zoomosc:${user.zoomId})`,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(125, 125, 125),
-			},
-			actions: [{ action: 'SelectUser', options: { user: user.zoomId } }],
-			feedbacks: [
-				{
-					type: 'selectedUser',
-					options: {
-						user: user.zoomId,
-						fg: instance.rgb(0, 0, 0),
-						bg: instance.rgb(255, 255, 0),
-					},
+			presets.push({
+				category: 'Select Callers',
+				label: user.userName,
+				bank: {
+					style: 'text',
+					text: `Select\\n$(zoomosc:${user.zoomId})`,
+					size: 'auto',
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(125, 125, 125),
 				},
-				{
-					type: 'microphoneLive',
-					options: {
-						user: user.zoomId,
-						bg: instance.rgb(255, 0, 0),
+				actions: [{ action: 'SelectUser', options: { user: user.zoomId } }],
+				feedbacks: [
+					{
+						type: 'selectedUser',
+						options: {
+							user: user.zoomId,
+							fg: instance.rgb(0, 0, 0),
+							bg: instance.rgb(255, 255, 0),
+						},
 					},
+					{
+						type: 'microphoneLive',
+						options: {
+							user: user.zoomId,
+							bg: instance.rgb(255, 0, 0),
+						},
+					},
+				],
+			})
+			presets.push({
+				category: 'Rename',
+				label: user.userName,
+				bank: {
+					style: 'text',
+					text: `Rename\\n$(zoomosc:${user.zoomId})`,
+					size: 'auto',
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(125, 125, 125),
 				},
-			],
-		})
-		presets.push({
-			category: 'Rename',
-			label: user.userName,
-			bank: {
-				style: 'text',
-				text: `Rename\\n$(zoomosc:${user.zoomId})`,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(125, 125, 125),
-			},
-			actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
-			feedbacks: [],
-		})
-	})
+				actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
+				feedbacks: [],
+			})
+		}
+	}
 
 	return presets
 }

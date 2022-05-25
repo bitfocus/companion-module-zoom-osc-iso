@@ -17,30 +17,13 @@ export class OSC {
 	private oscRXPort: number = 1234
 	private udpPort: any
 	private updateLoop: boolean = false
+	private needToPingPong: boolean = true
+	private pingInterval: NodeJS.Timer | undefined
+	private updatePresetsLoop: NodeJS.Timer | undefined
 
 	constructor(instance: ZoomInstance) {
 		this.instance = instance
 
-		this.instance.ZoomClientDataObj = {
-			selectedCallers: [0],
-			subscribeMode: 0,
-			galleryShape: [0, 0],
-			activeSpeaker: 'None',
-			zoomOSCVersion: 'Not Connected',
-			callStatus: 0,
-			numberOfUsersInCall: 0,
-			galleryCount: 0,
-			numberOfTargets: 0,
-			galTrackMode: 0,
-			last_ping: 0,
-			numberOfGroups: 5
-		}
-		this.instance.ZoomUserData = []
-		// Setup groups
-		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
-			// this.instance.ZoomGroupData[index] = { groupName: 'Group ' + index, users: [0]}
-			this.instance.ZoomUserData[index] = { zoomId: index, userName: `Group ${index}`, targetIndex: -1, galleryIndex: -1, users: [0]}
-		}
 		this.instance.updateVariables()
 		// Connect to ZoomOSC
 		this.Connect()
@@ -60,6 +43,8 @@ export class OSC {
 	public readonly destroy = (): void => {
 		if (this.udpPort) this.udpPort.Close()
 		if (this.udpPort) this.udpPort.destroy()
+		if (this.pingInterval) clearInterval(this.pingInterval)
+		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
 	}
 
 	/**
@@ -84,6 +69,7 @@ export class OSC {
 			this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
 				this.processData(oscMsg)
 			})
+
 			this.udpPort.on('error', (err: { code: string; message: string }) => {
 				if (err.code === 'EADDRINUSE') {
 					console.log('error', 'Error: Selected port in use.' + err.message)
@@ -96,15 +82,21 @@ export class OSC {
 
 			// When the port is read
 			this.udpPort.on('ready', () => {
-				// this.variables = new Variables(this)
 				this.instance.log('debug', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
-				// Subscribe to ZoomOSC
-				this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.config.subscribeMode })
-				this.sendCommand('/zoom/ping')
-				// Send this to fetch initial data
-				this.sendCommand('/zoom/list')
+				// See if ZoomOSC is active
+				this.pingInterval = setInterval(() => {
+					if (this.needToPingPong) {
+						this.sendCommand('/zoom/ping')
+					}
+				}, 2000)
+				// start looping for presets
+				this.updatePresetsLoop = setInterval(() => {
+					if (this.updateLoop) {
+						this.instance.updateInstance()
+						this.updateLoop = false
+					}
+				}, 2000)
 				resolve('ready for OSC')
-				this.updatePresetsLoop()
 			})
 		})
 		return p
@@ -116,8 +108,7 @@ export class OSC {
 	 * @param data ZoomOSCResponse
 	 * @returns promise
 	 */
-	private createZoomUser = (data: ZoomOSCResponse) => {
-		let p = new Promise((resolve, reject) => {
+	private createZoomUser = async (data: ZoomOSCResponse) => {
 			let zoomId = parseInt(data.args[3].value)
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
@@ -125,7 +116,7 @@ export class OSC {
 					targetIndex: data.args[0].value,
 					userName: data.args[1].value,
 					galleryIndex: data.args[2].value,
-					users: []
+					users: [],
 				}
 			} else if (data.args.length > 8) {
 				this.instance.ZoomUserData[zoomId] = {
@@ -136,34 +127,22 @@ export class OSC {
 					videoOn: data.args[8].value,
 					mute: data.args[9].value,
 					handRaised: data.args[10].value,
-					users: []
+					users: [],
 				}
 			} else {
-				reject('wrong number of arguments:' + data)
+				console.log('wrong arguments in OSC feedback')
 			}
 			// update it all
 			this.instance.updateVariables()
-			resolve('finished')
-		})
-		return p
 	}
 
-	private updatePresetsLoop = () => {
-		setInterval(() => {
-			if (this.updateLoop) {
-				this.instance.updatePresets()
-				this.updateLoop = false
-			}
-		}, 2000)
-	}
-
-	private processData = (data: ZoomOSCResponse) => {
+	private processData = async (data: ZoomOSCResponse) => {
 		// console.log('received',data)
 		let recvMsg = data.address.toString().split('/')
 		let zoomPart1 = recvMsg[1] // zoom, zoomosc
 		let zoomPart2 = recvMsg[2] // user, me, pong, galleryShape etc.
 		let zoomPart3 = recvMsg[3]
-		let zoomId
+		let zoomId: number
 
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
@@ -173,8 +152,12 @@ export class OSC {
 				// let isMe = true
 				/* falls through */
 				case 'user':
-					// Set for all cases
+					// Set for all cases the ZoomCallerId
 					zoomId = parseInt(data.args[3].value)
+					// Check if user exists, returns -1 if not
+					if(!this.instance.ZoomUserData[zoomId]) {
+						await this.createZoomUser(data)
+					}
 
 					switch (zoomPart3) {
 						case 'list':
@@ -188,21 +171,12 @@ export class OSC {
 							// {in videoStatus}
 							// {int audioStatus}
 							// {int handRaised}
-
-							// Check if user exists
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].userName = data.args[1].value
-								this.instance.ZoomUserData[zoomId].targetIndex = data.args[0].value
-								this.instance.ZoomUserData[zoomId].galleryIndex = data.args[2].value
-								this.instance.ZoomUserData[zoomId].videoOn = data.args[8].value
-								this.instance.ZoomUserData[zoomId].mute = data.args[9].value
-								this.instance.ZoomUserData[zoomId].handRaised = data.args[10].value
-							} else {
-								this.createZoomUser(data)
-							}
-							// Update all presets
-							console.log('updating presets')
-
+							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
+							this.instance.ZoomUserData[zoomId].targetIndex = data.args[0].value
+							this.instance.ZoomUserData[zoomId].galleryIndex = data.args[2].value
+							this.instance.ZoomUserData[zoomId].videoOn = data.args[8].value
+							this.instance.ZoomUserData[zoomId].mute = data.args[9].value
+							this.instance.ZoomUserData[zoomId].handRaised = data.args[10].value
 							this.updateLoop = true
 							break
 						case 'activeSpeaker':
@@ -212,57 +186,33 @@ export class OSC {
 							break
 						case 'videoOn':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].videoOn = true
-								this.instance.checkFeedbacks('camera')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].videoOn = true
+							this.instance.checkFeedbacks('camera')
 							break
 						case 'videoOff':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].videoOn = false
-								this.instance.checkFeedbacks('camera')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].videoOn = false
+							this.instance.checkFeedbacks('camera')
 							break
 						case 'mute':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].mute = true
-								this.instance.checkFeedbacks('microphoneLive')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].mute = true
+							this.instance.checkFeedbacks('microphoneLive')
 							break
 						case 'unMute':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].mute = false
-								this.instance.checkFeedbacks('microphoneLive')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].mute = false
+							this.instance.checkFeedbacks('microphoneLive')
 							break
 						case 'handRaised':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].handRaised = true
-								this.instance.checkFeedbacks('handRaised')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].handRaised = true
+							this.instance.checkFeedbacks('handRaised')
 							break
 						case 'handLowered':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].handRaised = false
-								this.instance.checkFeedbacks('handRaised')
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].handRaised = false
+							this.instance.checkFeedbacks('handRaised')
 							break
 						case 'online':
 							// New user coming online
@@ -272,24 +222,15 @@ export class OSC {
 						case 'offline':
 							// User offline
 							console.log('receiving', data)
-							delete this.instance.ZoomUserData[data.args[3].value]
+							delete this.instance.ZoomUserData[zoomId]
 							this.updateLoop = true
 							break
 						case 'chat':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								// Last chat message variable?
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
 							break
 						case 'roleChanged':
 							console.log('receiving', data)
-							if (this.instance.ZoomUserData[zoomId]) {
-								this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
-							} else {
-								this.createZoomUser(data).then(() => (this.updateLoop = true))
-							}
+							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
 							break
 
 						default:
@@ -335,6 +276,14 @@ export class OSC {
 					this.instance.ZoomClientDataObj.numberOfTargets = data.args[5].value
 					this.instance.ZoomClientDataObj.numberOfUsersInCall = data.args[6].value
 					this.instance.variables?.updateVariables()
+					this.needToPingPong = false
+					if (this.pingInterval) clearInterval(this.pingInterval)
+					// Subscribe to ZoomOSC
+					this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.config.subscribeMode })
+					// Send this to fetch initial data
+					this.sendCommand('/zoom/list')
+					// Start a loop to process incoming data in the backend
+					this.updateLoop = true
 					break
 
 				case 'meetingStatus':

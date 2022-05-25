@@ -18,18 +18,11 @@ import { OSC } from './osc'
  * Companion instance class for Zoom
  */
 class ZoomInstance extends instance_skel<Config> {
-	constructor(system: CompanionSystem, id: string, config: Config) {
-		super(system, id, config)
-		this.system = system
-		this.config = config
-	}
-	public combinedLayerArray!: { name: string; sourceA: string; sourceB: string; preset_enabled: number }[]
-	public combinedTransitionsArray!: Array<string>
-	public combinedSnapshotsArray!: Array<string>
-	public ZoomClientDataObj!: {
+	// Global call settings
+	public ZoomClientDataObj: {
 		subscribeMode: number
-		selectedCallers: [number]
-		galleryShape: [ number, number ]
+		selectedCaller: number
+		galleryShape: [number, number]
 		activeSpeaker: string
 		zoomOSCVersion: string | number
 		callStatus: string | number
@@ -39,23 +32,54 @@ class ZoomInstance extends instance_skel<Config> {
 		galTrackMode: number
 		last_ping: number
 		numberOfGroups: number
+	} = {
+		selectedCaller: 0,
+		subscribeMode: 0,
+		galleryShape: [0, 0],
+		activeSpeaker: 'None',
+		zoomOSCVersion: 'Not Connected',
+		callStatus: 0,
+		numberOfUsersInCall: 0,
+		galleryCount: 0,
+		numberOfTargets: 0,
+		galTrackMode: 0,
+		last_ping: 0,
+		numberOfGroups: 5,
 	}
-	// We use ZoomID as idex
-	public ZoomUserData!: {
-		zoomId: number
-		userName: string
-		targetIndex: number
-		galleryIndex: number
-		mute?: boolean
-		videoOn?: boolean
-		handRaised?: boolean
-		userRole?: number
-		users: number[]
-	}[]
+	// Array with all callers
+	public ZoomUserData: {
+		[key: number]: {
+			zoomId: number
+			userName: string
+			targetIndex: number
+			galleryIndex: number
+			mute?: boolean
+			videoOn?: boolean
+			handRaised?: boolean
+			userRole?: number
+			users: number[]
+		}
+	} = {}
 
-	public connected = false
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
+
+	constructor(system: CompanionSystem, id: string, config: Config) {
+		super(system, id, config)
+		this.system = system
+		this.config = config
+
+		// Setup groups
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+			this.ZoomUserData[index] = {
+				zoomId: index,
+				userName: `Group ${index}`,
+				targetIndex: -1,
+				galleryIndex: -1,
+				users: [0],
+			}
+		}
+	}
 
 	/**
 	 * @description triggered on instance being enabled
@@ -67,7 +91,6 @@ class ZoomInstance extends instance_skel<Config> {
 		this.variables = new Variables(this)
 		this.variables.updateDefinitions()
 		this.OSC = new OSC(this)
-		this.updateInstance()
 	}
 
 	/**
@@ -84,9 +107,15 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateConfig(config: Config): void {
 		this.config = config
-		if(config.numberOfGroups !== this.config.numberOfGroups) this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
+		if (config.numberOfGroups !== this.config.numberOfGroups)
+			this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
 		this.updateInstance()
-		this.setPresetDefinitions([...getSelectUsersPresets(this), ...getSpecialPresets(this), ...getUserPresets(this), ...getGlobalPresets(this)] as CompanionPreset[])
+		this.setPresetDefinitions([
+			...getSelectUsersPresets(this),
+			...getSpecialPresets(this),
+			...getUserPresets(this),
+			...getGlobalPresets(this),
+		] as CompanionPreset[])
 		if (this.variables) this.variables.updateDefinitions()
 	}
 
@@ -98,19 +127,24 @@ class ZoomInstance extends instance_skel<Config> {
 		this.OSC?.destroy()
 	}
 
-	/**
-	 * @description sets actions, presets and feedbacks available for this instance
-	 */
-	public updatePresets(): void {
-				// Cast actions and feedbacks from Zoom types to Companion types
-				const actions = getActions(this) as CompanionActions
-				const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-				const presets = [...getSelectUsersPresets(this), ...getUserPresets(this), ...getGlobalPresets(this), ...getSpecialPresets(this)] as CompanionPreset[]
-				
-				this.setActions(actions)
-				this.setFeedbackDefinitions(feedbacks)
-				this.setPresetDefinitions(presets)
-	}
+	// /**
+	//  * @description sets actions, presets and feedbacks available for this instance
+	//  */
+	// public updatePresets(): void {
+	// 	// Cast actions and feedbacks from Zoom types to Companion types
+	// 	const actions = getActions(this) as CompanionActions
+	// 	const feedbacks = getFeedbacks(this) as CompanionFeedbacks
+	// 	const presets = [
+	// 		...getSelectUsersPresets(this),
+	// 		...getUserPresets(this),
+	// 		...getGlobalPresets(this),
+	// 		...getSpecialPresets(this),
+	// 	] as CompanionPreset[]
+
+	// 	this.setActions(actions)
+	// 	this.setFeedbackDefinitions(feedbacks)
+	// 	this.setPresetDefinitions(presets)
+	// }
 
 	/**
 	 * @description Create and update variables
@@ -127,7 +161,12 @@ class ZoomInstance extends instance_skel<Config> {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActions
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = [...getSelectUsersPresets(this), ...getUserPresets(this), ...getGlobalPresets(this), ...getSpecialPresets(this)] as CompanionPreset[]
+		const presets = [
+			...getSelectUsersPresets(this),
+			...getUserPresets(this),
+			...getGlobalPresets(this),
+			...getSpecialPresets(this),
+		] as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)
