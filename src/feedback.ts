@@ -16,6 +16,7 @@ export interface ZoomFeedbacks {
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
 	selectedUser: ZoomFeedback<selectedUserCallback>
+	selectedAddToGroup: ZoomFeedback<selectedAddToGroupCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
@@ -55,6 +56,14 @@ interface selectedUserCallback {
 		fg: number
 		bg: number
 		user: number
+	}>
+}
+interface selectedAddToGroupCallback {
+	type: 'selectedAddToGroup'
+	options: Readonly<{
+		fg: number
+		bg: number
+		group: number
 	}>
 }
 
@@ -102,6 +111,7 @@ export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	let CHOICES_USERS = [{ id: '', label: 'no users' }]
+	let CHOICES_GROUPS = [{ id: '', label: 'no groups' }]
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
@@ -110,6 +120,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 			}
 		}
+		CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 	}
 
 	return {
@@ -197,6 +208,27 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (instance.ZoomClientDataObj.selectedCaller === feedback.options.user)
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
+		selectedAddToGroup: {
+			type: 'advanced',
+			label: 'Selected group to add user',
+			description: 'Indicate if a group is ready to accept callers',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Group',
+					id: 'group',
+					default: CHOICES_GROUPS[0].id,
+					choices: CHOICES_GROUPS,
+				},
+				options.foregroundColor,
+				options.backgroundColorYellow,
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.selectedAddToGroup === feedback.options.group)
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},

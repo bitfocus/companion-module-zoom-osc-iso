@@ -22,6 +22,7 @@ class ZoomInstance extends instance_skel<Config> {
 	public ZoomClientDataObj: {
 		subscribeMode: number
 		selectedCaller: number
+		selectedAddToGroup: number
 		galleryShape: [number, number]
 		activeSpeaker: string
 		zoomOSCVersion: string | number
@@ -34,6 +35,7 @@ class ZoomInstance extends instance_skel<Config> {
 		numberOfGroups: number
 	} = {
 		selectedCaller: 0,
+		selectedAddToGroup: -1,
 		subscribeMode: 0,
 		galleryShape: [0, 0],
 		activeSpeaker: 'None',

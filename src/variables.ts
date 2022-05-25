@@ -55,7 +55,7 @@ export class Variables {
 			// Status
 			{ label: 'zoomOSC version', name: 'zoomOSCversion' },
 			{ label: 'call status', name: 'callStatus' },
-			{ label: 'Selected caller(s)', name: 'selectedCallers' },
+			{ label: 'Selected caller/group', name: 'selectedCaller' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
 		])
 		let userVariables = []

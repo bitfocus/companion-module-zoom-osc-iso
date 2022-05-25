@@ -9,22 +9,6 @@ import { options } from './utils'
 
 const { UserActions, GlobalActions, SpecialActions } = require('./osccommands')
 
-// export interface ZoomActions {
-// 	// UserAction
-// 	Pin: ZoomAction<UserActionCallback>
-// 	AddPin: ZoomAction<UserActionCallback>
-// 	Mute: ZoomAction<UserActionCallback>
-// 	Unmute: ZoomAction<UserActionCallback>
-// 	SelectUser: ZoomAction<UserActionCallback>
-// 	SendAChatViaDM: ZoomAction<UserActionCallback>
-// 	UserVideoOnOutputOutput: ZoomAction<UserActionCallback>
-// 	UserVideoOffOutputOutput: ZoomAction<UserActionCallback>
-// 	// Global Actions
-// 	EnableUsersUnmute: ZoomAction<GlobalActionCallback>
-// 	// Index signature
-// 	[key: string]: ZoomAction<any>
-// }
-
 // UserAction
 interface UserActionCallback {
 	action: string
@@ -75,8 +59,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
-				const user = instance.ZoomUserData[key];
-				CHOICES_USERS.push({id: user.zoomId.toString(),	label: user.userName})
+				const user = instance.ZoomUserData[key]
+				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 			}
 		}
 		CHOICES_USERS_DEFAULT = CHOICES_USERS[0].id
@@ -428,9 +412,34 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Preselect user',
 			options: [userOption],
 			callback: (action: { options: { user: number } }) => {
-				instance.ZoomClientDataObj.selectedCaller = action.options.user
+				if (instance.ZoomClientDataObj.selectedAddToGroup !== -1) {
+					// When a group button is selected, add caller to that group
+					instance.ZoomUserData[instance.ZoomClientDataObj.selectedAddToGroup].users?.push(action.options.user)
+				} else {
+					// Or make the user selectable
+					instance.ZoomClientDataObj.selectedCaller = action.options.user
+				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+			},
+		},
+		SelectAddToGroup: {
+			label: 'Activate add to group',
+			options: [groupOption],
+			callback: (action: { options: { group: number } }) => {
+				// Toggle action
+				if (instance.ZoomClientDataObj.selectedAddToGroup === -1) {
+					// There was NO group selected so set it
+					instance.ZoomClientDataObj.selectedAddToGroup = action.options.group
+				} else if (instance.ZoomClientDataObj.selectedAddToGroup === action.options.group) {
+					// The same group selected means deselect
+					instance.ZoomClientDataObj.selectedAddToGroup = -1
+				} else {
+					// There is a new group selected
+					instance.ZoomClientDataObj.selectedAddToGroup = action.options.group
+				}
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedAddToGroup')
 			},
 		},
 		// Group Actions

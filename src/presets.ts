@@ -28,6 +28,31 @@ export type ZoomGlobalPreset = Exclude<CompanionPreset, 'category' | 'actions' |
 export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[] {
 	let presets: CompanionPreset[] = []
 
+	for (let index = 0; index < instance.ZoomClientDataObj.numberOfGroups; index++) {
+		presets.push({
+			category: 'Add to Group',
+			label: `Add to group: ${instance.ZoomUserData[index].userName}`,
+			bank: {
+				style: 'text',
+				text: `Add to group:\\n${instance.ZoomUserData[index].userName}`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(125, 125, 125),
+			},
+			actions: [{ action: 'SelectAddToGroup', options: { group: index } }],
+			feedbacks: [
+				{
+					type: 'selectedAddToGroup',
+					options: {
+						group: index,
+						fg: instance.rgb(0, 0, 0),
+						bg: instance.rgb(255, 255, 0),
+					},
+				},
+			],
+		})
+	}
+
 	for (const key in instance.ZoomUserData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 			const user = instance.ZoomUserData[key]
