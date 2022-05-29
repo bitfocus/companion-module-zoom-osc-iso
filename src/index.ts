@@ -34,7 +34,7 @@ class ZoomInstance extends instance_skel<Config> {
 		last_ping: number
 		numberOfGroups: number
 	} = {
-		selectedCaller: 0,
+		selectedCaller: -1,
 		selectedAddToGroup: -1,
 		subscribeMode: 0,
 		galleryShape: [0, 0],
@@ -70,7 +70,8 @@ class ZoomInstance extends instance_skel<Config> {
 		super(system, id, config)
 		this.system = system
 		this.config = config
-
+		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
+		
 		// Setup groups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomUserData[index] = {
@@ -78,7 +79,7 @@ class ZoomInstance extends instance_skel<Config> {
 				userName: `Group ${index}`,
 				targetIndex: -1,
 				galleryIndex: -1,
-				users: [0],
+				users: [],
 			}
 		}
 	}
