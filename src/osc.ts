@@ -287,7 +287,7 @@ export class OSC {
 					this.needToPingPong = false
 					if (this.pingInterval) clearInterval(this.pingInterval)
 					// Subscribe to ZoomOSC
-					this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.config.subscribeMode })
+					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: this.instance.config.subscribeMode }])
 					// Send this to fetch initial data
 					this.sendCommand('/zoom/list')
 					// Start a loop to process incoming data in the backend
@@ -295,6 +295,7 @@ export class OSC {
 					break
 
 				case 'meetingStatus':
+					console.log('received',data);
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 					this.sendCommand('/zoom/list')
 					// this.instance.variables?.updateVariables() // Not needed, the list command will drop at least 1 caller (host)
