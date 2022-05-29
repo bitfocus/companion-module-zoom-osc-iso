@@ -297,8 +297,8 @@ export class OSC {
 				case 'meetingStatus':
 					console.log('received',data);
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
-					this.sendCommand('/zoom/list')
-					// this.instance.variables?.updateVariables() // Not needed, the list command will drop at least 1 caller (host)
+					this.sendCommand('/zoom/ping')
+					// this.instance.variables?.updateVariables() // Not needed, the ping command will drop at least 1 caller (host) from zoom/ping
 					break
 
 				default:
