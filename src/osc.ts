@@ -232,6 +232,14 @@ export class OSC {
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
 							break
+						case 'stoppedSpeaking':
+							console.log('receiving', data)
+							// create feedback for this
+							break
+						case 'isSpeaking':
+							console.log('receiving', data)
+							// create feedback for this
+							break
 
 						default:
 							console.log('No Case provided for: ' + data.address)
