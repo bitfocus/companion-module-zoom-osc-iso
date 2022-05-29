@@ -50,7 +50,6 @@ export interface ZoomAction<T> {
 }
 
 export function getActions(instance: ZoomInstance): CompanionActions {
-	let selectedCaller = instance.ZoomClientDataObj.selectedCaller
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_USERS_DEFAULT = '0'
@@ -63,7 +62,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 			}
 		}
-		CHOICES_USERS_DEFAULT = CHOICES_USERS[0].id
+		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : "0"
 	}
 	let CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 
@@ -108,16 +107,28 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		if (Object.prototype.hasOwnProperty.call(returningUserActionsObj, key)) {
 			const element = returningUserActionsObj[key]
 			element.label = element.description
+
 			if (element.args) {
 				switch (element.args) {
 					case 'msg':
 						element.options = [options.message]
 						element.callback = (action: { options: { msg: string } }) => {
+							let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+							if (selectedCaller === -1) console.log('Select user first')
+							// Perform the action on a single caller or multiple callers
+							let argsCallers = {}
+							if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+								// A group is selected
+								argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+							} else {
+								// Single caller is selected
+								argsCallers = { type: 'i', value: selectedCaller }
+							}
 							const sendToCommand: any = {
 								id: element.shortDescription,
 								options: {
 									command: element.command,
-									args: { type: 's', value: action.options.msg },
+									args: [argsCallers, { type: 's', value: action.options.msg }],
 								},
 							}
 							sendUserActionCommand(sendToCommand)
@@ -126,11 +137,22 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					case 'name':
 						element.options = [options.name]
 						element.callback = (action: { options: { name: string } }) => {
+							let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+							if (selectedCaller === -1) console.log('Select user first')
+							// Perform the action on a single caller or multiple callers
+							let argsCallers = {}
+							if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+								// A group is selected
+								argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+							} else {
+								// Single caller is selected
+								argsCallers = { type: 'i', value: selectedCaller }
+							}
 							const sendToCommand: any = {
 								id: element.shortDescription,
 								options: {
 									command: element.command,
-									args: { type: 's', value: action.options.name },
+									args: [argsCallers, { type: 's', value: action.options.name }],
 								},
 							}
 							sendUserActionCommand(sendToCommand)
@@ -139,11 +161,23 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					case 'intX,intY':
 						element.options = [options.intX, options.intY]
 						element.callback = (action: { options: { intX: number; intY: number } }) => {
+							let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+							if (selectedCaller === -1) console.log('Select user first')
+							// Perform the action on a single caller or multiple callers
+							let argsCallers = {}
+							if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+								// A group is selected
+								argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+							} else {
+								// Single caller is selected
+								argsCallers = { type: 'i', value: selectedCaller }
+							}
 							const sendToCommand: any = {
 								id: element.shortDescription,
 								options: {
 									command: element.command,
 									args: [
+										argsCallers,
 										{ type: 'i', value: action.options.intX },
 										{ type: 'i', value: action.options.intY },
 									],
@@ -155,11 +189,22 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					case 'level':
 						element.options = [options.level]
 						element.callback = (action: { options: { level: number } }) => {
+							let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+							if (selectedCaller === -1) console.log('Select user first')
+							// Perform the action on a single caller or multiple callers
+							let argsCallers = {}
+							if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+								// A group is selected
+								argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+							} else {
+								// Single caller is selected
+								argsCallers = { type: 'i', value: selectedCaller }
+							}
 							const sendToCommand: any = {
 								id: element.shortDescription,
 								options: {
 									command: element.command,
-									args: { type: 'i', value: action.options.level },
+									args: [argsCallers, { type: 'i', value: action.options.level }],
 								},
 							}
 							sendUserActionCommand(sendToCommand)
@@ -168,11 +213,22 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					case 'id':
 						element.options = [options.id]
 						element.callback = (action: { options: { id: number } }) => {
+							let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+							if (selectedCaller === -1) console.log('Select user first')
+							// Perform the action on a single caller or multiple callers
+							let argsCallers = {}
+							if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+								// A group is selected
+								argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+							} else {
+								// Single caller is selected
+								argsCallers = { type: 'i', value: selectedCaller }
+							}
 							const sendToCommand: any = {
 								id: element.shortDescription,
 								options: {
 									command: element.command,
-									args: { type: 'i', value: action.options.id },
+									args: [argsCallers, { type: 'i', value: action.options.id }],
 								},
 							}
 							sendUserActionCommand(sendToCommand)
@@ -185,13 +241,26 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 			} else {
 				// No arguments so just a userOption
+
 				element.options = [options.userSelectedInfo]
 				element.callback = () => {
-					if (selectedCaller === 0) throw new Error('Select user first')
+					let selectedCaller = instance.ZoomClientDataObj.selectedCaller
+					if (selectedCaller === -1) console.log('Select user first')
+					// Perform the action on a single caller or multiple callers
+					let argsCallers = {}
+					if (selectedCaller < instance.ZoomClientDataObj.numberOfGroups) {
+						// A group is selected
+						argsCallers = { type: 'i', value: instance.ZoomUserData[selectedCaller]?.users }
+					} else {
+						// Single caller is selected
+						argsCallers = { type: 'i', value: selectedCaller }
+					}
+					console.log('args', argsCallers)
+
 					const sendToCommand: any = {
 						id: element.shortDescription,
 						options: {
-							args: { type: 'i', value: selectedCaller },
+							args: argsCallers,
 							command: element.command,
 						},
 					}
@@ -415,6 +484,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				if (instance.ZoomClientDataObj.selectedAddToGroup !== -1) {
 					// When a group button is selected, add caller to that group
 					instance.ZoomUserData[instance.ZoomClientDataObj.selectedAddToGroup].users?.push(action.options.user)
+					instance.ZoomClientDataObj.selectedAddToGroup = -1
 				} else {
 					// Or make the user selectable
 					instance.ZoomClientDataObj.selectedCaller = action.options.user
