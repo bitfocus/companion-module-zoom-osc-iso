@@ -296,7 +296,8 @@ export class OSC {
 
 				case 'meetingStatus':
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
-					this.instance.variables?.updateVariables()
+					this.sendCommand('/zoom/list')
+					// this.instance.variables?.updateVariables() // Not needed, the list command will drop at least 1 caller (host)
 					break
 
 				default:
