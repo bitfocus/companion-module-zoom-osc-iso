@@ -141,8 +141,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorMicLive,
 			],
 			callback: (feedback) => {
-				console.log(instance.ZoomUserData[feedback.options.user])
-
 				if (instance.ZoomUserData[feedback.options.user].mute === false) return { bgcolor: feedback.options.bg }
 				else return
 			},

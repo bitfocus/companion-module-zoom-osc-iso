@@ -255,8 +255,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						// Single caller is selected
 						argsCallers = { type: 'i', value: selectedCaller }
 					}
-					console.log('args', argsCallers)
-
 					const sendToCommand: any = {
 						id: element.shortDescription,
 						options: {
