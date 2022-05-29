@@ -62,7 +62,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 			}
 		}
-		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : "0"
+		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '0'
 	}
 	let CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 

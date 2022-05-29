@@ -71,7 +71,7 @@ class ZoomInstance extends instance_skel<Config> {
 		this.system = system
 		this.config = config
 		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
-		
+
 		// Setup groups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomUserData[index] = {
@@ -129,25 +129,6 @@ class ZoomInstance extends instance_skel<Config> {
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		this.OSC?.destroy()
 	}
-
-	// /**
-	//  * @description sets actions, presets and feedbacks available for this instance
-	//  */
-	// public updatePresets(): void {
-	// 	// Cast actions and feedbacks from Zoom types to Companion types
-	// 	const actions = getActions(this) as CompanionActions
-	// 	const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-	// 	const presets = [
-	// 		...getSelectUsersPresets(this),
-	// 		...getUserPresets(this),
-	// 		...getGlobalPresets(this),
-	// 		...getSpecialPresets(this),
-	// 	] as CompanionPreset[]
-
-	// 	this.setActions(actions)
-	// 	this.setFeedbackDefinitions(feedbacks)
-	// 	this.setPresetDefinitions(presets)
-	// }
 
 	/**
 	 * @description Create and update variables

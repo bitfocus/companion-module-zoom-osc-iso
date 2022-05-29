@@ -109,31 +109,31 @@ export class OSC {
 	 * @returns promise
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
-			let zoomId = parseInt(data.args[3].value)
-			if (data.args.length == 4) {
-				this.instance.ZoomUserData[zoomId] = {
-					zoomId,
-					targetIndex: data.args[0].value,
-					userName: data.args[1].value,
-					galleryIndex: data.args[2].value,
-					users: [],
-				}
-			} else if (data.args.length > 8) {
-				this.instance.ZoomUserData[zoomId] = {
-					zoomId,
-					targetIndex: data.args[0].value,
-					userName: data.args[1].value,
-					galleryIndex: data.args[2].value,
-					videoOn: data.args[8].value,
-					mute: data.args[9].value,
-					handRaised: data.args[10].value,
-					users: [],
-				}
-			} else {
-				console.log('wrong arguments in OSC feedback')
+		let zoomId = parseInt(data.args[3].value)
+		if (data.args.length == 4) {
+			this.instance.ZoomUserData[zoomId] = {
+				zoomId,
+				targetIndex: data.args[0].value,
+				userName: data.args[1].value,
+				galleryIndex: data.args[2].value,
+				users: [],
 			}
-			// update it all
-			this.instance.updateVariables()
+		} else if (data.args.length > 8) {
+			this.instance.ZoomUserData[zoomId] = {
+				zoomId,
+				targetIndex: data.args[0].value,
+				userName: data.args[1].value,
+				galleryIndex: data.args[2].value,
+				videoOn: data.args[8].value,
+				mute: data.args[9].value,
+				handRaised: data.args[10].value,
+				users: [],
+			}
+		} else {
+			console.log('wrong arguments in OSC feedback')
+		}
+		// update it all
+		this.instance.updateVariables()
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
@@ -155,7 +155,7 @@ export class OSC {
 					// Set for all cases the ZoomCallerId
 					zoomId = parseInt(data.args[3].value)
 					// Check if user exists, returns -1 if not
-					if(!this.instance.ZoomUserData[zoomId]) {
+					if (!this.instance.ZoomUserData[zoomId]) {
 						await this.createZoomUser(data)
 					}
 
@@ -295,7 +295,7 @@ export class OSC {
 					break
 
 				case 'meetingStatus':
-					console.log('received',data);
+					console.log('received', data)
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 					this.sendCommand('/zoom/ping')
 					// this.instance.variables?.updateVariables() // Not needed, the ping command will drop at least 1 caller (host) from zoom/ping

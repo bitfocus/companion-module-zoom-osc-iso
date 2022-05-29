@@ -1,4 +1,10 @@
-import { SomeCompanionConfigField, CompanionInputFieldColor, CompanionInputFieldDropdown, CompanionInputFieldNumber, CompanionInputFieldTextWithVariablesInput } from '../../../instance_skel_types'
+import {
+	SomeCompanionConfigField,
+	CompanionInputFieldColor,
+	CompanionInputFieldDropdown,
+	CompanionInputFieldNumber,
+	CompanionInputFieldTextWithVariablesInput,
+} from '../../../instance_skel_types'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
@@ -61,169 +67,169 @@ export const rgb = (red: number, green: number, blue: number): number => {
 }
 
 export const options: Options = {
-		userSelectedInfo: {
-			type: 'text',
-			id: 'info',
-			width: 12,
-			label: 'Make sure you select a user or a group first, via presets',
-			value: ''
-		},
-		message: {
-			type: 'textwithvariables',
-			label: 'Message',
-			id: 'msg',
-			default: ''
-		},
-		name: {
-			type: 'textwithvariables',
-			label: 'Name',
-			id: 'name',
-			default: ''
-		},
-		meetingID: {
-			type: 'textwithvariables',
-			label: 'Meeting ID',
-			id: 'meetingID',
-			default: ''
-		},
-		intX: {
-			type: 'number',
-			label: 'int X',
-			id: 'intX',
-			min: 0,
-			max: 5000,
-			default: 0
-		},
-		intY: {
-			type: 'number',
-			label: 'int X',
-			id: 'intX',
-			min: 0,
-			max: 5000,
-			default: 0
-		},
-		level: {
-			type: 'number',
-			label: 'Level',
-			id: 'level',
-			min: 0,
-			max: 5,
-			default: 0
-		},
-		subscribeLevel: {
-			type: 'dropdown',
-			label: 'Subscribtion level',
-			id: 'level',
-			choices: [
-				{ id: SubscribeMode.None, label: 'None' },
-				{ id: SubscribeMode.TargetList, label: 'Target List' },
-				{ id: SubscribeMode.All, label: 'All' },
-				{ id: SubscribeMode.Panelists, label: 'Panelists' },
-				{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
-			],
-			default: SubscribeMode.All,
-		},
-		mode: {
-			type: 'number',
-			label: 'Mode',
-			id: 'mode',
-			min: 0,
-			max: 5,
-			default: 0
-		},
-		id: {
-			type: 'number',
-			label: 'ID',
-			id: 'id',
-			min: 0,
-			max: 99999999,
-			default: 0
-		},
-		password: {
-			type: 'textwithvariables',
-			label: 'Password(optional)',
-			id: 'password',
-			default: ''
-		},
-		zak: {
-			type: 'textwithvariables',
-			label: 'Zak',
-			id: 'zak',
-			default: ''
-		},
-		mute: {
-			type: 'dropdown',
-			label: 'Mute',
-			id: 'mute',
-			default: 0,
-			choices: [
-				{ id: 0, label: 'unmute' },
-				{ id: 1, label: 'mute' },
-			],
-		},
-		video: {
-			type: 'dropdown',
-			label: 'Camera on/of',
-			id: 'video',
-			default: 0,
-			choices: [
-				{ id: 0, label: 'off' },
-				{ id: 1, label: 'on' },
-			],
-		},
+	userSelectedInfo: {
+		type: 'text',
+		id: 'info',
+		width: 12,
+		label: 'Make sure you select a user or a group first, via presets',
+		value: '',
+	},
+	message: {
+		type: 'textwithvariables',
+		label: 'Message',
+		id: 'msg',
+		default: '',
+	},
+	name: {
+		type: 'textwithvariables',
+		label: 'Name',
+		id: 'name',
+		default: '',
+	},
+	meetingID: {
+		type: 'textwithvariables',
+		label: 'Meeting ID',
+		id: 'meetingID',
+		default: '',
+	},
+	intX: {
+		type: 'number',
+		label: 'int X',
+		id: 'intX',
+		min: 0,
+		max: 5000,
+		default: 0,
+	},
+	intY: {
+		type: 'number',
+		label: 'int X',
+		id: 'intX',
+		min: 0,
+		max: 5000,
+		default: 0,
+	},
+	level: {
+		type: 'number',
+		label: 'Level',
+		id: 'level',
+		min: 0,
+		max: 5,
+		default: 0,
+	},
+	subscribeLevel: {
+		type: 'dropdown',
+		label: 'Subscribtion level',
+		id: 'level',
+		choices: [
+			{ id: SubscribeMode.None, label: 'None' },
+			{ id: SubscribeMode.TargetList, label: 'Target List' },
+			{ id: SubscribeMode.All, label: 'All' },
+			{ id: SubscribeMode.Panelists, label: 'Panelists' },
+			{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
+		],
+		default: SubscribeMode.All,
+	},
+	mode: {
+		type: 'number',
+		label: 'Mode',
+		id: 'mode',
+		min: 0,
+		max: 5,
+		default: 0,
+	},
+	id: {
+		type: 'number',
+		label: 'ID',
+		id: 'id',
+		min: 0,
+		max: 99999999,
+		default: 0,
+	},
+	password: {
+		type: 'textwithvariables',
+		label: 'Password(optional)',
+		id: 'password',
+		default: '',
+	},
+	zak: {
+		type: 'textwithvariables',
+		label: 'Zak',
+		id: 'zak',
+		default: '',
+	},
+	mute: {
+		type: 'dropdown',
+		label: 'Mute',
+		id: 'mute',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'unmute' },
+			{ id: 1, label: 'mute' },
+		],
+	},
+	video: {
+		type: 'dropdown',
+		label: 'Camera on/of',
+		id: 'video',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'off' },
+			{ id: 1, label: 'on' },
+		],
+	},
 
-		handRaised: {
-			type: 'dropdown',
-			label: 'Handraise or lower',
-			id: 'handRaised',
-			default: 0,
-			choices: [
-				{ id: 0, label: 'lowered' },
-				{ id: 1, label: 'raised' },
-			],
-		},
+	handRaised: {
+		type: 'dropdown',
+		label: 'Handraise or lower',
+		id: 'handRaised',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'lowered' },
+			{ id: 1, label: 'raised' },
+		],
+	},
 
-		foregroundColor: {
-			type: 'colorpicker',
-			label: 'Foreground color',
-			id: 'fg',
-			default: rgb(255, 255, 255),
-		},
+	foregroundColor: {
+		type: 'colorpicker',
+		label: 'Foreground color',
+		id: 'fg',
+		default: rgb(255, 255, 255),
+	},
 
-		foregroundColorBlack: {
-			type: 'colorpicker',
-			label: 'Foreground color',
-			id: 'fg',
-			default: rgb(0, 0, 0),
-		},
+	foregroundColorBlack: {
+		type: 'colorpicker',
+		label: 'Foreground color',
+		id: 'fg',
+		default: rgb(0, 0, 0),
+	},
 
-		backgroundColorPreview: {
-			type: 'colorpicker',
-			label: 'Background color when in preview',
-			id: 'bg_pvw',
-			default: rgb(0, 255, 0),
-		},
+	backgroundColorPreview: {
+		type: 'colorpicker',
+		label: 'Background color when in preview',
+		id: 'bg_pvw',
+		default: rgb(0, 255, 0),
+	},
 
-		backgroundColorProgram: {
-			type: 'colorpicker',
-			label: 'Background color when in grogram',
-			id: 'bg',
-			default: rgb(255, 0, 0),
-		},
+	backgroundColorProgram: {
+		type: 'colorpicker',
+		label: 'Background color when in grogram',
+		id: 'bg',
+		default: rgb(255, 0, 0),
+	},
 
-		backgroundColorMicLive: {
-			type: 'colorpicker',
-			label: 'Background color when microphone is live',
-			id: 'bg',
-			default: rgb(255, 0, 0),
-		},
+	backgroundColorMicLive: {
+		type: 'colorpicker',
+		label: 'Background color when microphone is live',
+		id: 'bg',
+		default: rgb(255, 0, 0),
+	},
 
-		backgroundColorYellow: {
-			type: 'colorpicker',
-			label: 'Background color',
-			id: 'bg',
-			default: rgb(255, 255, 0),
-		},
+	backgroundColorYellow: {
+		type: 'colorpicker',
+		label: 'Background color',
+		id: 'bg',
+		default: rgb(255, 255, 0),
+	},
 }
 /**
  * @description Common Action and Feedback options

@@ -101,7 +101,7 @@ export class Variables {
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
 		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
-		
+
 		// TODO username
 		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] =

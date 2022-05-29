@@ -82,7 +82,7 @@ const UserActions: userActionType = {
 		description: 'User Action: Send A Chat Via DM',
 		shortDescription: 'SendAChatViaDM',
 		command: '/chat',
-		args: 'msg'
+		args: 'msg',
 	},
 	RemoteChat: {
 		description: 'User Action: Remote Chat',
