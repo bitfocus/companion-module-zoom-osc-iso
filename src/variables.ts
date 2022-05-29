@@ -57,6 +57,7 @@ export class Variables {
 			{ label: 'call status', name: 'callStatus' },
 			{ label: 'Selected caller/group', name: 'selectedCaller' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
+			{ label: 'Number of users in call', name: 'numberOfUsers' },
 		])
 		let userVariables = []
 		// Which users in a group
@@ -99,6 +100,7 @@ export class Variables {
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
+		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
 		
 		// TODO username
 		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
