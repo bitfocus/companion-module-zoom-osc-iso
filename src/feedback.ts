@@ -110,8 +110,9 @@ interface ZoomFeedbackAdvanced<T> {
 export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
-	let CHOICES_USERS = [{ id: '', label: 'no users' }]
-	let CHOICES_GROUPS = [{ id: '', label: 'no groups' }]
+	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
+	let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
+	let CHOICES_USERS_DEFAULT = "0"
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
@@ -120,7 +121,8 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 			}
 		}
-		CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
+		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : "0"
+		if (CHOICES_USERS.length > 0)	CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 	}
 
 	return {
@@ -133,7 +135,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS[0].id,
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 				options.backgroundColorMicLive,
@@ -154,7 +156,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS[0].id,
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 				options.video,
@@ -176,7 +178,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS[0].id,
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 				options.handRaised,
@@ -200,7 +202,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'User',
 					id: 'user',
-					default: CHOICES_USERS[0].id,
+					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
 				options.foregroundColor,
