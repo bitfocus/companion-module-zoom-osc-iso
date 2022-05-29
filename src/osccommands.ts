@@ -79,9 +79,10 @@ const UserActions: userActionType = {
 		command: '/toggleMute',
 	},
 	SendAChatViaDM: {
-		description: 'User Action: Send A Cha tVia DM',
+		description: 'User Action: Send A Chat Via DM',
 		shortDescription: 'SendAChatViaDM',
 		command: '/chat',
+		args: 'msg'
 	},
 	RemoteChat: {
 		description: 'User Action: Remote Chat',
@@ -639,7 +640,7 @@ const SpecialActions = {
 	},
 	ListUsers: {
 		description: 'Global Action: Request list of users',
-		shortDescription: 'listUsers',
+		shortDescription: 'ListUsers',
 		command: '/zoom/list',
 	},
 	// ConfigureBreakoutRooms: {
