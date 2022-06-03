@@ -61,7 +61,7 @@ export class Variables {
 		])
 		let userVariables = []
 		// Which users in a group
-		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+		for (let index = 1; index-1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 			userVariables.push({
 				label: `Inside group`,
 				name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}`,
@@ -91,11 +91,11 @@ export class Variables {
 	 */
 	public readonly updateVariables = (): void => {
 		const newVariables: InstanceVariableValue = {}
-		if (this.instance.ZoomClientDataObj.selectedCaller === -1) {
+		if (this.instance.ZoomClientDataObj.selectedCallers.length === 0) {
 			newVariables['selectedCaller'] = 'nothing selected'
 		} else {
-			newVariables['selectedCaller'] =
-				this.instance.ZoomUserData[this.instance.ZoomClientDataObj.selectedCaller]?.userName
+			newVariables['selectedCaller'] =this.instance.ZoomClientDataObj.selectedCallers.toString()
+				// this.instance.ZoomUserData[this.instance.ZoomClientDataObj.selectedCaller]?.userName
 		}
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
@@ -103,7 +103,7 @@ export class Variables {
 		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
 
 		// TODO username
-		for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+		for (let index = 1; index-1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] =
 				this.instance.ZoomUserData[index].users?.toString()
 		}
