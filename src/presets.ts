@@ -2,7 +2,7 @@ import { CompanionPreset } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { GlobalActionCallbacks, UserActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
-const { UserActions, GlobalActions, SpecialActions } = require('./osccommands')
+const { UserActions, actionsWithArgs, GlobalActions, SpecialActions } = require('./osccommands')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
 
@@ -28,28 +28,19 @@ export type ZoomGlobalPreset = Exclude<CompanionPreset, 'category' | 'actions' |
 export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[] {
 	let presets: CompanionPreset[] = []
 
-	for (let index = 0; index < instance.ZoomClientDataObj.numberOfGroups; index++) {
+	for (let index = 1; index-1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
 		presets.push({
 			category: 'Add to Group',
 			label: `Add to group: ${instance.ZoomUserData[index].userName}`,
 			bank: {
 				style: 'text',
-				text: `Add to group:\\n${instance.ZoomUserData[index].userName}`,
+				text: `Add to group:\\n$(zoomosc:${index})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
 			},
-			actions: [{ action: 'SelectAddToGroup', options: { group: index } }],
-			feedbacks: [
-				{
-					type: 'selectedAddToGroup',
-					options: {
-						group: index,
-						fg: instance.rgb(0, 0, 0),
-						bg: instance.rgb(255, 255, 0),
-					},
-				},
-			],
+			actions: [{ action: 'addToGroup', options: { group: index } }],
+			feedbacks: [],
 		})
 	}
 
@@ -65,10 +56,18 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					text: `Select\\n$(zoomosc:${user.zoomId})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(125, 125, 125),
+					bgcolor: user.zoomId < (instance.ZoomClientDataObj.numberOfGroups+1) ? instance.rgb(125, 125, 125) : instance.rgb(0, 0, 0),
 				},
-				actions: [{ action: 'SelectUser', options: { user: user.zoomId } }],
+				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
 				feedbacks: [
+					{
+						type: 'selectedInAGroup',
+						options: {
+							user: user.zoomId,
+							fg: instance.rgb(0, 0, 0),
+							bg: instance.rgb(125, 125, 0),
+						},
+					},
 					{
 						type: 'selectedUser',
 						options: {
@@ -106,16 +105,37 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 }
 export function getUserPresets(instance: ZoomInstance): ZoomUserPreset[] {
 	let presets: ZoomUserPreset[] = []
-
 	for (const key in UserActions) {
 		if (Object.prototype.hasOwnProperty.call(UserActions, key)) {
 			const element = UserActions[key]
 			presets.push({
-				category: 'User Presets',
+				category: 'User Presets Basics',
 				label: element.shortDescription,
 				bank: {
 					style: 'text',
-					text: element.description.substring(13),
+					text: element.description,
+					size: 'auto',
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(0, 0, 0),
+				},
+				actions: [{ action: 'UserActions', options: { user: '', args: '', actionID: element.shortDescription, command: element.command } }],
+				feedbacks: [],
+			})
+		}
+	}
+	return presets
+}
+export function getPresetsWithArgs(instance: ZoomInstance): ZoomUserPreset[] {
+	let presets: ZoomUserPreset[] = []
+	for (const key in actionsWithArgs) {
+		if (Object.prototype.hasOwnProperty.call(actionsWithArgs, key)) {
+			const element = actionsWithArgs[key]
+			presets.push({
+				category: 'User/Global presets with arguments',
+				label: element.shortDescription,
+				bank: {
+					style: 'text',
+					text: element.description,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(0, 0, 0),
@@ -125,7 +145,6 @@ export function getUserPresets(instance: ZoomInstance): ZoomUserPreset[] {
 			})
 		}
 	}
-
 	return presets
 }
 export function getSpecialPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
@@ -139,7 +158,7 @@ export function getSpecialPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 				label: element.shortDescription,
 				bank: {
 					style: 'text',
-					text: element.description.substring(15),
+					text: element.description,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(0, 0, 0),
@@ -159,16 +178,16 @@ export function getGlobalPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 		if (Object.prototype.hasOwnProperty.call(GlobalActions, key)) {
 			const element = GlobalActions[key]
 			presets.push({
-				category: 'Global Presets',
+				category: 'Global Presets Basics',
 				label: element.shortDescription,
 				bank: {
 					style: 'text',
-					text: element.description.substring(15),
+					text: element.description,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(0, 0, 0),
 				},
-				actions: [{ action: element.shortDescription, options: { command: element.command } }],
+				actions: [{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } }],
 				feedbacks: [],
 			})
 		}
