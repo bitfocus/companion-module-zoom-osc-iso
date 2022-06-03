@@ -16,7 +16,7 @@ export interface ZoomFeedbacks {
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
 	selectedUser: ZoomFeedback<selectedUserCallback>
-	selectedAddToGroup: ZoomFeedback<selectedAddToGroupCallback>
+	selectedInAGroup: ZoomFeedback<selectedInAGroupCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
@@ -58,11 +58,12 @@ interface selectedUserCallback {
 		user: number
 	}>
 }
-interface selectedAddToGroupCallback {
+interface selectedInAGroupCallback {
 	type: 'selectedAddToGroup'
 	options: Readonly<{
 		fg: number
 		bg: number
+		user: number
 		group: number
 	}>
 }
@@ -111,7 +112,7 @@ export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
-	let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
+	// let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
 	let CHOICES_USERS_DEFAULT = '0'
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
@@ -122,7 +123,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			}
 		}
 		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '0'
-		if (CHOICES_USERS.length > 0) CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
+		// if (CHOICES_USERS.length > 0) CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
 	}
 
 	return {
@@ -207,30 +208,31 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorYellow,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedCaller === feedback.options.user)
-					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				if (instance.ZoomClientDataObj.selectedCallers.find(element => element === feedback.options.user)) return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},
 		},
-		selectedAddToGroup: {
+		selectedInAGroup: {
 			type: 'advanced',
-			label: 'Selected group to add user',
-			description: 'Indicate if a group is ready to accept callers',
+			label: 'User is in group',
+			description: 'Indicate if a user is in a group-selection',
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Group',
-					id: 'group',
-					default: CHOICES_GROUPS[0].id,
-					choices: CHOICES_GROUPS,
+					label: 'User',
+					id: 'user',
+					default: CHOICES_USERS_DEFAULT,
+					choices: CHOICES_USERS,
 				},
 				options.foregroundColor,
-				options.backgroundColorYellow,
+				options.backgroundColorGray,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedAddToGroup === feedback.options.group)
+				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+					if (instance.ZoomUserData[index].users.find(element => element === feedback.options.user))
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
-				else return
+				}
+				return
 			},
 		},
 	}
