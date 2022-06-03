@@ -41,7 +41,7 @@ export class OSC {
 	 * @description Close connection on instance disable/removal
 	 */
 	public readonly destroy = (): void => {
-		if (this.udpPort) this.udpPort.Close()
+		this.needToPingPong = false
 		if (this.udpPort) this.udpPort.destroy()
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
