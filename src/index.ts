@@ -10,7 +10,7 @@ import { Config } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
-import { getUserPresets, getGlobalPresets, getSelectUsersPresets, getSpecialPresets } from './presets'
+import { getUserPresets, getGlobalPresets, getSelectUsersPresets, getSpecialPresets, getPresetsWithArgs } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
@@ -21,7 +21,7 @@ class ZoomInstance extends instance_skel<Config> {
 	// Global call settings
 	public ZoomClientDataObj: {
 		subscribeMode: number
-		selectedCaller: number
+		selectedCallers: number[]
 		selectedAddToGroup: number
 		galleryShape: [number, number]
 		activeSpeaker: string
@@ -34,7 +34,7 @@ class ZoomInstance extends instance_skel<Config> {
 		last_ping: number
 		numberOfGroups: number
 	} = {
-		selectedCaller: -1,
+		selectedCallers: [],
 		selectedAddToGroup: -1,
 		subscribeMode: 0,
 		galleryShape: [0, 0],
@@ -71,9 +71,8 @@ class ZoomInstance extends instance_skel<Config> {
 		this.system = system
 		this.config = config
 		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
-
 		// Setup groups
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+		for (let index = 1; index-1 < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomUserData[index] = {
 				zoomId: index,
 				userName: `Group ${index}`,
@@ -109,6 +108,8 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description triggered every time the config for this instance is saved
 	 */
 	public updateConfig(config: Config): void {
+		console.log('changing config!',config);
+		
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
@@ -117,13 +118,14 @@ class ZoomInstance extends instance_skel<Config> {
 			this.oscSend(this.config.host, this.config.tx_port, '/zoom/subscribe', [{ type: 'i', value: this.config.subscribeMode }])
 		}
 		this.updateInstance()
-		this.setPresetDefinitions([
-			...getSelectUsersPresets(this),
-			...getSpecialPresets(this),
-			...getUserPresets(this),
-			...getGlobalPresets(this),
-		] as CompanionPreset[])
-		if (this.variables) this.variables.updateDefinitions()
+		// this.setPresetDefinitions([
+		// 	...getSelectUsersPresets(this),
+		// 	...getSpecialPresets(this),
+		// 	...getUserPresets(this),
+		// 	...getGlobalPresets(this),
+		// 	...getPresetsWithArgs(this),
+		// ] as CompanionPreset[])
+		// if (this.variables) this.variables.updateDefinitions()
 	}
 
 	/**
@@ -138,8 +140,10 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description Create and update variables
 	 */
 	public updateVariables(): void {
-		this.variables?.updateDefinitions()
-		this.variables?.updateVariables()
+		if (this.variables) {
+			this.variables.updateDefinitions()
+			this.variables.updateVariables()
+		}
 	}
 
 	/**
@@ -154,11 +158,13 @@ class ZoomInstance extends instance_skel<Config> {
 			...getUserPresets(this),
 			...getGlobalPresets(this),
 			...getSpecialPresets(this),
+			...getPresetsWithArgs(this),
 		] as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)
 		this.setPresetDefinitions(presets)
+		this.updateVariables()
 	}
 }
 
