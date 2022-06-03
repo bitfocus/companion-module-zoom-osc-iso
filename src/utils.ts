@@ -50,6 +50,8 @@ export interface Options {
 	backgroundColorProgram: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorMicLive: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorYellow: EnforceDefault<CompanionInputFieldColor, number>
+	backgroundColorGray: EnforceDefault<CompanionInputFieldColor, number>
+	backgroundColorGroup: EnforceDefault<CompanionInputFieldColor, number>
 }
 
 // Static Variables
@@ -210,6 +212,20 @@ export const options: Options = {
 		default: rgb(0, 255, 0),
 	},
 
+	backgroundColorGray: {
+		type: 'colorpicker',
+		label: 'Background color',
+		id: 'bg',
+		default: rgb(125, 125, 125),
+	},
+
+	backgroundColorGroup: {
+		type: 'colorpicker',
+		label: 'Background color',
+		id: 'bg',
+		default: rgb(125, 125, 125),
+	},
+
 	backgroundColorProgram: {
 		type: 'colorpicker',
 		label: 'Background color when in grogram',
@@ -311,6 +327,26 @@ export const options: Options = {
 // 		default: rgb(255, 255, 0),
 // 	},
 // }
+
+export const arrayRemove = (arr: Array<number>, value: number) => { 
+	return arr.filter(function(element){ 
+			return element != value; 
+	});
+}
+
+export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => { 
+	// Find a index of the value (use this so we can use it for remove)
+	let index = arr.findIndex(element => element === value)
+	// Create a temp array
+	let tempArr = arr
+	if(index === -1) {
+		tempArr.push(value)
+		return tempArr
+	} else {
+		tempArr.splice(index, 1)
+		return tempArr
+	}
+}
 
 /**
  * @param time Time in miliseconds or seconds
