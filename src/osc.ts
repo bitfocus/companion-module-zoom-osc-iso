@@ -168,7 +168,7 @@ export class OSC {
 							// {int listCount}
 							// {int userRole}
 							// {int onlineStatus}
-							// {in videoStatus}
+							// {int videoStatus}
 							// {int audioStatus}
 							// {int handRaised}
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
@@ -289,7 +289,7 @@ export class OSC {
 					// Subscribe to ZoomOSC
 					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: this.instance.config.subscribeMode }])
 					// Send this to fetch initial data
-					this.sendCommand('/zoom/list')
+					// this.sendCommand('/zoom/list')
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
 					break
