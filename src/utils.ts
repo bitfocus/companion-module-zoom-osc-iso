@@ -104,8 +104,8 @@ export const options: Options = {
 	},
 	intY: {
 		type: 'number',
-		label: 'int X',
-		id: 'intX',
+		label: 'int Y',
+		id: 'intY',
 		min: 0,
 		max: 5000,
 		default: 0,
