@@ -60,6 +60,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '1'
 	}
 	let CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
+	let CHOICES_GALLERY = [{ id: '0', label: 'empty gallery' }]
+	if (instance.ZoomClientDataObj.galleryOrder.length > 1) {
+		CHOICES_GALLERY.length = 0
+		for (let index = 0; index < instance.ZoomClientDataObj.galleryOrder.length; index++) {
+			CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
+		}
+	}
 
 	let userOption: InputFieldWithDefault = {
 		type: 'dropdown',
@@ -67,6 +74,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		id: 'user',
 		default: CHOICES_USERS_DEFAULT,
 		choices: CHOICES_USERS,
+	}
+
+	let galleryOrderOption: InputFieldWithDefault = {
+		type: 'dropdown',
+		label: 'Position',
+		id: 'position',
+		default: '0',
+		choices: CHOICES_GALLERY,
 	}
 
 	let groupOption: InputFieldWithDefault = {
@@ -514,6 +529,42 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedUserGalPos')
+			},
+		},
+		SelectFromGalleryPosition: {
+			label: 'Preselect user/group',
+			options: [
+				galleryOrderOption,
+				{
+					type: 'dropdown',
+					label: 'Option',
+					id: 'option',
+					default: '',
+					choices: [
+						{ label: 'Toggle', id: 'toggle' },
+						{ label: 'Select', id: 'select' },
+						{ label: 'Remove', id: 'remove' },
+					],
+				},
+			],
+			callback: (action: { options: { position: number; option: string } }) => {
+				if (action.options.option == 'toggle') {
+					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+						instance.ZoomClientDataObj.selectedCallers,
+						instance.ZoomClientDataObj.galleryOrder[action.options.position]
+					)
+				} else if (action.options.option == 'select') {
+					instance.ZoomClientDataObj.selectedCallers.push(instance.ZoomClientDataObj.galleryOrder[action.options.position])
+				} else if (action.options.option == 'remove') {
+					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+						instance.ZoomClientDataObj.selectedCallers,
+						instance.ZoomClientDataObj.galleryOrder[action.options.position]
+					)
+				}
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedUserGalPos')
 			},
 		},
 		addToGroup: {
@@ -527,7 +578,20 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedUserGalPos')
 				instance.checkFeedbacks('selectedInAGroup')
+				instance.checkFeedbacks('selectedInAGroupGalPos')
+			},
+		},
+		clearGroup: {
+			label: 'Clear group selection',
+			options: [groupOption],
+			callback: (action: { options: { group: number } }) => {
+				instance.ZoomUserData[action.options.group].users.length = 0
+				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedUserGalPos')
+				instance.checkFeedbacks('selectedInAGroup')
+				instance.checkFeedbacks('selectedInAGroupGalPos')
 			},
 		},
 		renameGroup: {
@@ -559,6 +623,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedUserGalPos')
 			},
 		},
 	}

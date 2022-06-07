@@ -94,6 +94,10 @@ export class OSC {
 					if (this.updateLoop) {
 						this.instance.updateInstance()
 						this.updateLoop = false
+						// Make sure initial status is reflected
+						this.instance.checkFeedbacks('handRaised')
+						this.instance.checkFeedbacks('camera')
+						this.instance.checkFeedbacks('microphoneLive')
 					}
 				}, 2000)
 				resolve('ready for OSC')
@@ -233,12 +237,12 @@ export class OSC {
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
 							break
 						case 'stoppedSpeaking':
-							console.log('receiving', data)
+							// console.log('receiving', data)
 							// create feedback for this
 							break
 						case 'isSpeaking':
-							console.log('receiving', data)
-							// create feedback for this
+							this.instance.ZoomClientDataObj.lastSpeaking = data.args[1].value
+							this.instance.variables?.updateVariables()
 							break
 
 						default:
@@ -248,22 +252,26 @@ export class OSC {
 					break
 
 				case 'galleryShape':
-					// {int rows} {int cols}
-					console.log('/zoomosc/galleryShape', data.args)
-					this.instance.ZoomClientDataObj.galleryShape[0] = data.args[0].value
-					this.instance.ZoomClientDataObj.galleryShape[1] = data.args[1].value
-					this.instance.variables?.updateVariables()
+					// {int rows} {int cols} only for mac?
+					// console.log('/zoomosc/galleryShape', data.args)
+					// this.instance.ZoomClientDataObj.galleryShape[0] = data.args[0].value
+					// this.instance.ZoomClientDataObj.galleryShape[1] = data.args[1].value
+					// this.instance.variables?.updateVariables()
 					break
 
 				case 'galleryOrder':
-					// {int item0} ... {int itemN}
 					console.log('receiving', data)
+					this.instance.ZoomClientDataObj.galleryOrder.length = 0
+					data.args.forEach((order: { type: string; value: number }) => {
+						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
+					})
+					this.instance.variables?.updateDefinitions()
+					this.instance.variables?.updateVariables()
 					break
 
 				case 'galleryCount':
 					console.log('receiving', data)
 					this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
-					this.instance.variables?.updateVariables()
 					break
 
 				case 'pong':
@@ -279,15 +287,14 @@ export class OSC {
 					this.instance.ZoomClientDataObj.last_ping = Date.now()
 					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
-					this.instance.ZoomClientDataObj.galTrackMode = data.args[3].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-					this.instance.ZoomClientDataObj.numberOfTargets = data.args[5].value
 					this.instance.ZoomClientDataObj.numberOfUsersInCall = data.args[6].value
 					this.instance.variables?.updateVariables()
 					this.needToPingPong = false
 					if (this.pingInterval) clearInterval(this.pingInterval)
 					// Subscribe to ZoomOSC
 					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: this.instance.config.subscribeMode }])
+					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
 					// Send this to fetch initial data
 					// this.sendCommand('/zoom/list')
 					// Start a loop to process incoming data in the backend

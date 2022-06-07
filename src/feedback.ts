@@ -112,7 +112,7 @@ export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
-	// let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
+	let CHOICES_GALLERY = [{ id: '0', label: 'no position' }]
 	let CHOICES_USERS_DEFAULT = '0'
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
@@ -123,7 +123,13 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			}
 		}
 		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '0'
-		// if (CHOICES_USERS.length > 0) CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
+		CHOICES_GALLERY = [{ id: '0', label: 'empty gallery' }]
+		if (instance.ZoomClientDataObj.galleryOrder.length > 1) {
+			CHOICES_GALLERY.length = 0
+			for (let index = 0; index < instance.ZoomClientDataObj.galleryOrder.length; index++) {
+				CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
+			}
+		}
 	}
 
 	return {
@@ -146,6 +152,26 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				else return
 			},
 		},
+		microphoneLiveGalPos: {
+			type: 'advanced',
+			label: 'Microphone live',
+			description: 'Indicates if a user has their microphone on',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Position',
+					id: 'position',
+					default: '0',
+					choices: CHOICES_GALLERY,
+				},
+				options.backgroundColorMicLive,
+			],
+			callback: (feedback) => {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].mute === false)
+					return { bgcolor: feedback.options.bg }
+				else return
+			},
+		},
 		camera: {
 			type: 'advanced',
 			label: 'Camera on/of',
@@ -164,6 +190,31 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (instance.ZoomUserData[feedback.options.user].videoOn === (feedback.options.video == 1 ? true : false))
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
+		cameraGalPos: {
+			type: 'advanced',
+			label: 'Camera on/of',
+			description: 'Indicates if camera is on or off',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Position',
+					id: 'position',
+					default: '0',
+					choices: CHOICES_GALLERY,
+				},
+				options.video,
+				options.foregroundColor,
+				options.backgroundColorProgram,
+			],
+			callback: (feedback) => {
+				if (
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].videoOn ===
+					(feedback.options.video == 1 ? true : false)
+				)
 					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},
@@ -192,6 +243,31 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				else return
 			},
 		},
+		handRaisedGalPos: {
+			type: 'advanced',
+			label: 'hand raised',
+			description: 'Indicates when hand is raised',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Position',
+					id: 'position',
+					default: '0',
+					choices: CHOICES_GALLERY,
+				},
+				options.handRaised,
+				options.foregroundColor,
+				options.backgroundColorYellow,
+			],
+			callback: (feedback) => {
+				if (
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].handRaised ===
+					(feedback.options.handRaised == 1 ? true : false)
+				)
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
 		selectedUser: {
 			type: 'advanced',
 			label: 'Selected user',
@@ -208,7 +284,33 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.backgroundColorYellow,
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedCallers.find(element => element === feedback.options.user)) return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				if (instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.user))
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				else return
+			},
+		},
+		selectedUserGalPos: {
+			type: 'advanced',
+			label: 'Selected user',
+			description: 'Indicate if a user is pre-selected for a command/action',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Position',
+					id: 'position',
+					default: '0',
+					choices: CHOICES_GALLERY,
+				},
+				options.foregroundColor,
+				options.backgroundColorYellow,
+			],
+			callback: (feedback) => {
+				if (
+					instance.ZoomClientDataObj.selectedCallers.find(
+						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
+					)
+				)
+					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				else return
 			},
 		},
@@ -229,8 +331,35 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
-					if (instance.ZoomUserData[index].users.find(element => element === feedback.options.user))
-					return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+					if (instance.ZoomUserData[index].users.find((element) => element === feedback.options.user))
+						return { color: feedback.options.fg, bgcolor: feedback.options.bg }
+				}
+				return
+			},
+		},
+		selectedInAGroupGalPos: {
+			type: 'advanced',
+			label: 'User is in group',
+			description: 'Indicate if a user is in a group-selection',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Position',
+					id: 'position',
+					default: '0',
+					choices: CHOICES_GALLERY,
+				},
+				options.foregroundColor,
+				options.backgroundColorGray,
+			],
+			callback: (feedback) => {
+				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+					if (
+						instance.ZoomUserData[index].users.find(
+							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
+						)
+					)
+						return { color: feedback.options.fg, bgcolor: feedback.options.bg }
 				}
 				return
 			},

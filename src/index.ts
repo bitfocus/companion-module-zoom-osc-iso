@@ -22,29 +22,27 @@ class ZoomInstance extends instance_skel<Config> {
 	public ZoomClientDataObj: {
 		subscribeMode: number
 		selectedCallers: number[]
-		selectedAddToGroup: number
-		galleryShape: [number, number]
+		// galleryShape: [number, number]
 		activeSpeaker: string
+		lastSpeaking: string
 		zoomOSCVersion: string | number
 		callStatus: string | number
 		numberOfUsersInCall: number
 		galleryCount: number
-		numberOfTargets: number
-		galTrackMode: number
+		galleryOrder: number[]
 		last_ping: number
 		numberOfGroups: number
 	} = {
 		selectedCallers: [],
-		selectedAddToGroup: -1,
 		subscribeMode: 0,
-		galleryShape: [0, 0],
+		// galleryShape: [0, 0],
 		activeSpeaker: 'None',
+		lastSpeaking: 'None',
 		zoomOSCVersion: 'Not Connected',
 		callStatus: 0,
 		numberOfUsersInCall: 0,
 		galleryCount: 0,
-		numberOfTargets: 0,
-		galTrackMode: 0,
+		galleryOrder: [],
 		last_ping: 0,
 		numberOfGroups: 5,
 	}

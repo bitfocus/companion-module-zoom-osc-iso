@@ -33,9 +33,9 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'clearSelection', options: {} }],
 		feedbacks: [],
 	})
-	
+
 	// Add to group presets
-	for (let index = 1; index-1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+	for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
 		presets.push({
 			category: 'Add to Group',
 			label: `Add to group: ${instance.ZoomUserData[index].userName}`,
@@ -48,6 +48,58 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			},
 			actions: [{ action: 'addToGroup', options: { group: index } }],
 			feedbacks: [],
+		})
+		presets.push({
+			category: 'Clear Group',
+			label: `Clear group: ${instance.ZoomUserData[index].userName}`,
+			bank: {
+				style: 'text',
+				text: `Clear group:\\n$(zoomosc:${index})`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(125, 125, 125),
+			},
+			actions: [{ action: 'clearGroup', options: { group: index } }],
+			feedbacks: [],
+		})
+	}
+	for (let index = 0; index < instance.ZoomClientDataObj.galleryOrder.length; index++) {
+		presets.push({
+			category: 'Select from Gallery',
+			label: `$(zoomosc:Gallery position ${index})`,
+			bank: {
+				style: 'text',
+				text: `Gal Pos ${index}\\n$(zoomosc:Gallery position ${index})`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: 'SelectFromGalleryPosition', options: { position: index, option: 'toggle' } }],
+			feedbacks: [
+				{
+					type: 'selectedInAGroupGalPos',
+					options: {
+						position: index,
+						fg: instance.rgb(0, 0, 0),
+						bg: instance.rgb(125, 125, 0),
+					},
+				},
+				{
+					type: 'selectedUserGalPos',
+					options: {
+						position: index,
+						fg: instance.rgb(0, 0, 0),
+						bg: instance.rgb(255, 255, 0),
+					},
+				},
+				{
+					type: 'microphoneLiveGalPos',
+					options: {
+						position: index,
+						bg: instance.rgb(255, 0, 0),
+					},
+				},
+			],
 		})
 	}
 
@@ -63,7 +115,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					text: `Select\\n$(zoomosc:${user.zoomId})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
-					bgcolor: user.zoomId < (instance.ZoomClientDataObj.numberOfGroups+1) ? instance.rgb(125, 125, 125) : instance.rgb(0, 0, 0),
+					bgcolor:
+						user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1
+							? instance.rgb(125, 125, 125)
+							: instance.rgb(0, 0, 0),
 				},
 				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
 				feedbacks: [
@@ -125,7 +180,12 @@ export function getUserPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(0, 0, 0),
 				},
-				actions: [{ action: 'UserActions', options: { user: '', args: '', actionID: element.shortDescription, command: element.command } }],
+				actions: [
+					{
+						action: 'UserActions',
+						options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+					},
+				],
 				feedbacks: [],
 			})
 		}
@@ -194,7 +254,9 @@ export function getGlobalPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(0, 0, 0),
 				},
-				actions: [{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } }],
+				actions: [
+					{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
+				],
 				feedbacks: [],
 			})
 		}
