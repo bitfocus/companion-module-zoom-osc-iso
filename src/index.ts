@@ -18,6 +18,25 @@ import { OSC } from './osc'
  * Companion instance class for Zoom
  */
 class ZoomInstance extends instance_skel<Config> {
+
+	static GetUpgradeScripts() {
+		return [
+			// any existing upgrade scripts go here
+			instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
+				'microphoneLive': true,
+				'microphoneLiveGalPos': true,
+				'camera': true,
+				'cameraGalPos': true,
+				'handRaised': true,
+				'handRaisedGalPos': true,
+				'selectedUser': true,
+				'selectedUserGalPos': true,
+				'selectedInAGroup': true,
+				'selectedInAGroupGalPos': true,
+			})
+		]
+	}
+
 	// Global call settings
 	public ZoomClientDataObj: {
 		subscribeMode: number
