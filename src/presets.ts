@@ -80,8 +80,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedInAGroupGalPos',
 					options: {
 						position: index,
-						fg: instance.rgb(0, 0, 0),
-						bg: instance.rgb(125, 125, 0),
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(125, 125, 0),
 					},
 				},
 				{
@@ -96,7 +98,9 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'microphoneLiveGalPos',
 					options: {
 						position: index,
-						bg: instance.rgb(255, 0, 0),
+					},
+					style: {
+						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
 			],
@@ -126,23 +130,29 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'selectedInAGroup',
 						options: {
 							user: user.zoomId,
-							fg: instance.rgb(0, 0, 0),
-							bg: instance.rgb(125, 125, 0),
+						},
+						style: {
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(125, 125, 0),
 						},
 					},
 					{
 						type: 'selectedUser',
 						options: {
 							user: user.zoomId,
-							fg: instance.rgb(0, 0, 0),
-							bg: instance.rgb(255, 255, 0),
+						},
+						style: {
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 255, 0),
 						},
 					},
 					{
 						type: 'microphoneLive',
 						options: {
 							user: user.zoomId,
-							bg: instance.rgb(255, 0, 0),
+						},
+						style: {
+							bgcolor: instance.rgb(255, 0, 0),
 						},
 					},
 				],
