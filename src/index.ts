@@ -129,20 +129,14 @@ class ZoomInstance extends instance_skel<Config> {
 		
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
-			this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
+			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
 		if (config.subscribeMode !== this.ZoomClientDataObj.subscribeMode){
-			this.ZoomClientDataObj.subscribeMode = this.config.subscribeMode
-			this.oscSend(this.config.host, this.config.tx_port, '/zoom/subscribe', [{ type: 'i', value: this.config.subscribeMode }])
+			this.ZoomClientDataObj.subscribeMode = config.subscribeMode
+			this.oscSend(config.host, config.tx_port, '/zoom/subscribe', [{ type: 'i', value: this.config.subscribeMode }])
 		}
+		console.log('groups',this.ZoomClientDataObj.numberOfGroups);
+		
 		this.updateInstance()
-		// this.setPresetDefinitions([
-		// 	...getSelectUsersPresets(this),
-		// 	...getSpecialPresets(this),
-		// 	...getUserPresets(this),
-		// 	...getGlobalPresets(this),
-		// 	...getPresetsWithArgs(this),
-		// ] as CompanionPreset[])
-		// if (this.variables) this.variables.updateDefinitions()
 	}
 
 	/**
@@ -158,6 +152,8 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateVariables(): void {
 		if (this.variables) {
+			console.log('updating');
+			
 			this.variables.updateDefinitions()
 			this.variables.updateVariables()
 		}
