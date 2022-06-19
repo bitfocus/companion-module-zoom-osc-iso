@@ -298,7 +298,11 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.user)) return true
+				if (
+					instance.ZoomClientDataObj.selectedCallers &&
+					instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.user)
+				)
+					return true
 				else return false
 			},
 		},
@@ -321,6 +325,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (
+					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
 					)
@@ -348,7 +353,11 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
-					if (instance.ZoomUserData[index].users.find((element) => element === feedback.options.user)) return true
+					if (
+						instance.ZoomUserData[index].users &&
+						instance.ZoomUserData[index].users.find((element) => element === feedback.options.user)
+					)
+						return true
 				}
 				return false
 			},
@@ -373,6 +382,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			callback: (feedback) => {
 				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
 					if (
+						instance.ZoomUserData[index].users &&
 						instance.ZoomUserData[index].users.find(
 							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
 						)
