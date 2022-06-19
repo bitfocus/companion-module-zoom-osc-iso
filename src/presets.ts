@@ -157,19 +157,35 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				],
 			})
-			presets.push({
-				category: 'Rename',
-				label: user.userName,
-				bank: {
-					style: 'text',
-					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(125, 125, 125),
-				},
-				actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
-				feedbacks: [],
-			})
+			if (user.zoomId <= instance.ZoomClientDataObj.numberOfGroups) {
+				presets.push({
+					category: 'Rename',
+					label: user.userName,
+					bank: {
+						style: 'text',
+						text: `Rename\\n$(zoomosc:${user.zoomId})`,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(125, 125, 125),
+					},
+					actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
+					feedbacks: [],
+				})
+			} else {
+				presets.push({
+					category: 'Rename',
+					label: user.userName,
+					bank: {
+						style: 'text',
+						text: `Rename\\n$(zoomosc:${user.zoomId})`,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(125, 125, 125),
+					},
+					actions: [{ action: 'Rename', options: { user: user.zoomId, name: user.userName } }],
+					feedbacks: [],
+				})
+			}
 		}
 	}
 
