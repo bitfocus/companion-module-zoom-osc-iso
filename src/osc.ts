@@ -229,6 +229,11 @@ export class OSC {
 							delete this.instance.ZoomUserData[zoomId]
 							this.updateLoop = true
 							break
+						case 'userNameChanged':
+							console.log('receiving', data)
+							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
+							this.instance.variables?.updateVariables()
+							break
 						case 'chat':
 							console.log('receiving', data)
 							break
@@ -238,7 +243,7 @@ export class OSC {
 							break
 						case 'stoppedSpeaking':
 							// console.log('receiving', data)
-							// create feedback for this
+							// create feedback for this?
 							break
 						case 'isSpeaking':
 							this.instance.ZoomClientDataObj.lastSpeaking = data.args[1].value
@@ -295,8 +300,6 @@ export class OSC {
 					// Subscribe to ZoomOSC
 					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: this.instance.config.subscribeMode }])
 					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
-					// Send this to fetch initial data
-					// this.sendCommand('/zoom/list')
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
 					break
