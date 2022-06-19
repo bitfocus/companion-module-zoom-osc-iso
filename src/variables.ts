@@ -68,11 +68,13 @@ export class Variables {
 				label: `Inside group`,
 				name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}`,
 			})
+			userVariables.push({ label: `name`, name: this.instance.ZoomUserData[index].zoomId.toString() })
 		}
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
 				const user = this.instance.ZoomUserData[key]
-				userVariables.push({ label: `name`, name: user.zoomId.toString() })
+				if (user.zoomId > this.instance.ZoomClientDataObj.numberOfGroups)
+					userVariables.push({ label: `name2`, name: user.zoomId.toString() })
 			}
 		}
 		let galleryVariables = []
@@ -106,9 +108,9 @@ export class Variables {
 			newVariables['selectedCallers'] = 'nothing selected'
 		} else {
 			let selectedCallers: string[] = []
-			this.instance.ZoomClientDataObj.selectedCallers.forEach(zoomID => {
+			this.instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
 				selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
-			});
+			})
 			newVariables['selectedCallers'] = selectedCallers.toString()
 		}
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
