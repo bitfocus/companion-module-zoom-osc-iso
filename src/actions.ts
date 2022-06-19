@@ -146,6 +146,20 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								sendActionCommand(sendToCommand)
 							}
 							break
+						case 'user,name':
+							element.options = [userOption, options.name]
+							element.callback = (action: { options: { user: number, name: string } }) => {
+								let oscPath = `/zoom/zoomID${element.command}`
+								const sendToCommand: any = {
+									id: element.shortDescription,
+									options: {
+										command: oscPath,
+										args: [{ type: 'i', value: action.options.user }, { type: 's', value: action.options.name }],
+									},
+								}
+								sendActionCommand(sendToCommand)
+							}
+							break
 						case 'intX,intY':
 							element.options = [options.intX, options.intY]
 							element.callback = (action: { options: { intX: number; intY: number } }) => {
@@ -595,7 +609,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			},
 		},
 		renameGroup: {
-			label: 'Rename caller/group',
+			label: 'Rename group',
 			options: [userOption, options.name],
 			callback: (action: { options: { user: number; name: string } }) => {
 				instance.ZoomUserData[action.options.user].userName = action.options.name

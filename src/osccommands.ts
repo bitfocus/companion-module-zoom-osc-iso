@@ -159,7 +159,6 @@ const UserActions: actionType = {
 		command: '/toggleHand',
 		type: 'User',
 	},
-	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User' },
 	MakeHost: { description: 'Make Host', shortDescription: 'MakeHost', command: '/makeHost', type: 'User' },
 	MakeCoHost: {
 		description: 'Make CoHost',
@@ -439,6 +438,7 @@ const UserActions: actionType = {
 	},
 }
 const actionsWithArgs: actionType = {
+	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User', args: 'user,name' },
 	SetWindowPosition: {
 		description: 'SetWindowPosition',
 		shortDescription: 'SetWindowPosition',
