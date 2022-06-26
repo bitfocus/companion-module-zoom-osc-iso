@@ -74,7 +74,7 @@ export class Variables {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
 				const user = this.instance.ZoomUserData[key]
 				if (user.zoomId > this.instance.ZoomClientDataObj.numberOfGroups)
-					userVariables.push({ label: `name2`, name: user.zoomId.toString() })
+					userVariables.push({ label: `name`, name: user.zoomId.toString() })
 			}
 		}
 		let galleryVariables = []
@@ -84,7 +84,13 @@ export class Variables {
 				name: `Gallery position ${index}`,
 			})
 		}
-
+		let selectUsersVariables = []
+		for (let index = 0; index < 50; index++) {
+			selectUsersVariables.push({
+				label: `UserInSelectionPosition ${index}`,
+				name: `UserInSelectionPosition${index}`,
+			})
+		}
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([
@@ -94,7 +100,13 @@ export class Variables {
 			{ label: 'gallery count', name: 'galleryCount' },
 		])
 
-		let filteredVariables = [...globalSettings, ...userVariablesDef, ...gallery, ...galleryVariablesDef]
+		let filteredVariables = [
+			...globalSettings,
+			...userVariablesDef,
+			...gallery,
+			...galleryVariablesDef,
+			...selectUsersVariables,
+		]
 
 		this.instance.setVariableDefinitions(filteredVariables)
 	}
@@ -120,7 +132,7 @@ export class Variables {
 		// newVariables['ActiveSpeaker'] = this.instance.ZoomClientDataObj.activeSpeaker
 		newVariables['lastSpeaking'] = this.instance.ZoomClientDataObj.lastSpeaking
 
-		// TODO username
+		// TODO add usernames in group?
 		let allUsers = ''
 		for (let index = 1; index - 1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 			this.instance.ZoomUserData[index].users?.forEach((zoomID: number) => {
@@ -128,21 +140,22 @@ export class Variables {
 			})
 			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] = allUsers
 		}
+		// "normal" users
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
 				const user = this.instance.ZoomUserData[key]
 				newVariables[user.zoomId.toString()] = user.userName
 			}
 		}
-		// this.instance.ZoomUserData.forEach(element => {
-		// 	newVariables[element.zoomId.toString()] = element.userName
-		// })
-		// newVariables['galleryShapeX'] = this.instance.ZoomClientDataObj.galleryShape[0]
-		// newVariables['galleryShapeY'] = this.instance.ZoomClientDataObj.galleryShape[1]
+		// Use the dynamic selection
+		for (let index = 0; index < this.instance.ZoomVariableLink.length; index++) {
+			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index] ? this.instance.ZoomVariableLink[index].userName : ''
+		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
-		this.instance.ZoomClientDataObj.galleryOrder.forEach((zoomID, index) => {
-			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID]?.userName
-		})
+		for (let index = 0; index < 50; index++) {
+			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index];
+			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID] ? this.instance.ZoomUserData[zoomID].userName : ''
+		}
 
 		this.set(newVariables)
 
