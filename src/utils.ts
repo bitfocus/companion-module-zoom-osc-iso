@@ -35,6 +35,7 @@ export interface Options {
 	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
@@ -85,6 +86,12 @@ export const options: Options = {
 	name: {
 		type: 'textwithvariables',
 		label: 'Name',
+		id: 'name',
+		default: '',
+	},
+	userName: {
+		type: 'textwithvariables',
+		label: 'username (keep blank when you pre-select)',
 		id: 'name',
 		default: '',
 	},
