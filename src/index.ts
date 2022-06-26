@@ -80,6 +80,8 @@ class ZoomInstance extends instance_skel<Config> {
 		}
 	} = {}
 
+	public ZoomVariableLink: {zoomId: number, userName: string}[] = []
+
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
 
