@@ -63,9 +63,56 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			feedbacks: [],
 		})
 	}
-	for (let index = 0; index < instance.ZoomClientDataObj.galleryOrder.length; index++) {
+	// Create presets for selection of unknown users
+	for (let index = 0; index < 50; index++) {
 		presets.push({
-			category: 'Select from Gallery',
+			category: 'Pre-select Callers',
+			label: `Caller${index}`,
+			bank: {
+				style: 'text',
+				text: `Select\\n$(zoomosc:UserInSelectionPosition${index})`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: 'SelectUser', options: { user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1', option: 'toggle' } }],
+			feedbacks: [
+				{
+					type: 'selectedInAGroup',
+					options: {
+						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(125, 125, 0),
+					},
+				},
+				{
+					type: 'selectedUser',
+					options: {
+						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 255, 0),
+					},
+				},
+				{
+					type: 'microphoneLive',
+					options: {
+						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+					},
+					style: {
+						bgcolor: instance.rgb(255, 0, 0),
+					},
+				},
+			],
+		})
+	}
+	// Create presets for gallery
+	for (let index = 0; index < 50; index++) {
+		presets.push({
+			category: 'Pre-select from Gallery',
 			label: `$(zoomosc:Gallery position ${index})`,
 			bank: {
 				style: 'text',
