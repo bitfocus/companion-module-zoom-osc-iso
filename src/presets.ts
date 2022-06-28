@@ -37,7 +37,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	// Add to group presets
 	for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
 		presets.push({
-			category: 'Add to Group',
+			category: 'Group presets',
 			label: `Add to group: ${instance.ZoomUserData[index].userName}`,
 			bank: {
 				style: 'text',
@@ -50,7 +50,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			feedbacks: [],
 		})
 		presets.push({
-			category: 'Clear Group',
+			category: 'Group presets',
 			label: `Clear group: ${instance.ZoomUserData[index].userName}`,
 			bank: {
 				style: 'text',
@@ -75,7 +75,15 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(0, 0, 0),
 			},
-			actions: [{ action: 'SelectUser', options: { user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1', option: 'toggle' } }],
+			actions: [
+				{
+					action: 'SelectUser',
+					options: {
+						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+						option: 'toggle',
+					},
+				},
+			],
 			feedbacks: [
 				{
 					type: 'selectedInAGroup',
@@ -240,99 +248,89 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 }
 export function getUserPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-	for (const key in UserActions) {
-		if (Object.prototype.hasOwnProperty.call(UserActions, key)) {
-			const element = UserActions[key]
-			presets.push({
-				category: 'User Presets Basics',
-				label: element.shortDescription,
-				bank: {
-					style: 'text',
-					text: element.description,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
+	for (const key of Object.keys(UserActions)) {
+		const element = UserActions[key]
+		presets.push({
+			category: 'User Presets Basics',
+			label: element.shortDescription,
+			bank: {
+				style: 'text',
+				text: element.description,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [
+				{
+					action: 'UserActions',
+					options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
 				},
-				actions: [
-					{
-						action: 'UserActions',
-						options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
-					},
-				],
-				feedbacks: [],
-			})
-		}
+			],
+			feedbacks: [],
+		})
 	}
+
 	return presets
 }
 export function getPresetsWithArgs(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-	for (const key in actionsWithArgs) {
-		if (Object.prototype.hasOwnProperty.call(actionsWithArgs, key)) {
-			const element = actionsWithArgs[key]
-			presets.push({
-				category: 'User/Global presets with arguments',
-				label: element.shortDescription,
-				bank: {
-					style: 'text',
-					text: element.description,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
-				},
-				actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-				feedbacks: [],
-			})
-		}
+	for (const key of Object.keys(actionsWithArgs)) {
+		const element = actionsWithArgs[key]
+		presets.push({
+			category: 'User/Global presets with arguments',
+			label: element.shortDescription,
+			bank: {
+				style: 'text',
+				text: element.description,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+			feedbacks: [],
+		})
 	}
+
 	return presets
 }
 export function getSpecialPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-
-	for (const key in SpecialActions) {
-		if (Object.prototype.hasOwnProperty.call(SpecialActions, key)) {
-			const element = SpecialActions[key]
-			presets.push({
-				category: 'Special Presets',
-				label: element.shortDescription,
-				bank: {
-					style: 'text',
-					text: element.description,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
-				},
-				actions: [{ action: element.shortDescription, options: { command: element.command } }],
-				feedbacks: [],
-			})
-		}
+	for (const key of Object.keys(SpecialActions)) {
+		const element = SpecialActions[key]
+		presets.push({
+			category: 'Special Presets',
+			label: element.shortDescription,
+			bank: {
+				style: 'text',
+				text: element.description,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: element.shortDescription, options: { command: element.command } }],
+			feedbacks: [],
+		})
 	}
 
 	return presets
 }
 export function getGlobalPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-
-	for (const key in GlobalActions) {
-		if (Object.prototype.hasOwnProperty.call(GlobalActions, key)) {
-			const element = GlobalActions[key]
-			presets.push({
-				category: 'Global Presets Basics',
-				label: element.shortDescription,
-				bank: {
-					style: 'text',
-					text: element.description,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
-				},
-				actions: [
-					{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
-				],
-				feedbacks: [],
-			})
-		}
+	for (const key of Object.keys(GlobalActions)) {
+		const element = GlobalActions[key]
+		presets.push({
+			category: 'Global Presets Basics',
+			label: element.shortDescription,
+			bank: {
+				style: 'text',
+				text: element.description,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } }],
+			feedbacks: [],
+		})
 	}
 
 	return presets
