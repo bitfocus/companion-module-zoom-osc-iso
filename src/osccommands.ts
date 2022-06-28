@@ -440,14 +440,14 @@ const UserActions: actionType = {
 const actionsWithArgs: actionType = {
 	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User', args: 'user,name' },
 	SetWindowPosition: {
-		description: 'SetWindowPosition',
+		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
 		command: '/setWindowPosition',
 		args: 'intX,intY',
 		type: 'User',
 	},
 	SetWindowSize: {
-		description: 'SetWindowSize',
+		description: 'Set Window Size',
 		shortDescription: 'SetWindowSize',
 		command: '/setWindowSize',
 		args: 'intX,intY',
