@@ -444,7 +444,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	const createUserArguments = (user: number[] | string) => {
 		let argsCallers: { type: string; value: string | number }[] = []
 		// Check if we have an array
-		if(Array.isArray(user)) {
+		if (Array.isArray(user)) {
 			if (user.length === 0) console.log('Select a caller first')
 			// Do a + 1 because groups start at 1
 			let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
@@ -472,7 +472,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			}
 		}
 		return argsCallers
-
 	}
 
 	let extraActions = {
@@ -491,18 +490,25 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			],
 			callback: (action: { options: { actionID: string; name: string } }) => {
 				let argsCallers: string | any[] = []
+				let oscPath = ''
 				if (action.options.name != '') {
-					console.log('name',action.options.name);
-					
-					argsCallers = createUserArguments(action.options.name)
+					console.log('name', action.options.name)
+					// Special cases
+					if (action.options.name === 'Me' || 'me' || 'all' || 'All') {
+						oscPath = `/zoom/${action.options.name.toLowerCase()}` + UserActions[action.options.actionID].command
+						argsCallers = []
+					} else {
+						oscPath = `/zoom/userName` + UserActions[action.options.actionID].command
+						argsCallers = createUserArguments(action.options.name)
+					}
 				} else {
-					console.log('selected',instance.ZoomClientDataObj.selectedCallers);
-					
+					console.log('selected', instance.ZoomClientDataObj.selectedCallers)
+
 					argsCallers = createUserArguments(instance.ZoomClientDataObj.selectedCallers)
+					oscPath =
+						(argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) +
+						UserActions[action.options.actionID].command
 				}
-				let oscPath =
-					(argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) +
-					UserActions[action.options.actionID].command
 				const sendToCommand: any = {
 					id: UserActions[action.options.actionID].shortDescription,
 					options: {
