@@ -436,6 +436,30 @@ const UserActions: actionType = {
 		command: '/getBackground',
 		type: 'User',
 	},
+	SendParticipantToBreakoutRoom: {
+		description: 'Send Participant To BreakoutRoom',
+		shortDescription: 'SendParticipantToBreakoutRoom',
+		command: '/sendToBreakout',
+		type: 'User',
+	},
+	RemoveParticipantFromBreakoutRoom: {
+		description: 'Remove Participant From BreakoutRoom',
+		shortDescription: 'RemoveParticipantFromBreakoutRoom',
+		command: '/removeFromBreakout',
+		type: 'User',
+	},
+	AssignParticipantToBreakoutRoom: {
+		description: 'Assign Participant To BreakoutRoom',
+		shortDescription: 'AssignParticipantToBreakoutRoom',
+		command: '/assignToBreakout',
+		type: 'User',
+	},
+	UnassignParticipantFromBreakoutRoom: {
+		description: 'Unassign Participant From BreakoutRoom',
+		shortDescription: 'UnassignParticipantFromBreakoutRoom',
+		command: '/unassignFromBreakout',
+		type: 'User',
+	},
 }
 const actionsWithArgs: actionType = {
 	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User', args: 'user,name' },
@@ -528,34 +552,6 @@ const actionsWithArgs: actionType = {
 		shortDescription: 'StartScreenShare',
 		command: '/startScreenshare',
 		args: 'id',
-		type: 'User',
-	},
-	SendParticipantToBreakoutRoom: {
-		description: 'Send Participant To BreakoutRoom',
-		shortDescription: 'SendParticipantToBreakoutRoom',
-		command: '/sendToBreakout',
-		args: 'name',
-		type: 'User',
-	},
-	RemoveParticipantFromBreakoutRoom: {
-		description: 'Remove Participant From BreakoutRoom',
-		shortDescription: 'RemoveParticipantFromBreakoutRoom',
-		command: '/removeFromBreakout',
-		args: 'name',
-		type: 'User',
-	},
-	AssignParticipantToBreakoutRoom: {
-		description: 'Assign Participant To BreakoutRoom',
-		shortDescription: 'AssignParticipantToBreakoutRoom',
-		command: '/assignToBreakout',
-		args: 'name',
-		type: 'User',
-	},
-	UnassignParticipantFromBreakoutRoom: {
-		description: 'Unassign Participant From BreakoutRoom',
-		shortDescription: 'UnassignParticipantFromBreakoutRoom',
-		command: '/unassignFromBreakout',
-		args: 'name',
 		type: 'User',
 	},
 	SendAChatViaDM: {
