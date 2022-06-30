@@ -251,7 +251,7 @@ export function getUserPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	for (const key of Object.keys(UserActions)) {
 		const element = UserActions[key]
 		presets.push({
-			category: 'User Presets Basics',
+			category: 'User Presets',
 			label: element.shortDescription,
 			bank: {
 				style: 'text',
@@ -277,7 +277,7 @@ export function getPresetsWithArgs(instance: ZoomInstance): ZoomGlobalPreset[] {
 	for (const key of Object.keys(actionsWithArgs)) {
 		const element = actionsWithArgs[key]
 		presets.push({
-			category: 'User/Global presets with arguments',
+			category: element.type === 'User' ? 'User Presets' : 'Global Presets',
 			label: element.shortDescription,
 			bank: {
 				style: 'text',
@@ -319,7 +319,7 @@ export function getGlobalPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	for (const key of Object.keys(GlobalActions)) {
 		const element = GlobalActions[key]
 		presets.push({
-			category: 'Global Presets Basics',
+			category: 'Global Presets',
 			label: element.shortDescription,
 			bank: {
 				style: 'text',
