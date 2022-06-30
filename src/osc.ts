@@ -115,9 +115,9 @@ export class OSC {
 	private createZoomUser = async (data: ZoomOSCResponse) => {
 		let zoomId = parseInt(data.args[3].value)
 		// search if exist first
-		let index = this.instance.ZoomVariableLink.findIndex(id => id.zoomId === zoomId)
-		if(index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
-		
+		let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+		if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+
 		if (data.args.length == 4) {
 			this.instance.ZoomUserData[zoomId] = {
 				zoomId,
@@ -126,7 +126,6 @@ export class OSC {
 				galleryIndex: data.args[2].value,
 				users: [],
 			}
-
 		} else if (data.args.length > 8) {
 			this.instance.ZoomUserData[zoomId] = {
 				zoomId,
@@ -180,13 +179,7 @@ export class OSC {
 							// {int videoStatus}
 							// {int audioStatus}
 							// {int handRaised}
-							this.createZoomUser(data).then(() => this.updateLoop = true)
-							// this.instance.ZoomUserData[zoomId].userName = data.args[1].value
-							// this.instance.ZoomUserData[zoomId].targetIndex = data.args[0].value
-							// this.instance.ZoomUserData[zoomId].galleryIndex = data.args[2].value
-							// this.instance.ZoomUserData[zoomId].videoOn = data.args[8].value
-							// this.instance.ZoomUserData[zoomId].mute = data.args[9].value
-							// this.instance.ZoomUserData[zoomId].handRaised = data.args[10].value
+							this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'activeSpeaker':
 							console.log('receiving', data)
@@ -224,16 +217,15 @@ export class OSC {
 							this.instance.checkFeedbacks('handRaised')
 							break
 						case 'online':
-							// New user coming online
 							console.log('receiving', data)
 							this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'offline':
-							// User offline
 							console.log('receiving', data)
 							delete this.instance.ZoomUserData[zoomId]
-							let index = this.instance.ZoomVariableLink.findIndex(id => id.zoomId === zoomId)
-							delete this.instance.ZoomVariableLink[index]
+							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+							// delete this.instance.ZoomVariableLink[index]
+							console.log('Removed:', this.instance.ZoomVariableLink.slice(index, 1))
 							this.updateLoop = true
 							break
 						case 'userNameChanged':
