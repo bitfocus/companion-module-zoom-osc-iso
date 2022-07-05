@@ -5,16 +5,16 @@ export interface Config {
 	host: string
 	tx_port: number
 	rx_port: number
-	subscribeMode: number
+	// subscribeMode: number
 	numberOfGroups: number
 }
-enum SubscribeMode {
-	None = 0,
-	TargetList = 1,
-	All = 2,
-	Panelists = 3,
-	OnlyGallery = 4,
-}
+// enum SubscribeMode {
+// 	None = 0,
+// 	TargetList = 1,
+// 	All = 2,
+// 	Panelists = 3,
+// 	OnlyGallery = 4,
+// }
 export const getConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{
@@ -44,20 +44,20 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 			max: 65535,
 			step: 1,
 		},
-		{
-			type: 'dropdown',
-			id: 'subscribeMode',
-			label: 'Subscribe Mode',
-			choices: [
-				{ id: SubscribeMode.None, label: 'None' },
-				{ id: SubscribeMode.TargetList, label: 'Target List' },
-				{ id: SubscribeMode.All, label: 'All' },
-				{ id: SubscribeMode.Panelists, label: 'Panelists' },
-				{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
-			],
-			default: SubscribeMode.All,
-			width: 6,
-		},
+		// {
+		// 	type: 'dropdown',
+		// 	id: 'subscribeMode',
+		// 	label: 'Subscribe Mode',
+		// 	choices: [
+		// 		{ id: SubscribeMode.None, label: 'None' },
+		// 		{ id: SubscribeMode.TargetList, label: 'Target List' },
+		// 		{ id: SubscribeMode.All, label: 'All' },
+		// 		{ id: SubscribeMode.Panelists, label: 'Panelists' },
+		// 		{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
+		// 	],
+		// 	default: SubscribeMode.All,
+		// 	width: 6,
+		// },
 		{
 			type: 'number',
 			id: 'numberOfGroups',

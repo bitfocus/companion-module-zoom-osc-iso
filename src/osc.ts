@@ -10,6 +10,14 @@ interface ZoomOSCResponse {
 	}[]
 }
 
+enum SubscribeMode {
+	None = 0,
+	TargetList = 1,
+	All = 2,
+	Panelists = 3,
+	OnlyGallery = 4,
+}
+
 export class OSC {
 	private readonly instance: ZoomInstance
 	private oscHost: string = ''
@@ -297,7 +305,7 @@ export class OSC {
 					this.needToPingPong = false
 					if (this.pingInterval) clearInterval(this.pingInterval)
 					// Subscribe to ZoomOSC
-					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: this.instance.config.subscribeMode }])
+					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: SubscribeMode.All }])
 					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
@@ -340,10 +348,10 @@ export class OSC {
 	 */
 	public readonly update = (): void => {
 		const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
-		if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
-			this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
-			// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
-		}
+		// if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
+		// 	this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
+		// 	// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
+		// }
 		if (hostCheck) {
 			this.oscHost = this.instance.config.host
 			this.oscRXPort = this.instance.config.rx_port
