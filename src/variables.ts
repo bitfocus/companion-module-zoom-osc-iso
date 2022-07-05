@@ -34,7 +34,7 @@ export class Variables {
 	}
 
 	/**
-	 * @param variables Object of variablenames and their values
+	 * @param variables Object of variable names and their values
 	 * @description Updates or removes variable for current instance
 	 */
 	public readonly set = (variables: InstanceVariableValue): void => {
@@ -58,7 +58,6 @@ export class Variables {
 			{ label: 'Selected callers/groups', name: 'selectedCallers' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
 			{ label: 'Number of users in call', name: 'numberOfUsers' },
-			// { label: 'Active Speaker', name: 'activeSpeaker' },
 			{ label: 'Last Speaking', name: 'lastSpeaking' },
 		])
 		let userVariables = []
@@ -94,9 +93,6 @@ export class Variables {
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([
-			// Status
-			// { label: 'gallery shape X', name: 'galleryShapeX' },
-			// { label: 'gallery shape Y', name: 'galleryShapeY' },
 			{ label: 'gallery count', name: 'galleryCount' },
 		])
 
@@ -129,7 +125,6 @@ export class Variables {
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
 		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
-		// newVariables['ActiveSpeaker'] = this.instance.ZoomClientDataObj.activeSpeaker
 		newVariables['lastSpeaking'] = this.instance.ZoomClientDataObj.lastSpeaking
 
 		// TODO add usernames in group?
