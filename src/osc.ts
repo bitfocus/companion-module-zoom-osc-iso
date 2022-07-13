@@ -27,6 +27,7 @@ export class OSC {
 	private updateLoop: boolean = false
 	private needToPingPong: boolean = true
 	private pingInterval: NodeJS.Timer | undefined
+	private pingIntervalTime: number = 2000
 	private updatePresetsLoop: NodeJS.Timer | undefined
 
 	constructor(instance: ZoomInstance) {
@@ -96,7 +97,7 @@ export class OSC {
 					if (this.needToPingPong) {
 						this.sendCommand('/zoom/ping')
 					}
-				}, 2000)
+				}, this.pingIntervalTime)
 				// start looping for presets
 				this.updatePresetsLoop = setInterval(() => {
 					if (this.updateLoop) {
@@ -163,6 +164,7 @@ export class OSC {
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
 			this.instance.status(this.instance.STATUS_OK)
+			this.instance.ZoomClientDataObj.last_response = Date.now()
 			switch (zoomPart2) {
 				case 'me':
 				// let isMe = true
@@ -296,14 +298,23 @@ export class OSC {
 					// {int number of targets}
 					// {int number of users in call}
 					// {int isPro (1=true, 0-false)}
-					this.instance.ZoomClientDataObj.last_ping = Date.now()
 					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
 					this.instance.ZoomClientDataObj.numberOfUsersInCall = data.args[6].value
 					this.instance.variables?.updateVariables()
 					this.needToPingPong = false
-					if (this.pingInterval) clearInterval(this.pingInterval)
+					if (this.pingInterval) {
+						clearInterval(this.pingInterval)
+						this.pingIntervalTime = 60000
+						this.pingInterval = setInterval(() => {
+							// When 60 seconds no response start pinging again
+							if ((Date.now() - this.instance.ZoomClientDataObj.last_response) > 60000) {
+								this.sendCommand('/zoom/ping')
+							}
+						}, this.pingIntervalTime)
+					}
+
 					// Subscribe to ZoomOSC
 					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: SubscribeMode.All }])
 					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])

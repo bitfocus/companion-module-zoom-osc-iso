@@ -39,6 +39,7 @@ class ZoomInstance extends instance_skel<Config> {
 
 	// Global call settings
 	public ZoomClientDataObj: {
+		last_response: number
 		subscribeMode: number
 		selectedCallers: number[]
 		// galleryShape: [number, number]
@@ -49,9 +50,9 @@ class ZoomInstance extends instance_skel<Config> {
 		numberOfUsersInCall: number
 		galleryCount: number
 		galleryOrder: number[]
-		last_ping: number
 		numberOfGroups: number
 	} = {
+		last_response: 0,
 		selectedCallers: [],
 		subscribeMode: 0,
 		// galleryShape: [0, 0],
@@ -62,7 +63,6 @@ class ZoomInstance extends instance_skel<Config> {
 		numberOfUsersInCall: 0,
 		galleryCount: 0,
 		galleryOrder: [],
-		last_ping: 0,
 		numberOfGroups: 5,
 	}
 	// Array with all callers
