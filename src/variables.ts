@@ -56,6 +56,7 @@ export class Variables {
 			{ label: 'zoomOSC version', name: 'zoomOSCversion' },
 			{ label: 'call status', name: 'callStatus' },
 			{ label: 'Selected callers/groups', name: 'selectedCallers' },
+			{ label: 'Selected number of callers/groups', name: 'selectedNumberOfCallers' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
 			{ label: 'Number of users in call', name: 'numberOfUsers' },
 			{ label: 'Last Speaking', name: 'lastSpeaking' },
@@ -92,9 +93,7 @@ export class Variables {
 		}
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
-		const gallery: Set<InstanceVariableDefinition> = new Set([
-			{ label: 'gallery count', name: 'galleryCount' },
-		])
+		const gallery: Set<InstanceVariableDefinition> = new Set([{ label: 'gallery count', name: 'galleryCount' }])
 
 		let filteredVariables = [
 			...globalSettings,
@@ -114,12 +113,20 @@ export class Variables {
 		const newVariables: InstanceVariableValue = {}
 		if (this.instance.ZoomClientDataObj.selectedCallers.length === 0) {
 			newVariables['selectedCallers'] = 'nothing selected'
+			newVariables['selectedNumberOfCallers'] = 'nothing selected'
 		} else {
 			let selectedCallers: string[] = []
 			this.instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
-				selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
+				if (zoomID < this.instance.ZoomClientDataObj.numberOfGroups + 1) {
+					this.instance.ZoomUserData[zoomID].users.forEach((user) => {
+						selectedCallers.push(this.instance.ZoomUserData[user].userName)
+					})
+				} else {
+					selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
+				}
 			})
 			newVariables['selectedCallers'] = selectedCallers.toString()
+			newVariables['selectedNumberOfCallers'] = selectedCallers.length
 		}
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
@@ -144,12 +151,16 @@ export class Variables {
 		}
 		// Use the dynamic selection
 		for (let index = 0; index < this.instance.ZoomVariableLink.length; index++) {
-			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index] ? this.instance.ZoomVariableLink[index].userName : ''
+			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index]
+				? this.instance.ZoomVariableLink[index].userName
+				: ''
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
 		for (let index = 0; index < 50; index++) {
-			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index];
-			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID] ? this.instance.ZoomUserData[zoomID].userName : ''
+			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index]
+			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID]
+				? this.instance.ZoomUserData[zoomID].userName
+				: ''
 		}
 
 		this.set(newVariables)
