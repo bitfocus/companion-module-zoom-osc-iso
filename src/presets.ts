@@ -25,7 +25,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		label: `Clear selection`,
 		bank: {
 			style: 'text',
-			text: `Clear selection`,
+			text: `Clear selected ($(zoomosc:selectedNumberOfCallers))`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
 			bgcolor: instance.rgb(0, 0, 0),
