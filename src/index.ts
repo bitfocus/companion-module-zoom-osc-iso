@@ -136,6 +136,9 @@ class ZoomInstance extends instance_skel<Config> {
 		// 	this.ZoomClientDataObj.subscribeMode = config.subscribeMode
 		// 	this.oscSend(config.host, config.tx_port, '/zoom/subscribe', [{ type: 'i', value: this.config.subscribeMode }])
 		// }
+		this.OSC?.destroy()
+		this.OSC = new OSC(this)
+
 		console.log('groups',this.ZoomClientDataObj.numberOfGroups);
 		
 		this.updateInstance()
