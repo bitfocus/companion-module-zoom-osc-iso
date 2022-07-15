@@ -599,10 +599,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Add selection to group',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				instance.ZoomUserData[action.options.group].users = [
-					...instance.ZoomUserData[action.options.group].users,
-					...instance.ZoomClientDataObj.selectedCallers,
-				]
+				instance.ZoomUserData[action.options.group].users = [ ...instance.ZoomClientDataObj.selectedCallers]
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')

@@ -384,7 +384,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					if (
 						instance.ZoomUserData[index].users &&
 						instance.ZoomUserData[index].users.find(
-							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
+							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position-1]
 						)
 					)
 						return true
