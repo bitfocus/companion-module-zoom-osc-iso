@@ -282,6 +282,7 @@ export class OSC {
 				case 'galleryCount':
 					console.log('receiving', data)
 					this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
+					this.instance.variables?.updateVariables()
 					break
 
 				case 'pong':
