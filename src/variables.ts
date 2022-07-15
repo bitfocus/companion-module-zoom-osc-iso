@@ -78,9 +78,9 @@ export class Variables {
 			}
 		}
 		let galleryVariables = []
-		for (let index = 0; index < this.instance.ZoomClientDataObj.galleryOrder.length; index++) {
+		for (let index = 1; index < 50; index++) {
 			galleryVariables.push({
-				label: `Gallery position ${index + 1}`,
+				label: `Gallery position ${index}`,
 				name: `Gallery position ${index}`,
 			})
 		}
@@ -156,8 +156,9 @@ export class Variables {
 				: '(none)'
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
-		for (let index = 0; index < 50; index++) {
-			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index]
+
+		for (let index = 1; index < 50; index++) {
+			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index-1]
 			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID]
 				? this.instance.ZoomUserData[zoomID].userName
 				: ''

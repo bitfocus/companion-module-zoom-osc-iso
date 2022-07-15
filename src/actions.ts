@@ -578,16 +578,16 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				if (action.options.option == 'toggle') {
 					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
 					)
 				} else if (action.options.option == 'select') {
 					instance.ZoomClientDataObj.selectedCallers.push(
-						instance.ZoomClientDataObj.galleryOrder[action.options.position]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
 					)
 				} else if (action.options.option == 'remove') {
 					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
 					)
 				}
 				instance.variables?.updateVariables()

@@ -126,7 +126,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 		CHOICES_GALLERY = [{ id: '0', label: 'empty gallery' }]
 		if (instance.ZoomClientDataObj.galleryOrder.length > 1) {
 			CHOICES_GALLERY.length = 0
-			for (let index = 0; index < instance.ZoomClientDataObj.galleryOrder.length; index++) {
+			for (let index = 1; index < 50; index++) {
 				CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
 			}
 		}
@@ -308,7 +308,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 		},
 		selectedUserGalPos: {
 			type: 'boolean',
-			label: 'Selected user',
+			label: 'Selected user in gallery',
 			description: 'Indicate if a user is pre-selected for a command/action',
 			style: {
 				color: rgb(255, 255, 255),
@@ -327,7 +327,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				if (
 					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomClientDataObj.selectedCallers.find(
-						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position]
+						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position-1]
 					)
 				)
 					return true

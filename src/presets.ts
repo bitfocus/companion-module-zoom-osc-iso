@@ -144,9 +144,11 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				{
 					type: 'selectedUserGalPos',
 					options: {
-						position: index,
-						fg: instance.rgb(0, 0, 0),
-						bg: instance.rgb(255, 255, 0),
+						position: index
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 255, 0),
 					},
 				},
 				{
