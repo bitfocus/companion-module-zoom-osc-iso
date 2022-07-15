@@ -150,6 +150,7 @@ export class OSC {
 			console.log('wrong arguments in OSC feedback')
 		}
 		// update it all
+		this.instance.ZoomClientDataObj.numberOfUsersInCall = Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
 		this.instance.updateVariables()
 	}
 
@@ -325,6 +326,14 @@ export class OSC {
 				case 'meetingStatus':
 					console.log('received', data)
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
+					// Meeting status ended
+					if(data.args[0].value === 0) {
+						this.instance.ZoomClientDataObj.selectedCallers.length = 0
+						for (const key of Object.keys(this.instance.ZoomUserData)) {
+							if(parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+								delete this.instance.ZoomUserData[parseInt(key)]							}				
+						}
+					}
 					this.sendCommand('/zoom/ping')
 					// this.instance.variables?.updateVariables() // Not needed, the ping command will drop at least 1 caller (host) from zoom/ping
 					break
