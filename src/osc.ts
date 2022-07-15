@@ -235,7 +235,6 @@ export class OSC {
 							console.log('receiving', data)
 							delete this.instance.ZoomUserData[zoomId]
 							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
-							// delete this.instance.ZoomVariableLink[index]
 							console.log('Removed:', this.instance.ZoomVariableLink.slice(index, 1))
 							this.updateLoop = true
 							break
@@ -267,11 +266,7 @@ export class OSC {
 					break
 
 				case 'galleryShape':
-					// {int rows} {int cols} only for mac?
-					// console.log('/zoomosc/galleryShape', data.args)
-					// this.instance.ZoomClientDataObj.galleryShape[0] = data.args[0].value
-					// this.instance.ZoomClientDataObj.galleryShape[1] = data.args[1].value
-					// this.instance.variables?.updateVariables()
+					// {int rows} {int cols} only for mac, skip this
 					break
 
 				case 'galleryOrder':
@@ -329,13 +324,14 @@ export class OSC {
 					// Meeting status ended
 					if(data.args[0].value === 0) {
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
+						this.instance.ZoomVariableLink.length = 0
 						for (const key of Object.keys(this.instance.ZoomUserData)) {
 							if(parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
 								delete this.instance.ZoomUserData[parseInt(key)]							}				
 						}
+						this.instance.variables?.updateVariables()
 					}
 					this.sendCommand('/zoom/ping')
-					// this.instance.variables?.updateVariables() // Not needed, the ping command will drop at least 1 caller (host) from zoom/ping
 					break
 
 				default:

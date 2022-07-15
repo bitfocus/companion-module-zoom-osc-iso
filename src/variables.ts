@@ -150,10 +150,10 @@ export class Variables {
 			}
 		}
 		// Use the dynamic selection
-		for (let index = 0; index < this.instance.ZoomVariableLink.length; index++) {
+		for (let index = 0; index < 50; index++) {
 			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index]
 				? this.instance.ZoomVariableLink[index].userName
-				: ''
+				: '(none)'
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
 		for (let index = 0; index < 50; index++) {
