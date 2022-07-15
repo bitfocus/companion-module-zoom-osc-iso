@@ -118,7 +118,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 	}
 	// Create presets for gallery
-	for (let index = 0; index < 50; index++) {
+	for (let index = 1; index < 50; index++) {
 		presets.push({
 			category: 'Pre-select from Gallery',
 			label: `$(zoomosc:Gallery position ${index})`,
