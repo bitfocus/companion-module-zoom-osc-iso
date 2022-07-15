@@ -134,13 +134,13 @@ export class Variables {
 		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
 		newVariables['lastSpeaking'] = this.instance.ZoomClientDataObj.lastSpeaking
 
-		// TODO add usernames in group?
 		let allUsers = ''
 		for (let index = 1; index - 1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
 			this.instance.ZoomUserData[index].users?.forEach((zoomID: number) => {
 				allUsers += this.instance.ZoomUserData[zoomID].userName
 			})
 			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] = allUsers
+			allUsers = '' // reset values
 		}
 		// "normal" users
 		for (const key in this.instance.ZoomUserData) {
