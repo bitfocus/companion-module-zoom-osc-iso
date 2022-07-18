@@ -80,6 +80,20 @@ class ZoomInstance extends instance_skel<Config> {
 		}
 	} = {}
 
+	public ZoomUserOffline: {
+		[key: number]: {
+			zoomId: number
+			userName: string
+			targetIndex: number
+			galleryIndex: number
+			mute?: boolean
+			videoOn?: boolean
+			handRaised?: boolean
+			userRole?: number
+			users: number[]
+		}
+	} = {}
+	
 	public ZoomVariableLink: {zoomId: number, userName: string}[] = []
 
 	public OSC: OSC | null = null

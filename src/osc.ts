@@ -123,7 +123,8 @@ export class OSC {
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
 		let zoomId = parseInt(data.args[3].value)
-		// search if exist first
+		// search if exist under other name first
+
 		let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
 		if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
 
@@ -150,7 +151,8 @@ export class OSC {
 			console.log('wrong arguments in OSC feedback')
 		}
 		// update it all
-		this.instance.ZoomClientDataObj.numberOfUsersInCall = Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
+		this.instance.ZoomClientDataObj.numberOfUsersInCall =
+			Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
 		this.instance.updateVariables()
 	}
 
@@ -175,7 +177,16 @@ export class OSC {
 					zoomId = parseInt(data.args[3].value)
 					// Check if user exists, returns -1 if not
 					if (!this.instance.ZoomUserData[zoomId]) {
-						await this.createZoomUser(data)
+						// for (let [key, value] of Object.entries(this.instance.ZoomUserData)) {
+						// 	console.log(`${key}: ${value}`);
+						// }
+						if (this.instance.ZoomUserOffline[zoomId]) {
+							// The zoomID was already there so this probably is a ghost ID
+							console.log('User just went offline, do nothing')
+						} else {
+							await this.createZoomUser(data)
+						}
+						// what to do if nothing has been found?
 					}
 
 					switch (zoomPart3) {
@@ -233,6 +244,7 @@ export class OSC {
 							break
 						case 'offline':
 							console.log('receiving', data)
+							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
 							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
 							console.log('Removed:', this.instance.ZoomVariableLink.slice(index, 1))
@@ -306,7 +318,7 @@ export class OSC {
 						this.pingIntervalTime = 60000
 						this.pingInterval = setInterval(() => {
 							// When 60 seconds no response start pinging again
-							if ((Date.now() - this.instance.ZoomClientDataObj.last_response) > 60000) {
+							if (Date.now() - this.instance.ZoomClientDataObj.last_response > 60000) {
 								this.sendCommand('/zoom/ping')
 							}
 						}, this.pingIntervalTime)
@@ -323,12 +335,13 @@ export class OSC {
 					console.log('received', data)
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 					// Meeting status ended
-					if(data.args[0].value === 0) {
+					if (data.args[0].value === 0) {
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
 						for (const key of Object.keys(this.instance.ZoomUserData)) {
-							if(parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-								delete this.instance.ZoomUserData[parseInt(key)]							}				
+							if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+								delete this.instance.ZoomUserData[parseInt(key)]
+							}
 						}
 						this.instance.variables?.updateVariables()
 					}
