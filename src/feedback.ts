@@ -16,7 +16,6 @@ export interface ZoomFeedbacks {
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
 	selectedUser: ZoomFeedback<selectedUserCallback>
-	selectedInAGroup: ZoomFeedback<selectedInAGroupCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
@@ -56,15 +55,8 @@ interface selectedUserCallback {
 		fg: number
 		bg: number
 		user: number
-	}>
-}
-interface selectedInAGroupCallback {
-	type: 'selectedAddToGroup'
-	options: Readonly<{
-		fg: number
-		bg: number
-		user: number
-		group: number
+		type: string
+		position: number
 	}>
 }
 
@@ -113,6 +105,10 @@ export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_GALLERY = [{ id: '0', label: 'no position' }]
+	let CHOICES_POSITION = []
+	for (let index = 1; index < 50; index++) {
+		CHOICES_POSITION.push({ id: index.toString(), label: `Position ${index}` })
+	}
 	let CHOICES_USERS_DEFAULT = '0'
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
@@ -296,68 +292,75 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					default: CHOICES_USERS_DEFAULT,
 					choices: CHOICES_USERS,
 				},
-			],
-			callback: (feedback) => {
-				if (
-					instance.ZoomClientDataObj.selectedCallers &&
-					instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.user)
-				)
-					return true
-				else return false
-			},
-		},
-		selectedUserGalPos: {
-			type: 'boolean',
-			label: 'Selected user in gallery',
-			description: 'Indicate if a user is pre-selected for a command/action',
-			style: {
-				color: rgb(255, 255, 255),
-				bgcolor: rgb(255, 255, 0),
-			},
-			options: [
 				{
 					type: 'dropdown',
 					label: 'Position',
 					id: 'position',
-					default: '0',
-					choices: CHOICES_GALLERY,
+					default: '1',
+					choices: CHOICES_POSITION,
+				},
+				{
+					type: 'dropdown',
+					label: 'type',
+					id: 'type',
+					default: 'normal',
+					choices: [
+						{ id: 'normal', label: 'normal' },
+						{ id: 'gallery', label: 'gallery' },
+						{ id: 'preselect', label: 'preselect' },
+						{ id: 'userInGroup', label: 'user inside a Group' },
+						{ id: 'galleryPositionInGroup', label: 'gallery position inside a Group' },
+						{ id: 'preselectPositionInGroup', label: 'preselect position inside a Group' },
+					],
 				},
 			],
 			callback: (feedback) => {
 				if (
+					feedback.options.type === 'normal' &&
+					instance.ZoomClientDataObj.selectedCallers &&
+					instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.user)
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'gallery' &&
 					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomClientDataObj.selectedCallers.find(
-						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position-1]
+						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]
 					)
-				)
+				) {
 					return true
-				else return false
-			},
-		},
-		selectedInAGroup: {
-			type: 'boolean',
-			label: 'User is in group',
-			description: 'Indicate if a user is in a group-selection',
-			style: {
-				color: rgb(255, 255, 255),
-				bgcolor: rgb(155, 155, 155),
-			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'User',
-					id: 'user',
-					default: CHOICES_USERS_DEFAULT,
-					choices: CHOICES_USERS,
-				},
-			],
-			callback: (feedback) => {
-				for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
-					if (
-						instance.ZoomUserData[index].users &&
-						instance.ZoomUserData[index].users.find((element) => element === feedback.options.user)
+				} else if (
+					feedback.options.type === 'preselect' &&
+					instance.ZoomClientDataObj.selectedCallers &&
+					instance.ZoomClientDataObj.selectedCallers.find(
+						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
 					)
-						return true
+				) {
+					return true
+				} else if (feedback.options.type === 'userInGroup') {
+					for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+						if (
+							instance.ZoomUserData[index].users &&
+							instance.ZoomUserData[index].users.find((element) => element === feedback.options.user)
+						)
+							return true
+					}
+				} else if (feedback.options.type === 'galleryPositionInGroup') {
+					for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+						if (
+							instance.ZoomUserData[index].users &&
+							instance.ZoomUserData[index].users.find((element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1])
+						)
+							return true
+					}
+				} else if (feedback.options.type === 'preselectPositionInGroup') {
+					for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+						if (
+							instance.ZoomUserData[index].users &&
+							instance.ZoomUserData[index].users.find((element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId)
+						)
+							return true
+					}
 				}
 				return false
 			},
@@ -384,7 +387,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					if (
 						instance.ZoomUserData[index].users &&
 						instance.ZoomUserData[index].users.find(
-							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position-1]
+							(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]
 						)
 					)
 						return true

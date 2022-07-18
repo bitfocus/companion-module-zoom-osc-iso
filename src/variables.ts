@@ -85,7 +85,7 @@ export class Variables {
 			})
 		}
 		let selectUsersVariables = []
-		for (let index = 0; index < 50; index++) {
+		for (let index = 1; index < 50; index++) {
 			selectUsersVariables.push({
 				label: `UserInSelectionPosition ${index}`,
 				name: `UserInSelectionPosition${index}`,
@@ -150,9 +150,9 @@ export class Variables {
 			}
 		}
 		// Use the dynamic selection
-		for (let index = 0; index < 50; index++) {
-			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index]
-				? this.instance.ZoomVariableLink[index].userName
+		for (let index = 1; index < 50; index++) {
+			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index-1]
+				? this.instance.ZoomVariableLink[index-1].userName
 				: '(none)'
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount

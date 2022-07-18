@@ -247,7 +247,7 @@ export class OSC {
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
 							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
-							console.log('Removed:', this.instance.ZoomVariableLink.slice(index, 1))
+							console.log('Removed:', this.instance.ZoomVariableLink.splice(index, 1))
 							this.updateLoop = true
 							break
 						case 'userNameChanged':

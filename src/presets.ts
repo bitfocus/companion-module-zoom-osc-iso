@@ -64,7 +64,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 	}
 	// Create presets for selection of unknown users
-	for (let index = 0; index < 50; index++) {
+	for (let index = 1; index < 50; index++) {
 		presets.push({
 			category: 'Pre-select Callers',
 			label: `Caller${index}`,
@@ -77,18 +77,19 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			},
 			actions: [
 				{
-					action: 'SelectUser',
+					action: 'SelectFromPreSelectPosition',
 					options: {
-						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+						position: index,
 						option: 'toggle',
 					},
 				},
 			],
 			feedbacks: [
 				{
-					type: 'selectedInAGroup',
+					type: 'selectedUser',
 					options: {
-						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+						position: index,
+						type: 'preselectPositionInGroup'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -98,7 +99,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				{
 					type: 'selectedUser',
 					options: {
-						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+						position: index,
+						type: 'preselect'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -132,9 +134,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			actions: [{ action: 'SelectFromGalleryPosition', options: { position: index, option: 'toggle' } }],
 			feedbacks: [
 				{
-					type: 'selectedInAGroupGalPos',
+					type: 'selectedUser',
 					options: {
 						position: index,
+						type: 'galleryPositionInGroup'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -142,9 +145,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				},
 				{
-					type: 'selectedUserGalPos',
+					type: 'selectedUser',
 					options: {
-						position: index
+						position: index,
+						type: 'gallery'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -163,7 +167,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			],
 		})
 	}
-
+	// normal selection
 	for (const key in instance.ZoomUserData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 			const user = instance.ZoomUserData[key]
@@ -184,23 +188,25 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
 				feedbacks: [
 					{
-						type: 'selectedInAGroup',
+						type: 'selectedUser',
 						options: {
 							user: user.zoomId,
+							type: 'normal'
 						},
 						style: {
 							color: instance.rgb(0, 0, 0),
-							bgcolor: instance.rgb(125, 125, 0),
+							bgcolor: instance.rgb(255, 255, 0),
 						},
 					},
 					{
 						type: 'selectedUser',
 						options: {
 							user: user.zoomId,
+							type: 'userInGroup'
 						},
 						style: {
 							color: instance.rgb(0, 0, 0),
-							bgcolor: instance.rgb(255, 255, 0),
+							bgcolor: instance.rgb(125, 125, 0),
 						},
 					},
 					{
