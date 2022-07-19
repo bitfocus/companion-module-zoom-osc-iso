@@ -31,6 +31,7 @@ export interface Options {
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
+	output: EnforceDefault<CompanionInputFieldNumber, number>
 	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
 	id: EnforceDefault<CompanionInputFieldNumber, number>
@@ -111,6 +112,14 @@ export const options: Options = {
 		min: 0,
 		max: 5,
 		default: 0,
+	},
+	output: {
+		type: 'number',
+		label: 'Output',
+		id: 'output',
+		min: 1,
+		max: 12,
+		default: 1,
 	},
 	subscribeLevel: {
 		type: 'dropdown',

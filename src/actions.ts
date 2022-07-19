@@ -123,7 +123,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					switch (element.args) {
 						case 'msg':
 							element.options = [options.userName, options.message]
-							element.callback = (action: { options: { msg: string, name: string } }) => {
+							element.callback = (action: { options: { msg: string; name: string } }) => {
 								let command = createUserCommand(element.command, action.options.name)
 								const sendToCommand: any = {
 									id: element.shortDescription,
@@ -154,7 +154,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 							break
 						case 'intX,intY':
 							element.options = [options.userName, options.intX, options.intY]
-							element.callback = (action: { options: { intX: number; intY: number, name: string } }) => {
+							element.callback = (action: { options: { intX: number; intY: number; name: string } }) => {
 								let command = createUserCommand(element.command, action.options.name)
 								command.argsCallers.push({ type: 'i', value: action.options.intX })
 								command.argsCallers.push({ type: 'i', value: action.options.intY })
@@ -162,7 +162,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									id: element.shortDescription,
 									options: {
 										command: command.oscPath,
-										args: command.argsCallers
+										args: command.argsCallers,
 									},
 								}
 								sendActionCommand(sendToCommand)
@@ -170,7 +170,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 							break
 						case 'level':
 							element.options = [options.userName, options.level]
-							element.callback = (action: { options: { level: number, name: string } }) => {
+							element.callback = (action: { options: { level: number; name: string } }) => {
 								let command = createUserCommand(element.command, action.options.name)
 								command.argsCallers.push({ type: 'i', value: action.options.level })
 								const sendToCommand: any = {
@@ -185,10 +185,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 							break
 						case 'output':
 							element.options = [options.userName, options.output]
-							element.callback = (action: { options: { output: number, name: string } }) => {
+							element.callback = (action: { options: { output: number; name: string } }) => {
 								let command = createUserCommand(element.command, action.options.name)
-								console.log('later',command);
-								
+
 								command.argsCallers.push({ type: 'i', value: action.options.output })
 								const sendToCommand: any = {
 									id: element.shortDescription,
@@ -202,7 +201,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 							break
 						case 'id':
 							element.options = [options.userName, options.id]
-							element.callback = (action: { options: { id: number, name: string } }) => {
+							element.callback = (action: { options: { id: number; name: string } }) => {
 								let command = createUserCommand(element.command, action.options.name)
 								command.argsCallers.push({ type: 'i', value: action.options.id })
 								const sendToCommand: any = {
@@ -464,14 +463,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			user = name
 			console.log('Name filled', user)
 			if (user === 'Me' || user === 'me' || user === 'all' || user === 'All') {
-				command.oscPath = `/zoom/${name.toLowerCase()}` + UserActions[actionID].command
+				command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
 			} else {
-				command.oscPath = `/zoom/userName` + UserActions[actionID].command
+				command.oscPath = `/zoom/userName` + actionID
 				command.argsCallers.push({ type: 's', value: user })
 			}
 			// Use the pre-selection options
 		} else {
-			console.log('Use pre-selected', instance.ZoomClientDataObj.selectedCallers)
+			console.log('Use pre-selected', user)
 			if (Array.isArray(user)) {
 				// should be otherwise somethings wrong
 				if (user.length === 0) console.log('Select a caller first')
@@ -479,6 +478,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
 				// Loop through selected callers to see if there is a group selected and get the callers
 				user.forEach((caller) => {
+
 					// Is a caller a group?
 					if (caller < numberOfGroups) {
 						instance.ZoomUserData[caller].users.forEach((callerInGroup) => {
@@ -492,8 +492,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				console.log('Wrong selection')
 			}
 			// Different path when more users are selected
-			command.oscPath =
-				(command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + UserActions[actionID].command
+			command.oscPath = (command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
 		}
 		return command
 	}
@@ -513,7 +512,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { actionID: string; name: string } }) => {
-				let command = createUserCommand(action.options.actionID, action.options.name)
+				let command = createUserCommand(UserActions[action.options.actionID].command, action.options.name)
 				const sendToCommand: any = {
 					id: UserActions[action.options.actionID].shortDescription,
 					options: {
@@ -601,16 +600,16 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				if (action.options.option == 'toggle') {
 					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
 					)
 				} else if (action.options.option == 'select') {
 					instance.ZoomClientDataObj.selectedCallers.push(
-						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
 					)
 				} else if (action.options.option == 'remove') {
 					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position-1]
+						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
 					)
 				}
 				instance.variables?.updateVariables()
@@ -637,16 +636,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				if (action.options.option == 'toggle') {
 					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomVariableLink[action.options.position-1].zoomId
+						instance.ZoomVariableLink[action.options.position - 1].zoomId
 					)
 				} else if (action.options.option == 'select') {
-					instance.ZoomClientDataObj.selectedCallers.push(
-						instance.ZoomVariableLink[action.options.position-1].zoomId
-					)
+					instance.ZoomClientDataObj.selectedCallers.push(instance.ZoomVariableLink[action.options.position - 1].zoomId)
 				} else if (action.options.option == 'remove') {
 					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomVariableLink[action.options.position-1].zoomId
+						instance.ZoomVariableLink[action.options.position - 1].zoomId
 					)
 				}
 				instance.variables?.updateVariables()
@@ -657,7 +654,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Add selection to group',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				instance.ZoomUserData[action.options.group].users = [ ...instance.ZoomClientDataObj.selectedCallers]
+				instance.ZoomUserData[action.options.group].users = [...instance.ZoomClientDataObj.selectedCallers]
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')

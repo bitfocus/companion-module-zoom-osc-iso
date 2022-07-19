@@ -463,6 +463,7 @@ const UserActions: actionType = {
 }
 const actionsWithArgs: actionType = {
 	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User', args: 'user,name' },
+	outputISO: { description: 'output ISO', shortDescription: 'outputISO', command: '/outputISO', type: 'User', args: 'output' },
 	SetWindowPosition: {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
