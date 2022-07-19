@@ -183,6 +183,23 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								sendActionCommand(sendToCommand)
 							}
 							break
+						case 'output':
+							element.options = [options.userName, options.output]
+							element.callback = (action: { options: { output: number, name: string } }) => {
+								let command = createUserCommand(element.command, action.options.name)
+								console.log('later',command);
+								
+								command.argsCallers.push({ type: 'i', value: action.options.output })
+								const sendToCommand: any = {
+									id: element.shortDescription,
+									options: {
+										command: command.oscPath,
+										args: command.argsCallers,
+									},
+								}
+								sendActionCommand(sendToCommand)
+							}
+							break
 						case 'id':
 							element.options = [options.userName, options.id]
 							element.callback = (action: { options: { id: number, name: string } }) => {
@@ -443,14 +460,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		}
 		let user: number[] | string = instance.ZoomClientDataObj.selectedCallers
 		// Check if override has been filled
-		if (name != '') {
+		if (name != '' && name != undefined) {
 			user = name
 			console.log('Name filled', user)
-			if (user === 'Me' || 'me' || 'all' || 'All') {
+			if (user === 'Me' || user === 'me' || user === 'all' || user === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + UserActions[actionID].command
 			} else {
 				command.oscPath = `/zoom/userName` + UserActions[actionID].command
-				command.argsCallers.push({ type: 'i', value: user })
+				command.argsCallers.push({ type: 's', value: user })
 			}
 			// Use the pre-selection options
 		} else {
@@ -478,7 +495,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			command.oscPath =
 				(command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + UserActions[actionID].command
 		}
-
 		return command
 	}
 
