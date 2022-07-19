@@ -110,7 +110,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				{
 					type: 'microphoneLive',
 					options: {
-						user: instance.ZoomVariableLink[index] ? instance.ZoomVariableLink[index].zoomId : '1',
+						position: index,
+						type: 'preselect'
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
@@ -156,9 +157,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				},
 				{
-					type: 'microphoneLiveGalPos',
+					type: 'microphoneLive',
 					options: {
 						position: index,
+						type: 'gallery'
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
@@ -213,6 +215,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'microphoneLive',
 						options: {
 							user: user.zoomId,
+							type: 'normal',
 						},
 						style: {
 							bgcolor: instance.rgb(255, 0, 0),
