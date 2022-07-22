@@ -67,18 +67,18 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	// Create presets for selection of unknown users
 	for (let index = 1; index < 50; index++) {
 		presets.push({
-			category: 'Pre-select Callers',
+			category: 'Index Callers',
 			label: `Caller${index}`,
 			bank: {
 				style: 'text',
-				text: `Select\\n$(zoomosc:UserInSelectionPosition${index})`,
+				text: `Index ${index}\\n$(zoomosc:UserInSelectionPosition${index})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(0, 0, 0),
 			},
 			actions: [
 				{
-					action: 'SelectFromPreSelectPosition',
+					action: 'SelectFromIndexPosition',
 					options: {
 						position: index,
 						option: 'toggle',
@@ -90,7 +90,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'preselect'
+						type: 'index',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -101,7 +101,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'preselectPositionInGroup'
+						type: 'indexPositionInGroup',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -112,7 +112,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'microphoneLive',
 					options: {
 						position: index,
-						type: 'preselect'
+						type: 'index',
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
@@ -122,7 +122,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'handRaised',
 					options: {
 						position: index,
-						type: 'preselect',
+						type: 'index',
 						handRaised: 1,
 					},
 					style: {
@@ -150,7 +150,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'gallery'
+						type: 'gallery',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -161,7 +161,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'galleryPositionInGroup'
+						type: 'galleryPositionInGroup',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -172,7 +172,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'microphoneLive',
 					options: {
 						position: index,
-						type: 'gallery'
+						type: 'gallery',
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
@@ -198,7 +198,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			const user = instance.ZoomUserData[key]
 
 			presets.push({
-				category: 'Select Callers',
+				category: user.zoomId > instance.ZoomClientDataObj.numberOfGroups + 1 ? 'Select Callers' : 'Group presets',
 				label: user.userName,
 				bank: {
 					style: 'text',
@@ -216,7 +216,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'selectedUser',
 						options: {
 							user: user.zoomId,
-							type: 'normal'
+							type: 'normal',
 						},
 						style: {
 							color: instance.rgb(0, 0, 0),
@@ -227,7 +227,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'selectedUser',
 						options: {
 							user: user.zoomId,
-							type: 'userInGroup'
+							type: 'userInGroup',
 						},
 						style: {
 							color: instance.rgb(0, 0, 0),

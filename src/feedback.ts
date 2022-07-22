@@ -165,7 +165,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					choices: [
 						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
-						{ id: 'preselect', label: 'preselect' },
+						{ id: 'index', label: 'index' },
 					],
 				},
 			],
@@ -178,7 +178,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				) {
 					return true
 				} else if (
-					feedback.options.type === 'preselect' &&
+					feedback.options.type === 'index' &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].mute === false
 				) {
 					return true
@@ -217,7 +217,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					choices: [
 						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
-						{ id: 'preselect', label: 'preselect' },
+						{ id: 'index', label: 'index' },
 					],
 				},
 				options.video,
@@ -235,7 +235,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				) {
 					return true
 				} else if (
-					feedback.options.type === 'preselect' &&
+					feedback.options.type === 'index' &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].videoOn ===
 						(feedback.options.video == 1 ? true : false)
 				) {
@@ -275,7 +275,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					choices: [
 						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
-						{ id: 'preselect', label: 'preselect' },
+						{ id: 'index', label: 'index' },
 					],
 				},
 				options.handRaised,
@@ -293,7 +293,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				) {
 					return true
 				} else if (
-					feedback.options.type === 'preselect' &&
+					feedback.options.type === 'index' &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].handRaised ===
 						(feedback.options.handRaised == 1 ? true : false)
 				) {
@@ -334,10 +334,10 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					choices: [
 						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
-						{ id: 'preselect', label: 'preselect' },
+						{ id: 'index', label: 'index' },
 						{ id: 'userInGroup', label: 'user inside a Group' },
 						{ id: 'galleryPositionInGroup', label: 'gallery position inside a Group' },
-						{ id: 'preselectPositionInGroup', label: 'preselect position inside a Group' },
+						{ id: 'indexPositionInGroup', label: 'index position inside a Group' },
 					],
 				},
 			],
@@ -357,7 +357,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				) {
 					return true
 				} else if (
-					feedback.options.type === 'preselect' &&
+					feedback.options.type === 'index' &&
 					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
@@ -382,7 +382,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						)
 							return true
 					}
-				} else if (feedback.options.type === 'preselectPositionInGroup') {
+				} else if (feedback.options.type === 'indexPositionInGroup') {
 					for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
 						if (
 							instance.ZoomUserData[index].users &&

@@ -616,7 +616,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.checkFeedbacks('selectedUser')
 			},
 		},
-		SelectFromPreSelectPosition: {
+		SelectFromIndexPosition: {
 			label: 'Preselect user/group',
 			options: [
 				preSelectOption,
