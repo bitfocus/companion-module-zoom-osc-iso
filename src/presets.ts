@@ -202,7 +202,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				label: user.userName,
 				bank: {
 					style: 'text',
-					text: `Select\\n$(zoomosc:${user.zoomId})`,
+					text: user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1 ? `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`: `Select\\n$(zoomosc:${user.zoomId})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor:

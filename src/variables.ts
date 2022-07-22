@@ -69,6 +69,7 @@ export class Variables {
 				name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}`,
 			})
 			userVariables.push({ label: `name`, name: this.instance.ZoomUserData[index].zoomId.toString() })
+			userVariables.push({label: `Callers In Group ${this.instance.ZoomUserData[index].zoomId.toString()}` , name: `CallersInGroup${this.instance.ZoomUserData[index].zoomId.toString()}`})
 		}
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
@@ -136,6 +137,7 @@ export class Variables {
 
 		let allUsers = ''
 		for (let index = 1; index - 1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+			newVariables[`CallersInGroup${this.instance.ZoomUserData[index].zoomId.toString()}`] = this.instance.ZoomUserData[index].users?.length
 			this.instance.ZoomUserData[index].users?.forEach((zoomID: number) => {
 				allUsers += this.instance.ZoomUserData[zoomID].userName
 			})
