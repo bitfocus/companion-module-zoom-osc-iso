@@ -51,7 +51,7 @@ export class OSC {
 	 */
 	public readonly destroy = (): void => {
 		this.needToPingPong = false
-		if (this.udpPort) this.udpPort.destroy()
+		if (this.udpPort) this.udpPort.close()
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
 	}
