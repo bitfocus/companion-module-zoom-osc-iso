@@ -658,9 +658,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
-				instance.checkFeedbacks('selectedUserGalPos')
-				instance.checkFeedbacks('selectedInAGroup')
-				instance.checkFeedbacks('selectedInAGroupGalPos')
 			},
 		},
 		clearGroup: {
@@ -669,9 +666,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			callback: (action: { options: { group: number } }) => {
 				instance.ZoomUserData[action.options.group].users.length = 0
 				instance.checkFeedbacks('selectedUser')
-				instance.checkFeedbacks('selectedUserGalPos')
-				instance.checkFeedbacks('selectedInAGroup')
-				instance.checkFeedbacks('selectedInAGroupGalPos')
+				instance.variables?.updateVariables()
 			},
 		},
 		renameGroup: {
@@ -703,7 +698,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
-				instance.checkFeedbacks('selectedUserGalPos')
 			},
 		},
 	}
