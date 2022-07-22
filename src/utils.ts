@@ -189,8 +189,8 @@ export const options: Options = {
 		id: 'handRaised',
 		default: 0,
 		choices: [
-			{ id: 0, label: 'lowered' },
-			{ id: 1, label: 'raised' },
+			{ id: 0, label: 'raised' },
+			{ id: 1, label: 'lowered' },
 		],
 	},
 

@@ -3,6 +3,7 @@ import ZoomInstance from './index'
 import { GlobalActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
 const { UserActions, actionsWithArgs, GlobalActions, SpecialActions } = require('./osccommands')
+const { images } = require('./images')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
 
@@ -89,22 +90,22 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'preselectPositionInGroup'
+						type: 'preselect'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(125, 125, 0),
+						bgcolor: instance.rgb(255, 255, 0),
 					},
 				},
 				{
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'preselect'
+						type: 'preselectPositionInGroup'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 255, 0),
+						bgcolor: instance.rgb(125, 125, 0),
 					},
 				},
 				{
@@ -115,6 +116,17 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
+					},
+				},
+				{
+					type: 'handRaised',
+					options: {
+						position: index,
+						type: 'preselect',
+						handRaised: 1,
+					},
+					style: {
+						png64: images.handRaised,
 					},
 				},
 			],
@@ -138,22 +150,22 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'galleryPositionInGroup'
+						type: 'gallery'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(125, 125, 0),
+						bgcolor: instance.rgb(255, 255, 0),
 					},
 				},
 				{
 					type: 'selectedUser',
 					options: {
 						position: index,
-						type: 'gallery'
+						type: 'galleryPositionInGroup'
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 255, 0),
+						bgcolor: instance.rgb(125, 125, 0),
 					},
 				},
 				{
@@ -164,6 +176,17 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
+					},
+				},
+				{
+					type: 'handRaised',
+					options: {
+						position: index,
+						type: 'gallery',
+						handRaised: 1,
+					},
+					style: {
+						png64: images.handRaised,
 					},
 				},
 			],
@@ -219,6 +242,17 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						},
 						style: {
 							bgcolor: instance.rgb(255, 0, 0),
+						},
+					},
+					{
+						type: 'handRaised',
+						options: {
+							user: user.zoomId,
+							type: 'normal',
+							handRaised: 1,
+						},
+						style: {
+							png64: images.handRaised,
 						},
 					},
 				],
