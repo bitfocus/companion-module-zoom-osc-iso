@@ -770,9 +770,9 @@ const GlobalActions: actionType = {
 		command: '/zoom/save',
 		type: 'Global',
 	},
-	RequestAllZoomOSCParticipantDataList: {
-		description: 'Request All ZoomOSC Participant Data List',
-		shortDescription: 'RequestAllZoomOSCParticipantDataList',
+	RequestListOfBreakoutRooms: {
+		description: 'Request list of breakout rooms',
+		shortDescription: 'RequestListOfBreakoutRooms',
 		command: '/zoom/listBreakouts',
 		type: 'Global',
 	},
