@@ -86,10 +86,10 @@ export class Variables {
 			})
 		}
 		let selectUsersVariables = []
-		for (let index = 1; index < 50; index++) {
+		for (let index = 1; index < 1000; index++) {
 			selectUsersVariables.push({
-				label: `UserInSelectionPosition ${index}`,
-				name: `UserInSelectionPosition${index}`,
+				label: `Participant ${index}`,
+				name: `Participant${index}`,
 			})
 		}
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
@@ -151,11 +151,11 @@ export class Variables {
 				newVariables[user.zoomId.toString()] = user.userName
 			}
 		}
-		// Use the dynamic selection
-		for (let index = 1; index < 50; index++) {
-			newVariables[`UserInSelectionPosition${index}`] = this.instance.ZoomVariableLink[index-1]
+		// Use the participant selection
+		for (let index = 1; index < 1000; index++) {
+			newVariables[`Participant${index}`] = this.instance.ZoomVariableLink[index-1]
 				? this.instance.ZoomVariableLink[index-1].userName
-				: '(none)'
+				: '-'
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
 
@@ -163,7 +163,7 @@ export class Variables {
 			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index-1]
 			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID]
 				? this.instance.ZoomUserData[zoomID].userName
-				: ''
+				: '-'
 		}
 
 		this.set(newVariables)
