@@ -24,7 +24,7 @@ export class OSC {
 	private oscTXPort: number = 9099
 	private oscRXPort: number = 1234
 	private udpPort: any
-	private updateLoop: boolean = false
+	private updateLoop: boolean = true
 	private needToPingPong: boolean = true
 	private pingInterval: NodeJS.Timer | undefined
 	private pingIntervalTime: number = 2000
