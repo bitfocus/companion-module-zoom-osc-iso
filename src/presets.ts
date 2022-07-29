@@ -22,7 +22,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 
 	//clear selection
 	presets.push({
-		category: 'Select Callers',
+		category: 'Select Participants',
 		label: `Clear selection`,
 		bank: {
 			style: 'text',
@@ -65,13 +65,13 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 	}
 	// Create presets for selection of unknown users
-	for (let index = 1; index < 50; index++) {
+	for (let index = 1; index < 1000; index++) {
 		presets.push({
-			category: 'Index Callers',
+			category: 'Select Participants',
 			label: `Caller${index}`,
 			bank: {
 				style: 'text',
-				text: `Index ${index}\\n$(zoomosc:UserInSelectionPosition${index})`,
+				text: `Caller ${index}\\n$(zoomosc:Participant${index})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(0, 0, 0),
@@ -135,7 +135,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	// Create presets for gallery
 	for (let index = 1; index < 50; index++) {
 		presets.push({
-			category: 'Pre-select from Gallery',
+			category: 'Select from Gallery',
 			label: `$(zoomosc:Gallery position ${index})`,
 			bank: {
 				style: 'text',
@@ -193,101 +193,101 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 	}
 	// normal selection
-	for (const key in instance.ZoomUserData) {
-		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
-			const user = instance.ZoomUserData[key]
+	// for (const key in instance.ZoomUserData) {
+	// 	if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+	// 		const user = instance.ZoomUserData[key]
 
-			presets.push({
-				category: user.zoomId > instance.ZoomClientDataObj.numberOfGroups + 1 ? 'Select Callers' : 'Group presets',
-				label: user.userName,
-				bank: {
-					style: 'text',
-					text: user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1 ? `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`: `Select\\n$(zoomosc:${user.zoomId})`,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor:
-						user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1
-							? instance.rgb(125, 125, 125)
-							: instance.rgb(0, 0, 0),
-				},
-				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
-				feedbacks: [
-					{
-						type: 'selectedUser',
-						options: {
-							user: user.zoomId,
-							type: 'normal',
-						},
-						style: {
-							color: instance.rgb(0, 0, 0),
-							bgcolor: instance.rgb(255, 255, 0),
-						},
-					},
-					{
-						type: 'selectedUser',
-						options: {
-							user: user.zoomId,
-							type: 'userInGroup',
-						},
-						style: {
-							color: instance.rgb(0, 0, 0),
-							bgcolor: instance.rgb(125, 125, 0),
-						},
-					},
-					{
-						type: 'microphoneLive',
-						options: {
-							user: user.zoomId,
-							type: 'normal',
-						},
-						style: {
-							bgcolor: instance.rgb(255, 0, 0),
-						},
-					},
-					{
-						type: 'handRaised',
-						options: {
-							user: user.zoomId,
-							type: 'normal',
-							handRaised: 1,
-						},
-						style: {
-							png64: images.handRaised,
-						},
-					},
-				],
-			})
-			if (user.zoomId <= instance.ZoomClientDataObj.numberOfGroups) {
-				presets.push({
-					category: 'Rename',
-					label: user.userName,
-					bank: {
-						style: 'text',
-						text: `Rename\\n$(zoomosc:${user.zoomId})`,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(125, 125, 125),
-					},
-					actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
-					feedbacks: [],
-				})
-			} else {
-				presets.push({
-					category: 'Rename',
-					label: user.userName,
-					bank: {
-						style: 'text',
-						text: `Rename\\n$(zoomosc:${user.zoomId})`,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(125, 125, 125),
-					},
-					actions: [{ action: 'Rename', options: { user: user.zoomId, name: user.userName } }],
-					feedbacks: [],
-				})
-			}
-		}
-	}
+	// 		presets.push({
+	// 			category: user.zoomId > instance.ZoomClientDataObj.numberOfGroups + 1 ? 'Select Callers' : 'Group presets',
+	// 			label: user.userName,
+	// 			bank: {
+	// 				style: 'text',
+	// 				text: user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1 ? `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`: `Select\\n$(zoomosc:${user.zoomId})`,
+	// 				size: 'auto',
+	// 				color: instance.rgb(255, 255, 255),
+	// 				bgcolor:
+	// 					user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1
+	// 						? instance.rgb(125, 125, 125)
+	// 						: instance.rgb(0, 0, 0),
+	// 			},
+	// 			actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
+	// 			feedbacks: [
+	// 				{
+	// 					type: 'selectedUser',
+	// 					options: {
+	// 						user: user.zoomId,
+	// 						type: 'normal',
+	// 					},
+	// 					style: {
+	// 						color: instance.rgb(0, 0, 0),
+	// 						bgcolor: instance.rgb(255, 255, 0),
+	// 					},
+	// 				},
+	// 				{
+	// 					type: 'selectedUser',
+	// 					options: {
+	// 						user: user.zoomId,
+	// 						type: 'userInGroup',
+	// 					},
+	// 					style: {
+	// 						color: instance.rgb(0, 0, 0),
+	// 						bgcolor: instance.rgb(125, 125, 0),
+	// 					},
+	// 				},
+	// 				{
+	// 					type: 'microphoneLive',
+	// 					options: {
+	// 						user: user.zoomId,
+	// 						type: 'normal',
+	// 					},
+	// 					style: {
+	// 						bgcolor: instance.rgb(255, 0, 0),
+	// 					},
+	// 				},
+	// 				{
+	// 					type: 'handRaised',
+	// 					options: {
+	// 						user: user.zoomId,
+	// 						type: 'normal',
+	// 						handRaised: 1,
+	// 					},
+	// 					style: {
+	// 						png64: images.handRaised,
+	// 					},
+	// 				},
+	// 			],
+	// 		})
+	// 		if (user.zoomId <= instance.ZoomClientDataObj.numberOfGroups) {
+	// 			presets.push({
+	// 				category: 'Rename',
+	// 				label: user.userName,
+	// 				bank: {
+	// 					style: 'text',
+	// 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
+	// 					size: 'auto',
+	// 					color: instance.rgb(255, 255, 255),
+	// 					bgcolor: instance.rgb(125, 125, 125),
+	// 				},
+	// 				actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
+	// 				feedbacks: [],
+	// 			})
+	// 		} else {
+	// 			presets.push({
+	// 				category: 'Rename',
+	// 				label: user.userName,
+	// 				bank: {
+	// 					style: 'text',
+	// 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
+	// 					size: 'auto',
+	// 					color: instance.rgb(255, 255, 255),
+	// 					bgcolor: instance.rgb(125, 125, 125),
+	// 				},
+	// 				actions: [{ action: 'Rename', options: { user: user.zoomId, name: user.userName } }],
+	// 				feedbacks: [],
+	// 			})
+	// 		}
+	// 	}
+	// }
 
 	return presets
 }
