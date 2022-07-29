@@ -64,6 +64,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	for (let index = 1; index < 50; index++) {
 		CHOICES_POSITION.push({ id: index.toString(), label: `Position ${index}` })
 	}
+	let CHOICES_PARTICIPANT = []
+	for (let index = 1; index < 1000; index++) {
+		CHOICES_PARTICIPANT.push({ id: index.toString(), label: `Participant ${index}` })
+	}
 
 	let userOption: InputFieldWithDefault = {
 		type: 'dropdown',
@@ -81,12 +85,12 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		choices: CHOICES_POSITION,
 	}
 
-	let preSelectOption: InputFieldWithDefault = {
+	let participantOption: InputFieldWithDefault = {
 		type: 'dropdown',
 		label: 'Position',
 		id: 'position',
 		default: '0',
-		choices: CHOICES_POSITION,
+		choices: CHOICES_PARTICIPANT,
 	}
 
 	let groupOption: InputFieldWithDefault = {
@@ -478,7 +482,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
 				// Loop through selected callers to see if there is a group selected and get the callers
 				user.forEach((caller) => {
-
 					// Is a caller a group?
 					if (caller < numberOfGroups) {
 						instance.ZoomUserData[caller].users.forEach((callerInGroup) => {
@@ -563,18 +566,24 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { user: number; option: string } }) => {
-				if (action.options.option == 'toggle') {
-					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						action.options.user
-					)
-				} else if (action.options.option == 'select') {
-					instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
-				} else if (action.options.option == 'remove') {
-					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						action.options.user
-					)
+				switch (action.options.option) {
+					case 'toggle':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							action.options.user
+						)
+						break
+					case 'select':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
+						break
+					case 'remove':
+						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							action.options.user
+						)
+						break
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
@@ -597,20 +606,26 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { position: number; option: string } }) => {
-				if (action.options.option == 'toggle') {
-					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
-					)
-				} else if (action.options.option == 'select') {
-					instance.ZoomClientDataObj.selectedCallers.push(
-						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
-					)
-				} else if (action.options.option == 'remove') {
-					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
-					)
+				switch (action.options.option) {
+					case 'toggle':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+						)
+						break
+					case 'select':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers.push(
+							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+						)
+						break
+					case 'remove':
+						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+						)
+						break
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
@@ -619,7 +634,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		SelectFromIndexPosition: {
 			label: 'Preselect user/group',
 			options: [
-				preSelectOption,
+				participantOption,
 				{
 					type: 'dropdown',
 					label: 'Option',
@@ -633,18 +648,26 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { position: number; option: string } }) => {
-				if (action.options.option == 'toggle') {
-					instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomVariableLink[action.options.position - 1].zoomId
-					)
-				} else if (action.options.option == 'select') {
-					instance.ZoomClientDataObj.selectedCallers.push(instance.ZoomVariableLink[action.options.position - 1].zoomId)
-				} else if (action.options.option == 'remove') {
-					instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-						instance.ZoomClientDataObj.selectedCallers,
-						instance.ZoomVariableLink[action.options.position - 1].zoomId
-					)
+				switch (action.options.option) {
+					case 'toggle':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomVariableLink[action.options.position - 1].zoomId
+						)
+						break
+					case 'select':
+						if (instance.config.singleSelection === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers.push(
+							instance.ZoomVariableLink[action.options.position - 1].zoomId
+						)
+						break
+					case 'remove':
+						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomVariableLink[action.options.position - 1].zoomId
+						)
+						break
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')

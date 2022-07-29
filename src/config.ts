@@ -5,16 +5,10 @@ export interface Config {
 	host: string
 	tx_port: number
 	rx_port: number
-	// subscribeMode: number
+	singleSelection: number
 	numberOfGroups: number
 }
-// enum SubscribeMode {
-// 	None = 0,
-// 	TargetList = 1,
-// 	All = 2,
-// 	Panelists = 3,
-// 	OnlyGallery = 4,
-// }
+
 export const getConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{
@@ -44,20 +38,17 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 			max: 65535,
 			step: 1,
 		},
-		// {
-		// 	type: 'dropdown',
-		// 	id: 'subscribeMode',
-		// 	label: 'Subscribe Mode',
-		// 	choices: [
-		// 		{ id: SubscribeMode.None, label: 'None' },
-		// 		{ id: SubscribeMode.TargetList, label: 'Target List' },
-		// 		{ id: SubscribeMode.All, label: 'All' },
-		// 		{ id: SubscribeMode.Panelists, label: 'Panelists' },
-		// 		{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
-		// 	],
-		// 	default: SubscribeMode.All,
-		// 	width: 6,
-		// },
+		{
+			type: 'dropdown',
+			id: 'singleSelection',
+			label: 'Selection method',
+			choices: [
+				{ id: 1, label: 'Single Selection' },
+				{ id: 0, label: 'Multi Selection' },
+			],
+			default: 1,
+			width: 6,
+		},
 		{
 			type: 'number',
 			id: 'numberOfGroups',
@@ -67,17 +58,5 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 			default: 2,
 			width: 6,
 		},
-		// {
-		// 	type: 'dropdown',
-		// 	id:	 'galTrackMode',
-		// 	label: 'Gallery Tracking Mode ---ZOOMID MODE REQUIRED FOR GALLERY TRACKING FEATURES---',
-		// 	choices:[
-		// 		{id: ZOSC.enums.GalleryTrackModeTargetIndex, label: 'Target Index'},
-		// 		{id: ZOSC.enums.GalleryTrackModeZoomID,			label: 'ZoomID'			}
-
-		// 	],
-		// 	default: ZOSC.enums.GalleryTrackModeZoomID,
-		// 	width: 6
-		// }
 	]
 }
