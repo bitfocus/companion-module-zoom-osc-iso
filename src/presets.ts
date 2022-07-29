@@ -34,6 +34,39 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'clearSelection', options: {} }],
 		feedbacks: [],
 	})
+	// Selection method
+	presets.push({
+		category: 'Select Participants',
+		label: `Selection Method`,
+		bank: {
+			style: 'text',
+			text: `Method`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'selectionMethod', options: { selectionMethod : 2 } }],
+		feedbacks: [
+			{
+				type: 'selectionMethod',
+					options: {
+						selectionMethod: 1,
+					},
+					style: {
+						text: 'Single selection',
+					},
+			},
+			{
+				type: 'selectionMethod',
+					options: {
+						selectionMethod: 0,
+					},
+					style: {
+						text: 'Multiple selection',
+					},
+			},
+		],
+	})
 
 	// Add to group presets
 	for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {

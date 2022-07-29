@@ -16,6 +16,7 @@ export interface ZoomFeedbacks {
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
 	selectedUser: ZoomFeedback<selectedUserCallback>
+	selectionMethod: ZoomFeedback<selectionMethodCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
@@ -63,6 +64,12 @@ interface selectedUserCallback {
 		user: number
 		type: string
 		position: number
+	}>
+}
+interface selectionMethodCallback {
+	type: 'selectionMethod'
+	options: Readonly<{
+		selectionMethod: number
 	}>
 }
 
@@ -394,6 +401,33 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					}
 				}
 				return false
+			},
+		},
+		selectionMethod: {
+			type: 'boolean',
+			label: 'selection method',
+			description: 'Use of single or multi select',
+			style: {
+				text: 'Single selection'
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Selection Method',
+					id: 'selectionMethod',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Single selection' },
+						{ id: 0, label: 'Multi selection' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				if (instance.config.selectionMethod === feedback.options.selectionMethod) {
+					return true
+				} else {
+					return false
+				}
 			},
 		},
 	}

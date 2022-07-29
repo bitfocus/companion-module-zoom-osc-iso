@@ -5,7 +5,7 @@ export interface Config {
 	host: string
 	tx_port: number
 	rx_port: number
-	singleSelection: number
+	selectionMethod: number
 	numberOfGroups: number
 }
 
@@ -40,8 +40,8 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 		},
 		{
 			type: 'dropdown',
-			id: 'singleSelection',
-			label: 'Selection method',
+			id: 'selectionMethod',
+			label: 'Default selection method',
 			choices: [
 				{ id: 1, label: 'Single Selection' },
 				{ id: 0, label: 'Multi Selection' },
