@@ -730,7 +730,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Clear group selection',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				instance.ZoomUserData[action.options.group].users.length = 0
+				instance.ZoomGroupData[action.options.group].users.length = 0
 				instance.checkFeedbacks('selectedUser')
 				instance.variables?.updateVariables()
 			},
