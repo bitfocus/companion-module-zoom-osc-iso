@@ -350,6 +350,19 @@ export class OSC {
 					this.sendCommand('/zoom/ping')
 					break
 
+				case 'listCleared':
+					console.log('received', data)
+					this.instance.ZoomClientDataObj.selectedCallers.length = 0
+					this.instance.ZoomVariableLink.length = 0
+					for (const key of Object.keys(this.instance.ZoomUserData)) {
+						if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+							delete this.instance.ZoomUserData[parseInt(key)]
+						}
+					}
+					this.instance.variables?.updateVariables()
+					// this.sendCommand('/zoom/ping')
+					break
+
 				default:
 					console.log('No Case provided for: ' + data.address)
 					console.log('Arguments', data.args)
