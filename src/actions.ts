@@ -48,7 +48,7 @@ export interface ZoomAction<T> {
 export function getActions(instance: ZoomInstance): CompanionActions {
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
-	let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
+	let CHOICES_GROUPS: { id: string; label: string }[] = []
 	let CHOICES_USERS_DEFAULT = '0'
 	let CHOICES_GROUPS_DEFAULT = '0'
 	if (instance.ZoomUserData) {
@@ -492,7 +492,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					// 		command.argsCallers.push({ type: 'i', value: callerInGroup })
 					// 	})
 					// } else {
-						command.argsCallers.push({ type: 'i', value: caller })
+					command.argsCallers.push({ type: 'i', value: caller })
 					// }
 				})
 			} else {
@@ -580,7 +580,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			},
 		},
 		SelectUser: {
-			label: 'Preselect user/group',
+			label: 'Preselect user',
 			options: [
 				userOption,
 				{
@@ -618,7 +618,18 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
-				instance.checkFeedbacks('selectedGroup')
+			},
+		},
+		SelectGroup: {
+			label: 'Preselect group',
+			options: [groupOption],
+			callback: (action: { options: { group: number } }) => {
+				if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomGroupData[action.options.group].users?.forEach((zoomID) => {
+					instance.ZoomClientDataObj.selectedCallers.push(zoomID)
+				})
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
 			},
 		},
 		SelectFromGalleryPosition: {
@@ -709,7 +720,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Add selection to group',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				instance.ZoomUserData[action.options.group].users = [...instance.ZoomClientDataObj.selectedCallers]
+				instance.ZoomGroupData[action.options.group].users = [...instance.ZoomClientDataObj.selectedCallers]
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')

@@ -75,7 +75,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			label: `Set to group: ${instance.ZoomGroupData[index].groupName}`,
 			bank: {
 				style: 'text',
-				text: `Set to group:\\n$(zoomosc:${index})`,
+				text: `Set to group:\\n$(zoomosc:Group${index + 1})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
@@ -88,7 +88,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			label: `Clear group: ${instance.ZoomGroupData[index].groupName}`,
 			bank: {
 				style: 'text',
-				text: `Clear group:\\n$(zoomosc:${index})`,
+				text: `Clear group:\\n$(zoomosc:Group${index + 1})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
@@ -128,17 +128,6 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					style: {
 						color: instance.rgb(0, 0, 0),
 						bgcolor: instance.rgb(255, 255, 0),
-					},
-				},
-				{
-					type: 'selectedUser',
-					options: {
-						position: index,
-						type: 'indexPositionInGroup',
-					},
-					style: {
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(125, 125, 0),
 					},
 				},
 				{
@@ -191,17 +180,6 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				},
 				{
-					type: 'selectedUser',
-					options: {
-						position: index,
-						type: 'galleryPositionInGroup',
-					},
-					style: {
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(125, 125, 0),
-					},
-				},
-				{
 					type: 'microphoneLive',
 					options: {
 						position: index,
@@ -226,37 +204,26 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 	}
 	// Group selection
+	instance.ZoomGroupData.forEach((group, index) => {
+		presets.push({
+			category: 'Group presets',
+			label: group.groupName,
+			bank: {
+				style: 'text',
+				text: `Select\\n$(zoomosc:Group${index}) ($(zoomosc:CallersInGroup${index}))`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(0, 0, 0),
+			},
+			actions: [{ action: 'SelectGroup', options: { group: index } }],
+			feedbacks: [],
+		})
+	})
+	// User selection
 	for (const key in instance.ZoomUserData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 			const user = instance.ZoomUserData[key]
 			// Group selection
-			if (user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1) {
-			
-			presets.push({
-				category: 'Group presets',
-				label: user.userName,
-				bank: {
-					style: 'text',
-					text: `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`,
-					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(0, 0, 0),
-				},
-				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
-				feedbacks: [
-					{
-						type: 'selectedGroup',
-						options: {
-							group: user.zoomId,
-						},
-						style: {
-							color: instance.rgb(0, 0, 0),
-							bgcolor: instance.rgb(255, 255, 0),
-						},
-					},
-				],
-			})
-		}
 			presets.push({
 				category: 'Rename',
 				label: user.userName,
