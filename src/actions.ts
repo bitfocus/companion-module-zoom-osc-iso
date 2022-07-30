@@ -745,6 +745,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.variables?.updateVariables()
 			},
 		},
+		renameGroup: {
+			label: 'Rename Group',
+			options: [groupOption, options.name],
+			callback: (action: { options: { group: number; name: string } }) => {
+				instance.ZoomGroupData[action.options.group].groupName = action.options.name
+				instance.variables?.updateVariables()
+			},
+		},
 		removeFromGroup: {
 			label: 'Remove from group',
 			options: [userOption, groupOption],
