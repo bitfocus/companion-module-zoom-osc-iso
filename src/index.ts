@@ -10,7 +10,13 @@ import { Config } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
-import { getUserPresets, getGlobalPresets, getSelectUsersPresets, getSpecialPresets, getPresetsWithArgs } from './presets'
+import {
+	getUserPresets,
+	getGlobalPresets,
+	getSelectUsersPresets,
+	getSpecialPresets,
+	getPresetsWithArgs,
+} from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
@@ -18,22 +24,21 @@ import { OSC } from './osc'
  * Companion instance class for Zoom
  */
 class ZoomInstance extends instance_skel<Config> {
-
 	static GetUpgradeScripts() {
 		return [
 			// any existing upgrade scripts go here
 			instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
-				'microphoneLive': true,
-				'microphoneLiveGalPos': true,
-				'camera': true,
-				'cameraGalPos': true,
-				'handRaised': true,
-				'handRaisedGalPos': true,
-				'selectedUser': true,
-				'selectedUserGalPos': true,
-				'selectedInAGroup': true,
-				'selectedInAGroupGalPos': true,
-			})
+				microphoneLive: true,
+				microphoneLiveGalPos: true,
+				camera: true,
+				cameraGalPos: true,
+				handRaised: true,
+				handRaisedGalPos: true,
+				selectedUser: true,
+				selectedUserGalPos: true,
+				selectedInAGroup: true,
+				selectedInAGroupGalPos: true,
+			}),
 		]
 	}
 
@@ -80,6 +85,11 @@ class ZoomInstance extends instance_skel<Config> {
 		}
 	} = {}
 
+	public ZoomGroupData: {
+		groupName: string
+		users: number[]
+	}[] = []
+
 	public ZoomUserOffline: {
 		[key: number]: {
 			zoomId: number
@@ -93,8 +103,8 @@ class ZoomInstance extends instance_skel<Config> {
 			users: number[]
 		}
 	} = {}
-	
-	public ZoomVariableLink: {zoomId: number, userName: string}[] = []
+
+	public ZoomVariableLink: { zoomId: number; userName: string }[] = []
 
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
@@ -105,12 +115,9 @@ class ZoomInstance extends instance_skel<Config> {
 		this.config = config
 		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
 		// Setup groups
-		for (let index = 1; index-1 < this.ZoomClientDataObj.numberOfGroups; index++) {
-			this.ZoomUserData[index] = {
-				zoomId: index,
-				userName: `Group ${index}`,
-				targetIndex: -1,
-				galleryIndex: -1,
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+			this.ZoomGroupData[index] = {
+				groupName: `Group ${index+1}`,
 				users: [],
 			}
 		}
@@ -141,20 +148,22 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description triggered every time the config for this instance is saved
 	 */
 	public updateConfig(config: Config): void {
-		console.log('changing config!',config);
-		
+		console.log('changing config!', config)
+
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-		// if (config.subscribeMode !== this.ZoomClientDataObj.subscribeMode){
-		// 	this.ZoomClientDataObj.subscribeMode = config.subscribeMode
-		// 	this.oscSend(config.host, config.tx_port, '/zoom/subscribe', [{ type: 'i', value: this.config.subscribeMode }])
-		// }
+		for (let index = 1; index - 1 < this.ZoomClientDataObj.numberOfGroups; index++) {
+			this.ZoomGroupData[index] = {
+				groupName: `Group ${index}`,
+				users: [],
+			}
+		}
 		this.OSC?.destroy()
 		this.OSC = new OSC(this)
 
-		console.log('groups',this.ZoomClientDataObj.numberOfGroups);
-		
+		console.log('groups', this.ZoomClientDataObj.numberOfGroups)
+
 		this.updateInstance()
 	}
 
@@ -171,8 +180,8 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateVariables(): void {
 		if (this.variables) {
-			console.log('updating');
-			
+			console.log('updating')
+
 			this.variables.updateDefinitions()
 			this.variables.updateVariables()
 		}

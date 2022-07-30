@@ -62,14 +62,17 @@ export class Variables {
 			{ label: 'Last Speaking', name: 'lastSpeaking' },
 		])
 		let userVariables = []
-		// Which users in a group
-		for (let index = 1; index - 1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
+		// Groups
+		for (let index = 0; index < this.instance.ZoomGroupData.length; index++) {
 			userVariables.push({
 				label: `Inside group`,
-				name: `Inside${this.instance.ZoomUserData[index].zoomId.toString()}`,
+				name: `InsideGroup${index + 1}`,
 			})
-			userVariables.push({ label: `name`, name: this.instance.ZoomUserData[index].zoomId.toString() })
-			userVariables.push({label: `Callers In Group ${this.instance.ZoomUserData[index].zoomId.toString()}` , name: `CallersInGroup${this.instance.ZoomUserData[index].zoomId.toString()}`})
+			userVariables.push({ label: `name`, name: `Group${index + 1}` })
+			userVariables.push({
+				label: `Callers In Group ${index + 1}`,
+				name: `CallersInGroup${index + 1}`,
+			})
 		}
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
@@ -136,14 +139,15 @@ export class Variables {
 		newVariables['lastSpeaking'] = this.instance.ZoomClientDataObj.lastSpeaking
 
 		let allUsers = ''
-		for (let index = 1; index - 1 < this.instance.ZoomClientDataObj.numberOfGroups; index++) {
-			newVariables[`CallersInGroup${this.instance.ZoomUserData[index].zoomId.toString()}`] = this.instance.ZoomUserData[index].users?.length
-			this.instance.ZoomUserData[index].users?.forEach((zoomID: number) => {
-				allUsers += this.instance.ZoomUserData[zoomID].userName
+		this.instance.ZoomGroupData.forEach((group, index) => {
+			newVariables[`CallersInGroup${index + 1}`] = group.users?.length
+			newVariables[`Group${index + 1}`] = group.groupName
+			group.users?.forEach((zoomID: number) => {
+				allUsers += this.instance.ZoomUserData[zoomID].userName + ' '
 			})
-			newVariables[`Inside${this.instance.ZoomUserData[index].zoomId.toString()}`] = allUsers
+			newVariables[`InsideGroup${index + 1}`] = allUsers
 			allUsers = '' // reset values
-		}
+		})
 		// "normal" users
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
@@ -153,14 +157,14 @@ export class Variables {
 		}
 		// Use the participant selection
 		for (let index = 1; index < 1000; index++) {
-			newVariables[`Participant${index}`] = this.instance.ZoomVariableLink[index-1]
-				? this.instance.ZoomVariableLink[index-1].userName
+			newVariables[`Participant${index}`] = this.instance.ZoomVariableLink[index - 1]
+				? this.instance.ZoomVariableLink[index - 1].userName
 				: '-'
 		}
 		newVariables['galleryCount'] = this.instance.ZoomClientDataObj.galleryCount
 
 		for (let index = 1; index < 50; index++) {
-			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index-1]
+			const zoomID = this.instance.ZoomClientDataObj.galleryOrder[index - 1]
 			newVariables[`Gallery position ${index}`] = this.instance.ZoomUserData[zoomID]
 				? this.instance.ZoomUserData[zoomID].userName
 				: '-'

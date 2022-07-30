@@ -69,13 +69,13 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	})
 
 	// Add to group presets
-	for (let index = 1; index - 1 < instance.ZoomClientDataObj.numberOfGroups; index++) {
+	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		presets.push({
 			category: 'Group presets',
-			label: `Add to group: ${instance.ZoomUserData[index].userName}`,
+			label: `Set to group: ${instance.ZoomGroupData[index].groupName}`,
 			bank: {
 				style: 'text',
-				text: `Add to group:\\n$(zoomosc:${index})`,
+				text: `Set to group:\\n$(zoomosc:${index})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
@@ -85,7 +85,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 		presets.push({
 			category: 'Group presets',
-			label: `Clear group: ${instance.ZoomUserData[index].userName}`,
+			label: `Clear group: ${instance.ZoomGroupData[index].groupName}`,
 			bank: {
 				style: 'text',
 				text: `Clear group:\\n$(zoomosc:${index})`,
@@ -231,7 +231,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			const user = instance.ZoomUserData[key]
 			// Group selection
 			if (user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1) {
-			}
+			
 			presets.push({
 				category: 'Group presets',
 				label: user.userName,
@@ -245,10 +245,9 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
 				feedbacks: [
 					{
-						type: 'selectedUser',
+						type: 'selectedGroup',
 						options: {
-							user: user.zoomId,
-							type: 'normal',
+							group: user.zoomId,
 						},
 						style: {
 							color: instance.rgb(0, 0, 0),
@@ -257,7 +256,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				],
 			})
-
+		}
 			presets.push({
 				category: 'Rename',
 				label: user.userName,

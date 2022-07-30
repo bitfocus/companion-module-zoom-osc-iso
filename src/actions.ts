@@ -48,18 +48,22 @@ export interface ZoomAction<T> {
 export function getActions(instance: ZoomInstance): CompanionActions {
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
-	let CHOICES_USERS_DEFAULT = '1'
+	let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
+	let CHOICES_USERS_DEFAULT = '0'
+	let CHOICES_GROUPS_DEFAULT = '0'
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 				const user = instance.ZoomUserData[key]
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
+				CHOICES_USERS_DEFAULT = user.zoomId.toString()
 			}
 		}
-		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '1'
 	}
-	let CHOICES_GROUPS = CHOICES_USERS.slice(0, instance.ZoomClientDataObj.numberOfGroups)
+	instance.ZoomGroupData.forEach((group, index) => {
+		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
+	})
 	let CHOICES_POSITION = []
 	for (let index = 1; index < 50; index++) {
 		CHOICES_POSITION.push({ id: index.toString(), label: `Position ${index}` })
@@ -97,7 +101,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		type: 'dropdown',
 		label: 'Group',
 		id: 'group',
-		default: 0,
+		default: CHOICES_GROUPS_DEFAULT,
 		choices: CHOICES_GROUPS,
 	}
 
@@ -479,17 +483,17 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				// should be otherwise somethings wrong
 				if (user.length === 0) console.log('Select a caller first')
 				// Do a + 1 because groups start at 1
-				let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
+				// let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
 				// Loop through selected callers to see if there is a group selected and get the callers
 				user.forEach((caller) => {
 					// Is a caller a group?
-					if (caller < numberOfGroups) {
-						instance.ZoomUserData[caller].users.forEach((callerInGroup) => {
-							command.argsCallers.push({ type: 'i', value: callerInGroup })
-						})
-					} else {
+					// if (caller < numberOfGroups) {
+					// 	instance.ZoomUserData[caller].users.forEach((callerInGroup) => {
+					// 		command.argsCallers.push({ type: 'i', value: callerInGroup })
+					// 	})
+					// } else {
 						command.argsCallers.push({ type: 'i', value: caller })
-					}
+					// }
 				})
 			} else {
 				console.log('Wrong selection')
@@ -602,7 +606,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						break
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
-						instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
+						if (action.options.user < instance.ZoomClientDataObj.numberOfGroups + 1)
+							instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
@@ -613,6 +618,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('selectedGroup')
 			},
 		},
 		SelectFromGalleryPosition: {
