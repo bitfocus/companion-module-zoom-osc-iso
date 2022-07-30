@@ -291,6 +291,7 @@ export class OSC {
 					})
 					this.instance.variables?.updateDefinitions()
 					this.instance.variables?.updateVariables()
+					this.instance.checkFeedbacks('selectedUser')
 					break
 
 				case 'galleryCount':
