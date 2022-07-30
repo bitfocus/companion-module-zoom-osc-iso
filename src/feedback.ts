@@ -408,7 +408,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			label: 'selection method',
 			description: 'Use of single or multi select',
 			style: {
-				text: 'Single selection'
+				text: 'Single selection',
 			},
 			options: [
 				{
@@ -423,6 +423,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
+				if (instance.config.selectionMethod === undefined) instance.config.selectionMethod = 1
 				if (instance.config.selectionMethod === feedback.options.selectionMethod) {
 					return true
 				} else {

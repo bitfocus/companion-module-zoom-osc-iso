@@ -107,6 +107,7 @@ export class OSC {
 						this.instance.checkFeedbacks('handRaised')
 						this.instance.checkFeedbacks('camera')
 						this.instance.checkFeedbacks('microphoneLive')
+						this.instance.checkFeedbacks('selectionMethod')
 					}
 				}, 2000)
 				resolve('ready for OSC')
