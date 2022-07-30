@@ -124,37 +124,38 @@ export class OSC {
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
 		let zoomId = parseInt(data.args[3].value)
-		// search if exist under other name first
-
-		let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
-		if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
-
-		if (data.args.length == 4) {
-			this.instance.ZoomUserData[zoomId] = {
-				zoomId,
-				targetIndex: data.args[0].value,
-				userName: data.args[1].value,
-				galleryIndex: data.args[2].value,
-				users: [],
+		// Only when a user is not in offline array
+		if(!this.instance.ZoomUserOffline[zoomId]) {
+			let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+	
+			if (data.args.length == 4) {
+				this.instance.ZoomUserData[zoomId] = {
+					zoomId,
+					targetIndex: data.args[0].value,
+					userName: data.args[1].value,
+					galleryIndex: data.args[2].value,
+					users: [],
+				}
+			} else if (data.args.length > 8) {
+				this.instance.ZoomUserData[zoomId] = {
+					zoomId,
+					targetIndex: data.args[0].value,
+					userName: data.args[1].value,
+					galleryIndex: data.args[2].value,
+					videoOn: data.args[8].value,
+					mute: data.args[9].value,
+					handRaised: data.args[10].value,
+					users: [],
+				}
+			} else {
+				console.log('wrong arguments in OSC feedback')
 			}
-		} else if (data.args.length > 8) {
-			this.instance.ZoomUserData[zoomId] = {
-				zoomId,
-				targetIndex: data.args[0].value,
-				userName: data.args[1].value,
-				galleryIndex: data.args[2].value,
-				videoOn: data.args[8].value,
-				mute: data.args[9].value,
-				handRaised: data.args[10].value,
-				users: [],
-			}
-		} else {
-			console.log('wrong arguments in OSC feedback')
+			// update it all
+			this.instance.ZoomClientDataObj.numberOfUsersInCall =
+				Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
+			this.instance.updateVariables()
 		}
-		// update it all
-		this.instance.ZoomClientDataObj.numberOfUsersInCall =
-			Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
-		this.instance.updateVariables()
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
