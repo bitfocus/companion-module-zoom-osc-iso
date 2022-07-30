@@ -718,11 +718,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.variables?.updateVariables()
 			},
 		},
-		renameGroup: {
-			label: 'Rename group',
+		rename: {
+			label: 'Rename',
 			options: [userOption, options.name],
 			callback: (action: { options: { user: number; name: string } }) => {
 				instance.ZoomUserData[action.options.user].userName = action.options.name
+				let index = instance.ZoomVariableLink.findIndex((finduser) => finduser.zoomId === action.options.user)
+				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name
 				instance.variables?.updateVariables()
 			},
 		},
