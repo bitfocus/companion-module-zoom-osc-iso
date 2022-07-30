@@ -40,30 +40,30 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		label: `Selection Method`,
 		bank: {
 			style: 'text',
-			text: `Method`,
+			text: `Selection Method`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
 			bgcolor: instance.rgb(0, 0, 0),
 		},
-		actions: [{ action: 'selectionMethod', options: { selectionMethod : 2 } }],
+		actions: [{ action: 'selectionMethod', options: { selectionMethod: 2 } }],
 		feedbacks: [
 			{
 				type: 'selectionMethod',
-					options: {
-						selectionMethod: 1,
-					},
-					style: {
-						text: 'Single selection',
-					},
+				options: {
+					selectionMethod: 1,
+				},
+				style: {
+					text: 'Single selection',
+				},
 			},
 			{
 				type: 'selectionMethod',
-					options: {
-						selectionMethod: 0,
-					},
-					style: {
-						text: 'Multiple selection',
-					},
+				options: {
+					selectionMethod: 0,
+				},
+				style: {
+					text: 'Multiple selection',
+				},
 			},
 		],
 	})
@@ -225,102 +225,69 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			],
 		})
 	}
-	// normal selection
-	// for (const key in instance.ZoomUserData) {
-	// 	if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
-	// 		const user = instance.ZoomUserData[key]
-
-	// 		presets.push({
-	// 			category: user.zoomId > instance.ZoomClientDataObj.numberOfGroups + 1 ? 'Select Callers' : 'Group presets',
-	// 			label: user.userName,
-	// 			bank: {
-	// 				style: 'text',
-	// 				text: user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1 ? `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`: `Select\\n$(zoomosc:${user.zoomId})`,
-	// 				size: 'auto',
-	// 				color: instance.rgb(255, 255, 255),
-	// 				bgcolor:
-	// 					user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1
-	// 						? instance.rgb(125, 125, 125)
-	// 						: instance.rgb(0, 0, 0),
-	// 			},
-	// 			actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
-	// 			feedbacks: [
-	// 				{
-	// 					type: 'selectedUser',
-	// 					options: {
-	// 						user: user.zoomId,
-	// 						type: 'normal',
-	// 					},
-	// 					style: {
-	// 						color: instance.rgb(0, 0, 0),
-	// 						bgcolor: instance.rgb(255, 255, 0),
-	// 					},
-	// 				},
-	// 				{
-	// 					type: 'selectedUser',
-	// 					options: {
-	// 						user: user.zoomId,
-	// 						type: 'userInGroup',
-	// 					},
-	// 					style: {
-	// 						color: instance.rgb(0, 0, 0),
-	// 						bgcolor: instance.rgb(125, 125, 0),
-	// 					},
-	// 				},
-	// 				{
-	// 					type: 'microphoneLive',
-	// 					options: {
-	// 						user: user.zoomId,
-	// 						type: 'normal',
-	// 					},
-	// 					style: {
-	// 						bgcolor: instance.rgb(255, 0, 0),
-	// 					},
-	// 				},
-	// 				{
-	// 					type: 'handRaised',
-	// 					options: {
-	// 						user: user.zoomId,
-	// 						type: 'normal',
-	// 						handRaised: 1,
-	// 					},
-	// 					style: {
-	// 						png64: images.handRaised,
-	// 					},
-	// 				},
-	// 			],
-	// 		})
-	// 		if (user.zoomId <= instance.ZoomClientDataObj.numberOfGroups) {
-	// 			presets.push({
-	// 				category: 'Rename',
-	// 				label: user.userName,
-	// 				bank: {
-	// 					style: 'text',
-	// 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-	// 					size: 'auto',
-	// 					color: instance.rgb(255, 255, 255),
-	// 					bgcolor: instance.rgb(125, 125, 125),
-	// 				},
-	// 				actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
-	// 				feedbacks: [],
-	// 			})
-	// 		} else {
-	// 			presets.push({
-	// 				category: 'Rename',
-	// 				label: user.userName,
-	// 				bank: {
-	// 					style: 'text',
-	// 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-	// 					size: 'auto',
-	// 					color: instance.rgb(255, 255, 255),
-	// 					bgcolor: instance.rgb(125, 125, 125),
-	// 				},
-	// 				actions: [{ action: 'Rename', options: { user: user.zoomId, name: user.userName } }],
-	// 				feedbacks: [],
-	// 			})
-	// 		}
-	// 	}
-	// }
+	// Group selection
+	for (const key in instance.ZoomUserData) {
+		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+			const user = instance.ZoomUserData[key]
+			// Group selection
+			if (user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1) {
+			}
+			presets.push({
+				category: 'Group presets',
+				label: user.userName,
+				bank: {
+					style: 'text',
+					text: `Select\\n$(zoomosc:${user.zoomId}) ($(zoomosc:CallersInGroup${user.zoomId}))`,
+					size: 'auto',
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(0, 0, 0),
+				},
+				actions: [{ action: 'SelectUser', options: { user: user.zoomId, option: 'toggle' } }],
+				feedbacks: [
+					{
+						type: 'selectedUser',
+						options: {
+							user: user.zoomId,
+							type: 'normal',
+						},
+						style: {
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 255, 0),
+						},
+					},
+				],
+			})
+			if (user.zoomId <= instance.ZoomClientDataObj.numberOfGroups) {
+				presets.push({
+					category: 'Rename',
+					label: user.userName,
+					bank: {
+						style: 'text',
+						text: `Rename\\n$(zoomosc:${user.zoomId})`,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(125, 125, 125),
+					},
+					actions: [{ action: 'renameGroup', options: { user: user.zoomId, name: user.userName } }],
+					feedbacks: [],
+				})
+			} else {
+				presets.push({
+					category: 'Rename',
+					label: user.userName,
+					bank: {
+						style: 'text',
+						text: `Rename\\n$(zoomosc:${user.zoomId})`,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(125, 125, 125),
+					},
+					actions: [{ action: 'Rename', options: { user: user.zoomId, name: user.userName } }],
+					feedbacks: [],
+				})
+			}
+		}
+	}
 
 	return presets
 }
