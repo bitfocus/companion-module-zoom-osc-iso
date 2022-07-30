@@ -40,7 +40,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		label: `Selection Method`,
 		bank: {
 			style: 'text',
-			text: `Selection Method`,
+			text: `Toggle Selection Method`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
 			bgcolor: instance.rgb(0, 0, 0),
@@ -66,6 +66,32 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				},
 			},
 		],
+	})
+	presets.push({
+		category: 'Select Participants',
+		label: `Single selection`,
+		bank: {
+			style: 'text',
+			text: `Single selection`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'selectionMethod', options: { selectionMethod: 1 } }],
+		feedbacks: [],
+	})
+	presets.push({
+		category: 'Select Participants',
+		label: `Multiple selection`,
+		bank: {
+			style: 'text',
+			text: `Multiple selection`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'selectionMethod', options: { selectionMethod: 0 } }],
+		feedbacks: [],
 	})
 
 	// Add to group presets
