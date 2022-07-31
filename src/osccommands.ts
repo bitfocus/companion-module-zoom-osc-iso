@@ -268,12 +268,6 @@ const UserActions: actionType = {
 		command: '/disallowToRecord',
 		type: 'User',
 	},
-	SetGalleryView: {
-		description: 'Set Gallery View',
-		shortDescription: 'SetGalleryView',
-		command: '/setGalleryView',
-		type: 'User',
-	},
 	GotoNextGalleryPage: {
 		description: 'Goto Next Gallery Page',
 		shortDescription: 'GotoNextGalleryPage',
@@ -620,6 +614,12 @@ const actionsWithArgs: actionType = {
 	},
 }
 const GlobalActions: actionType = {
+	SetGalleryView: {
+		description: 'Set Gallery View',
+		shortDescription: 'SetGalleryView',
+		command: '/zoom/me/setGalleryView',
+		type: 'Global',
+	},
 	MuteAll: {
 		description: 'Mute All',
 		shortDescription: 'MuteAll',
