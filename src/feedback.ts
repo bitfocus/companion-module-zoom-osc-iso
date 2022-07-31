@@ -16,7 +16,6 @@ export interface ZoomFeedbacks {
 	camera: ZoomFeedback<cameraCallback>
 	handRaised: ZoomFeedback<handRaisedCallback>
 	selectedUser: ZoomFeedback<selectedUserCallback>
-	// selectedGroup: ZoomFeedback<selectedGroupCallback>
 	selectionMethod: ZoomFeedback<selectionMethodCallback>
 
 	// Index signature
@@ -67,12 +66,6 @@ interface selectedUserCallback {
 		position: number
 	}>
 }
-// interface selectedGroupCallback {
-// 	type: 'selectedGroup'
-// 	options: Readonly<{
-// 		group: number
-// 	}>
-// }
 interface selectionMethodCallback {
 	type: 'selectionMethod'
 	options: Readonly<{
@@ -123,34 +116,16 @@ interface ZoomFeedbackAdvanced<T> {
 export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
 
 export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
-	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
-	let CHOICES_USERS_DEFAULT = '0'
-	// let CHOICES_GROUPS = [{ id: '0', label: 'no groups' }]
-	// let CHOICES_GROUPS_DEFAULT = '0'
 	let CHOICES_GALLERY = [{ id: '0', label: 'no position' }]
 	let CHOICES_POSITION = []
 	for (let index = 1; index < 1000; index++) {
 		CHOICES_POSITION.push({ id: index.toString(), label: `Position ${index}` })
 	}
-	if (instance.ZoomUserData) {
-		CHOICES_USERS.length = 0
-		// CHOICES_GROUPS.length = 0
-		for (const key in instance.ZoomUserData) {
-			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
-				const user = instance.ZoomUserData[key]
-				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
-				// if (user.zoomId < instance.ZoomClientDataObj.numberOfGroups + 1) {
-				// 	CHOICES_GROUPS.push({ id: user.zoomId.toString(), label: user.userName })
-				// }
-			}
-		}
-		CHOICES_USERS_DEFAULT = CHOICES_USERS.length > 0 ? CHOICES_USERS[0].id : '0'
-		CHOICES_GALLERY = [{ id: '0', label: 'empty gallery' }]
-		if (instance.ZoomClientDataObj.galleryOrder.length > 1) {
-			CHOICES_GALLERY.length = 0
-			for (let index = 1; index < 50; index++) {
-				CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
-			}
+	CHOICES_GALLERY = [{ id: '0', label: 'empty gallery' }]
+	if (instance.ZoomClientDataObj.galleryOrder.length > 1) {
+		CHOICES_GALLERY.length = 0
+		for (let index = 1; index < 50; index++) {
+			CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
 		}
 	}
 
@@ -165,13 +140,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			options: [
 				{
 					type: 'dropdown',
-					label: 'User',
-					id: 'user',
-					default: CHOICES_USERS_DEFAULT,
-					choices: CHOICES_USERS,
-				},
-				{
-					type: 'dropdown',
 					label: 'Position',
 					id: 'position',
 					default: '1',
@@ -181,24 +149,23 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'type',
 					id: 'type',
-					default: 'normal',
+					default: 'index',
 					choices: [
-						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
 						{ id: 'index', label: 'index' },
 					],
 				},
 			],
 			callback: (feedback) => {
-				if (feedback.options.type === 'normal' && instance.ZoomUserData[feedback.options.user].mute === false) {
-					return true
-				} else if (
+				if (
 					feedback.options.type === 'gallery' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
 					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].mute === false
 				) {
 					return true
 				} else if (
 					feedback.options.type === 'index' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].mute === false
 				) {
 					return true
@@ -217,13 +184,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			options: [
 				{
 					type: 'dropdown',
-					label: 'User',
-					id: 'user',
-					default: CHOICES_USERS_DEFAULT,
-					choices: CHOICES_USERS,
-				},
-				{
-					type: 'dropdown',
 					label: 'Position',
 					id: 'position',
 					default: '1',
@@ -233,9 +193,8 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'type',
 					id: 'type',
-					default: 'normal',
+					default: 'index',
 					choices: [
-						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
 						{ id: 'index', label: 'index' },
 					],
@@ -244,18 +203,15 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (
-					feedback.options.type === 'normal' &&
-					instance.ZoomUserData[feedback.options.user].videoOn === (feedback.options.video == 1 ? true : false)
-				) {
-					return true
-				} else if (
 					feedback.options.type === 'gallery' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]] &&
 					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].videoOn ===
 						(feedback.options.video == 1 ? true : false)
 				) {
 					return true
 				} else if (
 					feedback.options.type === 'index' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].videoOn ===
 						(feedback.options.video == 1 ? true : false)
 				) {
@@ -275,13 +231,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			options: [
 				{
 					type: 'dropdown',
-					label: 'User',
-					id: 'user',
-					default: CHOICES_USERS_DEFAULT,
-					choices: CHOICES_USERS,
-				},
-				{
-					type: 'dropdown',
 					label: 'Position',
 					id: 'position',
 					default: '1',
@@ -291,9 +240,8 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'type',
 					id: 'type',
-					default: 'normal',
+					default: 'index',
 					choices: [
-						{ id: 'normal', label: 'normal' },
 						{ id: 'gallery', label: 'gallery' },
 						{ id: 'index', label: 'index' },
 					],
@@ -301,19 +249,22 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.handRaised,
 			],
 			callback: (feedback) => {
+				console.log(
+					'feedbackgallery',
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]
+				)
+				console.log('feedback index', instance.ZoomVariableLink[feedback.options.position - 1])
+
 				if (
-					feedback.options.type === 'normal' &&
-					instance.ZoomUserData[feedback.options.user].handRaised === (feedback.options.handRaised == 1 ? true : false)
-				) {
-					return true
-				} else if (
 					feedback.options.type === 'gallery' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
 					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].handRaised ===
 						(feedback.options.handRaised == 1 ? true : false)
 				) {
 					return true
 				} else if (
 					feedback.options.type === 'index' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
 					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].handRaised ===
 						(feedback.options.handRaised == 1 ? true : false)
 				) {
@@ -343,7 +294,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					type: 'dropdown',
 					label: 'type',
 					id: 'type',
-					default: 'normal',
+					default: 'index',
 					choices: [
 						{ id: 'gallery', label: 'gallery' },
 						{ id: 'index', label: 'index' },
@@ -357,47 +308,21 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]
 					)
-					) {
-						return true
+				) {
+					return true
 				} else if (
 					feedback.options.type === 'index' &&
 					instance.ZoomClientDataObj.selectedCallers &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
 					)
 				) {
 					return true
-				} 
+				}
 				return false
 			},
 		},
-		// selectedGroup: {
-		// 	type: 'boolean',
-		// 	label: 'Selected group',
-		// 	description: 'Indicate if a group is pre-selected for a command/action',
-		// 	style: {
-		// 		color: rgb(255, 255, 255),
-		// 		bgcolor: rgb(255, 255, 0),
-		// 	},
-		// 	options: [
-		// 		{
-		// 			type: 'dropdown',
-		// 			label: 'Group',
-		// 			id: 'group',
-		// 			default: CHOICES_GROUPS_DEFAULT,
-		// 			choices: CHOICES_GROUPS,
-		// 		},
-		// 	],
-		// 	callback: (feedback) => {
-		// 	 if (
-		// 			instance.ZoomClientDataObj.selectedCallers &&
-		// 			instance.ZoomClientDataObj.selectedCallers.find((element) => element === feedback.options.group)
-		// 		) {
-		// 			return true
-		// 		} 
-		// 		return false
-		// 	},
-		// },
 		selectionMethod: {
 			type: 'boolean',
 			label: 'selection method',
