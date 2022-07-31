@@ -739,6 +739,18 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Rename',
 			options: [userOption, options.name],
 			callback: (action: { options: { user: number; name: string } }) => {
+				let oscPath = `/zoom/zoomID/rename`
+				const sendToCommand: any = {
+					id: 'rename',
+					options: {
+						command: oscPath,
+						args: [
+							{ type: 'i', value: action.options.user },
+							{ type: 's', value: action.options.name },
+						],
+					},
+				}
+				sendActionCommand(sendToCommand)
 				instance.ZoomUserData[action.options.user].userName = action.options.name
 				let index = instance.ZoomVariableLink.findIndex((finduser) => finduser.zoomId === action.options.user)
 				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name
