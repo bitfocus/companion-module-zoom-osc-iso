@@ -598,13 +598,6 @@ const actionsWithArgs: actionType = {
 		args: 'msg',
 		type: 'Global',
 	},
-	// SetZoomOSCGalleryTrackingMode: {
-	// 	description: 'Set ZoomOSC GalleryTracking Mode',
-	// 	shortDescription: 'SetZoomOSCGalleryTrackingMode',
-	// 	command: '/zoom/galTrackMode',
-	// 	args: 'mode',
-	// 	type: 'Global',
-	// },
 	JoinMeeting: {
 		description: 'Join Meeting',
 		shortDescription: 'JoinMeeting',
