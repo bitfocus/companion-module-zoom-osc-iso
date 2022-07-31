@@ -249,12 +249,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				options.handRaised,
 			],
 			callback: (feedback) => {
-				console.log(
-					'feedbackgallery',
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]
-				)
-				console.log('feedback index', instance.ZoomVariableLink[feedback.options.position - 1])
-
 				if (
 					feedback.options.type === 'gallery' &&
 					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
