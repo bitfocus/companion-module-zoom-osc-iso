@@ -140,7 +140,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			label: instance.ZoomGroupData[index].groupName,
 			bank: {
 				style: 'text',
-				text: `Rename\\n$(zoomosc:Group${index+1})`,
+				text: `Rename\\n$(zoomosc:Group${index + 1})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
@@ -148,6 +148,23 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			actions: [{ action: 'renameGroup', options: { group: index, name: instance.ZoomGroupData[index].groupName } }],
 			feedbacks: [],
 		})
+		for (let position = 1; position < 50; position++) {
+			presets.push({
+				category: `Group ${index+1}`,
+				label: 'Group selection',
+				bank: {
+					style: 'text',
+					text: `Group ${index+1}-${position}\\n$(zoomosc:Group${index+1}Position${position})`,
+					size: 'auto',
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(125, 125, 125),
+				},
+				actions: [
+					{ action: 'selectUserFromGroupPosition', options: { group: index, position: position, option: 'toggle' } },
+				],
+				feedbacks: [],
+			})
+		}
 	}
 	// Create presets for selection of unknown users
 	for (let index = 1; index < 1000; index++) {

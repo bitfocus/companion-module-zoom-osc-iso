@@ -87,7 +87,7 @@ class ZoomInstance extends instance_skel<Config> {
 
 	public ZoomGroupData: {
 		groupName: string
-		users: number[]
+		users: { zoomID: number; userName: string }[]
 	}[] = []
 
 	public ZoomUserOffline: {
@@ -117,7 +117,7 @@ class ZoomInstance extends instance_skel<Config> {
 		// Setup groups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
-				groupName: `Group ${index+1}`,
+				groupName: `Group ${index + 1}`,
 				users: [],
 			}
 		}

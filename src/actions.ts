@@ -625,9 +625,53 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
 				if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.ZoomGroupData[action.options.group].users?.forEach((zoomID) => {
-					instance.ZoomClientDataObj.selectedCallers.push(zoomID)
+				instance.ZoomGroupData[action.options.group].users?.forEach((user) => {
+					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
+			},
+		},
+		selectUserFromGroupPosition: {
+			label: 'Preselect user',
+			options: [
+				groupOption,
+				galleryOrderOption,
+				{
+					type: 'dropdown',
+					label: 'Option',
+					id: 'option',
+					default: '',
+					choices: [
+						{ label: 'Toggle', id: 'toggle' },
+						{ label: 'Select', id: 'select' },
+						{ label: 'Remove', id: 'remove' },
+					],
+				},
+			],
+			callback: (action: { options: { group: number; position: number; option: string } }) => {
+				let position = action.options.position - 1
+				switch (action.options.option) {
+					case 'toggle':
+						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomGroupData[action.options.group].users[position].zoomID
+						)
+						break
+					case 'select':
+						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+						instance.ZoomClientDataObj.selectedCallers.push(
+							instance.ZoomGroupData[action.options.group].users[position].zoomID
+						)
+						break
+					case 'remove':
+						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							instance.ZoomGroupData[action.options.group].users[position].zoomID
+						)
+						break
+				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
 			},
@@ -720,7 +764,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Add selection to group',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				instance.ZoomGroupData[action.options.group].users = [...instance.ZoomClientDataObj.selectedCallers]
+				instance.ZoomGroupData[action.options.group].users.length = 0
+				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
+					instance.ZoomGroupData[action.options.group].users.push({
+						zoomID: zoomID,
+						userName: instance.ZoomUserData[zoomID].userName,
+					})
+				})
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
@@ -731,8 +781,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
 				instance.ZoomGroupData[action.options.group].users.length = 0
-				instance.checkFeedbacks('selectedUser')
 				instance.variables?.updateVariables()
+				instance.updateVariables()
 			},
 		},
 		rename: {
