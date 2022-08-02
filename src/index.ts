@@ -153,9 +153,9 @@ class ZoomInstance extends instance_skel<Config> {
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-		for (let index = 1; index - 1 < this.ZoomClientDataObj.numberOfGroups; index++) {
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
-				groupName: `Group ${index}`,
+				groupName: `Group ${index+1}`,
 				users: [],
 			}
 		}
