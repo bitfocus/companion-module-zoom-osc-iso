@@ -162,7 +162,42 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				actions: [
 					{ action: 'selectUserFromGroupPosition', options: { group: index, position: position, option: 'toggle' } },
 				],
-				feedbacks: [],
+				feedbacks: [
+					{
+						type: 'groupBased',
+						options: {
+							group: index,
+							position: position,
+							type: 'selected',
+						},
+						style: {
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 255, 0),
+						},
+					},
+					{
+						type: 'groupBased',
+						options: {
+							group: index,
+							position: position,
+							type: 'micLive',
+						},
+						style: {
+							bgcolor: instance.rgb(255, 0, 0),
+						},
+					},
+					{
+						type: 'groupBased',
+						options: {
+							group: index,
+							position: position,
+							type: 'handRaised',
+						},
+						style: {
+							png64: images.handRaised,
+						},
+					},
+				],
 			})
 		}
 	}
