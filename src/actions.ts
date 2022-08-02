@@ -7,7 +7,7 @@ import {
 import ZoomInstance from './index'
 import { options, arrayRemove, arrayAddRemove } from './utils'
 
-const { UserActions, actionsWithArgs, GlobalActions, SpecialActions } = require('./osccommands')
+const { Actions } = require('./osccommands')
 
 /**
  * Define what is needed
@@ -121,336 +121,327 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	}
 
 	// Create all actions with arguments
-	let returningActionsWithArgsObj = actionsWithArgs
-	for (const key in returningActionsWithArgsObj) {
-		if (Object.prototype.hasOwnProperty.call(returningActionsWithArgsObj, key)) {
-			const element = returningActionsWithArgsObj[key]
+	let actionsObj = Actions
+	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
+	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
+	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
+	for (const key in actionsObj) {
+		if (Object.prototype.hasOwnProperty.call(actionsObj, key)) {
+			const element = actionsObj[key]
 			element.label = element.description
 			switch (element.type) {
 				case 'User':
-					switch (element.args) {
-						case 'msg':
-							element.options = [options.userName, options.message]
-							element.callback = (action: { options: { msg: string; name: string } }) => {
-								let command = createUserCommand(element.command, action.options.name)
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: command.oscPath,
-										args: [command.argsCallers, { type: 's', value: action.options.msg }],
-									},
+					if (element.args) {
+						switch (element.args) {
+							case 'msg':
+								element.options = [options.userName, options.message]
+								element.callback = (action: { options: { msg: string; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: [command.argsCallers, { type: 's', value: action.options.msg }],
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'user,name':
-							element.options = [userOption, options.name]
-							element.callback = (action: { options: { user: number; name: string } }) => {
-								let oscPath = `/zoom/zoomID${element.command}`
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: oscPath,
-										args: [
-											{ type: 'i', value: action.options.user },
-											{ type: 's', value: action.options.name },
-										],
-									},
+								break
+							case 'user,name':
+								element.options = [userOption, options.name]
+								element.callback = (action: { options: { user: number; name: string } }) => {
+									let oscPath = `/zoom/zoomID${element.command}`
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: oscPath,
+											args: [
+												{ type: 'i', value: action.options.user },
+												{ type: 's', value: action.options.name },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'intX,intY':
-							element.options = [options.userName, options.intX, options.intY]
-							element.callback = (action: { options: { intX: number; intY: number; name: string } }) => {
-								let command = createUserCommand(element.command, action.options.name)
-								command.argsCallers.push({ type: 'i', value: action.options.intX })
-								command.argsCallers.push({ type: 'i', value: action.options.intY })
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: command.oscPath,
-										args: command.argsCallers,
-									},
+								break
+							case 'intX,intY':
+								element.options = [options.userName, options.intX, options.intY]
+								element.callback = (action: { options: { intX: number; intY: number; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
+									command.argsCallers.push({ type: 'i', value: action.options.intX })
+									command.argsCallers.push({ type: 'i', value: action.options.intY })
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: command.argsCallers,
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'level':
-							element.options = [options.userName, options.level]
-							element.callback = (action: { options: { level: number; name: string } }) => {
-								let command = createUserCommand(element.command, action.options.name)
-								command.argsCallers.push({ type: 'i', value: action.options.level })
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: command.oscPath,
-										args: command.argsCallers,
-									},
+								break
+							case 'level':
+								element.options = [options.userName, options.level]
+								element.callback = (action: { options: { level: number; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
+									command.argsCallers.push({ type: 'i', value: action.options.level })
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: command.argsCallers,
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'output':
-							element.options = [options.userName, options.output]
-							element.callback = (action: { options: { output: number; name: string } }) => {
-								let command = createUserCommand(element.command, action.options.name)
+								break
+							case 'output':
+								element.options = [options.userName, options.output]
+								element.callback = (action: { options: { output: number; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
 
-								command.argsCallers.push({ type: 'i', value: action.options.output })
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: command.oscPath,
-										args: command.argsCallers,
-									},
+									command.argsCallers.push({ type: 'i', value: action.options.output })
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: command.argsCallers,
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'id':
-							element.options = [options.userName, options.id]
-							element.callback = (action: { options: { id: number; name: string } }) => {
-								let command = createUserCommand(element.command, action.options.name)
-								command.argsCallers.push({ type: 'i', value: action.options.id })
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: command.oscPath,
-										args: command.argsCallers,
-									},
+								break
+							case 'id':
+								element.options = [options.userName, options.id]
+								element.callback = (action: { options: { id: number; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
+									command.argsCallers.push({ type: 'i', value: action.options.id })
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: command.argsCallers,
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
+								break
 
-						default:
-							console.log('Missed an argument in osc commands (user)', element.args)
-							break
+							default:
+								console.log('Missed an argument in osc commands (user)', element.args)
+								break
+						}
+						break
+					} else {
+						// User with no extra arguments
+						CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					}
 					break
 				case 'Global':
-					switch (element.args) {
-						case 'msg':
-							element.options = [options.message]
-							element.callback = (action: { options: { msg: string } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: { type: 's', value: action.options.msg },
-									},
+					if (element.args) {
+						switch (element.args) {
+							case 'msg':
+								element.options = [options.message]
+								element.callback = (action: { options: { msg: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 's', value: action.options.msg },
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'name':
-							element.options = [options.name]
-							element.callback = (action: { options: { name: string } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: { type: 's', value: action.options.name },
-									},
+								break
+							case 'name':
+								element.options = [options.name]
+								element.callback = (action: { options: { name: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 's', value: action.options.name },
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'intX,intY':
-							element.options = [options.intX, options.intY]
-							element.callback = (action: { options: { intX: number; intY: number } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: [
-											{ type: 'i', value: action.options.intX },
-											{ type: 'i', value: action.options.intY },
-										],
-									},
+								break
+							case 'intX,intY':
+								element.options = [options.intX, options.intY]
+								element.callback = (action: { options: { intX: number; intY: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: [
+												{ type: 'i', value: action.options.intX },
+												{ type: 'i', value: action.options.intY },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'level':
-							element.options = [options.level]
-							element.callback = (action: { options: { level: number } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: { type: 'i', value: action.options.level },
-									},
+								break
+							case 'level':
+								element.options = [options.level]
+								element.callback = (action: { options: { level: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 'i', value: action.options.level },
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'mode':
-							element.options = [options.mode]
-							element.callback = (action: { options: { mode: number } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: { type: 'i', value: action.options.mode },
-									},
+								break
+							case 'mode':
+								element.options = [options.mode]
+								element.callback = (action: { options: { mode: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 'i', value: action.options.mode },
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'id':
-							element.options = [options.id]
-							element.callback = (action: { options: { id: number } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: { type: 'i', value: action.options.id },
-									},
+								break
+							case 'id':
+								element.options = [options.id]
+								element.callback = (action: { options: { id: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 'i', value: action.options.id },
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'JoinMeeting':
-							element.options = [options.meetingID, options.name, options.password]
-							element.callback = (action: { options: { meetingID: string; name: string; password: string } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: [
-											{ type: 's', value: action.options.meetingID },
-											{ type: 's', value: action.options.name },
-											{ type: 's', value: action.options.password },
-										],
-									},
+								break
+							case 'JoinMeeting':
+								element.options = [options.meetingID, options.name, options.password]
+								element.callback = (action: { options: { meetingID: string; name: string; password: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: [
+												{ type: 's', value: action.options.meetingID },
+												{ type: 's', value: action.options.name },
+												{ type: 's', value: action.options.password },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
-						case 'zak':
-							element.options = [options.zak, options.meetingID, options.name]
-							element.callback = (action: { options: { zak: string; meetingID: string; name: string } }) => {
-								const sendToCommand: any = {
-									id: element.shortDescription,
-									options: {
-										command: element.command,
-										args: [
-											{ type: 's', value: action.options.zak },
-											{ type: 's', value: action.options.meetingID },
-											{ type: 's', value: action.options.name },
-										],
-									},
+								break
+							case 'zak':
+								element.options = [options.zak, options.meetingID, options.name]
+								element.callback = (action: { options: { zak: string; meetingID: string; name: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: [
+												{ type: 's', value: action.options.zak },
+												{ type: 's', value: action.options.meetingID },
+												{ type: 's', value: action.options.name },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
 								}
-								sendActionCommand(sendToCommand)
-							}
-							break
+								break
 
-						default:
-							console.log('Missed an argument in osc commands (global)', element.args)
-							break
+							case 'subscribeLevel':
+								element.options = [options.subscribeLevel]
+								element.callback = (action: { options: { level: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 'i', value: action.options.level },
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							default:
+								console.log('Missed an argument in osc commands (global)', element.args)
+								break
+						}
+						break
+					} else {
+						// Global with no extra arguments/options
+						CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+					}
+					break
+				case 'Special':
+					if (element.args) {
+						switch (element.args) {
+							case 'JoinMeeting':
+								element.options = [options.meetingID, options.name, options.password]
+								element.callback = (action: { options: { meetingID: string; name: string; password: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: [
+												{ type: 's', value: action.options.meetingID },
+												{ type: 's', value: action.options.name },
+												{ type: 's', value: action.options.password },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							case 'zak':
+								element.options = [options.zak, options.meetingID, options.name]
+								element.callback = (action: { options: { zak: string; meetingID: string; name: string } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: [
+												{ type: 's', value: action.options.zak },
+												{ type: 's', value: action.options.meetingID },
+												{ type: 's', value: action.options.name },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							case 'subscribeLevel':
+								element.options = [options.subscribeLevel]
+								element.callback = (action: { options: { level: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: element.command,
+											args: { type: 'i', value: action.options.level },
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							default:
+								console.log('Missed an argument in osc commands (special)', element.args)
+								break
+						}
+					} else {
+						// Special with no extra arguments/options
+						CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					}
 					break
 				default:
 					console.log('Missed type in osc commands', element)
 					break
 			}
-		}
-	}
-	// Create all Global actions
-	let returningGlobalActionsObj = GlobalActions
-	for (const key in returningGlobalActionsObj) {
-		if (Object.prototype.hasOwnProperty.call(returningGlobalActionsObj, key)) {
-			const element = returningGlobalActionsObj[key]
-			element.label = element.description
-			// No arguments
-			element.options = []
-			element.callback = () => {
-				const sendToCommand: any = {
-					id: element.shortDescription,
-					options: {
-						command: element.command,
-					},
-				}
-				sendActionCommand(sendToCommand)
-			}
-		}
-	}
-	// Create all Special actions
-	let returningSpecialActionsObj = SpecialActions
-	for (const key in returningSpecialActionsObj) {
-		if (Object.prototype.hasOwnProperty.call(returningSpecialActionsObj, key)) {
-			const element = returningSpecialActionsObj[key]
-			element.label = element.description
-			if (element.args) {
-				// There are arguments, lets check them
-				switch (element.args) {
-					case 'zak':
-						element.options = [options.zak, options.meetingID, options.name]
-						element.callback = (action: { options: { zak: string; meetingID: string; name: string } }) => {
-							const sendToCommand: any = {
-								id: element.shortDescription,
-								options: {
-									command: element.command,
-									args: [
-										{ type: 's', value: action.options.zak },
-										{ type: 's', value: action.options.meetingID },
-										{ type: 's', value: action.options.name },
-									],
-								},
-							}
-							sendActionCommand(sendToCommand)
-						}
-						break
-
-					case 'subscribeLevel':
-						element.options = [options.subscribeLevel]
-						element.callback = (action: { options: { level: number } }) => {
-							const sendToCommand: any = {
-								id: element.shortDescription,
-								options: {
-									command: element.command,
-									args: { type: 'i', value: action.options.level },
-								},
-							}
-							sendActionCommand(sendToCommand)
-						}
-						break
-
-					default:
-						console.log('Missed an argument in osc commands (Specials)', element.args)
-						break
-				}
-			} else {
-				// No arguments
-				element.options = []
-				element.callback = () => {
-					const sendToCommand: any = {
-						id: element.shortDescription,
-						options: {
-							command: element.command,
-						},
-					}
-					sendActionCommand(sendToCommand)
-				}
-			}
-		}
-	}
-
-	// CREATE ALL BASIC USER ACTIONS AS CHOICES
-	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
-	for (const key in UserActions) {
-		if (Object.prototype.hasOwnProperty.call(UserActions, key)) {
-			const element = UserActions[key]
-			CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
-		}
-	}
-	// CREATE ALL BASIC GLOBAL ACTIONS AS CHOICES
-	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
-	for (const key in GlobalActions) {
-		if (Object.prototype.hasOwnProperty.call(GlobalActions, key)) {
-			const element = GlobalActions[key]
-			CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
 		}
 	}
 
@@ -465,40 +456,29 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			argsCallers: [],
 			oscPath: '',
 		}
-		let user: number[] | string = instance.ZoomClientDataObj.selectedCallers
+		let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 		// Check if override has been filled
 		if (name != '' && name != undefined) {
-			user = name
-			console.log('Name filled', user)
-			if (user === 'Me' || user === 'me' || user === 'all' || user === 'All') {
+			console.log('Name filled', name)
+			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
 			} else {
 				command.oscPath = `/zoom/userName` + actionID
-				command.argsCallers.push({ type: 's', value: user })
+				command.argsCallers.push({ type: 's', value: name })
 			}
 			// Use the pre-selection options
 		} else {
-			console.log('Use pre-selected', user)
-			if (Array.isArray(user)) {
+			console.log('Use pre-selected', selectedCallers)
+			if (Array.isArray(selectedCallers)) {
 				// should be otherwise somethings wrong
-				if (user.length === 0) console.log('Select a caller first')
-				// Do a + 1 because groups start at 1
-				// let numberOfGroups = instance.ZoomClientDataObj.numberOfGroups + 1
-				// Loop through selected callers to see if there is a group selected and get the callers
-				user.forEach((caller) => {
-					// Is a caller a group?
-					// if (caller < numberOfGroups) {
-					// 	instance.ZoomUserData[caller].users.forEach((callerInGroup) => {
-					// 		command.argsCallers.push({ type: 'i', value: callerInGroup })
-					// 	})
-					// } else {
+				if (selectedCallers.length === 0) console.log('Select a caller first')
+				selectedCallers.forEach((caller) => {
 					command.argsCallers.push({ type: 'i', value: caller })
-					// }
 				})
 			} else {
 				console.log('Wrong selection')
 			}
-			// Different path when more users are selected
+			// Different path when more than one users are selected
 			command.oscPath = (command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
 		}
 		return command
@@ -519,9 +499,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { actionID: string; name: string } }) => {
-				let command = createUserCommand(UserActions[action.options.actionID].command, action.options.name)
+				let command = createUserCommand(Actions[action.options.actionID].command, action.options.name)
 				const sendToCommand: any = {
-					id: UserActions[action.options.actionID].shortDescription,
+					id: Actions[action.options.actionID].shortDescription,
 					options: {
 						command: command.oscPath,
 						args: command.argsCallers,
@@ -543,9 +523,31 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			],
 			callback: (action: { options: { actionID: string } }) => {
 				const sendToCommand: any = {
-					id: GlobalActions[action.options.actionID].shortDescription,
+					id: Actions[action.options.actionID].shortDescription,
 					options: {
-						command: GlobalActions[action.options.actionID].command,
+						command: Actions[action.options.actionID].command,
+						args: [],
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		SpecialActions: {
+			label: 'Special actions',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Special Action',
+					id: 'actionID',
+					default: 'PingZoomOSC',
+					choices: CHOICES_SPECIAL_ACTIONS,
+				},
+			],
+			callback: (action: { options: { actionID: string } }) => {
+				const sendToCommand: any = {
+					id: Actions[action.options.actionID].shortDescription,
+					options: {
+						command: Actions[action.options.actionID].command,
 						args: [],
 					},
 				}
@@ -760,6 +762,16 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.checkFeedbacks('selectedUser')
 			},
 		},
+		clearSelection: {
+			label: 'Clear selection',
+			options: [],
+			callback: () => {
+				instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
+			},
+		},
+		// Group Actions
 		addToGroup: {
 			label: 'Add selection to group',
 			options: [groupOption],
@@ -785,6 +797,21 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.updateVariables()
 			},
 		},
+		removeFromGroup: {
+			label: 'Remove from group',
+			options: [userOption, groupOption],
+			callback: (action: { options: { user: number; group: number } }) => {
+				if (instance.ZoomUserData[action.options.group].users !== undefined) {
+					for (var i = 0; i < instance.ZoomUserData[action.options.group].users.length; i++) {
+						if (instance.ZoomUserData[action.options.group].users[i] === action.options.user) {
+							instance.ZoomUserData[action.options.group].users.splice(i, 1)
+						}
+					}
+				}
+				instance.variables?.updateVariables()
+			},
+		},
+		// Rename Actions
 		rename: {
 			label: 'Rename',
 			options: [userOption, options.name],
@@ -815,35 +842,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.variables?.updateVariables()
 			},
 		},
-		removeFromGroup: {
-			label: 'Remove from group',
-			options: [userOption, groupOption],
-			callback: (action: { options: { user: number; group: number } }) => {
-				if (instance.ZoomUserData[action.options.group].users !== undefined) {
-					for (var i = 0; i < instance.ZoomUserData[action.options.group].users.length; i++) {
-						if (instance.ZoomUserData[action.options.group].users[i] === action.options.user) {
-							instance.ZoomUserData[action.options.group].users.splice(i, 1)
-						}
-					}
-				}
-				instance.variables?.updateVariables()
-			},
-		},
-		clearSelection: {
-			label: 'Clear selection',
-			options: [],
-			callback: () => {
-				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
-			},
-		},
 	}
 
 	return {
 		...extraActions,
-		...returningActionsWithArgsObj,
-		...returningGlobalActionsObj,
-		...returningSpecialActionsObj,
+		...actionsObj,
 	}
 }
