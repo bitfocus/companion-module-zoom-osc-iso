@@ -2,7 +2,7 @@ import { CompanionPreset } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { GlobalActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
-const { UserActions, actionsWithArgs, GlobalActions, SpecialActions } = require('./osccommands')
+const { Actions } = require('./osccommands')
 const { images } = require('./images')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
@@ -150,11 +150,11 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		})
 		for (let position = 1; position < 50; position++) {
 			presets.push({
-				category: `Group ${index+1}`,
+				category: `Group ${index + 1}`,
 				label: 'Group selection',
 				bank: {
 					style: 'text',
-					text: `Group ${index+1}-${position}\\n$(zoomosc:Group${index+1}Position${position})`,
+					text: `Group ${index + 1}-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(125, 125, 125),
@@ -330,92 +330,99 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 
 	return presets
 }
-export function getUserPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
+export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(UserActions)) {
-		const element = UserActions[key]
-		presets.push({
-			category: 'User Presets',
-			label: element.shortDescription,
-			bank: {
-				style: 'text',
-				text: element.description,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
-			},
-			actions: [
-				{
-					action: 'UserActions',
-					options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
-				},
-			],
-			feedbacks: [],
-		})
+	for (const key of Object.keys(Actions)) {
+		const element = Actions[key]
+		switch (element.type) {
+			case 'User':
+				if (element.args) {
+					presets.push({
+						category: 'User Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: 'auto',
+							color: instance.rgb(255, 255, 255),
+							bgcolor: instance.rgb(0, 0, 0),
+						},
+						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+						feedbacks: [],
+					})
+				} else {
+					presets.push({
+						category: 'User Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: 'auto',
+							color: instance.rgb(255, 255, 255),
+							bgcolor: instance.rgb(0, 0, 0),
+						},
+						actions: [
+							{
+								action: 'UserActions',
+								options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+							},
+						],
+						feedbacks: [],
+					})
+				}
+				break
+			case 'Global':
+				if (element.args) {
+					presets.push({
+						category: 'Global Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: 'auto',
+							color: instance.rgb(255, 255, 255),
+							bgcolor: instance.rgb(0, 0, 0),
+						},
+						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+						feedbacks: [],
+					})
+				} else {
+					presets.push({
+						category: 'Global Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: 'auto',
+							color: instance.rgb(255, 255, 255),
+							bgcolor: instance.rgb(0, 0, 0),
+						},
+						actions: [
+							{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
+						],
+						feedbacks: [],
+					})
+				}
+				break
+			case 'Special':
+				presets.push({
+					category: 'Special Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { command: element.command } }],
+					feedbacks: [],
+				})
+				break
+			default:
+				console.log('Wrong type at building presets')
+				break
+		}
 	}
-
-	return presets
-}
-export function getPresetsWithArgs(instance: ZoomInstance): ZoomGlobalPreset[] {
-	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(actionsWithArgs)) {
-		const element = actionsWithArgs[key]
-		presets.push({
-			category: element.type === 'User' ? 'User Presets' : 'Global Presets',
-			label: element.shortDescription,
-			bank: {
-				style: 'text',
-				text: element.description,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
-			},
-			actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-			feedbacks: [],
-		})
-	}
-
-	return presets
-}
-export function getSpecialPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
-	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(SpecialActions)) {
-		const element = SpecialActions[key]
-		presets.push({
-			category: 'Special Presets',
-			label: element.shortDescription,
-			bank: {
-				style: 'text',
-				text: element.description,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
-			},
-			actions: [{ action: element.shortDescription, options: { command: element.command } }],
-			feedbacks: [],
-		})
-	}
-
-	return presets
-}
-export function getGlobalPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
-	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(GlobalActions)) {
-		const element = GlobalActions[key]
-		presets.push({
-			category: 'Global Presets',
-			label: element.shortDescription,
-			bank: {
-				style: 'text',
-				text: element.description,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
-			},
-			actions: [{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } }],
-			feedbacks: [],
-		})
-	}
-
 	return presets
 }

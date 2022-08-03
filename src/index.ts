@@ -11,11 +11,8 @@ import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
 import {
-	getUserPresets,
-	getGlobalPresets,
+	getPresets,
 	getSelectUsersPresets,
-	getSpecialPresets,
-	getPresetsWithArgs,
 } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
@@ -196,10 +193,7 @@ class ZoomInstance extends instance_skel<Config> {
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
 		const presets = [
 			...getSelectUsersPresets(this),
-			...getUserPresets(this),
-			...getGlobalPresets(this),
-			...getSpecialPresets(this),
-			...getPresetsWithArgs(this),
+			...getPresets(this),
 		] as CompanionPreset[]
 
 		this.setActions(actions)
