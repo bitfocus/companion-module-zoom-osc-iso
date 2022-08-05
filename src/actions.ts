@@ -579,6 +579,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					instance.config.selectionMethod = action.options.selectionMethod
 				}
 				instance.checkFeedbacks('selectionMethod')
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		SelectUser: {
@@ -620,6 +621,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		SelectGroup: {
@@ -632,6 +634,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				})
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		selectUserFromGroupPosition: {
@@ -676,6 +679,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		SelectFromGalleryPosition: {
@@ -718,6 +722,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		SelectFromIndexPosition: {
@@ -759,6 +764,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						break
 				}
 				instance.variables?.updateVariables()
+				instance.checkFeedbacks('groupBased')
 				instance.checkFeedbacks('selectedUser')
 			},
 		},
@@ -768,6 +774,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			callback: () => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
+				instance.checkFeedbacks('groupBased')
 				instance.checkFeedbacks('selectedUser')
 			},
 		},
@@ -785,6 +792,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				})
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
+				instance.checkFeedbacks('groupBased')
 				instance.checkFeedbacks('selectedUser')
 			},
 		},

@@ -104,6 +104,7 @@ export class OSC {
 						this.instance.updateInstance()
 						this.updateLoop = false
 						// Make sure initial status is reflected
+						this.instance.checkFeedbacks('groupBased')
 						this.instance.checkFeedbacks('handRaised')
 						this.instance.checkFeedbacks('camera')
 						this.instance.checkFeedbacks('microphoneLive')
@@ -125,10 +126,10 @@ export class OSC {
 	private createZoomUser = async (data: ZoomOSCResponse) => {
 		let zoomId = parseInt(data.args[3].value)
 		// Only when a user is not in offline array
-		if(!this.instance.ZoomUserOffline[zoomId]) {
+		if (!this.instance.ZoomUserOffline[zoomId]) {
 			let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
 			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
-	
+
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
@@ -214,31 +215,43 @@ export class OSC {
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].videoOn = true
 							this.instance.checkFeedbacks('camera')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'videoOff':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].videoOn = false
 							this.instance.checkFeedbacks('camera')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'mute':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].mute = true
 							this.instance.checkFeedbacks('microphoneLive')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'unMute':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].mute = false
 							this.instance.checkFeedbacks('microphoneLive')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'handRaised':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].handRaised = true
 							this.instance.checkFeedbacks('handRaised')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'handLowered':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].handRaised = false
 							this.instance.checkFeedbacks('handRaised')
+							this.instance.checkFeedbacks('groupBased')
+
 							break
 						case 'online':
 							console.log('receiving', data)
@@ -292,6 +305,7 @@ export class OSC {
 					})
 					this.instance.variables?.updateDefinitions()
 					this.instance.variables?.updateVariables()
+					this.instance.checkFeedbacks('groupBased')
 					this.instance.checkFeedbacks('selectedUser')
 					break
 

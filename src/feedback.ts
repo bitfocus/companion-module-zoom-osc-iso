@@ -83,7 +83,13 @@ interface groupBasedCallback {
 }
 
 // Callback type for Presets
-export type FeedbackCallbacks = microphoneMuteCallback | cameraCallback | selectedUserCallback | handRaisedCallback | selectionMethodCallback | groupBasedCallback
+export type FeedbackCallbacks =
+	| microphoneMuteCallback
+	| cameraCallback
+	| selectedUserCallback
+	| handRaisedCallback
+	| selectionMethodCallback
+	| groupBasedCallback
 
 // Force options to have a default to prevent sending undefined values
 type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
@@ -134,7 +140,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	for (let index = 1; index < 50; index++) {
 		CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
 	}
-	let CHOICES_GROUPS = [{ id: '0', label: 'no position' }]
+	let CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: `Group ${index + 1}` })
 	}
@@ -395,34 +401,39 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) =>
-							element === instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID
+							element === instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					)
 				) {
 					return true
 				} else if (
 					feedback.options.type === 'micLive' &&
 					instance.ZoomUserData[
-						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					] &&
-					instance.ZoomUserData[instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID]
-						.mute === true
+					instance.ZoomUserData[
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
+					].mute === false
 				) {
 					return true
 				} else if (
 					feedback.options.type === 'handRaised' &&
 					instance.ZoomUserData[
-						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					] &&
-					instance.ZoomUserData[instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID]
-						.handRaised === true
+					instance.ZoomUserData[
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
+					].handRaised === true
 				) {
 					return true
-				} else if (feedback.options.type === 'camera' &&
-				instance.ZoomUserData[
-					instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID
-				] &&
-				instance.ZoomUserData[instance.ZoomGroupData[feedback.options.group].users[feedback.options.position].zoomID]
-					.videoOn === true) {
+				} else if (
+					feedback.options.type === 'camera' &&
+					instance.ZoomUserData[
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
+					] &&
+					instance.ZoomUserData[
+						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
+					].videoOn === true
+				) {
 					return true
 				}
 				return false
