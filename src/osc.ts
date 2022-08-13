@@ -152,9 +152,6 @@ export class OSC {
 			} else {
 				console.log('wrong arguments in OSC feedback')
 			}
-			// update it all
-			this.instance.ZoomClientDataObj.numberOfUsersInCall =
-				Object.keys(this.instance.ZoomUserData).length - this.instance.ZoomClientDataObj.numberOfGroups
 			this.instance.updateVariables()
 		}
 	}
@@ -328,7 +325,8 @@ export class OSC {
 					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-					this.instance.ZoomClientDataObj.numberOfUsersInCall = data.args[6].value
+					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value) console.log(`User data doesnt match with list info`)
+					
 					this.instance.variables?.updateVariables()
 					this.needToPingPong = false
 					if (this.pingInterval) {
