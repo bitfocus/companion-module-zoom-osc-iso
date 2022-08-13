@@ -98,15 +98,28 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		presets.push({
 			category: 'Group presets',
-			label: `Set to group: ${instance.ZoomGroupData[index].groupName}`,
+			label: `Make group: ${instance.ZoomGroupData[index].groupName}`,
 			bank: {
 				style: 'text',
-				text: `Set to group:\\n$(zoomosc:Group${index + 1})`,
+				text: `Make group:\\n$(zoomosc:Group${index + 1})`,
 				size: 'auto',
 				color: instance.rgb(255, 255, 255),
 				bgcolor: instance.rgb(125, 125, 125),
 			},
-			actions: [{ action: 'addToGroup', options: { group: index } }],
+			actions: [{ action: 'addToGroup', options: { group: index, groupOption: 'set' } }],
+			feedbacks: [],
+		})
+		presets.push({
+			category: 'Group presets',
+			label: `Add to group: ${instance.ZoomGroupData[index].groupName}`,
+			bank: {
+				style: 'text',
+				text: `Add to group:\\n$(zoomosc:Group${index + 1})`,
+				size: 'auto',
+				color: instance.rgb(255, 255, 255),
+				bgcolor: instance.rgb(125, 125, 125),
+			},
+			actions: [{ action: 'addToGroup', options: { group: index, groupOption: 'add' } }],
 			feedbacks: [],
 		})
 		presets.push({

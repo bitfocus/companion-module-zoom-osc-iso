@@ -628,7 +628,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			label: 'Preselect group',
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
-				if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[action.options.group].users?.forEach((user) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
@@ -781,9 +781,23 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		// Group Actions
 		addToGroup: {
 			label: 'Add selection to group',
-			options: [groupOption],
-			callback: (action: { options: { group: number } }) => {
-				instance.ZoomGroupData[action.options.group].users.length = 0
+			options: [
+				groupOption,
+				{
+					type: 'dropdown',
+					label: 'Add or set',
+					id: 'groupOption',
+					default: 'add',
+					choices: [
+						{ label: 'Add', id: 'add' },
+						{ label: 'Set', id: 'set' },
+					],
+				},
+			],
+			callback: (action: { options: { group: number; groupOption: string } }) => {
+				if (action.options.groupOption === 'set') {
+					instance.ZoomGroupData[action.options.group].users.length = 0
+				}
 				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
 					instance.ZoomGroupData[action.options.group].users.push({
 						zoomID: zoomID,
@@ -803,6 +817,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomGroupData[action.options.group].users.length = 0
 				instance.variables?.updateVariables()
 				instance.updateVariables()
+				instance.checkFeedbacks('groupBased')
 			},
 		},
 		removeFromGroup: {
