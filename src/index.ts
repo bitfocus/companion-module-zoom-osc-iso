@@ -26,15 +26,9 @@ class ZoomInstance extends instance_skel<Config> {
 			// any existing upgrade scripts go here
 			instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
 				microphoneLive: true,
-				microphoneLiveGalPos: true,
 				camera: true,
-				cameraGalPos: true,
 				handRaised: true,
-				handRaisedGalPos: true,
 				selectedUser: true,
-				selectedUserGalPos: true,
-				selectedInAGroup: true,
-				selectedInAGroupGalPos: true,
 			}),
 		]
 	}
@@ -49,7 +43,6 @@ class ZoomInstance extends instance_skel<Config> {
 		lastSpeaking: string
 		zoomOSCVersion: string | number
 		callStatus: string | number
-		numberOfUsersInCall: number
 		galleryCount: number
 		galleryOrder: number[]
 		numberOfGroups: number
@@ -62,7 +55,6 @@ class ZoomInstance extends instance_skel<Config> {
 		lastSpeaking: 'None',
 		zoomOSCVersion: 'Not Connected',
 		callStatus: 0,
-		numberOfUsersInCall: 0,
 		galleryCount: 0,
 		galleryOrder: [],
 		numberOfGroups: 5,
