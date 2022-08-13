@@ -144,7 +144,7 @@ export class Variables {
 		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
-		newVariables['numberOfUsers'] = this.instance.ZoomClientDataObj.numberOfUsersInCall
+		newVariables['numberOfUsers'] = Object.keys(this.instance.ZoomUserData).length
 		newVariables['lastSpeaking'] = this.instance.ZoomClientDataObj.lastSpeaking
 
 		let allUsers = ''
