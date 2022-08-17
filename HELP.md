@@ -16,3 +16,7 @@ On the image you'll see Make group and Add to group. You can pre-select particip
 
 The other way of quickly selecting participants can be done via Gallery view. Drag those presets on the deck correponding to the galleryview of ZoomOSC/ISO. Quick selection is now posible.
 ![Gallery selection](images/Example3.png)
+
+### Gallery
+>> Please make sure you have Participant Reporting set to ZoomID in ZoomOSC Client.
+If Gallery order is not coming into the deck try to change the order by dragging a window to a different position. This will force the client to send a update.
