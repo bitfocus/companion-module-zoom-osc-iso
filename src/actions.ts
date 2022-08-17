@@ -348,8 +348,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 											command: element.command,
 											args: [
 												{ type: 's', value: action.options.meetingID },
-												{ type: 's', value: action.options.name },
 												{ type: 's', value: action.options.password },
+												{ type: 's', value: action.options.name },
 											],
 										},
 									}
@@ -404,8 +404,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 											command: element.command,
 											args: [
 												{ type: 's', value: action.options.meetingID },
-												{ type: 's', value: action.options.name },
 												{ type: 's', value: action.options.password },
+												{ type: 's', value: action.options.name },
 											],
 										},
 									}
@@ -471,7 +471,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		if (name != '' && name != undefined) {
 			console.log('Name filled', name)
 			instance.getVariable(name, (value: string) => {
-				if(value !== undefined)	name = value
+				if (value !== undefined) name = value
 			})
 			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
@@ -542,7 +542,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						args: [],
 					},
 				}
-				if(Actions[action.options.actionID].shortDescription === 'LowerAllHands') {
+				if (Actions[action.options.actionID].shortDescription === 'LowerAllHands') {
 					console.log('action: Lower All Hands overide')
 					for (const key in instance.ZoomUserData) {
 						if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
