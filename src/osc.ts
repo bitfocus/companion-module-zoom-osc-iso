@@ -265,6 +265,8 @@ export class OSC {
 						case 'userNameChanged':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
+							let findIndex = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
 							this.instance.variables?.updateVariables()
 							break
 						case 'chat':
@@ -304,6 +306,9 @@ export class OSC {
 					this.instance.variables?.updateVariables()
 					this.instance.checkFeedbacks('groupBased')
 					this.instance.checkFeedbacks('selectedUser')
+					this.instance.checkFeedbacks('microphoneLive')
+					this.instance.checkFeedbacks('camera')
+					this.instance.checkFeedbacks('handRaised')
 					break
 
 				case 'galleryCount':
