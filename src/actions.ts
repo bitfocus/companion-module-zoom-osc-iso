@@ -471,7 +471,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		if (name != '' && name != undefined) {
 			console.log('Name filled', name)
 			instance.getVariable(name, (value: string) => {
-				name = value
+				if(value !== undefined)	name = value
 			})
 			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
