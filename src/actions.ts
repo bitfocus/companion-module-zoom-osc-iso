@@ -131,7 +131,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			element.label = element.description
 			switch (element.type) {
 				case 'User':
-					if (element.args) {
+					if (element.args !== undefined) {
 						switch (element.args) {
 							case 'msg':
 								element.options = [options.userName, options.message]
@@ -231,14 +231,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								console.log('Missed an argument in osc commands (user)', element.args)
 								break
 						}
-						break
 					} else {
 						// User with no extra arguments
 						CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						delete actionsObj[key]
 					}
 					break
 				case 'Global':
-					if (element.args) {
+					if (element.args !== undefined) {
 						switch (element.args) {
 							case 'msg':
 								element.options = [options.message]
@@ -355,7 +355,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									sendActionCommand(sendToCommand)
 								}
 								break
-
 							case 'subscribeLevel':
 								element.options = [options.subscribeLevel]
 								element.callback = (action: { options: { level: number } }) => {
@@ -373,10 +372,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								console.log('Missed an argument in osc commands (global)', element.args)
 								break
 						}
-						break
 					} else {
 						// Global with no extra arguments/options
 						CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						delete actionsObj[key]
 					}
 					break
 				case 'Special':
@@ -436,6 +435,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					} else {
 						// Special with no extra arguments/options
 						CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						delete actionsObj[key]
 					}
 					break
 				default:
@@ -460,6 +460,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		// Check if override has been filled
 		if (name != '' && name != undefined) {
 			console.log('Name filled', name)
+			instance.getVariable(name, (value: string) => {
+				name = value
+			})
 			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
 			} else {
@@ -578,6 +581,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				} else {
 					instance.config.selectionMethod = action.options.selectionMethod
 				}
+				instance.saveConfig()
 				instance.checkFeedbacks('selectionMethod')
 				instance.checkFeedbacks('groupBased')
 			},
