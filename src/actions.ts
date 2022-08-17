@@ -542,6 +542,16 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						args: [],
 					},
 				}
+				if(Actions[action.options.actionID].shortDescription === 'LowerAllHands') {
+					console.log('action: Lower All Hands overide')
+					for (const key in instance.ZoomUserData) {
+						if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+							const element = instance.ZoomUserData[key]
+							element.handRaised = false
+						}
+					}
+					instance.checkFeedbacks('handRaised')
+				}
 				sendActionCommand(sendToCommand)
 			},
 		},
