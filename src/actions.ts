@@ -7,7 +7,7 @@ import {
 import ZoomInstance from './index'
 import { options, arrayRemove, arrayAddRemove } from './utils'
 
-const { Actions } = require('./osccommands')
+const { Actions, ActionsWithArguments } = require('./osccommands')
 
 /**
  * Define what is needed
@@ -120,18 +120,40 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 	}
 
-	// Create all actions with arguments
+	// Create all actions
 	let actionsObj = Actions
+	let actionsWithArgumentsObj = ActionsWithArguments
 	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
+
 	for (const key in actionsObj) {
 		if (Object.prototype.hasOwnProperty.call(actionsObj, key)) {
 			const element = actionsObj[key]
+			switch (element.type) {
+				case 'User':
+					CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
+					break
+				case 'Global':
+					CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+					break
+				case 'Special':
+					CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+					break
+				default:
+					console.log('wrong type', element.type)
+					break
+			}
+		}
+	}
+
+	for (const key in actionsWithArgumentsObj) {
+		if (Object.prototype.hasOwnProperty.call(actionsWithArgumentsObj, key)) {
+			const element = actionsWithArgumentsObj[key]
 			element.label = element.description
 			switch (element.type) {
 				case 'User':
-					if (element.args !== undefined) {
+					if (element.args) {
 						switch (element.args) {
 							case 'msg':
 								element.options = [options.userName, options.message]
@@ -231,14 +253,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								console.log('Missed an argument in osc commands (user)', element.args)
 								break
 						}
-					} else {
-						// User with no extra arguments
-						CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						delete actionsObj[key]
 					}
 					break
 				case 'Global':
-					if (element.args !== undefined) {
+					if (element.args) {
 						switch (element.args) {
 							case 'msg':
 								element.options = [options.message]
@@ -372,10 +390,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								console.log('Missed an argument in osc commands (global)', element.args)
 								break
 						}
-					} else {
-						// Global with no extra arguments/options
-						CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						delete actionsObj[key]
 					}
 					break
 				case 'Special':
@@ -432,10 +446,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								console.log('Missed an argument in osc commands (special)', element.args)
 								break
 						}
-					} else {
-						// Special with no extra arguments/options
-						CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						delete actionsObj[key]
 					}
 					break
 				default:
@@ -873,6 +883,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 
 	return {
 		...extraActions,
-		...actionsObj,
+		...actionsWithArgumentsObj,
 	}
 }

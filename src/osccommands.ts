@@ -646,6 +646,47 @@ const Actions: actionType = {
 		command: '/zoom/disableWaitingRoom',
 		type: 'Global',
 	},
+
+	PingZoomOSC: {
+		description: 'Ping Zoom OSC',
+		shortDescription: 'PingZoomOSC',
+		command: '/zoom/ping',
+		type: 'Special',
+	},
+	// SetZoomOSCSubscribeLevel: {
+	// 	description: 'Set ZoomOSC Subscribe Level',
+	// 	shortDescription: 'SetZoomOSCSubscribeLevel',
+	// 	command: '/zoom/subscribe',
+	// 	args: 'subscribeLevel',
+	// 	type: 'Special',
+	// },
+	// RequestOrderOfGalleryView: {
+	// 	description: 'Request Order Of GalleryView',
+	// 	shortDescription: 'RequestOrderOfGalleryView',
+	// 	command: '/zoom/getGalleryOrder',
+	// 	type: 'Special',
+	// },
+	// RequestOrderOfSpotlights: {
+	// 	description: 'Request Order Of Spotlights',
+	// 	shortDescription: 'RequestOrderOfSpotlights',
+	// 	command: '/zoom/getSpotOrder',
+	// 	type: 'Special',
+	// },
+	// ListUsers: {
+	// 	description: 'Request list of users',
+	// 	shortDescription: 'ListUsers',
+	// 	command: '/zoom/list',
+	// 	type: 'Special',
+	// },
+	// ConfigureBreakoutRooms: {
+	// 	description: 'Configure BreakoutRooms',
+	// 	shortDescription: 'Configure BreakoutRooms',
+	// 	command:
+	// 		'/zoom/configureBreakouts{intpostCloseSeconds,intallowChooseBreakout(0=false,1=true),intallowReturnAtWill,intautoMoveParticipants,intuseTimer,intcloseWithTimer,intbreakoutDurrationSeconds}',
+	// },
+}
+
+const ActionsWithArguments: actionType = {
 	Rename: { description: 'Rename', shortDescription: 'Rename', command: '/rename', type: 'User', args: 'user,name' },
 	outputISO: {
 		description: 'output ISO',
@@ -815,43 +856,5 @@ const Actions: actionType = {
 		args: 'zak',
 		type: 'Special',
 	},
-	PingZoomOSC: {
-		description: 'Ping Zoom OSC',
-		shortDescription: 'PingZoomOSC',
-		command: '/zoom/ping',
-		type: 'Special',
-	},
-	// SetZoomOSCSubscribeLevel: {
-	// 	description: 'Set ZoomOSC Subscribe Level',
-	// 	shortDescription: 'SetZoomOSCSubscribeLevel',
-	// 	command: '/zoom/subscribe',
-	// 	args: 'subscribeLevel',
-	// 	type: 'Special',
-	// },
-	// RequestOrderOfGalleryView: {
-	// 	description: 'Request Order Of GalleryView',
-	// 	shortDescription: 'RequestOrderOfGalleryView',
-	// 	command: '/zoom/getGalleryOrder',
-	// 	type: 'Special',
-	// },
-	// RequestOrderOfSpotlights: {
-	// 	description: 'Request Order Of Spotlights',
-	// 	shortDescription: 'RequestOrderOfSpotlights',
-	// 	command: '/zoom/getSpotOrder',
-	// 	type: 'Special',
-	// },
-	// ListUsers: {
-	// 	description: 'Request list of users',
-	// 	shortDescription: 'ListUsers',
-	// 	command: '/zoom/list',
-	// 	type: 'Special',
-	// },
-	// ConfigureBreakoutRooms: {
-	// 	description: 'Configure BreakoutRooms',
-	// 	shortDescription: 'Configure BreakoutRooms',
-	// 	command:
-	// 		'/zoom/configureBreakouts{intpostCloseSeconds,intallowChooseBreakout(0=false,1=true),intallowReturnAtWill,intautoMoveParticipants,intuseTimer,intcloseWithTimer,intbreakoutDurrationSeconds}',
-	// },
 }
-
-if (module != undefined) module.exports = { Actions }
+if (module != undefined) module.exports = { Actions, ActionsWithArguments }
