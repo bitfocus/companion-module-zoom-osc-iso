@@ -2,13 +2,17 @@
 
 This module is rebuild for the new version (> 4.0.5) of Zoom OSC/ISO.
 
-It is based on the principle of selecting a caller or caller group first and then do an user action. You can find the callers in the presets (Select Callers).
-There is also an option: Select from Gallery. Based on the callers that are in drag the position to your streamdeck, so quick selection based on position is possible.
-You'll find feedback standard on the buttons (mic live, selected)
+It is mainly based on the principle of selecting a caller or caller group first and then do an user action. Most of what you need you'll find in the presets. Of course you can use Global actions also
 
-When you have selected some callers, you can put them in a group. After that you can select the group and preform an action.
+### Selection of participants
 
-There is a group "special presets", to set some basic's. when you feel the user database needs an update, use the request list users preset/action. Al other regular actions can be found within the preset categories.
+For example; drag some participants to your streamdeck like the image below. Add some user actions to it. Make sure you have the buttons for multi or single selection modus on your deck.
 
-You can even rename the users and groups, internally
-> Rename can be handy to make it more readable, but it won't change the name in Zoom.
+![Selection of Participants](images/Example1.png)
+
+On the image you'll see Make group and Add to group. You can pre-select participants into groups and see then back on a new page on the deck. This way you can create for example 3 panels in a session.
+
+![Group selection](images/Example2.png)
+
+The other way of quickly selecting participants can be done via Gallery view. Drag those presets on the deck correponding to the galleryview of ZoomOSC/ISO. Quick selection is now posible.
+![Gallery selection](images/Example3.png)
