@@ -407,9 +407,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					return true
 				} else if (
 					feedback.options.type === 'micLive' &&
-					instance.ZoomUserData[
-						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
-					] &&
+					instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1] &&
 					instance.ZoomUserData[
 						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					].mute === false
@@ -417,9 +415,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					return true
 				} else if (
 					feedback.options.type === 'handRaised' &&
-					instance.ZoomUserData[
-						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
-					] &&
+					instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1] &&
 					instance.ZoomUserData[
 						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					].handRaised === true
@@ -427,9 +423,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					return true
 				} else if (
 					feedback.options.type === 'camera' &&
-					instance.ZoomUserData[
-						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
-					] &&
+					instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1] &&
 					instance.ZoomUserData[
 						instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
 					].videoOn === true
