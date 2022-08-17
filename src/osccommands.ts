@@ -245,7 +245,7 @@ const Actions: actionType = {
 		type: 'Global',
 	},
 	RequestListWindowsForSharing: {
-		description: 'Request Lis tWindows For Sharing',
+		description: 'Request List Windows For Sharing',
 		shortDescription: 'RequestListWindowsForSharing',
 		command: '/zoom/me/listWindows',
 		type: 'Global',
