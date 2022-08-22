@@ -2,7 +2,7 @@ import { CompanionPreset } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { GlobalActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
-const { Actions } = require('./osccommands')
+const { Actions, ActionsWithArguments } = require('./osccommands')
 const { images } = require('./images')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
@@ -320,7 +320,6 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			],
 		})
 	}
-
 	// User selection
 	for (const key in instance.ZoomUserData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
@@ -349,73 +348,115 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 		const element = Actions[key]
 		switch (element.type) {
 			case 'User':
-				if (element.args) {
-					presets.push({
-						category: 'User Presets',
-						label: element.shortDescription,
-						bank: {
-							style: 'text',
-							text: element.description,
-							size: 'auto',
-							color: instance.rgb(255, 255, 255),
-							bgcolor: instance.rgb(0, 0, 0),
+				presets.push({
+					category: 'User Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [
+						{
+							action: 'UserActions',
+							options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
 						},
-						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-						feedbacks: [],
-					})
-				} else {
-					presets.push({
-						category: 'User Presets',
-						label: element.shortDescription,
-						bank: {
-							style: 'text',
-							text: element.description,
-							size: 'auto',
-							color: instance.rgb(255, 255, 255),
-							bgcolor: instance.rgb(0, 0, 0),
-						},
-						actions: [
-							{
-								action: 'UserActions',
-								options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
-							},
-						],
-						feedbacks: [],
-					})
-				}
+					],
+					feedbacks: [],
+				})
+				break
+
+			case 'Global':
+				presets.push({
+					category: 'Global Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [
+						{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
+					],
+					feedbacks: [],
+				})
+				break
+			case 'Special':
+				presets.push({
+					category: 'Special Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { command: element.command } }],
+					feedbacks: [],
+				})
+				break
+			default:
+				console.log('Wrong type at building presets')
+				break
+		}
+	}
+	return presets
+}
+
+export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPreset[] {
+	let presets: ZoomGlobalPreset[] = []
+	for (const key of Object.keys(ActionsWithArguments)) {
+		const element = ActionsWithArguments[key]
+		switch (element.type) {
+			case 'User':
+				presets.push({
+					category: 'User Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					feedbacks: [],
+				})
+				break
+			case 'ISO':
+				presets.push({
+					category: 'ISO Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					feedbacks: [],
+				})
 				break
 			case 'Global':
-				if (element.args) {
-					presets.push({
-						category: 'Global Presets',
-						label: element.shortDescription,
-						bank: {
-							style: 'text',
-							text: element.description,
-							size: 'auto',
-							color: instance.rgb(255, 255, 255),
-							bgcolor: instance.rgb(0, 0, 0),
-						},
-						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-						feedbacks: [],
-					})
-				} else {
-					presets.push({
-						category: 'Global Presets',
-						label: element.shortDescription,
-						bank: {
-							style: 'text',
-							text: element.description,
-							size: 'auto',
-							color: instance.rgb(255, 255, 255),
-							bgcolor: instance.rgb(0, 0, 0),
-						},
-						actions: [
-							{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
-						],
-						feedbacks: [],
-					})
-				}
+				presets.push({
+					category: 'Global Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					feedbacks: [],
+				})
 				break
 			case 'Special':
 				presets.push({
