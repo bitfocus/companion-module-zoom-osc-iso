@@ -217,22 +217,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									sendActionCommand(sendToCommand)
 								}
 								break
-							case 'output':
-								element.options = [options.userName, options.output]
-								element.callback = (action: { options: { output: number; name: string } }) => {
-									let command = createUserCommand(element.command, action.options.name)
-
-									command.argsCallers.push({ type: 'i', value: action.options.output })
-									const sendToCommand: any = {
-										id: element.shortDescription,
-										options: {
-											command: command.oscPath,
-											args: command.argsCallers,
-										},
-									}
-									sendActionCommand(sendToCommand)
-								}
-								break
 							case 'id':
 								element.options = [options.userName, options.id]
 								element.callback = (action: { options: { id: number; name: string } }) => {
@@ -251,6 +235,47 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 
 							default:
 								console.log('Missed an argument in osc commands (user)', element.args)
+								break
+						}
+					}
+					break
+				case 'ISO':
+					if (element.args) {
+						switch (element.args) {
+							case 'audio':
+								element.options = [options.audio, options.output]
+								element.callback = (action: { options: { audio: number; output: number } }) => {
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: `zoom/${element.command}`,
+											args: [
+												{ type: 'i', value: action.options.audio },
+												{ type: 'i', value: action.options.output },
+											],
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							case 'output':
+								element.options = [options.userName, options.output]
+								element.callback = (action: { options: { output: number; name: string } }) => {
+									let command = createUserCommand(element.command, action.options.name)
+
+									command.argsCallers.push({ type: 'i', value: action.options.output })
+									const sendToCommand: any = {
+										id: element.shortDescription,
+										options: {
+											command: command.oscPath,
+											args: command.argsCallers,
+										},
+									}
+									sendActionCommand(sendToCommand)
+								}
+								break
+							default:
+								console.log('Missed an argument in osc commands (ISO)', element.args)
 								break
 						}
 					}

@@ -32,6 +32,7 @@ export interface Options {
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
 	output: EnforceDefault<CompanionInputFieldNumber, number>
+	audio: EnforceDefault<CompanionInputFieldNumber, number>
 	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
 	id: EnforceDefault<CompanionInputFieldNumber, number>
@@ -118,7 +119,15 @@ export const options: Options = {
 		label: 'Output',
 		id: 'output',
 		min: 1,
-		max: 12,
+		max: 128,
+		default: 1,
+	},
+	audio: {
+		type: 'number',
+		label: 'Audio',
+		id: 'audio',
+		min: 1,
+		max: 128,
 		default: 1,
 	},
 	subscribeLevel: {

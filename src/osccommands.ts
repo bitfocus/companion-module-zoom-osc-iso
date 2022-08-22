@@ -692,8 +692,15 @@ const ActionsWithArguments: actionType = {
 		description: 'output ISO',
 		shortDescription: 'outputISO',
 		command: '/outputISO',
-		type: 'User',
+		type: 'ISO',
 		args: 'output',
+	},
+	audioISO: {
+		description: 'audio ISO',
+		shortDescription: 'audioISO',
+		command: '/audioISO',
+		type: 'ISO',
+		args: 'audio',
 	},
 	SetWindowPosition: {
 		description: 'Set Window Position',
