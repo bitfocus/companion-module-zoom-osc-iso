@@ -20,7 +20,7 @@
 		"url": "https://github.com/bitfocus/companion-module-zoom-osc-iso/issues"
 	},
 	"manufacturer": "Zoom",
-	"product": ["ZoomOSC","ZoomISO","Liminalet"],
+	"product": ["ZoomOSC Pro","ZoomISO","ZoomISO","Liminalet"],
 	"shortname": "zoomosc",
 	"description": "ZoomOSC plugin for companion ",
 	"keywords": [
