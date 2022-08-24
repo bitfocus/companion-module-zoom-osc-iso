@@ -695,13 +695,13 @@ const ActionsWithArguments: actionType = {
 		type: 'ISO',
 		args: 'output',
 	},
-	audioISO: {
-		description: 'audio ISO',
-		shortDescription: 'audioISO',
-		command: '/audioISO',
-		type: 'ISO',
-		args: 'audio',
-	},
+	// audioISO: {
+	// 	description: 'audio ISO',
+	// 	shortDescription: 'audioISO',
+	// 	command: '/audioISO',
+	// 	type: 'ISO',
+	// 	args: 'audio',
+	// },
 	SetWindowPosition: {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
