@@ -205,6 +205,7 @@ export class OSC {
 							break
 						case 'activeSpeaker':
 							console.log('receiving', data)
+							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
 							this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
 							this.instance.variables?.updateVariables()
 							break
@@ -281,7 +282,7 @@ export class OSC {
 							// create feedback for this?
 							break
 						case 'isSpeaking':
-							this.instance.ZoomClientDataObj.lastSpeaking = data.args[1].value
+							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
 							this.instance.variables?.updateVariables()
 							break
 
