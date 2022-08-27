@@ -41,7 +41,7 @@ class ZoomInstance extends instance_skel<Config> {
 		selectedCallers: number[]
 		// galleryShape: [number, number]
 		activeSpeaker: string
-		lastSpeaking: string
+		isSpeaking: string
 		zoomOSCVersion: string | number
 		callStatus: string | number
 		galleryCount: number
@@ -53,7 +53,7 @@ class ZoomInstance extends instance_skel<Config> {
 		subscribeMode: 0,
 		// galleryShape: [0, 0],
 		activeSpeaker: 'None',
-		lastSpeaking: 'None',
+		isSpeaking: 'None',
 		zoomOSCVersion: 'Not Connected',
 		callStatus: 0,
 		galleryCount: 0,
