@@ -93,6 +93,32 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 0 } }],
 		feedbacks: [],
 	})
+	presets.push({
+		category: 'Select Participants',
+		label: `Next participants`,
+		bank: {
+			style: 'text',
+			text: `Next participants`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'nextParticipants', options: { shift: 30 } }],
+		feedbacks: [],
+	})
+	presets.push({
+		category: 'Select Participants',
+		label: `Previous participants`,
+		bank: {
+			style: 'text',
+			text: `Previous participants`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'previousParticipants', options: { shift: 30 } }],
+		feedbacks: [],
+	})
 
 	// Add to group presets
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {

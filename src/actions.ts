@@ -914,6 +914,63 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.variables?.updateVariables()
 			},
 		},
+		nextParticipants: {
+			label: 'nextParticipants',
+			options: [
+				{
+					type: 'number',
+					label: 'Number of buttons',
+					id: 'shift',
+					default: 30,
+					min: 1,
+					max: 32,
+				},
+			],
+			callback: (action: { options: { shift: number } }) => {
+				// Grap the items you want to see
+				let numberToShift = action.options.shift
+				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(0, numberToShift)
+				instance.ZoomVariableLink.splice(0, numberToShift)
+				instance.ZoomVariableLink.push(...itemsToShift)
+
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('handRaised')
+				instance.checkFeedbacks('microphoneLive')
+				instance.checkFeedbacks('camera')
+			},
+		},
+		previousParticipants: {
+			label: 'previousParticipants',
+			options: [
+				{
+					type: 'number',
+					label: 'Number of buttons',
+					id: 'shift',
+					default: 30,
+					min: 1,
+					max: 32,
+				},
+			],
+			callback: (action: { options: { shift: number } }) => {
+				// Grap the items you want to see
+				let numberToShift = action.options.shift
+				// Be carefull for below/invallid index
+				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(-numberToShift)
+				console.log(itemsToShift)
+
+				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
+				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
+
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('handRaised')
+				instance.checkFeedbacks('microphoneLive')
+				instance.checkFeedbacks('camera')
+			},
+		},
 	}
 
 	return {

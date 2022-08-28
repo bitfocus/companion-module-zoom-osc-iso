@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "2.1.6",
+	"version": "2.1.7",
 	"api_version": "1.0.0",
 	"main": "dist/index.js",
 	"repository": {
