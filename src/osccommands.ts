@@ -733,7 +733,7 @@ const ActionsWithArguments: actionType = {
 	SetCameraDevice: {
 		description: 'Set Camera Device',
 		shortDescription: 'SetCameraDevice',
-		command: '/setCamerDevice',
+		command: '/setCameraDevice',
 		args: 'id',
 		type: 'User',
 	},
