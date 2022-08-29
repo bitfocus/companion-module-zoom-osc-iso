@@ -673,6 +673,60 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.checkFeedbacks('groupBased')
 			},
 		},
+		SelectUserByName: {
+			label: 'Preselect user by name',
+			options: [
+				{
+					type: 'textinput',
+					label: 'name',
+					id: 'name',
+					default: '',
+				},
+				{
+					type: 'dropdown',
+					label: 'Option',
+					id: 'option',
+					default: 'toggle',
+					choices: [
+						{ label: 'Toggle', id: 'toggle' },
+						{ label: 'Select', id: 'select' },
+						{ label: 'Remove', id: 'remove' },
+					],
+				},
+			],
+			callback: async (action: { options: { name: string; option: string } }) => {
+				for (const key in instance.ZoomUserData) {
+					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+						const user = instance.ZoomUserData[key]
+						if (user.userName === action.options.name) {
+							switch (action.options.option) {
+								case 'toggle':
+									if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+									//find user in list
+									instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
+										instance.ZoomClientDataObj.selectedCallers,
+										user.zoomId
+									)
+									break
+								case 'select':
+									if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
+									instance.ZoomClientDataObj.selectedCallers.push(user.zoomId)
+									break
+								case 'remove':
+									instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+										instance.ZoomClientDataObj.selectedCallers,
+										user.zoomId
+									)
+									break
+							}
+							instance.variables?.updateVariables()
+							instance.checkFeedbacks('selectedUser')
+							instance.checkFeedbacks('groupBased')
+						}
+					}
+				}
+			},
+		},
 		SelectGroup: {
 			label: 'Preselect group',
 			options: [groupOption],

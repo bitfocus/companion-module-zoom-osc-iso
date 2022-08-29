@@ -82,6 +82,19 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	})
 	presets.push({
 		category: 'Select Participants',
+		label: `Select by name`,
+		bank: {
+			style: 'text',
+			text: `Select by name`,
+			size: 'auto',
+			color: instance.rgb(255, 255, 255),
+			bgcolor: instance.rgb(0, 0, 0),
+		},
+		actions: [{ action: 'SelectUserByName', options: { option: 'toggle' } }],
+		feedbacks: [], //TODO ADD FEEDBACKS
+	})
+	presets.push({
+		category: 'Select Participants',
 		label: `Multiple selection`,
 		bank: {
 			style: 'text',
