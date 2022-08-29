@@ -67,8 +67,8 @@ export class Variables {
 		for (let index = 0; index < this.instance.ZoomGroupData.length; index++) {
 			for (let position = 1; position < 50; position++) {
 				groupPositionVariables.push({
-					label: `Group${index+1} Position ${position}`,
-					name: `Group${index+1}Position${position}`,
+					label: `Group${index + 1} Position ${position}`,
+					name: `Group${index + 1}Position${position}`,
 				})
 			}
 			userVariables.push({
@@ -131,9 +131,11 @@ export class Variables {
 			let selectedCallers: string[] = []
 			this.instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
 				if (zoomID < this.instance.ZoomClientDataObj.numberOfGroups + 1) {
-					this.instance.ZoomUserData[zoomID].users.forEach((user) => {
-						selectedCallers.push(this.instance.ZoomUserData[user].userName)
-					})
+					if (this.instance.ZoomUserData[zoomID]) {
+						this.instance.ZoomUserData[zoomID].users.forEach((user) => {
+							selectedCallers.push(this.instance.ZoomUserData[user].userName)
+						})
+					}
 				} else {
 					selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
 				}
@@ -155,7 +157,9 @@ export class Variables {
 				allUsers += this.instance.ZoomUserData[user.zoomID].userName + ' '
 			})
 			for (let position = 1; position < 50; position++) {
-				newVariables[`Group${index+1}Position${position}`] = group.users[position-1] ? group.users[position-1].userName : '-'
+				newVariables[`Group${index + 1}Position${position}`] = group.users[position - 1]
+					? group.users[position - 1].userName
+					: '-'
 			}
 			newVariables[`InsideGroup${index + 1}`] = allUsers
 			allUsers = '' // reset values
