@@ -262,7 +262,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					return true
 				} else if (
 					feedback.options.type === 'selected' &&
-					instance.ZoomClientDataObj.activeSpeaker &&
+					instance.ZoomClientDataObj.selectedCallers &&
 					instance.ZoomVariableLink[feedback.options.position - 1] &&
 					instance.ZoomClientDataObj.selectedCallers.find(
 						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
