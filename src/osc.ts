@@ -104,10 +104,9 @@ export class OSC {
 						this.instance.updateInstance()
 						this.updateLoop = false
 						// Make sure initial status is reflected
+						this.instance.checkFeedbacks('indexBased')
+						this.instance.checkFeedbacks('galleryBased')
 						this.instance.checkFeedbacks('groupBased')
-						this.instance.checkFeedbacks('handRaised')
-						this.instance.checkFeedbacks('camera')
-						this.instance.checkFeedbacks('microphoneLive')
 						this.instance.checkFeedbacks('selectionMethod')
 					}
 				}, 2000)
@@ -208,46 +207,55 @@ export class OSC {
 							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
 							this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
 							this.instance.variables?.updateVariables()
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
+							this.instance.checkFeedbacks('groupBased')
 							break
 						case 'videoOn':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].videoOn = true
-							this.instance.checkFeedbacks('camera')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
 						case 'videoOff':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].videoOn = false
-							this.instance.checkFeedbacks('camera')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
 						case 'mute':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].mute = true
-							this.instance.checkFeedbacks('microphoneLive')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
 						case 'unMute':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].mute = false
-							this.instance.checkFeedbacks('microphoneLive')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
 						case 'handRaised':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].handRaised = true
-							this.instance.checkFeedbacks('handRaised')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
 						case 'handLowered':
 							console.log('receiving', data)
 							this.instance.ZoomUserData[zoomId].handRaised = false
-							this.instance.checkFeedbacks('handRaised')
+							this.instance.checkFeedbacks('indexBased')
+							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 
 							break
@@ -305,11 +313,10 @@ export class OSC {
 					})
 					this.instance.variables?.updateDefinitions()
 					this.instance.variables?.updateVariables()
-					this.instance.checkFeedbacks('groupBased')
 					this.instance.checkFeedbacks('selectedUser')
-					this.instance.checkFeedbacks('microphoneLive')
-					this.instance.checkFeedbacks('camera')
-					this.instance.checkFeedbacks('handRaised')
+					this.instance.checkFeedbacks('indexBased')
+					this.instance.checkFeedbacks('galleryBased')
+					this.instance.checkFeedbacks('groupBased')
 					break
 
 				case 'galleryCount':
@@ -331,8 +338,9 @@ export class OSC {
 					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value) console.log(`User data doesnt match with list info`)
-					
+					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
+						console.log(`User data doesnt match with list info`)
+
 					this.instance.variables?.updateVariables()
 					this.needToPingPong = false
 					if (this.pingInterval) {

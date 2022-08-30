@@ -7,66 +7,18 @@ import {
 	CompanionFeedbackEventInfo,
 	CompanionBankPNG,
 } from '../../../instance_skel_types'
-import { options, rgb } from './utils'
+import { rgb } from './utils'
 
 export interface ZoomFeedbacks {
-	// Audio
-	microphoneLive: ZoomFeedback<microphoneMuteCallback>
-	// Video
-	camera: ZoomFeedback<cameraCallback>
-	handRaised: ZoomFeedback<handRaisedCallback>
-	selectedUser: ZoomFeedback<selectedUserCallback>
 	selectionMethod: ZoomFeedback<selectionMethodCallback>
 	groupBased: ZoomFeedback<groupBasedCallback>
+	indexBased: ZoomFeedback<indexBasedCallback>
+	galleryBased: ZoomFeedback<galleryBasedCallback>
 
 	// Index signature
 	[key: string]: ZoomFeedback<any>
 }
 
-// Audio
-interface microphoneMuteCallback {
-	type: 'microphoneMute'
-	options: Readonly<{
-		fg: number
-		bg: number
-		mute: number
-		user: number
-		type: string
-		position: number
-	}>
-}
-interface cameraCallback {
-	type: 'camera'
-	options: Readonly<{
-		fg: number
-		bg: number
-		video: number
-		user: number
-		type: string
-		position: number
-	}>
-}
-interface handRaisedCallback {
-	type: ' handRaised'
-	options: Readonly<{
-		fg: number
-		bg: number
-		user: number
-		handRaised: number
-		type: string
-		position: number
-	}>
-}
-interface selectedUserCallback {
-	type: 'selectedUser'
-	options: Readonly<{
-		fg: number
-		bg: number
-		user: number
-		type: string
-		position: number
-	}>
-}
 interface selectionMethodCallback {
 	type: 'selectionMethod'
 	options: Readonly<{
@@ -81,15 +33,23 @@ interface groupBasedCallback {
 		type: string
 	}>
 }
+interface indexBasedCallback {
+	type: 'indexBased'
+	options: Readonly<{
+		position: number
+		type: string
+	}>
+}
+interface galleryBasedCallback {
+	type: 'galleryBased'
+	options: Readonly<{
+		position: number
+		type: string
+	}>
+}
 
 // Callback type for Presets
-export type FeedbackCallbacks =
-	| microphoneMuteCallback
-	| cameraCallback
-	| selectedUserCallback
-	| handRaisedCallback
-	| selectionMethodCallback
-	| groupBasedCallback
+export type FeedbackCallbacks = selectionMethodCallback | groupBasedCallback | indexBasedCallback | galleryBasedCallback
 
 // Force options to have a default to prevent sending undefined values
 type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
@@ -146,192 +106,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 	}
 
 	return {
-		microphoneLive: {
-			type: 'boolean',
-			label: 'Microphone live',
-			description: 'Indicates if a user has their microphone on',
-			style: {
-				bgcolor: rgb(255, 0, 0),
-			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Position',
-					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
-				},
-				{
-					type: 'dropdown',
-					label: 'type',
-					id: 'type',
-					default: 'index',
-					choices: [
-						{ id: 'gallery', label: 'gallery' },
-						{ id: 'index', label: 'index' },
-					],
-				},
-			],
-			callback: (feedback) => {
-				if (
-					feedback.options.type === 'gallery' &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].mute === false
-				) {
-					return true
-				} else if (
-					feedback.options.type === 'index' &&
-					instance.ZoomVariableLink[feedback.options.position - 1] &&
-					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].mute === false
-				) {
-					return true
-				}
-				return false
-			},
-		},
-		camera: {
-			type: 'boolean',
-			label: 'Camera on/of',
-			description: 'Indicates if camera is on or off',
-			style: {
-				color: rgb(255, 255, 255),
-				bgcolor: rgb(0, 0, 0),
-			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Position',
-					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
-				},
-				{
-					type: 'dropdown',
-					label: 'type',
-					id: 'type',
-					default: 'index',
-					choices: [
-						{ id: 'gallery', label: 'gallery' },
-						{ id: 'index', label: 'index' },
-					],
-				},
-				options.video,
-			],
-			callback: (feedback) => {
-				if (
-					feedback.options.type === 'gallery' &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]] &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].videoOn ===
-						(feedback.options.video == 1 ? true : false)
-				) {
-					return true
-				} else if (
-					feedback.options.type === 'index' &&
-					instance.ZoomVariableLink[feedback.options.position - 1] &&
-					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].videoOn ===
-						(feedback.options.video == 1 ? true : false)
-				) {
-					return true
-				}
-				return false
-			},
-		},
-		handRaised: {
-			type: 'boolean',
-			label: 'hand raised',
-			description: 'Indicates when hand is raised',
-			style: {
-				color: rgb(255, 255, 255),
-				bgcolor: rgb(255, 255, 0),
-			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Position',
-					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
-				},
-				{
-					type: 'dropdown',
-					label: 'type',
-					id: 'type',
-					default: 'index',
-					choices: [
-						{ id: 'gallery', label: 'gallery' },
-						{ id: 'index', label: 'index' },
-					],
-				},
-				options.handRaised,
-			],
-			callback: (feedback) => {
-				if (
-					feedback.options.type === 'gallery' &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
-					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].handRaised ===
-						(feedback.options.handRaised == 1 ? true : false)
-				) {
-					return true
-				} else if (
-					feedback.options.type === 'index' &&
-					instance.ZoomVariableLink[feedback.options.position - 1] &&
-					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].handRaised ===
-						(feedback.options.handRaised == 1 ? true : false)
-				) {
-					return true
-				}
-				return false
-			},
-		},
-		selectedUser: {
-			type: 'boolean',
-			label: 'Selected user',
-			description: 'Indicate if a user is pre-selected for a command/action',
-			style: {
-				color: rgb(255, 255, 255),
-				bgcolor: rgb(255, 255, 0),
-			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Position',
-					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
-				},
-				{
-					type: 'dropdown',
-					label: 'type',
-					id: 'type',
-					default: 'index',
-					choices: [
-						{ id: 'gallery', label: 'gallery' },
-						{ id: 'index', label: 'index' },
-					],
-				},
-			],
-			callback: (feedback) => {
-				if (
-					feedback.options.type === 'gallery' &&
-					instance.ZoomClientDataObj.selectedCallers &&
-					instance.ZoomClientDataObj.selectedCallers.find(
-						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]
-					)
-				) {
-					return true
-				} else if (
-					feedback.options.type === 'index' &&
-					instance.ZoomClientDataObj.selectedCallers &&
-					instance.ZoomVariableLink[feedback.options.position - 1] &&
-					instance.ZoomClientDataObj.selectedCallers.find(
-						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
-					)
-				) {
-					return true
-				}
-				return false
-			},
-		},
 		selectionMethod: {
 			type: 'boolean',
 			label: 'selection method',
@@ -431,6 +205,135 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					return true
 				}
 				return false
+			},
+		},
+		indexBased: {
+			type: 'boolean',
+			label: 'index based feedback',
+			description: 'Index based feedback',
+			style: {
+				bgcolor: rgb(255, 0, 0),
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Index',
+					id: 'position',
+					default: '1',
+					choices: CHOICES_POSITION,
+				},
+				{
+					type: 'dropdown',
+					label: 'Type of feedback',
+					id: 'type',
+					default: 'selected',
+					choices: [
+						{ id: 'selected', label: 'Selected' },
+						{ id: 'micLive', label: 'Mic Live' },
+						{ id: 'handRaised', label: 'Hand Raised' },
+						{ id: 'camera', label: 'Camera off' },
+						{ id: 'activeSpeaker', label: 'Active speaker' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				if (
+					feedback.options.type === 'micLive' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
+					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].mute === false
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'camera' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
+					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].videoOn === false
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'handRaised' &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
+					instance.ZoomUserData[instance.ZoomVariableLink[feedback.options.position - 1].zoomId].handRaised === true
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'activeSpeaker' &&
+					instance.ZoomClientDataObj.activeSpeaker === (feedback.options.position -1).toString()
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'selected' &&
+					instance.ZoomClientDataObj.activeSpeaker &&
+					instance.ZoomVariableLink[feedback.options.position - 1] &&
+					instance.ZoomClientDataObj.selectedCallers.find(
+						(element) => element === instance.ZoomVariableLink[feedback.options.position - 1].zoomId
+					)
+				) {
+					return true
+				} else {
+					return false
+				}
+			},
+		},
+		galleryBased: {
+			type: 'boolean',
+			label: 'Gallery based feedback',
+			description: 'Gallery based feedback',
+			style: {
+				bgcolor: rgb(255, 0, 0),
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Gallery position',
+					id: 'position',
+					default: '1',
+					choices: CHOICES_GALLERY,
+				},
+				{
+					type: 'dropdown',
+					label: 'Type of feedback',
+					id: 'type',
+					default: 'selected',
+					choices: [
+						{ id: 'selected', label: 'Selected' },
+						{ id: 'micLive', label: 'Mic Live' },
+						{ id: 'handRaised', label: 'Hand Raised' },
+						{ id: 'camera', label: 'Camera off' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				if (
+					feedback.options.type === 'micLive' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].mute === false
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'camera' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]] &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position]].videoOn === false
+				) {
+					return true
+				} else if (
+					feedback.options.type === 'handRaised' &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]] &&
+					instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].handRaised ===
+						true
+				) {
+					return true
+				}
+				if (
+					feedback.options.type === 'selected' &&
+					instance.ZoomClientDataObj.selectedCallers &&
+					instance.ZoomClientDataObj.selectedCallers.find(
+						(element) => element === instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]
+					)
+				) {
+					return true
+				} else {
+					return false
+				}
 			},
 		},
 	}

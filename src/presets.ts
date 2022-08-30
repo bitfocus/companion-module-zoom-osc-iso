@@ -276,10 +276,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			],
 			feedbacks: [
 				{
-					type: 'selectedUser',
+					type: 'indexBased',
 					options: {
 						position: index,
-						type: 'index',
+						type: 'selected',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -287,20 +287,20 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				},
 				{
-					type: 'microphoneLive',
+					type: 'indexBased',
 					options: {
 						position: index,
-						type: 'index',
+						type: 'micLive',
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
 				{
-					type: 'handRaised',
+					type: 'indexBased',
 					options: {
 						position: index,
-						type: 'index',
+						type: 'handRaised',
 						handRaised: 1,
 					},
 					style: {
@@ -325,10 +325,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			actions: [{ action: 'SelectFromGalleryPosition', options: { position: index, option: 'toggle' } }],
 			feedbacks: [
 				{
-					type: 'selectedUser',
+					type: 'galleryBased',
 					options: {
 						position: index,
-						type: 'gallery',
+						type: 'selected',
 					},
 					style: {
 						color: instance.rgb(0, 0, 0),
@@ -336,20 +336,20 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 				},
 				{
-					type: 'microphoneLive',
+					type: 'galleryBased',
 					options: {
 						position: index,
-						type: 'gallery',
+						type: 'micLive',
 					},
 					style: {
 						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
 				{
-					type: 'handRaised',
+					type: 'galleryBased',
 					options: {
 						position: index,
-						type: 'gallery',
+						type: 'handRaised',
 						handRaised: 1,
 					},
 					style: {
