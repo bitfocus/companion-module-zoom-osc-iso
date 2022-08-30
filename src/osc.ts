@@ -128,7 +128,6 @@ export class OSC {
 		if (!this.instance.ZoomUserOffline[zoomId]) {
 			let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
 			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
-
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
@@ -143,9 +142,9 @@ export class OSC {
 					targetIndex: data.args[0].value,
 					userName: data.args[1].value,
 					galleryIndex: data.args[2].value,
-					videoOn: data.args[8].value,
-					mute: data.args[9].value,
-					handRaised: data.args[10].value,
+					videoOn: data.args[8].value === 1 ? true : false,
+					mute: data.args[9].value === 1 ? true : false,
+					handRaised: data.args[10].value === 1 ? true : false,
 					users: [],
 				}
 			} else {
@@ -191,7 +190,6 @@ export class OSC {
 					switch (zoomPart3) {
 						case 'list':
 							console.log('receiving list data', data)
-
 							// {int targetIndex}, {str userName}, {int galleryIndex}, {int zoomID}
 							// {int targetCount}
 							// {int listCount}
@@ -203,13 +201,15 @@ export class OSC {
 							this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'activeSpeaker':
-							console.log('receiving', data)
-							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
-							this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
-							this.instance.variables?.updateVariables()
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
+							if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
+								console.log('receiving', data)
+								this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
+								this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
+								this.instance.variables?.updateVariables()
+								this.instance.checkFeedbacks('indexBased')
+								this.instance.checkFeedbacks('galleryBased')
+								this.instance.checkFeedbacks('groupBased')
+							}
 							break
 						case 'videoOn':
 							console.log('receiving', data)
