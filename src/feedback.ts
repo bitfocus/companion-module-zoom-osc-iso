@@ -235,7 +235,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					let zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
 					switch (feedback.options.type) {
 						case 'micLive':
-							return instance.ZoomUserData[zoomID].mute === true ? true : false
+							return instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'camera':
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
 						case 'handRaised':
@@ -287,7 +287,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 
 						switch (feedback.options.type) {
 							case 'micLive':
-								return instance.ZoomUserData[zoomID].mute === true ? true : false
+								return instance.ZoomUserData[zoomID].mute === false ? true : false
 							case 'camera':
 								return instance.ZoomUserData[zoomID].videoOn === false ? true : false
 							case 'handRaised':
