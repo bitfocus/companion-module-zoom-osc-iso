@@ -720,8 +720,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									break
 							}
 							instance.variables?.updateVariables()
-							instance.checkFeedbacks('selectedUser')
 							instance.checkFeedbacks('groupBased')
+							instance.checkFeedbacks('indexBased')
+							instance.checkFeedbacks('userNameBased')
+							instance.checkFeedbacks('galleryBased')
 						}
 					}
 				}
@@ -736,8 +738,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
 				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
 				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		selectUserFromGroupPosition: {
@@ -781,8 +785,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						break
 				}
 				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
 				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		SelectFromGalleryPosition: {
@@ -824,8 +830,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						break
 				}
 				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
 				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		SelectFromIndexPosition: {
@@ -868,7 +876,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		clearSelection: {
@@ -902,15 +912,19 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					instance.ZoomGroupData[action.options.group].users.length = 0
 				}
 				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
-					instance.ZoomGroupData[action.options.group].users.push({
-						zoomID: zoomID,
-						userName: instance.ZoomUserData[zoomID].userName,
-					})
+					if (!instance.ZoomGroupData[action.options.group].users.find((o) => o.zoomID === zoomID)) {
+						instance.ZoomGroupData[action.options.group].users.push({
+							zoomID: zoomID,
+							userName: instance.ZoomUserData[zoomID].userName,
+						})
+					}
 				})
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		clearGroup: {
