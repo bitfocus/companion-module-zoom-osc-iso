@@ -59,7 +59,8 @@ export class Variables {
 			{ label: 'Selected number of callers/groups', name: 'selectedNumberOfCallers' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
 			{ label: 'Number of users in call', name: 'numberOfUsers' },
-			{ label: 'Speaking', name: 'isSpeaking' },
+			{ label: 'Is speaking', name: 'isSpeaking' },
+			{ label: 'Active speaking', name: 'activeSpeaker' },
 		])
 		// Groups
 		let groupPositionVariables = []
@@ -148,6 +149,7 @@ export class Variables {
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
 		newVariables['numberOfUsers'] = Object.keys(this.instance.ZoomUserData).length
 		newVariables['isSpeaking'] = this.instance.ZoomClientDataObj.isSpeaking
+		newVariables['activeSpeaker'] = this.instance.ZoomClientDataObj.activeSpeaker
 
 		let allUsers = ''
 		this.instance.ZoomGroupData.forEach((group, index) => {
