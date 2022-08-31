@@ -67,6 +67,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			},
 		],
 	})
+	// Single selection
 	presets.push({
 		category: 'Select Participants',
 		label: `Single selection`,
@@ -80,6 +81,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 1 } }],
 		feedbacks: [],
 	})
+	// Select by name
 	presets.push({
 		category: 'Select Participants',
 		label: `Select by name`,
@@ -91,8 +93,54 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			bgcolor: instance.rgb(0, 0, 0),
 		},
 		actions: [{ action: 'SelectUserByName', options: { option: 'toggle' } }],
-		feedbacks: [], //TODO ADD FEEDBACKS
+		feedbacks: [
+			{
+				type: 'userNameBased',
+				options: {
+					name: '',
+					type: 'micLive',
+				},
+				style: {
+					color: instance.rgb(0, 0, 0),
+					bgcolor: instance.rgb(255, 255, 0),
+				},
+			},
+			{
+				type: 'userNameBased',
+				options: {
+					name: '',
+					type: 'handRaised',
+					handRaised: 1,
+				},
+				style: {
+					png64: images.handRaised,
+				},
+			},
+			{
+				type: 'userNameBased',
+				options: {
+					name: '',
+					type: 'activeSpeaker',
+				},
+				style: {
+					color: instance.rgb(0, 0, 0),
+					bgcolor: instance.rgb(255, 255, 0),
+				},
+			},
+			{
+				type: 'userNameBased',
+				options: {
+					name: '',
+					type: 'selected',
+				},
+				style: {
+					color: instance.rgb(0, 0, 0),
+					bgcolor: instance.rgb(255, 255, 0),
+				},
+			},
+		],
 	})
+	// Multiple selection
 	presets.push({
 		category: 'Select Participants',
 		label: `Multiple selection`,
@@ -106,6 +154,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 0 } }],
 		feedbacks: [],
 	})
+	// Next participants
 	presets.push({
 		category: 'Select Participants',
 		label: `Next participants`,
@@ -119,6 +168,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'nextParticipants', options: { shift: 30 } }],
 		feedbacks: [],
 	})
+	// Previous participants
 	presets.push({
 		category: 'Select Participants',
 		label: `Previous participants`,
@@ -279,17 +329,6 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'indexBased',
 					options: {
 						position: index,
-						type: 'selected',
-					},
-					style: {
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 255, 0),
-					},
-				},
-				{
-					type: 'indexBased',
-					options: {
-						position: index,
 						type: 'micLive',
 					},
 					style: {
@@ -305,6 +344,28 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 					style: {
 						png64: images.handRaised,
+					},
+				},
+				{
+					type: 'indexBased',
+					options: {
+						position: index,
+						type: 'activeSpeaker',
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(0, 0, 255),
+					},
+				},
+				{
+					type: 'indexBased',
+					options: {
+						position: index,
+						type: 'selected',
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 255, 0),
 					},
 				},
 			],
@@ -328,21 +389,21 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'galleryBased',
 					options: {
 						position: index,
-						type: 'selected',
+						type: 'micLive',
 					},
 					style: {
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 255, 0),
+						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
 				{
 					type: 'galleryBased',
 					options: {
 						position: index,
-						type: 'micLive',
+						type: 'activeSpeaker',
 					},
 					style: {
-						bgcolor: instance.rgb(255, 0, 0),
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(0, 0, 255),
 					},
 				},
 				{
@@ -354,6 +415,17 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					},
 					style: {
 						png64: images.handRaised,
+					},
+				},
+				{
+					type: 'galleryBased',
+					options: {
+						position: index,
+						type: 'selected',
+					},
+					style: {
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 255, 0),
 					},
 				},
 			],
@@ -435,7 +507,9 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 						color: instance.rgb(255, 255, 255),
 						bgcolor: instance.rgb(0, 0, 0),
 					},
-					actions: [{ action: element.shortDescription, options: { command: element.command } }],
+					actions: [
+						{ action: 'SpecialActions', options: { actionID: element.shortDescription, command: element.command } },
+					],
 					feedbacks: [],
 				})
 				break
