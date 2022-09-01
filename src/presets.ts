@@ -516,7 +516,7 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 				})
 				break
 			default:
-				console.log('Wrong type at building presets')
+				instance.showLog('console', 'Wrong type at building presets')
 				break
 		}
 	}
@@ -589,7 +589,7 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 				})
 				break
 			default:
-				console.log('Wrong type at building presets')
+				instance.showLog('console', 'Wrong type at building presets')
 				break
 		}
 	}
