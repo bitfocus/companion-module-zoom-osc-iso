@@ -101,8 +101,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'micLive',
 				},
 				style: {
-					color: instance.rgb(0, 0, 0),
-					bgcolor: instance.rgb(255, 255, 0),
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(255, 0, 0),
 				},
 			},
 			{
@@ -123,8 +123,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					type: 'activeSpeaker',
 				},
 				style: {
-					color: instance.rgb(0, 0, 0),
-					bgcolor: instance.rgb(255, 255, 0),
+					color: instance.rgb(255, 255, 255),
+					bgcolor: instance.rgb(0, 0, 255),
 				},
 			},
 			{
@@ -332,6 +332,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'micLive',
 					},
 					style: {
+						color: instance.rgb(255, 255, 255),
 						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
@@ -353,7 +354,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'activeSpeaker',
 					},
 					style: {
-						color: instance.rgb(0, 0, 0),
+						color: instance.rgb(255, 255, 255),
 						bgcolor: instance.rgb(0, 0, 255),
 					},
 				},
@@ -392,6 +393,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'micLive',
 					},
 					style: {
+						color: instance.rgb(255, 255, 255),
 						bgcolor: instance.rgb(255, 0, 0),
 					},
 				},
@@ -402,7 +404,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 						type: 'activeSpeaker',
 					},
 					style: {
-						color: instance.rgb(0, 0, 0),
+						color: instance.rgb(255, 255, 255),
 						bgcolor: instance.rgb(0, 0, 255),
 					},
 				},
