@@ -108,6 +108,7 @@ export class OSC {
 						this.instance.checkFeedbacks('galleryBased')
 						this.instance.checkFeedbacks('groupBased')
 						this.instance.checkFeedbacks('selectionMethod')
+						this.instance.checkFeedbacks('userNameBased')
 					}
 				}, 2000)
 				resolve('ready for OSC')
