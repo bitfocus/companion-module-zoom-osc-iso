@@ -1,5 +1,5 @@
 export interface actionType {
-	[key: string]: { shortDescription: string; command: string; description: string; args?: any; type: string }
+	[key: string]: { shortDescription: string; command: string; description: string; args?: any; type: string; singleUser?: boolean }
 }
 
 const Actions: actionType = {
@@ -646,7 +646,6 @@ const Actions: actionType = {
 		command: '/zoom/disableWaitingRoom',
 		type: 'Global',
 	},
-
 	PingZoomOSC: {
 		description: 'Ping Zoom OSC',
 		shortDescription: 'PingZoomOSC',
@@ -693,20 +692,23 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'outputISO',
 		command: '/outputISO',
 		type: 'ISO',
+		singleUser: true,
 		args: 'output',
 	},
-	// audioISO: {
-	// 	description: 'audio ISO',
-	// 	shortDescription: 'audioISO',
-	// 	command: '/audioISO',
-	// 	type: 'ISO',
-	// 	args: 'audio',
-	// },
+	audioISO: {
+		description: 'audio ISO',
+		shortDescription: 'audioISO',
+		command: '/audioISO',
+		type: 'ISO',
+		singleUser: true,
+		args: 'audio',
+	},
 	SetWindowPosition: {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
 		command: '/setWindowPosition',
 		args: 'intX,intY',
+		singleUser: true,
 		type: 'User',
 	},
 	SetWindowSize: {
@@ -714,6 +716,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetWindowSize',
 		command: '/setWindowSize',
 		args: 'intX,intY',
+		singleUser: true,
 		type: 'User',
 	},
 	SetVirtualBackground: {
@@ -721,6 +724,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetVirtualBackground',
 		command: '/setBackground',
 		args: 'id',
+		singleUser: true,
 		type: 'User',
 	},
 	SetVideoFilter: {
@@ -728,6 +732,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetVideoFilter',
 		command: '/setVideoFilter',
 		args: 'id',
+		singleUser: true,
 		type: 'User',
 	},
 	SetCameraDevice: {
@@ -735,6 +740,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetCameraDevice',
 		command: '/setCameraDevice',
 		args: 'id',
+		singleUser: true,
 		type: 'User',
 	},
 	SetSpeakerVolume: {
@@ -742,6 +748,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetSpeakerVolume',
 		command: '/setSpeakerVolume',
 		args: 'level',
+		singleUser: false,
 		type: 'User',
 	},
 	SetSpeakerDevice: {
@@ -749,6 +756,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetSpeakerDevice',
 		command: '/setSpeakerDevice',
 		args: 'id',
+		singleUser: true,
 		type: 'User',
 	},
 	SetMicDevice: {
@@ -756,6 +764,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SetMicDevice',
 		command: '/setMicDevice',
 		args: 'id',
+		singleUser: true,
 		type: 'User',
 	},
 	SetMicLevel: {
@@ -770,6 +779,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartShareWithWindow',
 		command: '/zoom/me/startWindowShare',
 		args: 'id',
+		singleUser: true,
 		type: 'Global',
 	},
 	StartAudioShare: {
@@ -777,6 +787,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartAudioShare',
 		command: '/zoom/me/startAudioShare',
 		args: 'id',
+		singleUser: true,
 		type: 'Global',
 	},
 	StartCameraShare: {
@@ -784,6 +795,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartCameraShare',
 		command: '/zoom/me/startCameraShare',
 		args: 'id',
+		singleUser: true,
 		type: 'Global',
 	},
 	StartScreenShare: {
@@ -791,6 +803,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartScreenShare',
 		command: '/zoom/me/startScreenshare',
 		args: 'id',
+		singleUser: true,
 		type: 'Global',
 	},
 	SendAChatViaDM: {
@@ -798,6 +811,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'SendAChatViaDM',
 		command: '/chat',
 		args: 'msg',
+		singleUser: true,
 		type: 'User',
 	},
 	// RemoteChat: {
