@@ -20,3 +20,12 @@ The other way of quickly selecting participants can be done via Gallery view. Dr
 ### Gallery
 >> Please make sure you have Participant Reporting set to ZoomID in ZoomOSC Client.
 If Gallery order is not coming into the deck try to change the order by dragging a window to a different position. This will force the client to send a update.
+
+## FEEDBACK
+In the standard presets you will find feedback for;
+* Microphone live/hot
+* Selected
+* Active speaker
+* Handraised
+
+There is also an option for camera on.
