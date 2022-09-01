@@ -532,7 +532,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			}
 			// Different path when more than one users are selected
 			command.oscPath = (command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
-			command.oscPathName = (command.argsCallersNames.length > 1 ? `/zoom/users/userName` : `/zoom/UserName`) + actionID
+			command.oscPathName = (command.argsCallersNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + actionID
 		}
 		return command
 	}
@@ -903,7 +903,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.variables?.updateVariables()
 				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('selectedUser')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		// Group Actions
@@ -1017,11 +1019,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomVariableLink.push(...itemsToShift)
 
 				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
 				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('handRaised')
-				instance.checkFeedbacks('microphoneLive')
-				instance.checkFeedbacks('camera')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 		previousParticipants: {
@@ -1047,11 +1048,10 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
 
 				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
 				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('handRaised')
-				instance.checkFeedbacks('microphoneLive')
-				instance.checkFeedbacks('camera')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
 			},
 		},
 	}
