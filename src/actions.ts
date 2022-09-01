@@ -248,6 +248,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									let command = createUserCommand(element.command, action.options.name, element.singleUser)
 									command.argsCallersNames.push({ type: 'i', value: action.options.output })
 
+									// const sendToCommand: any = {
+									// 	id: element.shortDescription,
+									// 	options: {
+									// 		command: `/zoom/userName/audioISO`,
+									// 		args: [{ type: 's', value: 'Jeffrey Davidsz' },{ type: 'i', value: action.options.output }],
+									// 	},
+									// }
 									const sendToCommand: any = {
 										id: element.shortDescription,
 										options: {
