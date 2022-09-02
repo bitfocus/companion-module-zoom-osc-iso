@@ -677,6 +677,24 @@ const Actions: actionType = {
 		command: '/zoom/list',
 		type: 'Special',
 	},
+	startISOEngine: {
+		description: 'start ISO Engine',
+		shortDescription: 'startISOEngine',
+		command: '/zoom/startISOEngine',
+		type: 'ISO',
+	},
+	stopISOEngine: {
+		description: 'Start ISO Engine',
+		shortDescription: 'stopISOEngine',
+		command: '/zoom/stopISOEngine',
+		type: 'ISO',
+	},
+	pauseISOEngine: {
+		description: 'Pause ISO Engine',
+		shortDescription: 'pauseISOEngine',
+		command: '/zoom/pauseISOEngine',
+		type: 'ISO',
+	},
 	// ConfigureBreakoutRooms: {
 	// 	description: 'Configure BreakoutRooms',
 	// 	shortDescription: 'Configure BreakoutRooms',
