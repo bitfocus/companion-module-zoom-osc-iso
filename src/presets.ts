@@ -480,7 +480,21 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					feedbacks: [],
 				})
 				break
-
+			case 'ISO':
+				presets.push({
+					category: 'ISO Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					feedbacks: [],
+				})
+				break
 			case 'Global':
 				presets.push({
 					category: 'Global Presets',
