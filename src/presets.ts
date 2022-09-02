@@ -544,19 +544,47 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 				})
 				break
 			case 'ISO':
-				presets.push({
-					category: 'ISO Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
-					},
-					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-					feedbacks: [],
-				})
+				for (let index = 1; index < 8; index++) {
+					if (element.shortDescription === 'audioISO') {
+						presets.push({
+							category: 'ISO Presets',
+							label: `To audio Output ${index}`,
+							bank: {
+								style: 'text',
+								text: `To audio Output ${index}`,
+								size: 'auto',
+								color: instance.rgb(255, 255, 255),
+								bgcolor: instance.rgb(0, 0, 0),
+							},
+							actions: [
+								{
+									action: element.shortDescription,
+									options: { user: '', args: '', command: element.command, output: index },
+								},
+							],
+							feedbacks: [],
+						})
+					} else if (element.shortDescription === 'outputISO') {
+						presets.push({
+							category: 'ISO Presets',
+							label: `To video Output ${index}`,
+							bank: {
+								style: 'text',
+								text: `To video Output ${index}`,
+								size: 'auto',
+								color: instance.rgb(255, 255, 255),
+								bgcolor: instance.rgb(0, 0, 0),
+							},
+							actions: [
+								{
+									action: element.shortDescription,
+									options: { user: '', args: '', command: element.command, output: index },
+								},
+							],
+							feedbacks: [],
+						})
+					}
+				}
 				break
 			case 'Global':
 				presets.push({
