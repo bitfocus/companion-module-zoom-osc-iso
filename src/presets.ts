@@ -256,7 +256,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				label: 'Group selection',
 				bank: {
 					style: 'text',
-					text: `Group ${index + 1}-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
+					text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(125, 125, 125),
