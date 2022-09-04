@@ -154,6 +154,10 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description close connections and stop timers/intervals
 	 */
 	public readonly destroy = (): void => {
+		this.ZoomUserData = {}
+		this.ZoomVariableLink = []
+		this.ZoomGroupData = []
+		this.ZoomUserOffline = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		this.OSC?.destroy()
 	}
@@ -184,7 +188,7 @@ class ZoomInstance extends instance_skel<Config> {
 				console.log(message)
 				break
 			case 'OSC':
-				// console.log(message)
+				console.log(message)
 				break
 			case 'debug':
 				this.log('debug', message)
