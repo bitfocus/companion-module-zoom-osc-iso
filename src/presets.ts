@@ -238,7 +238,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			feedbacks: [],
 		})
 		presets.push({
-			category: 'Rename',
+			category: 'Group presets',
 			label: instance.ZoomGroupData[index].groupName,
 			bank: {
 				style: 'text',
@@ -438,7 +438,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 			const user = instance.ZoomUserData[key]
 			presets.push({
-				category: 'Rename',
+				category: 'Rename participants',
 				label: user.userName,
 				bank: {
 					style: 'text',
