@@ -282,7 +282,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				let zoomID = 0
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {
-						console.log(iterator.userName)
 						zoomID = iterator.zoomId
 
 						switch (feedback.options.type) {

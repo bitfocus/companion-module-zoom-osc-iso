@@ -10,11 +10,7 @@ import { Config } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
 import { getFeedbacks } from './feedback'
-import {
-	getPresets,
-	getPresetsWithArguments,
-	getSelectUsersPresets,
-} from './presets'
+import { getPresets, getPresetsWithArguments, getSelectUsersPresets } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
@@ -138,22 +134,19 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description triggered every time the config for this instance is saved
 	 */
 	public updateConfig(config: Config): void {
-		console.log('changing config!', config)
+		this.showLog('debug', 'changing config!')
 
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
-				groupName: `Group ${index+1}`,
+				groupName: `Group ${index + 1}`,
 				users: [],
 			}
 		}
 		this.OSC?.destroy()
 		this.OSC = new OSC(this)
-
-		console.log('groups', this.ZoomClientDataObj.numberOfGroups)
-
 		this.updateInstance()
 	}
 
@@ -161,6 +154,10 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @description close connections and stop timers/intervals
 	 */
 	public readonly destroy = (): void => {
+		this.ZoomUserData = {}
+		this.ZoomVariableLink = []
+		this.ZoomGroupData = []
+		this.ZoomUserOffline = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		this.OSC?.destroy()
 	}
@@ -170,10 +167,38 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateVariables(): void {
 		if (this.variables) {
-			console.log('updating')
+			this.showLog('console', 'updating variables')
 
 			this.variables.updateDefinitions()
 			this.variables.updateVariables()
+		}
+	}
+
+	/**
+	 * @description function to handle logs
+	 * @param type isolate, console, OSC, debug, info
+	 * @param message
+	 */
+	public showLog(type: string, message: string): void {
+		switch (type) {
+			case 'isolate':
+				console.log(message)
+				break
+			case 'console':
+				console.log(message)
+				break
+			case 'OSC':
+				console.log(message)
+				break
+			case 'debug':
+				this.log('debug', message)
+				break
+			case 'info':
+				this.log('info', message)
+				break
+			case 'error':
+				this.log('error', message)
+				break
 		}
 	}
 

@@ -238,7 +238,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			feedbacks: [],
 		})
 		presets.push({
-			category: 'Rename',
+			category: 'Group presets',
 			label: instance.ZoomGroupData[index].groupName,
 			bank: {
 				style: 'text',
@@ -256,7 +256,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				label: 'Group selection',
 				bank: {
 					style: 'text',
-					text: `Group ${index + 1}-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
+					text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
 					size: 'auto',
 					color: instance.rgb(255, 255, 255),
 					bgcolor: instance.rgb(125, 125, 125),
@@ -438,7 +438,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 			const user = instance.ZoomUserData[key]
 			presets.push({
-				category: 'Rename',
+				category: 'Rename participants',
 				label: user.userName,
 				bank: {
 					style: 'text',
@@ -480,7 +480,21 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					feedbacks: [],
 				})
 				break
-
+			case 'ISO':
+				presets.push({
+					category: 'ISO Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: 'auto',
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(0, 0, 0),
+					},
+					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					feedbacks: [],
+				})
+				break
 			case 'Global':
 				presets.push({
 					category: 'Global Presets',
@@ -516,7 +530,7 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 				})
 				break
 			default:
-				console.log('Wrong type at building presets')
+				instance.showLog('console', 'Wrong type at building presets')
 				break
 		}
 	}
@@ -617,7 +631,7 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 				})
 				break
 			default:
-				console.log('Wrong type at building presets')
+				instance.showLog('console', 'Wrong type at building presets')
 				break
 		}
 	}

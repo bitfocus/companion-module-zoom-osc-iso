@@ -141,7 +141,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					break
 				default:
-					console.log('wrong type', element.type)
+					instance.showLog('console', 'wrong type' + element.type)
 					break
 			}
 		}
@@ -234,7 +234,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								break
 
 							default:
-								console.log('Missed an argument in osc commands (user)', element.args)
+								instance.showLog('console', 'Missed an argument in osc commands (user)' + element.args)
 								break
 						}
 					}
@@ -282,7 +282,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								}
 								break
 							default:
-								console.log('Missed an argument in osc commands (ISO)', element.args)
+								instance.showLog('console', 'Missed an argument in osc commands (ISO)' + element.args)
 								break
 						}
 					}
@@ -419,7 +419,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								}
 								break
 							default:
-								console.log('Missed an argument in osc commands (global)', element.args)
+								instance.showLog('console', 'Missed an argument in osc commands (global)' + element.args)
 								break
 						}
 					}
@@ -475,13 +475,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								}
 								break
 							default:
-								console.log('Missed an argument in osc commands (special)', element.args)
+								instance.showLog('console', 'Missed an argument in osc commands (special)' + element.args)
 								break
 						}
 					}
 					break
 				default:
-					console.log('Missed type in osc commands', element)
+					instance.showLog('console', 'Missed type in osc commands' + element)
 					break
 			}
 		}
@@ -508,7 +508,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 		// Check if override has been filled
 		if (name != '' && name != undefined) {
-			console.log('Name filled', name)
+			instance.showLog('debug', 'Override:' + name)
 			instance.getVariable(name, (value: string) => {
 				if (value !== undefined) name = value
 			})
@@ -520,7 +520,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			}
 			// Use the pre-selection options
 		} else {
-			console.log('Use pre-selected', selectedCallers)
 			if (Array.isArray(selectedCallers)) {
 				// should be otherwise somethings wrong
 				if (selectedCallers.length === 0) console.log('Select a caller first')
@@ -535,7 +534,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					})
 				}
 			} else {
-				console.log('Wrong selection')
+				instance.showLog('console', 'Wrong selection')
 			}
 			// Different path when more than one users are selected
 			command.oscPath = (command.argsCallers.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
@@ -590,7 +589,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					},
 				}
 				if (Actions[action.options.actionID].shortDescription === 'LowerAllHands') {
-					console.log('action: Lower All Hands overide')
+					instance.showLog('debug', 'action: Lower All Hands overide')
 					for (const key in instance.ZoomUserData) {
 						if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 							const element = instance.ZoomUserData[key]
@@ -1049,7 +1048,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				let numberToShift = action.options.shift
 				// Be carefull for below/invallid index
 				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(-numberToShift)
-				console.log(itemsToShift)
 
 				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)

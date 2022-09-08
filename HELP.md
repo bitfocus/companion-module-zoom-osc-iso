@@ -13,11 +13,11 @@ There are 4 ways of selecting a participant;
 
 * Selection based on index from participants coming in
 > The buttons will autopopulate themselfs. Have a few of these buttons on your streamdeck and use the previous/next presets to cycle through them.
-![Selection of Participants](images/Example1.png)
+![Selection of Participants](images/ExampleIndex.png)
 
 * Selection based on Gallery view
 > Works almost the same as selection based on index. Only now the order of the participant on your streamdeck is based on the gallery view. When you match you Gallery layout to your streamdeck, easy selection is posible.
-![Gallery selection](images/Example3.png)
+![Gallery selection](images/ExampleGallery.png)
 
 * Selection based on a group
 > By using the group option you can select a group of predefined participants (more info below about groups)
