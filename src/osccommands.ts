@@ -244,18 +244,18 @@ const Actions: actionType = {
 		command: '/zoom/me/stopShare',
 		type: 'Global',
 	},
-	RequestListWindowsForSharing: {
-		description: 'List Windows For Sharing',
-		shortDescription: 'RequestListWindowsForSharing',
-		command: '/zoom/me/listWindows',
-		type: 'Global',
-	},
-	RequestListScreensForSharing: {
-		description: 'List Screens For Sharing',
-		shortDescription: 'RequestListScreensForSharing',
-		command: '/zoom/me/listScreens',
-		type: 'Global',
-	},
+	// RequestListWindowsForSharing: {
+	// 	description: 'List Windows For Sharing',
+	// 	shortDescription: 'RequestListWindowsForSharing',
+	// 	command: '/zoom/me/listWindows',
+	// 	type: 'Global',
+	// },
+	// RequestListScreensForSharing: {
+	// 	description: 'List Screens For Sharing',
+	// 	shortDescription: 'RequestListScreensForSharing',
+	// 	command: '/zoom/me/listScreens',
+	// 	type: 'Global',
+	// },
 	AllowToRecord: {
 		description: 'Allow To Record',
 		shortDescription: 'AllowToRecord',
