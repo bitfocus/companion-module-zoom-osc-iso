@@ -126,6 +126,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
+	let CHOICES_ISO_ACTIONS: { id: string; label: string }[] = []
 
 	for (const key in actionsObj) {
 		if (Object.prototype.hasOwnProperty.call(actionsObj, key)) {
@@ -141,7 +142,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					break
 				case 'ISO':
-					// Do nothing
+					CHOICES_ISO_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					break
 				default:
 					instance.showLog('console', 'wrong type ' + element.type)
@@ -614,6 +615,28 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					id: 'actionID',
 					default: 'PingZoomOSC',
 					choices: CHOICES_SPECIAL_ACTIONS,
+				},
+			],
+			callback: (action: { options: { actionID: string } }) => {
+				const sendToCommand: any = {
+					id: Actions[action.options.actionID].shortDescription,
+					options: {
+						command: Actions[action.options.actionID].command,
+						args: [],
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		ISOActions: {
+			label: 'ISO actions',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'ISO Action',
+					id: 'actionID',
+					default: 'startISOEngine',
+					choices: CHOICES_ISO_ACTIONS,
 				},
 			],
 			callback: (action: { options: { actionID: string } }) => {
