@@ -193,7 +193,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handRaised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 					}
@@ -241,7 +241,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handRaised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 					}
@@ -292,7 +292,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 							case 'handRaised':
 								return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 							case 'activeSpeaker':
-								return instance.ZoomClientDataObj.activeSpeaker === name ? true : false
+								return instance.ZoomClientDataObj.activeSpeaker === name && instance.ZoomUserData[zoomID].mute === false ? true : false
 							case 'selected':
 								return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 							default:
@@ -344,7 +344,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handraised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 						default:
