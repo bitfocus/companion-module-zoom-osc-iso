@@ -29,7 +29,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Clear selected ($(zoomosc:selectedNumberOfCallers))`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'clearSelection', options: {} }],
 		feedbacks: [],
@@ -43,7 +43,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Toggle Selection Method`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 2 } }],
 		feedbacks: [
@@ -76,7 +76,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Single selection`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 1 } }],
 		feedbacks: [],
@@ -89,8 +89,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			style: 'text',
 			text: `Select by name`,
 			size: 'auto',
-			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			color: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(255, 191, 128),
 		},
 		actions: [{ action: 'SelectUserByName', options: { option: 'toggle' } }],
 		feedbacks: [
@@ -149,7 +149,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Multiple selection`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 0 } }],
 		feedbacks: [],
@@ -163,7 +163,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Next participants`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'nextParticipants', options: { shift: 30 } }],
 		feedbacks: [],
@@ -177,7 +177,7 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			text: `Previous participants`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
-			bgcolor: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(125, 125, 125),
 		},
 		actions: [{ action: 'previousParticipants', options: { shift: 30 } }],
 		feedbacks: [],
@@ -310,10 +310,10 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 			label: `Caller${index}`,
 			bank: {
 				style: 'text',
-				text: `Caller ${index}\\n$(zoomosc:Participant${index})`,
-				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
+				text: `${index}. $(zoomosc:Participant${index})`,
+				size: '14',
+				color: instance.rgb(0, 0, 0),
+				bgcolor: instance.rgb(192, 255, 192),
 			},
 			actions: [
 				{
@@ -381,8 +381,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 				style: 'text',
 				text: `Gal Pos ${index}\\n$(zoomosc:Gallery position ${index})`,
 				size: 'auto',
-				color: instance.rgb(255, 255, 255),
-				bgcolor: instance.rgb(0, 0, 0),
+				color: instance.rgb(0, 0, 0),
+				bgcolor: instance.rgb(255, 255, 192),
 			},
 			actions: [{ action: 'SelectFromGalleryPosition', options: { position: index, option: 'toggle' } }],
 			feedbacks: [
@@ -444,8 +444,8 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 					style: 'text',
 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
 					size: 'auto',
-					color: instance.rgb(255, 255, 255),
-					bgcolor: instance.rgb(125, 125, 125),
+					color: instance.rgb(0, 0, 0),
+					bgcolor: instance.rgb(111, 222, 222),
 				},
 				actions: [{ action: 'rename', options: { user: user.zoomId, name: user.userName } }],
 				feedbacks: [],
@@ -467,9 +467,9 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(192, 192, 255),
 					},
 					actions: [
 						{
@@ -487,11 +487,16 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '14',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 64, 64),
 					},
-					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+					actions: [
+						{
+							action: 'ISOActions',
+							options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+						},
+					],
 					feedbacks: [],
 				})
 				break
@@ -502,9 +507,9 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 64, 64),
 					},
 					actions: [
 						{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
@@ -519,9 +524,9 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 64, 255),
 					},
 					actions: [
 						{ action: 'SpecialActions', options: { actionID: element.shortDescription, command: element.command } },
@@ -549,9 +554,9 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(192, 192, 255),
 					},
 					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
 					feedbacks: [],
@@ -566,9 +571,9 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 							bank: {
 								style: 'text',
 								text: `To audio Output ${index}`,
-								size: 'auto',
-								color: instance.rgb(255, 255, 255),
-								bgcolor: instance.rgb(0, 0, 0),
+								size: '14',
+								color: instance.rgb(0, 0, 0),
+								bgcolor: instance.rgb(255, 64, 64),
 							},
 							actions: [
 								{
@@ -585,9 +590,9 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 							bank: {
 								style: 'text',
 								text: `To video Output ${index}`,
-								size: 'auto',
-								color: instance.rgb(255, 255, 255),
-								bgcolor: instance.rgb(0, 0, 0),
+								size: '14',
+								color: instance.rgb(0, 0, 0),
+								bgcolor: instance.rgb(255, 64, 64),
 							},
 							actions: [
 								{
@@ -607,9 +612,9 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 64, 64),
 					},
 					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
 					feedbacks: [],
@@ -622,9 +627,9 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 					bank: {
 						style: 'text',
 						text: element.description,
-						size: 'auto',
-						color: instance.rgb(255, 255, 255),
-						bgcolor: instance.rgb(0, 0, 0),
+						size: '18',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(255, 64, 255),
 					},
 					actions: [{ action: element.shortDescription, options: { command: element.command } }],
 					feedbacks: [],
