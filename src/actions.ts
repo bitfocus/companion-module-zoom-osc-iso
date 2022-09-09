@@ -140,8 +140,11 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				case 'Special':
 					CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
 					break
+				case 'ISO':
+					// Do nothing
+					break
 				default:
-					instance.showLog('console', 'wrong type' + element.type)
+					instance.showLog('console', 'wrong type ' + element.type)
 					break
 			}
 		}
@@ -159,11 +162,12 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								element.options = [options.userName, options.message]
 								element.callback = (action: { options: { msg: string; name: string } }) => {
 									let command = createUserCommand(element.command, action.options.name, element.singleUser)
+									command.argsCallers.push({ type: 's', value: action.options.msg })
 									const sendToCommand: any = {
 										id: element.shortDescription,
 										options: {
 											command: command.oscPath,
-											args: [command.argsCallers, { type: 's', value: action.options.msg }],
+											args: command.argsCallers,
 										},
 									}
 									sendActionCommand(sendToCommand)
