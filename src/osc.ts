@@ -296,7 +296,7 @@ export class OSC {
 
 						default:
 							this.instance.showLog('console', 'No Case provided for:' + data.address)
-							this.instance.showLog('console', 'Arguments' + data.args)
+							this.instance.showLog('console', 'Arguments' + JSON.stringify(data.args))
 					}
 					break
 
@@ -392,7 +392,7 @@ export class OSC {
 
 				default:
 					this.instance.showLog('console', 'No Case provided for:' + data.address)
-					this.instance.showLog('console', 'Arguments' + data.args)
+					this.instance.showLog('console', 'Arguments' + JSON.stringify(data.args))
 			}
 		}
 	}
