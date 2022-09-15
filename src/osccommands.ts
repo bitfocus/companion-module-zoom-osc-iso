@@ -227,9 +227,9 @@ const Actions: actionType = {
 		type: 'User',
 	},
 	StartScreenShareWithPrimaryScreen: {
-		description: 'Start Screen Share With Primary Screen',
+		description: 'Share Primary Screen',
 		shortDescription: 'StartScreenShareWithPrimaryScreen',
-		command: '/zoom/me/startScreensharePrimary',
+		command: '/zoom/me/startScreenSharePrimary',
 		type: 'Global',
 	},
 	CycleSharedCameraToNextAvailable: {
@@ -793,7 +793,7 @@ const ActionsWithArguments: actionType = {
 		type: 'User',
 	},
 	StartShareWithWindow: {
-		description: 'Start Share With Window',
+		description: 'Share Window',
 		shortDescription: 'StartShareWithWindow',
 		command: '/zoom/me/startWindowShare',
 		args: 'id',
@@ -817,7 +817,7 @@ const ActionsWithArguments: actionType = {
 		type: 'Global',
 	},
 	StartScreenShare: {
-		description: 'Start Screen Share',
+		description: 'Screen Share',
 		shortDescription: 'StartScreenShare',
 		command: '/zoom/me/startScreenshare',
 		args: 'id',
@@ -825,7 +825,7 @@ const ActionsWithArguments: actionType = {
 		type: 'Global',
 	},
 	SendAChatViaDM: {
-		description: 'Send A Chat Via DM',
+		description: 'Chat Via DM',
 		shortDescription: 'SendAChatViaDM',
 		command: '/chat',
 		args: 'msg',
