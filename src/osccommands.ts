@@ -819,7 +819,7 @@ const ActionsWithArguments: actionType = {
 	StartScreenShare: {
 		description: 'Screen Share',
 		shortDescription: 'StartScreenShare',
-		command: '/zoom/me/startScreenshare',
+		command: '/zoom/me/startScreenShare',
 		args: 'id',
 		singleUser: true,
 		type: 'Global',
