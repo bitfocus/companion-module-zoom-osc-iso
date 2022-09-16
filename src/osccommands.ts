@@ -481,13 +481,13 @@ const Actions: actionType = {
 	EnableUsersToUnmute: {
 		description: 'Enable Users To Unmute',
 		shortDescription: 'EnableUsersToUnmute',
-		command: '/zoom/enableUserUnmute',
+		command: '/zoom/enableUsersUnmute',
 		type: 'Global',
 	},
 	DisableUsersToUnmute: {
 		description: 'Disable Users ToUnmute',
 		shortDescription: 'DisableUsersToUnmute',
-		command: '/zoom/disableUserUnmute',
+		command: '/zoom/disableUsersUnmute',
 		type: 'Global',
 	},
 	LowerAllHands: {
