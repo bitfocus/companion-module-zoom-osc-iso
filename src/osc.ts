@@ -306,7 +306,7 @@ export class OSC {
 
 				case 'galleryOrder':
 					this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
-					this.instance.log('debug', `Gallery info ${JSON.stringify(data.args)}`)
+					// this.instance.log('debug', `Gallery info ${JSON.stringify(data.args)}`)
 					this.instance.ZoomClientDataObj.galleryOrder.length = 0
 					data.args.forEach((order: { type: string; value: number }) => {
 						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
