@@ -53,7 +53,7 @@ export class Variables {
 	public readonly updateDefinitions = (): void => {
 		const globalSettings: Set<InstanceVariableDefinition> = new Set([
 			// Status
-			{ label: 'zoomOSC version', name: 'zoomOSCversion' },
+			{ label: 'Zoom version', name: 'zoomVersion' },
 			{ label: 'call status', name: 'callStatus' },
 			{ label: 'Selected callers/groups', name: 'selectedCallers' },
 			{ label: 'Selected number of callers/groups', name: 'selectedNumberOfCallers' },
@@ -144,7 +144,7 @@ export class Variables {
 			newVariables['selectedCallers'] = selectedCallers.toString()
 			newVariables['selectedNumberOfCallers'] = selectedCallers.length
 		}
-		newVariables['zoomOSCversion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
+		newVariables['zoomVersion'] = this.instance.ZoomClientDataObj.zoomOSCVersion
 		newVariables['callStatus'] = this.instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
 		newVariables['numberOfGroups'] = this.instance.ZoomClientDataObj.numberOfGroups
 		newVariables['numberOfUsers'] = Object.keys(this.instance.ZoomUserData).length
