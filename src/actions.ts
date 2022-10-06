@@ -786,8 +786,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.checkFeedbacks('galleryBased')
 			},
 		},
-		clearSelection: {
-			label: 'Clear selection',
+		clearParticipants: {
+			label: 'Clear Participants',
 			options: [],
 			callback: () => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
