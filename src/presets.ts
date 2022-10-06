@@ -23,15 +23,15 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 	//clear selection
 	presets.push({
 		category: 'Select Participants',
-		label: `Clear selection`,
+		label: `Clear Participants`,
 		bank: {
 			style: 'text',
-			text: `Clear selected ($(zoomosc:selectedNumberOfCallers))`,
+			text: `Clear Participants ($(zoomosc:selectedNumberOfCallers))`,
 			size: 'auto',
 			color: instance.rgb(255, 255, 255),
 			bgcolor: instance.rgb(125, 125, 125),
 		},
-		actions: [{ action: 'clearSelection', options: {} }],
+		actions: [{ action: 'clearParticipants', options: {} }],
 		feedbacks: [],
 	})
 	// Selection method
