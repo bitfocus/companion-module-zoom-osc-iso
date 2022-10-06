@@ -16,16 +16,16 @@ const Actions: actionType = {
 	ClearPins: {
 		description: 'Clear Pins',
 		shortDescription: 'ClearPins',
-		command: '/clearPin',
+		command: '/me/clearPin',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	TogglePin: {
 		description: 'Toggle Pin',
 		shortDescription: 'TogglePin',
-		command: '/togglePin',
+		command: '/me/togglePin',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	PinScreen2: {
 		description: 'Pin Screen2',
@@ -44,9 +44,9 @@ const Actions: actionType = {
 	ClearPinsScreen2: {
 		description: 'Clear PinsScreen2',
 		shortDescription: 'ClearPinsScreen2',
-		command: '/clearPin2',
+		command: '/me/clearPin2',
 		singleUser: true,
-		type: 'User',
+		type: 'Global',
 	},
 	TogglePinScreen2: {
 		description: 'Toggle PinScreen2',
@@ -279,16 +279,16 @@ const Actions: actionType = {
 	ShowUserNamesOnVideo: {
 		description: 'Show User Names On Video',
 		shortDescription: 'ShowUserNamesOnVideo',
-		command: '/showUserNames',
+		command: '/me/showUserNames',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	HideUserNamesOnVideo: {
 		description: 'Hide User Names On Video',
 		shortDescription: 'HideUserNamesOnVideo',
-		command: '/hideUserNames',
+		command: '/me/hideUserNames',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	EnableOriginalSound: {
 		description: 'Enable Original Sound',
@@ -307,16 +307,16 @@ const Actions: actionType = {
 	EnableHDVideo: {
 		description: 'Enable HD Video',
 		shortDescription: 'EnableHDVideo',
-		command: '/enableHDVideo',
+		command: '/me/enableHDVideo',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	DisableHDVideo: {
 		description: 'Disable HD Video',
 		shortDescription: 'DisableHDVideo',
-		command: '/disableHDVideo',
+		command: '/me/disableHDVideo',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	EnableMirrorVideo: {
 		description: 'Enable Mirror Video',
@@ -335,30 +335,30 @@ const Actions: actionType = {
 	EnableOptimizeVideoForSharing: {
 		description: 'Enable Optimize Video For Sharing',
 		shortDescription: 'EnableOptimizeVideoForSharing',
-		command: '/enableOptimizeVideo',
+		command: '/me/enableOptimizeVideo',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	DisableOptimizeVideoForSharing: {
 		description: 'Disable Optimize Video For Sharing',
 		shortDescription: 'DisableOptimizeVideoForSharing',
-		command: '/disableOptimizeVideo',
+		command: '/me/disableOptimizeVideo',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	EnableComputerSoundWhenSharing: {
 		description: 'Enable Computer Sound When Sharing',
 		shortDescription: 'EnableComputerSoundWhenSharing',
-		command: '/enableComputerSoundWhenSharing',
+		command: '/me/enableComputerSoundWhenSharing',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	DisableComputerSoundWhenSharing: {
 		description: 'Disable Computer Sound When Sharing',
 		shortDescription: 'DisableComputerSoundWhenSharing',
-		command: '/disableComputerSoundWhenSharing',
+		command: '/me/disableComputerSoundWhenSharing',
 		singleUser: null,
-		type: 'User',
+		type: 'Global',
 	},
 	// RequestMicDeviceList: {
 	// 	description: 'Mic Device List',
@@ -675,10 +675,6 @@ const Actions: actionType = {
 		singleUser: null,
 		type: 'ISO',
 	},
-
-	// /getEngineState
-	// /zoomosc/engineState {int state (0 = disabled, 1 = standby, 2 = enabled)
-
 	ConfigureBreakoutRooms: {
 		description: 'Configure BreakoutRooms',
 		shortDescription: 'configureBreakoutRooms',

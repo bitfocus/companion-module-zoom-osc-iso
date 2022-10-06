@@ -10,7 +10,11 @@ interface InstanceVariableDefinition {
 interface InstanceVariableValue {
 	[key: string]: string | number | undefined
 }
-
+enum engineState {
+	disabled = 'disabled',
+	standby = 'standby',
+	enabled = 'enabled',
+}
 export class Variables {
 	private readonly instance: ZoomInstance
 
@@ -54,7 +58,8 @@ export class Variables {
 		const globalSettings: Set<InstanceVariableDefinition> = new Set([
 			// Status
 			{ label: 'Zoom version', name: 'zoomVersion' },
-			{ label: 'call status', name: 'callStatus' },
+			{ label: 'Call Status', name: 'callStatus' },
+			{ label: 'Engine Status', name: 'engineState' },
 			{ label: 'Selected callers/groups', name: 'selectedCallers' },
 			{ label: 'Selected number of callers/groups', name: 'selectedNumberOfCallers' },
 			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
@@ -150,6 +155,15 @@ export class Variables {
 		newVariables['numberOfUsers'] = Object.keys(this.instance.ZoomUserData).length
 		newVariables['isSpeaking'] = this.instance.ZoomClientDataObj.isSpeaking
 		newVariables['activeSpeaker'] = this.instance.ZoomClientDataObj.activeSpeaker
+		if (this.instance.ZoomClientDataObj.engineState === -1) {
+			newVariables['engineState'] = 'no engine found'
+		} else if (this.instance.ZoomClientDataObj.engineState === 0) {
+			newVariables['engineState'] = engineState.disabled
+		} else if (this.instance.ZoomClientDataObj.engineState === 1) {
+			newVariables['engineState'] = engineState.standby
+		} else if (this.instance.ZoomClientDataObj.engineState === 2) {
+			newVariables['engineState'] = engineState.enabled
+		}
 
 		let allUsers = ''
 		this.instance.ZoomGroupData.forEach((group, index) => {

@@ -18,7 +18,11 @@ export interface ZoomFeedbacks {
 	// Index signature
 	[key: string]: ZoomFeedback<any>
 }
-
+enum engineState {
+	disabled = 0,
+	standby = 1,
+	enabled = 2,
+}
 interface selectionMethodCallback {
 	type: 'selectionMethod'
 	options: Readonly<{
@@ -193,7 +197,10 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handRaised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
+								instance.ZoomUserData[zoomID].mute === false
+								? true
+								: false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 					}
@@ -241,7 +248,10 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handRaised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
+								instance.ZoomUserData[zoomID].mute === false
+								? true
+								: false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 					}
@@ -292,7 +302,9 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 							case 'handRaised':
 								return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 							case 'activeSpeaker':
-								return instance.ZoomClientDataObj.activeSpeaker === name && instance.ZoomUserData[zoomID].mute === false ? true : false
+								return instance.ZoomClientDataObj.activeSpeaker === name && instance.ZoomUserData[zoomID].mute === false
+									? true
+									: false
 							case 'selected':
 								return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 							default:
@@ -344,7 +356,10 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						case 'handraised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
-							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName && instance.ZoomUserData[zoomID].mute === false ? true : false
+							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
+								instance.ZoomUserData[zoomID].mute === false
+								? true
+								: false
 						case 'selected':
 							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
 						default:
@@ -352,6 +367,34 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 					}
 				}
 				return false
+			},
+		},
+		engineState: {
+			type: 'boolean',
+			label: 'Status of the engine feedback',
+			description: 'Show feedback of the engine',
+			style: {
+				bgcolor: rgb(255, 0, 0),
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Engine state',
+					id: 'state',
+					default: engineState.enabled,
+					choices: [
+						{ id: engineState.disabled, label: 'Disabled' },
+						{ id: engineState.enabled, label: 'Enabled' },
+						{ id: engineState.standby, label: 'Standby' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.engineState === feedback.options.state) {
+					return false
+				} else {
+					return false
+				}
 			},
 		},
 	}

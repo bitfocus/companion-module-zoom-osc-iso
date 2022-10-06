@@ -345,7 +345,7 @@ export class OSC {
 							case 'ZISO':
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.zoomISOPuller = setInterval(() => {
-									console.log('start pulling data when on ISO');
+									this.sendISOPullingCommands()
 								}, 1500)
 								break
 							case 'ZOSC':
@@ -415,6 +415,12 @@ export class OSC {
 					this.instance.variables?.updateVariables()
 					break
 
+				// ISO data
+				case 'engineState':
+					this.instance.ZoomClientDataObj.engineState = data.args[0].value
+					this.instance.checkFeedbacks('engineState')
+					break
+
 				default:
 					this.instance.showLog('console', 'No Case provided for:' + data.address)
 					this.instance.showLog('console', 'Arguments' + JSON.stringify(data.args))
@@ -438,6 +444,11 @@ export class OSC {
 			this.oscHost,
 			this.oscTXPort
 		)
+	}
+
+	public readonly sendISOPullingCommands = () => {
+		console.log('start pulling data when on ISO');
+		this.sendCommand('/zoom/getEngineState',[])
 	}
 
 	/**

@@ -43,6 +43,7 @@ class ZoomInstance extends instance_skel<Config> {
 		galleryCount: number
 		galleryOrder: number[]
 		numberOfGroups: number
+		engineState: number
 	} = {
 		last_response: 0,
 		selectedCallers: [],
@@ -55,6 +56,7 @@ class ZoomInstance extends instance_skel<Config> {
 		galleryCount: 0,
 		galleryOrder: [],
 		numberOfGroups: 5,
+		engineState: -1
 	}
 	// Array with all callers
 	public ZoomUserData: {
