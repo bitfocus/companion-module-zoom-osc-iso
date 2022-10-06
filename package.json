@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "2.4.2",
+	"version": "2.5.0",
 	"api_version": "1.0.0",
 	"main": "dist/index.js",
 	"repository": {
@@ -20,8 +20,8 @@
 		"url": "https://github.com/bitfocus/companion-module-zoom-osc-iso/issues"
 	},
 	"manufacturer": "Zoom",
-	"product": ["ZoomOSC Pro","ZoomISO","ZoomISO","Liminalet"],
-	"shortname": "zoomosc",
+	"product": ["OSC/ISO"],
+	"shortname": "OSC / ISO module",
 	"description": "ZoomOSC plugin for companion ",
 	"keywords": [
 		"zoom",
