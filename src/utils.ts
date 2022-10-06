@@ -19,24 +19,45 @@ enum SubscribeMode {
 	OnlyGallery = 4,
 }
 
+enum EmbeddedAudioMode {
+	Mix = 'mix',
+	Off = 'off',
+	ISO = 'iso',
+}
+
 export interface Options {
-	mute: EnforceDefault<CompanionInputFieldDropdown, number>
-	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	userSelectedInfo: SomeCompanionConfigField
+	
+	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	lossModeName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
 	output: EnforceDefault<CompanionInputFieldNumber, number>
-	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
+	channel: EnforceDefault<CompanionInputFieldNumber, number>
+	reductionAmount: EnforceDefault<CompanionInputFieldNumber, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
 	id: EnforceDefault<CompanionInputFieldNumber, number>
+	postCloseSeconds: EnforceDefault<CompanionInputFieldNumber, number>
+	breakoutDurrationSeconds: EnforceDefault<CompanionInputFieldNumber, number>
+	
+	allowChooseBreakout: EnforceDefault<CompanionInputFieldDropdown, number>
+	allowReturnAtWill: EnforceDefault<CompanionInputFieldDropdown, number>
+	autoMoveParticipants: EnforceDefault<CompanionInputFieldDropdown, number>
+	useTimer: EnforceDefault<CompanionInputFieldDropdown, number>
+	closeWithTimer: EnforceDefault<CompanionInputFieldDropdown, number>
+	mute: EnforceDefault<CompanionInputFieldDropdown, number>
+	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
+	isoEmbeddedAudioMode: EnforceDefault<CompanionInputFieldDropdown, string>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
+
 	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
 	foregroundColorBlack: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorPreview: EnforceDefault<CompanionInputFieldColor, number>
@@ -77,10 +98,32 @@ export const options: Options = {
 		id: 'name',
 		default: '',
 	},
+	lossModeName: {
+		type: 'textwithvariables',
+		label: 'Loss mode name',
+		id: 'lossModeName',
+		default: '',
+	},
+	channel: {
+		type: 'number',
+		label: 'number',
+		id: 'number',
+		default: 1,
+		min: 1,
+		max: 256,
+	},
+	reductionAmount: {
+		type: 'number',
+		label: 'Reduction Amount',
+		id: 'reductionAmount',
+		default: 1,
+		min: 1,
+		max: 256,
+	},
 	userName: {
 		type: 'textwithvariables',
 		label: 'username (keep blank when you pre-select)',
-		id: 'name',
+		id: 'userName',
 		default: '',
 	},
 	meetingID: {
@@ -134,6 +177,17 @@ export const options: Options = {
 		],
 		default: SubscribeMode.All,
 	},
+	isoEmbeddedAudioMode: {
+		type: 'dropdown',
+		label: 'Output Embedded Audio mode',
+		id: 'mode',
+		choices: [
+			{ id: EmbeddedAudioMode.ISO, label: 'ISO' },
+			{ id: EmbeddedAudioMode.Mix, label: 'Mix' },
+			{ id: EmbeddedAudioMode.Off, label: 'Off' },
+		],
+		default: EmbeddedAudioMode.ISO,
+	},
 	mode: {
 		type: 'number',
 		label: 'Mode',
@@ -182,7 +236,6 @@ export const options: Options = {
 			{ id: 1, label: 'on' },
 		],
 	},
-
 	handRaised: {
 		type: 'dropdown',
 		label: 'Handraise or lower',
@@ -193,76 +246,134 @@ export const options: Options = {
 			{ id: 1, label: 'lowered' },
 		],
 	},
-
 	foregroundColor: {
 		type: 'colorpicker',
 		label: 'Foreground color',
 		id: 'fg',
 		default: rgb(255, 255, 255),
 	},
-
 	foregroundColorBlack: {
 		type: 'colorpicker',
 		label: 'Foreground color',
 		id: 'fg',
 		default: rgb(0, 0, 0),
 	},
-
 	backgroundColorPreview: {
 		type: 'colorpicker',
 		label: 'Background color when in preview',
 		id: 'bg_pvw',
 		default: rgb(0, 255, 0),
 	},
-
 	backgroundColorGray: {
 		type: 'colorpicker',
 		label: 'Background color',
 		id: 'bg',
 		default: rgb(125, 125, 125),
 	},
-
 	backgroundColorGroup: {
 		type: 'colorpicker',
 		label: 'Background color',
 		id: 'bg',
 		default: rgb(125, 125, 125),
 	},
-
 	backgroundColorProgram: {
 		type: 'colorpicker',
 		label: 'Background color when in grogram',
 		id: 'bg',
 		default: rgb(255, 0, 0),
 	},
-
 	backgroundColorMicLive: {
 		type: 'colorpicker',
 		label: 'Background color when microphone is live',
 		id: 'bg',
 		default: rgb(255, 0, 0),
 	},
-
 	backgroundColorYellow: {
 		type: 'colorpicker',
 		label: 'Background color',
 		id: 'bg',
 		default: rgb(255, 255, 0),
 	},
+	allowChooseBreakout: {
+		type: 'dropdown',
+		label: 'Allow Choose Breakout',
+		id: 'allowChooseBreakout',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'false' },
+			{ id: 1, label: 'true' },
+		],
+	},
+	postCloseSeconds: {
+		type: 'number',
+		label: 'postCloseSeconds',
+		id: 'postCloseSeconds',
+		min: 0,
+		max: 99999,
+		default: 0,
+	},
+	allowReturnAtWill: {
+		type: 'dropdown',
+		label: 'Allow Return At Will',
+		id: 'allowReturnAtWill',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'false' },
+			{ id: 1, label: 'true' },
+		],
+	},
+	autoMoveParticipants: {
+		type: 'dropdown',
+		label: 'Auto Move Participants',
+		id: 'autoMoveParticipants',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'false' },
+			{ id: 1, label: 'true' },
+		],
+	},
+	useTimer: {
+		type: 'dropdown',
+		label: 'Use Timer',
+		id: 'useTimer',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'false' },
+			{ id: 1, label: 'true' },
+		],
+	},
+	closeWithTimer: {
+		type: 'dropdown',
+		label: 'Close With Timer',
+		id: 'closeWithTimer',
+		default: 0,
+		choices: [
+			{ id: 0, label: 'false' },
+			{ id: 1, label: 'true' },
+		],
+	},
+	breakoutDurrationSeconds: {
+		type: 'number',
+		label: 'Breakout Durration Seconds',
+		id: 'breakoutDurrationSeconds',
+		min: 0,
+		max: 99999,
+		default: 0,
+	},
 }
 
-export const arrayRemove = (arr: Array<number>, value: number) => { 
-	return arr.filter(function(element){ 
-			return element != value; 
-	});
+export const arrayRemove = (arr: Array<number>, value: number) => {
+	return arr.filter(function (element) {
+		return element != value
+	})
 }
 
-export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => { 
+export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => {
 	// Find a index of the value (use this so we can use it for remove)
-	let index = arr.findIndex(element => element === value)
+	let index = arr.findIndex((element) => element === value)
 	// Create a temp array
 	let tempArr = arr
-	if(index === -1) {
+	if (index === -1) {
 		tempArr.push(value)
 		return tempArr
 	} else {
