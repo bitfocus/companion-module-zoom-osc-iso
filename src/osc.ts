@@ -9,7 +9,10 @@ interface ZoomOSCResponse {
 		value: any
 	}[]
 }
-
+enum ZoomVersion {
+	ZoomOSC = 0,
+	ZoomISO = 1,
+}
 enum SubscribeMode {
 	None = 0,
 	TargetList = 1,
@@ -29,6 +32,7 @@ export class OSC {
 	private pingInterval: NodeJS.Timer | undefined
 	private pingIntervalTime: number = 2000
 	private updatePresetsLoop: NodeJS.Timer | undefined
+	private zoomISOPuller: NodeJS.Timer | undefined
 
 	constructor(instance: ZoomInstance) {
 		this.instance = instance
@@ -54,6 +58,7 @@ export class OSC {
 		if (this.udpPort) this.udpPort.close()
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
+		if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
 	}
 
 	/**
@@ -305,8 +310,6 @@ export class OSC {
 					break
 
 				case 'galleryOrder':
-					this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
-					// this.instance.log('debug', `Gallery info ${JSON.stringify(data.args)}`)
 					this.instance.ZoomClientDataObj.galleryOrder.length = 0
 					data.args.forEach((order: { type: string; value: number }) => {
 						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
@@ -335,7 +338,29 @@ export class OSC {
 					// {int number of targets}
 					// {int number of users in call}
 					// {int isPro (1=true, 0-false)}
-					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value
+					let versionInfo = data.args[1].value as string
+					if(versionInfo !== this.instance.ZoomClientDataObj.zoomOSCVersion) {
+						// Only do this when version actually has changed
+						switch (versionInfo.substring(0,4)) {
+							case 'ZISO':
+								this.instance.config.version = ZoomVersion.ZoomISO
+								this.zoomISOPuller = setInterval(() => {
+									console.log('start pulling data when on ISO');
+								}, 1500)
+								break
+							case 'ZOSC':
+								this.instance.config.version = ZoomVersion.ZoomOSC
+								if(this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+								break
+							default:
+								// Default to ZoomOSC no pulling of data
+								this.instance.config.version = ZoomVersion.ZoomOSC
+								this.instance.showLog('console', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
+								break
+						}
+						this.instance.saveConfig()
+						this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value as string
+					}
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
 					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)

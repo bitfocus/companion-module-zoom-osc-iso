@@ -5,10 +5,14 @@ export interface Config {
 	host: string
 	tx_port: number
 	rx_port: number
+	version: number
 	selectionMethod: number
 	numberOfGroups: number
 }
-
+enum ZoomVersion {
+	ZoomOSC = 0,
+	ZoomISO = 1,
+}
 export const getConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{
@@ -47,6 +51,17 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 				{ id: 0, label: 'Multi Selection' },
 			],
 			default: 1,
+			width: 6,
+		},
+		{
+			type: 'dropdown',
+			id: 'version',
+			label: 'Using ZoomOSC or ZoomISO',
+			choices: [
+				{ id: ZoomVersion.ZoomISO, label: 'ZoomISO' },
+				{ id: ZoomVersion.ZoomOSC, label: 'ZoomOSC' },
+			],
+			default: ZoomVersion.ZoomOSC,
 			width: 6,
 		},
 		{
