@@ -650,28 +650,21 @@ const Actions: actionType = {
 	startISOEngine: {
 		description: 'Start ISO Engine',
 		shortDescription: 'startISOEngine',
-		command: '/startISOEngine',
+		command: '/zoom/startISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
 	stopISOEngine: {
 		description: 'Stop ISO Engine',
 		shortDescription: 'stopISOEngine',
-		command: '/stopISOEngine',
+		command: '/zoom/stopISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
 	pauseISOEngine: {
 		description: 'Pause ISO Engine',
 		shortDescription: 'pauseISOEngine',
-		command: '/pauseISOEngine',
-		singleUser: null,
-		type: 'ISO',
-	},
-	setOutputCount: {
-		description: 'set OutputCount',
-		shortDescription: 'setOutputCount',
-		command: '/setOutputCount',
+		command: '/zoom/pauseISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
@@ -694,17 +687,24 @@ const ActionsWithArguments: actionType = {
 		singleUser: true,
 		args: ['userName','name'],
 	},
-
+	setOutputCount: {
+		description: 'set Output Count',
+		shortDescription: 'setOutputCount',
+		command: '/setOutputCount',
+		singleUser: null,
+		args: ['count'],
+		type: 'ISO',
+	},
 	// /enableOutput {int index  | string output_name}
 	// /disableOutput {int index  | string output_name}
 
-	// /getAudioLevel
+	// /getAudioLevel*
 	// /zoomosc/audioLevels
 
-	// /getOutputRouting
+	// /getOutputRouting*
 	// /zoomosc/outputRouting {int num_outputs, int this_output_num, int enabled (0|1), string output_name, string mode (use string names from dropdown), string selection ("" if nothing, otherwise use string selected), string resolution, string embedded_audio_info, string status}
 
-	// /getAudioRouting
+	// /getAudioRouting*
 	// /zoomosc/audioRouting {string audio_device_name, int num_channels, int this_channel, string mode, int gain_reduction, string selection, int audio_level}
 
 	// /zoomosc/videoLoss {int output_num, string output_name, string selection}
