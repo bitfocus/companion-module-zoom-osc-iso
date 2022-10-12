@@ -489,7 +489,7 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 						text: element.description,
 						size: '14',
 						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 64, 64),
+						bgcolor: instance.rgb(86, 221, 221),
 					},
 					actions: [
 						{
@@ -573,7 +573,7 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 								text: `To audio Output ${index}`,
 								size: '14',
 								color: instance.rgb(0, 0, 0),
-								bgcolor: instance.rgb(255, 64, 64),
+								bgcolor: instance.rgb(86, 221, 221),
 							},
 							actions: [
 								{
@@ -592,7 +592,7 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 								text: `To video Output ${index}`,
 								size: '14',
 								color: instance.rgb(0, 0, 0),
-								bgcolor: instance.rgb(255, 64, 64),
+								bgcolor: instance.rgb(86, 221, 221),
 							},
 							actions: [
 								{
@@ -604,6 +604,24 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 						})
 					}
 				}
+				presets.push({
+					category: 'ISO Presets',
+					label: element.shortDescription,
+					bank: {
+						style: 'text',
+						text: element.description,
+						size: '14',
+						color: instance.rgb(0, 0, 0),
+						bgcolor: instance.rgb(86, 221, 221),
+					},
+					actions: [
+						{
+							action: element.shortDescription,
+							options: { user: '', args: '', command: element.command },
+						},
+					],
+					feedbacks: [],
+				})
 				break
 			case 'Global':
 				presets.push({
