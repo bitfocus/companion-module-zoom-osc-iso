@@ -235,6 +235,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						case 'breakoutDurrationSeconds':
 							element.options.push(options.breakoutDurrationSeconds)
 							break
+						case 'count':
+							element.options.push(options.count)
+							break
 
 						default:
 							instance.showLog('console', 'Missed to add an option in actions: ' + argument)
@@ -256,6 +259,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									break
 								case 'output':
 									args.push({ type: 'i', value: action.options.output })
+									break
+								case 'count':
+									args.push({ type: 'i', value: action.options.count })
 									break
 								case 'mode':
 									args.push({ type: 's', value: action.options.mode })
