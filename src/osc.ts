@@ -418,7 +418,17 @@ export class OSC {
 				// ISO data
 				case 'engineState':
 					this.instance.ZoomClientDataObj.engineState = data.args[0].value
+					this.instance.variables?.updateVariables()
 					this.instance.checkFeedbacks('engineState')
+					break
+				case 'audioLevels':
+					this.instance.showLog('console', 'audioLevels'+data.address+data.args)
+					break
+				case 'outputRouting':
+					this.instance.showLog('console', 'outputRouting'+data.address+data.args)
+					break
+				case 'audioRouting':
+					this.instance.showLog('console', 'audioRouting'+data.address+data.args)
 					break
 
 				default:
@@ -433,9 +443,7 @@ export class OSC {
 	 * @description Check OSC connection status and format command to send to Zoom
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
-		// this.instance.oscSend(this.oscHost, this.oscTXPort, path, args ? args : [])
-		this.instance.showLog('console', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
-
+		// this.instance.showLog('console', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		this.udpPort.send(
 			{
 				address: path,
@@ -447,8 +455,10 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = () => {
-		console.log('start pulling data when on ISO');
 		this.sendCommand('/zoom/getEngineState',[])
+		this.sendCommand('/zoom/getAudioLevel',[])
+		this.sendCommand('/zoom/getOutputRouting',[])
+		this.sendCommand('/zoom/getAudioRouting',[])
 	}
 
 	/**
