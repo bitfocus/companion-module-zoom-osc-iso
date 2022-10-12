@@ -40,6 +40,7 @@ export interface Options {
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
 	output: EnforceDefault<CompanionInputFieldNumber, number>
+	count: EnforceDefault<CompanionInputFieldNumber, number>
 	channel: EnforceDefault<CompanionInputFieldNumber, number>
 	reductionAmount: EnforceDefault<CompanionInputFieldNumber, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
@@ -160,6 +161,14 @@ export const options: Options = {
 		type: 'number',
 		label: 'Output',
 		id: 'output',
+		min: 0,
+		max: 512,
+		default: 1,
+	},
+	count: {
+		type: 'number',
+		label: 'count',
+		id: 'count',
 		min: 0,
 		max: 512,
 		default: 1,
