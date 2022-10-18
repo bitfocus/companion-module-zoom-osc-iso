@@ -455,10 +455,10 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = () => {
-		this.sendCommand('/zoom/getEngineState',[])
-		this.sendCommand('/zoom/getAudioLevel',[])
-		this.sendCommand('/zoom/getOutputRouting',[])
-		this.sendCommand('/zoom/getAudioRouting',[])
+		// this.sendCommand('/zoom/getEngineState',[])
+		// this.sendCommand('/zoom/getAudioLevel',[])
+		// this.sendCommand('/zoom/getOutputRouting',[])
+		// this.sendCommand('/zoom/getAudioRouting',[])
 	}
 
 	/**
