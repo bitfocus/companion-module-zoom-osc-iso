@@ -35,6 +35,7 @@ export interface Options {
 	lossModeName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	path: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
@@ -131,6 +132,12 @@ export const options: Options = {
 		type: 'textwithvariables',
 		label: 'Meeting ID',
 		id: 'meetingID',
+		default: '',
+	},
+	path: {
+		type: 'textwithvariables',
+		label: 'absolute path',
+		id: 'path',
 		default: '',
 	},
 	intX: {
