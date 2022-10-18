@@ -154,6 +154,20 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 		actions: [{ action: 'selectionMethod', options: { selectionMethod: 0 } }],
 		feedbacks: [],
 	})
+	// ISO
+	presets.push({
+		category: 'ISO Presets',
+		label: `Take Outputs`,
+		bank: {
+			style: 'text',
+			text: `Take Outputs`,
+			size: 'auto',
+			color: instance.rgb(0, 0, 0),
+			bgcolor: instance.rgb(86, 221, 221),
+		},
+		actions: [{ action: 'takeSelectedOutputs', options: {} }],
+		feedbacks: [],
+	})
 	// Next participants
 	presets.push({
 		category: 'Select Participants',
@@ -563,47 +577,6 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 				})
 				break
 			case 'ISO':
-				for (let index = 1; index < 8; index++) {
-					if (element.shortDescription === 'audioISO') {
-						presets.push({
-							category: 'ISO Presets',
-							label: `To audio Output ${index}`,
-							bank: {
-								style: 'text',
-								text: `To audio Output ${index}`,
-								size: '14',
-								color: instance.rgb(0, 0, 0),
-								bgcolor: instance.rgb(86, 221, 221),
-							},
-							actions: [
-								{
-									action: element.shortDescription,
-									options: { user: '', args: '', command: element.command, output: index },
-								},
-							],
-							feedbacks: [],
-						})
-					} else if (element.shortDescription === 'outputISO') {
-						presets.push({
-							category: 'ISO Presets',
-							label: `To video Output ${index}`,
-							bank: {
-								style: 'text',
-								text: `To video Output ${index}`,
-								size: '14',
-								color: instance.rgb(0, 0, 0),
-								bgcolor: instance.rgb(86, 221, 221),
-							},
-							actions: [
-								{
-									action: element.shortDescription,
-									options: { user: '', args: '', command: element.command, output: index },
-								},
-							],
-							feedbacks: [],
-						})
-					}
-				}
 				presets.push({
 					category: 'ISO Presets',
 					label: element.shortDescription,
@@ -658,5 +631,69 @@ export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPrese
 				break
 		}
 	}
+	// extra presets
+	for (let index = 1; index < 8; index++) {
+		presets.push({
+			category: 'ISO Presets',
+			label: `Output ${index}`,
+			bank: {
+				style: 'text',
+				text: `Output ${index}`,
+				size: '14',
+				color: instance.rgb(0, 0, 0),
+				bgcolor: instance.rgb(86, 221, 221),
+			},
+			actions: [
+				{
+					action: 'selectOutput',
+					options: { user: '', args: '', command: '/outputISO', output: index },
+				},
+			],
+			feedbacks: [
+				{
+					type: 'output',
+					options: {
+						output: index,
+					},
+					style: {
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(255, 0, 0),
+					},
+				},
+			],
+		})
+	}
+	for (let index = 1; index < 8; index++) {
+		presets.push({
+			category: 'ISO Presets',
+			label: `Audio\nOutput ${index}`,
+			bank: {
+				style: 'text',
+				text: `Audio\nOutput ${index}`,
+				size: '14',
+				color: instance.rgb(0, 0, 0),
+				bgcolor: instance.rgb(86, 221, 221),
+			},
+			actions: [
+				{
+					action: 'selectAudioOutput',
+					options: { user: '', args: '', command: '/audioISO', output: index },
+				},
+			],
+			feedbacks: [
+				{
+					type: 'audioOutput',
+					options: {
+						output: index,
+					},
+					style: {
+						color: instance.rgb(255, 255, 255),
+						bgcolor: instance.rgb(255, 0, 0),
+					},
+				},
+			],
+		})
+	}
+
 	return presets
 }

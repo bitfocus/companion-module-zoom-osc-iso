@@ -73,6 +73,12 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		CHOICES_PARTICIPANT.push({ id: index.toString(), label: `Participant ${index}` })
 	}
 
+	let CHOICES_OUTPUTS = []
+	// Change this to actual created output, get that with pulling
+	for (let index = 1; index < 10; index++) {
+		CHOICES_OUTPUTS.push({ id: index.toString(), label: `Output ${index}` })
+	}
+
 	let userOption: InputFieldWithDefault = {
 		type: 'dropdown',
 		label: 'User',
@@ -103,6 +109,14 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		id: 'group',
 		default: CHOICES_GROUPS_DEFAULT,
 		choices: CHOICES_GROUPS,
+	}
+
+	let outputOption: InputFieldWithDefault = {
+		type: 'dropdown',
+		label: 'Output',
+		id: 'output',
+		default: '1',
+		choices: CHOICES_OUTPUTS,
 	}
 
 	/**
@@ -300,25 +314,25 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									args.push({ type: 's', value: action.options.zak })
 									break
 								case 'postCloseSeconds':
-									args.push({ type: 'i', value: action.postCloseSeconds})
+									args.push({ type: 'i', value: action.postCloseSeconds })
 									break
 								case 'allowChooseBreakout':
-									args.push({ type: 'i', value: action.allowChooseBreakout})
+									args.push({ type: 'i', value: action.allowChooseBreakout })
 									break
 								case 'allowReturnAtWill':
-									args.push({ type: 'i', value: action.allowReturnAtWill})
+									args.push({ type: 'i', value: action.allowReturnAtWill })
 									break
 								case 'autoMoveParticipants':
-									args.push({ type: 'i', value: action.autoMoveParticipants})
+									args.push({ type: 'i', value: action.autoMoveParticipants })
 									break
 								case 'useTimer':
-									args.push({ type: 'i', value: action.useTimer})
+									args.push({ type: 'i', value: action.useTimer })
 									break
 								case 'closeWithTimer':
-									args.push({ type: 'i', value: action.closeWithTimer})
+									args.push({ type: 'i', value: action.closeWithTimer })
 									break
 								case 'breakoutDurrationSeconds':
-									args.push({ type: 'i', value: action.breakoutDurrationSeconds})
+									args.push({ type: 'i', value: action.breakoutDurrationSeconds })
 									break
 
 								default:
@@ -406,8 +420,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				// Different path when more than one users are selected
 				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
-				command.oscPathName =
-					(command.argsNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + actionID
+				command.oscPathName = (command.argsNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + actionID
 			}
 		}
 		return command
@@ -428,7 +441,11 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { actionID: string; userName: string } }) => {
-				let command = createCommand(Actions[action.options.actionID].command, action.options.userName, Actions[action.options.actionID].singleUser)
+				let command = createCommand(
+					Actions[action.options.actionID].command,
+					action.options.userName,
+					Actions[action.options.actionID].singleUser
+				)
 				const sendToCommand: any = {
 					id: Actions[action.options.actionID].shortDescription,
 					options: {
@@ -484,7 +501,11 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { actionID: string } }) => {
-				let command = createCommand(Actions[action.options.actionID].command, '', Actions[action.options.actionID].singleUser)
+				let command = createCommand(
+					Actions[action.options.actionID].command,
+					'',
+					Actions[action.options.actionID].singleUser
+				)
 				const sendToCommand: any = {
 					id: Actions[action.options.actionID].shortDescription,
 					options: {
@@ -507,7 +528,11 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				},
 			],
 			callback: (action: { options: { actionID: string } }) => {
-				let command = createCommand(Actions[action.options.actionID].command, '', Actions[action.options.actionID].singleUser)
+				let command = createCommand(
+					Actions[action.options.actionID].command,
+					'',
+					Actions[action.options.actionID].singleUser
+				)
 				const sendToCommand: any = {
 					id: Actions[action.options.actionID].shortDescription,
 					options: {
@@ -952,6 +977,64 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				instance.checkFeedbacks('indexBased')
 				instance.checkFeedbacks('userNameBased')
 				instance.checkFeedbacks('galleryBased')
+			},
+		},
+		// ISO Actions
+		selectOutput: {
+			label: 'Select output',
+			options: [outputOption],
+			callback: (action: { options: { output: number } }) => {
+				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output)
+				if (index > -1) {
+					instance.ZoomClientDataObj.selectedOutputs.splice(index, 1)
+				} else {
+					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output)
+				}
+				instance.checkFeedbacks('output')
+			},
+		},
+		selectAudioOutput: {
+			label: 'Select audio output',
+			options: [outputOption],
+			callback: (action: { options: { output: number } }) => {
+				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output)
+				if (index > -1) {
+					instance.ZoomClientDataObj.selectedAudioOutputs.splice(index, 1)
+				} else {
+					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output)
+				}
+				instance.checkFeedbacks('audioOutput')
+			},
+		},
+		takeSelectedOutputs: {
+			label: 'Take selected outputs',
+			options: [],
+			callback: () => {
+				let args: { type: string; value: string | number }[] = []
+				for (let index = 0; index < instance.ZoomClientDataObj.selectedOutputs.length; index++) {
+					if (instance.ZoomClientDataObj.selectedCallers[index]) {
+						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[index] })
+						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[index] })
+					}
+				}
+
+				const sendToCommand: any = {
+					id: 'outputISO',
+					options: {
+						command: '/zoom/outputISO',
+						args: args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+				// reset arrays
+				instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomClientDataObj.selectedOutputs.length = 0
+				instance.variables?.updateVariables()
+				instance.checkFeedbacks('groupBased')
+				instance.checkFeedbacks('indexBased')
+				instance.checkFeedbacks('userNameBased')
+				instance.checkFeedbacks('galleryBased')
+				instance.checkFeedbacks('output')
 			},
 		},
 	}

@@ -843,7 +843,7 @@ const ActionsWithArguments: actionType = {
 		command: '/outputISO',
 		type: 'ISO',
 		singleUser: true,
-		args: ['output'],
+		args: ['userName','output'],
 	},
 	audioISO: {
 		description: 'audio ISO',

@@ -15,6 +15,8 @@ export interface ZoomFeedbacks {
 	indexBased: ZoomFeedback<indexBasedCallback>
 	galleryBased: ZoomFeedback<galleryBasedCallback>
 	userNameBased: ZoomFeedback<userNameBasedCallback>
+	output: ZoomFeedback<outputCallback>
+	audioOutput: ZoomFeedback<audioOutputCallback>
 	// Index signature
 	[key: string]: ZoomFeedback<any>
 }
@@ -60,6 +62,20 @@ interface userNameBasedCallback {
 	}>
 }
 
+interface outputCallback {
+	type: 'output'
+	options: Readonly<{
+		output: number
+	}>
+}
+
+interface audioOutputCallback {
+	type: 'audioOutput'
+	options: Readonly<{
+		output: number
+	}>
+}
+
 // Callback type for Presets
 export type FeedbackCallbacks =
 	| selectionMethodCallback
@@ -67,6 +83,8 @@ export type FeedbackCallbacks =
 	| indexBasedCallback
 	| galleryBasedCallback
 	| userNameBasedCallback
+	| outputCallback
+	| audioOutputCallback
 
 // Force options to have a default to prevent sending undefined values
 type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
@@ -392,6 +410,56 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			callback: (feedback) => {
 				if (instance.ZoomClientDataObj.engineState === feedback.options.state) {
 					return false
+				} else {
+					return false
+				}
+			},
+		},
+		output: {
+			type: 'boolean',
+			label: 'Selected output feedback',
+			description: 'Selected output',
+			style: {
+				bgcolor: rgb(255, 0, 0),
+			},
+			options: [
+				{
+					type: 'number',
+					label: 'Output',
+					id: 'output',
+					default: 1,
+					min: 1,
+					max: 99,
+				},
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output)) {
+					return true
+				} else {
+					return false
+				}
+			},
+		},
+		audioOutput: {
+			type: 'boolean',
+			label: 'Selected audio output feedback',
+			description: 'Selected audio output',
+			style: {
+				bgcolor: rgb(255, 0, 0),
+			},
+			options: [
+				{
+					type: 'number',
+					label: 'Output',
+					id: 'output',
+					default: 1,
+					min: 1,
+					max: 99,
+				},
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output)) {
+					return true
 				} else {
 					return false
 				}
