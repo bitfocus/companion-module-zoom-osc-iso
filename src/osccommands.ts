@@ -650,24 +650,35 @@ const Actions: actionType = {
 	startISOEngine: {
 		description: 'Start ISO Engine',
 		shortDescription: 'startISOEngine',
-		command: '/zoom/startISOEngine',
+		command: '/startISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
 	stopISOEngine: {
 		description: 'Stop ISO Engine',
 		shortDescription: 'stopISOEngine',
-		command: '/zoom/stopISOEngine',
+		command: '/stopISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
 	pauseISOEngine: {
 		description: 'Pause ISO Engine',
 		shortDescription: 'pauseISOEngine',
-		command: '/zoom/pauseISOEngine',
+		command: '/pauseISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
+	addOutput: {
+		description: 'addOutput',
+		shortDescription: 'addOutput',
+		command: '/addOutput',
+		singleUser: null,
+		type: 'ISO',
+	},
+
+}
+
+const ActionsWithArguments: actionType = {
 	ConfigureBreakoutRooms: {
 		description: 'Configure BreakoutRooms',
 		shortDescription: 'configureBreakoutRooms',
@@ -676,9 +687,6 @@ const Actions: actionType = {
 		type: 'Special',
 		args: ['postCloseSeconds','allowChooseBreakout','allowReturnAtWill','autoMoveParticipants','useTimer','closeWithTimer','breakoutDurrationSeconds'],
 	},
-}
-
-const ActionsWithArguments: actionType = {
 	Rename: {
 		description: 'Rename',
 		shortDescription: 'Rename',
@@ -695,9 +703,71 @@ const ActionsWithArguments: actionType = {
 		args: ['count'],
 		type: 'ISO',
 	},
-	// /enableOutput {int index  | string output_name}
-	// /disableOutput {int index  | string output_name}
-
+	enableOutput: {
+		description: 'enableOutput',
+		shortDescription: 'enableOutput',
+		command: '/enableOutput',
+		singleUser: null,
+		args: ['output'],
+		type: 'ISO',
+	},
+	enableOdisableOutpututput: {
+		description: 'disableOutput',
+		shortDescription: 'disableOutput',
+		command: '/disableOutput',
+		singleUser: null,
+		args: ['output'],
+		type: 'ISO',
+	},
+	loadISOConfig: {
+		description: 'loadISOConfig',
+		shortDescription: 'loadISOConfig',
+		command: '/loadISOConfig',
+		singleUser: null,
+		args: ['path'],
+		type: 'ISO',
+	},
+	saveISOConfig: {
+		description: 'saveISOConfig',
+		shortDescription: 'saveISOConfig',
+		command: '/saveISOConfig',
+		singleUser: null,
+		args: ['path'],
+		type: 'ISO',
+	},
+	mergeISOConfig: {
+		description: 'mergeISOConfig',
+		shortDescription: 'mergeISOConfig',
+		command: '/mergeISOConfig',
+		singleUser: null,
+		args: ['path'],
+		type: 'ISO',
+	},
+	setOutputMode: {
+		description: 'setOutputMode',
+		shortDescription: 'setOutputMode',
+		command: '/setOutputMode',
+		singleUser: null,
+		args: ['output'],
+		type: 'ISO',
+	},
+	setOutputType: {
+		description: 'setOutputType',
+		shortDescription: 'setOutputType',
+		command: '/setOutputType',
+		singleUser: null,
+		args: ['output'],
+		type: 'ISO',
+	},
+	setAudioMode: {
+		description: 'setAudioMode',
+		shortDescription: 'setAudioMode',
+		command: '/setAudioMode',
+		singleUser: null,
+		args: ['channel'],
+		type: 'ISO',
+	},
+	
 	// /getAudioLevel*
 	// /zoomosc/audioLevels
 
@@ -710,18 +780,7 @@ const ActionsWithArguments: actionType = {
 	// /zoomosc/videoLoss {int output_num, string output_name, string selection}
 	// /zoomosc/videoResume {int output_num, string output_name, string selection}
 
-	// /loadISOConfig {string absolute_path_to_ziso_config_file}
-	// /saveISOConfig {string absolute_path_to_save_ziso_config_file}
-	// /mergeISOConfig {string absolute_path_to_ziso_config_file}
-
-	// /setOutputMode {int output_index | string output_name, string exact_name_of_output_mode}
-	// /setAudioMode {int channel_index  | string output_name, string exact_name_of_output_mode}
-
-	// /setOutputType {int output_index  | string output_name, string exact_name_of_output_type}
-
-	// /setAudioGainReduction {int channel, str reduction_amount}
-
-	// /addOutput
+	
 	setAudioGainReduction: {
 		description: 'set Audio Gain Reduction',
 		shortDescription: 'setAudioGainReduction',
