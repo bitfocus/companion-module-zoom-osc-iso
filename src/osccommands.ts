@@ -675,9 +675,15 @@ const Actions: actionType = {
 		singleUser: null,
 		type: 'ISO',
 	},
-
+	StartCameraShare: {
+		description: 'Start CameraShare',
+		shortDescription: 'StartCameraShare',
+		command: '/me/startCameraShare',
+		singleUser: null,
+		type: 'Global',
+	},
 }
-
+/*******************************************************************************************************************************/
 const ActionsWithArguments: actionType = {
 	ConfigureBreakoutRooms: {
 		description: 'Configure BreakoutRooms',
@@ -930,7 +936,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartShareWithWindow',
 		command: '/me/startWindowShare',
 		args: ['id'],
-		singleUser: true,
+		singleUser: null,
 		type: 'Global',
 	},
 	StartAudioShare: {
@@ -938,15 +944,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartAudioShare',
 		command: '/me/startAudioShare',
 		args: ['id'],
-		singleUser: true,
-		type: 'Global',
-	},
-	StartCameraShare: {
-		description: 'Start CameraShare',
-		shortDescription: 'StartCameraShare',
-		command: '/me/startCameraShare',
-		args: ['id'],
-		singleUser: true,
+		singleUser: null,
 		type: 'Global',
 	},
 	StartScreenShare: {
@@ -954,7 +952,7 @@ const ActionsWithArguments: actionType = {
 		shortDescription: 'StartScreenShare',
 		command: '/me/startScreenShare',
 		args: ['id'],
-		singleUser: true,
+		singleUser: null,
 		type: 'Global',
 	},
 	SendAChatViaDM: {
