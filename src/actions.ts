@@ -385,7 +385,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		}
 		// If/When no user is involved set path and skip the rest
 		if (singleUser === null) {
-			command.oscPath = `/zoom/${actionID}`
+			command.oscPath = `/zoom${actionID}`
 		} else {
 			let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 			// Check if override has been filled
