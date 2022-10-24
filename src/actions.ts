@@ -145,29 +145,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	for (const key in actionsObj) {
 		if (Object.prototype.hasOwnProperty.call(actionsObj, key)) {
 			const element = actionsObj[key]
-			switch (element.type) {
-				case 'User':
-					CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
-					break
-				case 'Global':
-					CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-					break
-				case 'Special':
-					CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-					break
-				case 'ISO':
-					CHOICES_ISO_ACTIONS.push({ label: element.description, id: element.shortDescription })
-					break
-				default:
-					instance.showLog('console', 'wrong type ' + element.type)
-					break
-			}
-		}
-	}
-
-	for (const key in actionsWithArgumentsObj) {
-		if (Object.prototype.hasOwnProperty.call(actionsWithArgumentsObj, key)) {
-			const element = actionsWithArgumentsObj[key]
 			element.label = element.description
 			element.options = []
 			// The array should only contain commands with arguments
@@ -360,7 +337,23 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					}
 				})
 			} else {
-				instance.showLog('console', `element has no arguments: ${JSON.stringify(element)}`)
+				switch (element.type) {
+					case 'User':
+						CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						break
+					case 'Global':
+						CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						break
+					case 'Special':
+						CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						break
+					case 'ISO':
+						CHOICES_ISO_ACTIONS.push({ label: element.description, id: element.shortDescription })
+						break
+					default:
+						instance.showLog('console', 'wrong type ' + element.type)
+						break
+				}
 			}
 		}
 	}
