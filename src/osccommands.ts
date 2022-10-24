@@ -45,7 +45,7 @@ const Actions: actionType = {
 		description: 'Clear PinsScreen2',
 		shortDescription: 'ClearPinsScreen2',
 		command: '/me/clearPin2',
-		singleUser: true,
+		singleUser: null,
 		type: 'Global',
 	},
 	TogglePinScreen2: {
@@ -55,7 +55,13 @@ const Actions: actionType = {
 		singleUser: true,
 		type: 'User',
 	},
-	Spotlight: { description: 'Spotlight', shortDescription: 'Spotlight', command: '/spot', singleUser: true, type: 'User' },
+	Spotlight: {
+		description: 'Spotlight',
+		shortDescription: 'Spotlight',
+		command: '/spot',
+		singleUser: true,
+		type: 'User',
+	},
 	AddSpotlight: {
 		description: 'Add Spotlight',
 		shortDescription: 'AddSpotlight',
@@ -128,7 +134,13 @@ const Actions: actionType = {
 		singleUser: false,
 		type: 'User',
 	},
-	MakeHost: { description: 'Make Host', shortDescription: 'MakeHost', command: '/makeHost', singleUser: false, type: 'User' },
+	MakeHost: {
+		description: 'Make Host',
+		shortDescription: 'MakeHost',
+		command: '/makeHost',
+		singleUser: false,
+		type: 'User',
+	},
 	MakeCoHost: {
 		description: 'Make CoHost',
 		shortDescription: 'MakeCoHost',
@@ -449,6 +461,7 @@ const Actions: actionType = {
 		description: 'Set Gallery View',
 		shortDescription: 'SetGalleryView',
 		command: '/me/setGalleryView',
+		singleUser: null,
 		type: 'Global',
 	},
 	MuteAll: {
@@ -682,16 +695,21 @@ const Actions: actionType = {
 		singleUser: null,
 		type: 'Global',
 	},
-}
-/*******************************************************************************************************************************/
-const ActionsWithArguments: actionType = {
 	ConfigureBreakoutRooms: {
 		description: 'Configure BreakoutRooms',
 		shortDescription: 'configureBreakoutRooms',
 		command: '/configureBreakouts',
 		singleUser: null,
 		type: 'Special',
-		args: ['postCloseSeconds','allowChooseBreakout','allowReturnAtWill','autoMoveParticipants','useTimer','closeWithTimer','breakoutDurrationSeconds'],
+		args: [
+			'postCloseSeconds',
+			'allowChooseBreakout',
+			'allowReturnAtWill',
+			'autoMoveParticipants',
+			'useTimer',
+			'closeWithTimer',
+			'breakoutDurrationSeconds',
+		],
 	},
 	Rename: {
 		description: 'Rename',
@@ -699,7 +717,7 @@ const ActionsWithArguments: actionType = {
 		command: '/rename',
 		type: 'User',
 		singleUser: true,
-		args: ['userName','name'],
+		args: ['userName', 'name'],
 	},
 	setOutputCount: {
 		description: 'set Output Count',
@@ -773,7 +791,7 @@ const ActionsWithArguments: actionType = {
 		args: ['channel'],
 		type: 'ISO',
 	},
-	
+
 	// /getAudioLevel*
 	// /zoomosc/audioLevels
 
@@ -786,7 +804,6 @@ const ActionsWithArguments: actionType = {
 	// /zoomosc/videoLoss {int output_num, string output_name, string selection}
 	// /zoomosc/videoResume {int output_num, string output_name, string selection}
 
-	
 	setAudioGainReduction: {
 		description: 'set Audio Gain Reduction',
 		shortDescription: 'setAudioGainReduction',
@@ -849,7 +866,7 @@ const ActionsWithArguments: actionType = {
 		command: '/outputISO',
 		type: 'ISO',
 		singleUser: true,
-		args: ['userName','output'],
+		args: ['userName', 'output'],
 	},
 	audioISO: {
 		description: 'audio ISO',
@@ -863,7 +880,7 @@ const ActionsWithArguments: actionType = {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
 		command: '/setWindowPosition',
-		args: ['intX','intY'],
+		args: ['intX', 'intY'],
 		singleUser: true,
 		type: 'User',
 	},
@@ -871,7 +888,7 @@ const ActionsWithArguments: actionType = {
 		description: 'Set Window Size',
 		shortDescription: 'SetWindowSize',
 		command: '/setWindowSize',
-		args: ['intX','intY'],
+		args: ['intX', 'intY'],
 		singleUser: true,
 		type: 'User',
 	},
@@ -1028,4 +1045,4 @@ const ActionsWithArguments: actionType = {
 		type: 'Special',
 	},
 }
-if (module != undefined) module.exports = { Actions, ActionsWithArguments }
+if (module != undefined) module.exports = { Actions }
