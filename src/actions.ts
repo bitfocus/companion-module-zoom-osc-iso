@@ -7,7 +7,7 @@ import {
 import ZoomInstance from './index'
 import { options, arrayRemove, arrayAddRemove } from './utils'
 
-const { Actions, ActionsWithArguments } = require('./osccommands')
+const { Actions } = require('./osccommands')
 
 /**
  * Define what is needed
@@ -136,7 +136,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 
 	// Create all actions
 	let actionsObj = Actions
-	let actionsWithArgumentsObj = ActionsWithArguments
 	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
@@ -160,8 +159,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						case 'output':
 							element.options.push(options.output)
 							break
-						case 'output':
-							element.options.push(options.output)
+						case 'path':
+							element.options.push(options.path)
 							break
 						case 'mode':
 							element.options.push(options.isoEmbeddedAudioMode)
@@ -250,6 +249,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									break
 								case 'output':
 									args.push({ type: 'i', value: action.options.output })
+									break
+								case 'path':
+									args.push({ type: 's', value: action.options.path })
 									break
 								case 'count':
 									args.push({ type: 'i', value: action.options.count })
@@ -483,7 +485,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			},
 		},
 		SpecialActions: {
-			label: 'Special actions',
+			label: 'Special actions: Basics',
 			options: [
 				{
 					type: 'dropdown',
@@ -510,7 +512,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			},
 		},
 		ISOActions: {
-			label: 'ISO actions',
+			label: 'ISO actions: Basics',
 			options: [
 				{
 					type: 'dropdown',
@@ -1034,6 +1036,6 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 
 	return {
 		...extraActions,
-		...actionsWithArgumentsObj,
+		...actionsObj,
 	}
 }

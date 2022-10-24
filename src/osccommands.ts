@@ -865,7 +865,7 @@ const Actions: actionType = {
 		shortDescription: 'outputISO',
 		command: '/outputISO',
 		type: 'ISO',
-		singleUser: true,
+		singleUser: false,
 		args: ['userName', 'output'],
 	},
 	audioISO: {
