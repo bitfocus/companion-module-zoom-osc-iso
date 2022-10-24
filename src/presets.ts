@@ -2,7 +2,7 @@ import { CompanionPreset } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { GlobalActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
-const { Actions, ActionsWithArguments } = require('./osccommands')
+const { Actions } = require('./osccommands')
 const { images } = require('./images')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
@@ -473,162 +473,157 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
 	for (const key of Object.keys(Actions)) {
 		const element = Actions[key]
-		switch (element.type) {
-			case 'User':
-				presets.push({
-					category: 'User Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(192, 192, 255),
-					},
-					actions: [
-						{
-							action: 'UserActions',
-							options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+		if (element.args) {
+			switch (element.type) {
+				case 'User':
+					presets.push({
+						category: 'User Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(192, 192, 255),
 						},
-					],
-					feedbacks: [],
-				})
-				break
-			case 'ISO':
-				presets.push({
-					category: 'ISO Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '14',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(86, 221, 221),
-					},
-					actions: [
-						{
-							action: 'ISOActions',
-							options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+						feedbacks: [],
+					})
+					break
+				case 'ISO':
+					presets.push({
+						category: 'ISO Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '14',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(86, 221, 221),
 						},
-					],
-					feedbacks: [],
-				})
-				break
-			case 'Global':
-				presets.push({
-					category: 'Global Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 64, 64),
-					},
-					actions: [
-						{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
-					],
-					feedbacks: [],
-				})
-				break
-			case 'Special':
-				presets.push({
-					category: 'Special Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 64, 255),
-					},
-					actions: [
-						{ action: 'SpecialActions', options: { actionID: element.shortDescription, command: element.command } },
-					],
-					feedbacks: [],
-				})
-				break
-			default:
-				instance.showLog('console', 'Wrong type at building presets')
-				break
-		}
-	}
-	return presets
-}
-
-export function getPresetsWithArguments(instance: ZoomInstance): ZoomGlobalPreset[] {
-	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(ActionsWithArguments)) {
-		const element = ActionsWithArguments[key]
-		switch (element.type) {
-			case 'User':
-				presets.push({
-					category: 'User Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(192, 192, 255),
-					},
-					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-					feedbacks: [],
-				})
-				break
-			case 'ISO':
-				presets.push({
-					category: 'ISO Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '14',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(86, 221, 221),
-					},
-					actions: [
-						{
-							action: element.shortDescription,
-							options: { user: '', args: '', command: element.command },
+						actions: [
+							{
+								action: element.shortDescription,
+								options: { user: '', args: '', command: element.command },
+							},
+						],
+						feedbacks: [],
+					})
+					break
+				case 'Global':
+					presets.push({
+						category: 'Global Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 64, 64),
 						},
-					],
-					feedbacks: [],
-				})
-				break
-			case 'Global':
-				presets.push({
-					category: 'Global Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 64, 64),
-					},
-					actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
-					feedbacks: [],
-				})
-				break
-			case 'Special':
-				presets.push({
-					category: 'Special Presets',
-					label: element.shortDescription,
-					bank: {
-						style: 'text',
-						text: element.description,
-						size: '18',
-						color: instance.rgb(0, 0, 0),
-						bgcolor: instance.rgb(255, 64, 255),
-					},
-					actions: [{ action: element.shortDescription, options: { command: element.command } }],
-					feedbacks: [],
-				})
-				break
-			default:
-				instance.showLog('console', 'Wrong type at building presets')
-				break
+						actions: [{ action: element.shortDescription, options: { user: '', args: '', command: element.command } }],
+						feedbacks: [],
+					})
+					break
+				case 'Special':
+					presets.push({
+						category: 'Special Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 64, 255),
+						},
+						actions: [{ action: element.shortDescription, options: { command: element.command } }],
+						feedbacks: [],
+					})
+					break
+				default:
+					instance.showLog('console', 'Wrong type at building presets')
+					break
+			}
+		} else {
+			switch (element.type) {
+				case 'User':
+					presets.push({
+						category: 'User Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(192, 192, 255),
+						},
+						actions: [
+							{
+								action: 'UserActions',
+								options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+							},
+						],
+						feedbacks: [],
+					})
+					break
+				case 'ISO':
+					presets.push({
+						category: 'ISO Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '14',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(86, 221, 221),
+						},
+						actions: [
+							{
+								action: 'ISOActions',
+								options: { user: '', args: '', actionID: element.shortDescription, command: element.command },
+							},
+						],
+						feedbacks: [],
+					})
+					break
+				case 'Global':
+					presets.push({
+						category: 'Global Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 64, 64),
+						},
+						actions: [
+							{ action: 'GlobalActions', options: { actionID: element.shortDescription, command: element.command } },
+						],
+						feedbacks: [],
+					})
+					break
+				case 'Special':
+					presets.push({
+						category: 'Special Presets',
+						label: element.shortDescription,
+						bank: {
+							style: 'text',
+							text: element.description,
+							size: '18',
+							color: instance.rgb(0, 0, 0),
+							bgcolor: instance.rgb(255, 64, 255),
+						},
+						actions: [
+							{ action: 'SpecialActions', options: { actionID: element.shortDescription, command: element.command } },
+						],
+						feedbacks: [],
+					})
+					break
+				default:
+					instance.showLog('console', 'Wrong type at building presets')
+					break
+			}
 		}
 	}
 	// extra presets
