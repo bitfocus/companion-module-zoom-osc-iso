@@ -84,14 +84,14 @@ const Actions: actionType = {
 		type: 'User',
 	},
 	TurnVideoOn: {
-		description: 'Turn Video On',
+		description: 'Video On',
 		shortDescription: 'TurnVideoOn',
 		command: '/videoOn',
 		singleUser: false,
 		type: 'User',
 	},
 	TurnVideoOff: {
-		description: 'Turn Video Off',
+		description: 'Video Off',
 		shortDescription: 'TurnVideoOff',
 		command: '/videoOff',
 		singleUser: false,
