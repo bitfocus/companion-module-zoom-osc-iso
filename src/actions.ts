@@ -1007,6 +1007,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			callback: () => {
 				let args: { type: string; value: string | number }[] = []
 				for (let index = 0; index < instance.ZoomClientDataObj.selectedOutputs.length; index++) {
+					// only fill up outputs when there are users
 					if (instance.ZoomClientDataObj.selectedCallers[index]) {
 						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[index] })
 						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[index] })
@@ -1016,7 +1017,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				const sendToCommand: any = {
 					id: 'outputISO',
 					options: {
-						command: '/zoom/outputISO',
+						command: '/zoom/zoomID/outputISO',
 						args: args,
 					},
 				}
