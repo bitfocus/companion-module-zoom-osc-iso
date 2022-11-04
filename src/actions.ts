@@ -7,7 +7,7 @@ import {
 import ZoomInstance from './index'
 import { options, arrayRemove, arrayAddRemove } from './utils'
 
-const { Actions } = require('./osccommands')
+const { Actions, ISOActions } = require('./osccommands')
 
 /**
  * Define what is needed
@@ -135,7 +135,12 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	}
 
 	// Create all actions
-	let actionsObj = Actions
+	let actionsObj
+	if( instance.config.version === 1 ) {
+		actionsObj = {...Actions, ...ISOActions}
+	} else {
+		actionsObj = Actions
+	}
 	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
 	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
@@ -162,6 +167,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						case 'path':
 							element.options.push(options.path)
 							break
+						case 'customArgs':
+							element.options.push(options.customArgs)
+							break
 						case 'mode':
 							element.options.push(options.isoEmbeddedAudioMode)
 							break
@@ -174,8 +182,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 						case 'exact_name_of_selection':
 							element.options.push(options.reductionAmount)
 							break
-						case 'loss_mode_name':
-							element.options.push(options.lossModeName)
+						case 'videoLossMode':
+							element.options.push(options.videoLossMode)
 							break
 						case 'id':
 							element.options.push(options.id)
@@ -241,8 +249,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								case 'name':
 									args.push({ type: 's', value: action.options.name })
 									break
-								case 'lossModeName':
-									args.push({ type: 's', value: action.options.lossModeName })
+								case 'videoLossMode':
+									args.push({ type: 's', value: action.options.videoLossMode })
 									break
 								case 'userName':
 									// Handled by createUserCommand
@@ -252,6 +260,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									break
 								case 'path':
 									args.push({ type: 's', value: action.options.path })
+									break
+								case 'customArgs':
+									args.push(JSON.parse(action.options.customArgs))
 									break
 								case 'count':
 									args.push({ type: 'i', value: action.options.count })
@@ -319,14 +330,26 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									break
 							}
 						})
-						let command = createCommand(
-							element.command,
-							action.options.userName ? action.options.userName : undefined,
-							element.singleUser
-						)
-						args.forEach((element) => {
-							command.args.push(element)
-						})
+						let command: {
+							args: any
+							oscPath: any
+							argsNames?: { type: string; value: string | number }[]
+							oscPathName?: string
+						}
+						if (element.command === '/customCommand') {
+							command = { oscPath: action.options.path, args: [] }
+						} else if (element.command === '/customCommandWithArguments') {
+							command = { oscPath: element.command, args: action.options.customArgs }
+						} else {
+							command = createCommand(
+								element.command,
+								action.options.userName ? action.options.userName : undefined,
+								element.singleUser
+							)
+							args.forEach((element) => {
+								command.args.push(element)
+							})
+						}
 
 						const sendToCommand: any = {
 							id: element.shortDescription,

@@ -2,7 +2,7 @@ import { CompanionPreset } from '../../../instance_skel_types'
 import ZoomInstance from './index'
 import { GlobalActionCallbacks } from './actions'
 import { FeedbackCallbacks } from './feedback'
-const { Actions } = require('./osccommands')
+const { Actions, ISOActions } = require('./osccommands')
 const { images } = require('./images')
 
 export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
@@ -471,8 +471,14 @@ export function getSelectUsersPresets(instance: ZoomInstance): CompanionPreset[]
 }
 export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 	let presets: ZoomGlobalPreset[] = []
-	for (const key of Object.keys(Actions)) {
-		const element = Actions[key]
+	let actionsObj
+	if( instance.config.version === 1 ) {
+		actionsObj = {...Actions, ...ISOActions}
+	} else {
+		actionsObj = Actions
+	}
+	for (const key of Object.keys(actionsObj)) {
+		const element = actionsObj[key]
 		if (element.args) {
 			switch (element.type) {
 				case 'User':
@@ -532,7 +538,7 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 						bank: {
 							style: 'text',
 							text: element.description,
-							size: '18',
+							size: '14',
 							color: instance.rgb(0, 0, 0),
 							bgcolor: instance.rgb(255, 64, 255),
 						},
@@ -610,7 +616,7 @@ export function getPresets(instance: ZoomInstance): ZoomGlobalPreset[] {
 						bank: {
 							style: 'text',
 							text: element.description,
-							size: '18',
+							size: '14',
 							color: instance.rgb(0, 0, 0),
 							bgcolor: instance.rgb(255, 64, 255),
 						},
