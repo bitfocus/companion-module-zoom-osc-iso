@@ -27,16 +27,16 @@ enum EmbeddedAudioMode {
 
 export interface Options {
 	userSelectedInfo: SomeCompanionConfigField
-	
+
 	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	lossModeName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
 	path: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	
+	customArgs: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
@@ -48,7 +48,7 @@ export interface Options {
 	id: EnforceDefault<CompanionInputFieldNumber, number>
 	postCloseSeconds: EnforceDefault<CompanionInputFieldNumber, number>
 	breakoutDurrationSeconds: EnforceDefault<CompanionInputFieldNumber, number>
-	
+
 	allowChooseBreakout: EnforceDefault<CompanionInputFieldDropdown, number>
 	allowReturnAtWill: EnforceDefault<CompanionInputFieldDropdown, number>
 	autoMoveParticipants: EnforceDefault<CompanionInputFieldDropdown, number>
@@ -59,6 +59,7 @@ export interface Options {
 	isoEmbeddedAudioMode: EnforceDefault<CompanionInputFieldDropdown, string>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
+	videoLossMode: EnforceDefault<CompanionInputFieldDropdown, string>
 
 	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
 	foregroundColorBlack: EnforceDefault<CompanionInputFieldColor, number>
@@ -100,12 +101,6 @@ export const options: Options = {
 		id: 'name',
 		default: '',
 	},
-	lossModeName: {
-		type: 'textwithvariables',
-		label: 'Loss mode name',
-		id: 'lossModeName',
-		default: '',
-	},
 	channel: {
 		type: 'number',
 		label: 'number',
@@ -139,6 +134,25 @@ export const options: Options = {
 		label: 'absolute path',
 		id: 'path',
 		default: '',
+	},
+	customArgs: {
+		type: 'textwithvariables',
+		label: 'Arguments JSON style',
+		id: 'customArgs',
+		default: '{type: "i", value: 0}',
+	},
+	videoLossMode: {
+		type: 'dropdown',
+		label: 'Video Loss Mode',
+		id: 'mode',
+		choices: [
+			{ id: 'Black', label: 'Black' },
+			{ id: 'Freeze', label: 'Freeze' },
+			{ id: 'Transparent', label: 'Transparent' },
+			{ id: 'Image', label: 'Image' },
+			{ id: 'Testcard', label: 'Testcard' },
+		],
+		default: 'Black',
 	},
 	intX: {
 		type: 'number',
