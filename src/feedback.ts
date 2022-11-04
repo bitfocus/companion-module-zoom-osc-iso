@@ -409,7 +409,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			],
 			callback: (feedback) => {
 				if (instance.ZoomClientDataObj.engineState === feedback.options.state) {
-					return false
+					return true
 				} else {
 					return false
 				}
