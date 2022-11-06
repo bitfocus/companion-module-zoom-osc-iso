@@ -267,8 +267,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 								case 'count':
 									args.push({ type: 'i', value: action.options.count })
 									break
-								case 'mode':
-									args.push({ type: 's', value: action.options.mode })
+								case 'embeddedAudioMode':
+									args.push({ type: 'i', value: action.options.embeddedAudioMode })
 									break
 								case 'channel':
 									args.push({ type: 'i', value: action.options.channel })
@@ -547,12 +547,13 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			],
 			callback: (action: { options: { actionID: string } }) => {
 				let command = createCommand(
-					Actions[action.options.actionID].command,
+					ISOActions[action.options.actionID].command,
 					'',
-					Actions[action.options.actionID].singleUser
+					ISOActions[action.options.actionID].singleUser
 				)
+				
 				const sendToCommand: any = {
-					id: Actions[action.options.actionID].shortDescription,
+					id: ISOActions[action.options.actionID].shortDescription,
 					options: {
 						command: command.oscPath,
 						args: [],
