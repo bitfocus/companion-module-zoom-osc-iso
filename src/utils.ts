@@ -20,9 +20,9 @@ enum SubscribeMode {
 }
 
 enum EmbeddedAudioMode {
-	Mix = 'mix',
-	Off = 'off',
-	ISO = 'iso',
+	Mix = 0,
+	Off = 0,
+	ISO = 2,
 }
 
 export interface Options {
@@ -56,7 +56,7 @@ export interface Options {
 	closeWithTimer: EnforceDefault<CompanionInputFieldDropdown, number>
 	mute: EnforceDefault<CompanionInputFieldDropdown, number>
 	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
-	isoEmbeddedAudioMode: EnforceDefault<CompanionInputFieldDropdown, string>
+	isoEmbeddedAudioMode: EnforceDefault<CompanionInputFieldDropdown, number>
 	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
 	video: EnforceDefault<CompanionInputFieldDropdown, number>
 	videoLossMode: EnforceDefault<CompanionInputFieldDropdown, string>
@@ -144,7 +144,7 @@ export const options: Options = {
 	videoLossMode: {
 		type: 'dropdown',
 		label: 'Video Loss Mode',
-		id: 'mode',
+		id: 'videoLossMode',
 		choices: [
 			{ id: 'Black', label: 'Black' },
 			{ id: 'Freeze', label: 'Freeze' },
@@ -210,7 +210,7 @@ export const options: Options = {
 	isoEmbeddedAudioMode: {
 		type: 'dropdown',
 		label: 'Output Embedded Audio mode',
-		id: 'mode',
+		id: 'embeddedAudioMode',
 		choices: [
 			{ id: EmbeddedAudioMode.ISO, label: 'ISO' },
 			{ id: EmbeddedAudioMode.Mix, label: 'Mix' },
