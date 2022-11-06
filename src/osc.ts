@@ -339,9 +339,9 @@ export class OSC {
 					// {int number of users in call}
 					// {int isPro (1=true, 0-false)}
 					let versionInfo = data.args[1].value as string
-					if(versionInfo !== this.instance.ZoomClientDataObj.zoomOSCVersion) {
+					if (versionInfo !== this.instance.ZoomClientDataObj.zoomOSCVersion) {
 						// Only do this when version actually has changed
-						switch (versionInfo.substring(0,4)) {
+						switch (versionInfo.substring(0, 4)) {
 							case 'ZISO':
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.zoomISOPuller = setInterval(() => {
@@ -350,12 +350,15 @@ export class OSC {
 								break
 							case 'ZOSC':
 								this.instance.config.version = ZoomVersion.ZoomOSC
-								if(this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+								if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
 								break
 							default:
 								// Default to ZoomOSC no pulling of data
 								this.instance.config.version = ZoomVersion.ZoomOSC
-								this.instance.showLog('console', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
+								this.instance.showLog(
+									'console',
+									`Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`
+								)
 								break
 						}
 						this.instance.saveConfig()
@@ -422,13 +425,27 @@ export class OSC {
 					this.instance.checkFeedbacks('engineState')
 					break
 				case 'audioLevels':
-					this.instance.showLog('console', 'audioLevels'+data.address+JSON.stringify(data.args))
+					this.instance.showLog('console', 'audioLevels' + data.address + JSON.stringify(data.args))
 					break
 				case 'outputRouting':
-					this.instance.showLog('console', 'outputRouting'+data.address+JSON.stringify(data.args))
+					this.instance.showLog('console', 'outputRouting' + data.address + JSON.stringify(data.args))
 					break
 				case 'audioRouting':
-					this.instance.showLog('console', 'audioRouting'+data.address+JSON.stringify(data.args))
+					this.instance.showLog('console', 'audioRouting' + data.address + JSON.stringify(data.args))
+					break
+				case 'outputRouting':
+					let outputNumber = parseInt(data.args[1].value)
+					this.instance.ZoomOutputData[outputNumber] = {
+						numberOfOutputs: data.args[0].value,
+						outputNumber: data.args[1].value,
+						enabled: data.args[2].value,
+						outputName: data.args[3].value,
+						mode: data.args[4].value,
+						resolution: data.args[5].value,
+						embeddedAudioInfo: data.args[6].value,
+						status: data.args[7].value,
+					}
+					this.instance.variables?.updateVariables()
 					break
 
 				default:
@@ -455,7 +472,7 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = () => {
-		this.sendCommand('/zoom/getEngineState',[])
+		// this.sendCommand('/zoom/getEngineState',[])
 		// this.sendCommand('/zoom/getAudioLevel',[])
 		// this.sendCommand('/zoom/getOutputRouting',[])
 		// this.sendCommand('/zoom/getAudioRouting',[])
