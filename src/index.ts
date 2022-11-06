@@ -58,7 +58,7 @@ class ZoomInstance extends instance_skel<Config> {
 		galleryCount: 0,
 		galleryOrder: [],
 		numberOfGroups: 5,
-		engineState: -1
+		engineState: -1,
 	}
 	// Array with all callers
 	public ZoomUserData: {
@@ -72,6 +72,20 @@ class ZoomInstance extends instance_skel<Config> {
 			handRaised?: boolean
 			userRole?: number
 			users: number[]
+		}
+	} = {}
+
+	// Array with all output information
+	public ZoomOutputData: {
+		[key: number]: {
+			numberOfOutputs: number
+			outputNumber: number
+			enabled: boolean
+			outputName: string
+			mode: string
+			resolution: string
+			embeddedAudioInfo: string
+			status: string
 		}
 	} = {}
 
@@ -213,10 +227,7 @@ class ZoomInstance extends instance_skel<Config> {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActions
 		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = [
-			...getSelectUsersPresets(this),
-			...getPresets(this),
-		] as CompanionPreset[]
+		const presets = [...getSelectUsersPresets(this), ...getPresets(this)] as CompanionPreset[]
 
 		this.setActions(actions)
 		this.setFeedbackDefinitions(feedbacks)
