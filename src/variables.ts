@@ -70,6 +70,7 @@ export class Variables {
 		// Groups
 		let groupPositionVariables = []
 		let userVariables = []
+		let outputVariables = []
 		for (let index = 0; index < this.instance.ZoomGroupData.length; index++) {
 			for (let position = 1; position < 50; position++) {
 				groupPositionVariables.push({
@@ -94,6 +95,28 @@ export class Variables {
 					userVariables.push({ label: `name`, name: user.zoomId.toString() })
 			}
 		}
+		for (const key in this.instance.ZoomOutputData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomOutputData, key)) {
+				const output = this.instance.ZoomOutputData[key]
+				
+				outputVariables.push({
+					label: `Output ${output.outputNumber} name`,
+					name: `Output${output.outputNumber}name`,
+				})
+				outputVariables.push({
+					label: `Output ${output.outputNumber} resolution`,
+					name: `Output${output.outputNumber}resolution`,
+				})
+				outputVariables.push({
+					label: `Output ${output.outputNumber} mode`,
+					name: `Output${output.outputNumber}mode`,
+				})
+				outputVariables.push({
+					label: `Output ${output.outputNumber} status`,
+					name: `Output${output.outputNumber}status`,
+				})
+			}
+		}
 		let galleryVariables = []
 		for (let index = 1; index < 50; index++) {
 			galleryVariables.push({
@@ -110,12 +133,14 @@ export class Variables {
 		}
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
+		const outputVariablesDef: Set<InstanceVariableDefinition> = new Set(outputVariables)
 		const groupPositionVariablesDef: Set<InstanceVariableDefinition> = new Set(groupPositionVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([{ label: 'gallery count', name: 'galleryCount' }])
 
 		let filteredVariables = [
 			...globalSettings,
 			...userVariablesDef,
+			...outputVariablesDef,
 			...gallery,
 			...galleryVariablesDef,
 			...selectUsersVariables,
@@ -130,6 +155,15 @@ export class Variables {
 	 */
 	public readonly updateVariables = (): void => {
 		const newVariables: InstanceVariableValue = {}
+		for (const key in this.instance.ZoomOutputData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomOutputData, key)) {
+				const output = this.instance.ZoomOutputData[key]
+				newVariables[`Output${output.outputNumber}name`] = output.outputName
+				newVariables[`Output${output.outputNumber}resolution`] = output.resolution
+				newVariables[`Output${output.outputNumber}mode`] = output.mode
+				newVariables[`Output${output.outputNumber}status`] = output.status
+			}
+		}
 		if (this.instance.ZoomClientDataObj.selectedCallers.length === 0) {
 			newVariables['selectedCallers'] = 'nothing selected'
 			newVariables['selectedNumberOfCallers'] = '0'

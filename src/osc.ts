@@ -427,9 +427,6 @@ export class OSC {
 				case 'audioLevels':
 					this.instance.showLog('console', 'audioLevels' + data.address + JSON.stringify(data.args))
 					break
-				case 'outputRouting':
-					this.instance.showLog('console', 'outputRouting' + data.address + JSON.stringify(data.args))
-					break
 				case 'audioRouting':
 					this.instance.showLog('console', 'audioRouting' + data.address + JSON.stringify(data.args))
 					break
@@ -441,10 +438,12 @@ export class OSC {
 						enabled: data.args[2].value,
 						outputName: data.args[3].value,
 						mode: data.args[4].value,
-						resolution: data.args[5].value,
-						embeddedAudioInfo: data.args[6].value,
-						status: data.args[7].value,
+						selection: data.args[5].value,
+						resolution: data.args[6].value,
+						embeddedAudioInfo: data.args[7].value,
+						status: data.args[8].value,
 					}
+					this.instance.variables?.updateDefinitions()
 					this.instance.variables?.updateVariables()
 					break
 

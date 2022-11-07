@@ -83,6 +83,7 @@ class ZoomInstance extends instance_skel<Config> {
 			enabled: boolean
 			outputName: string
 			mode: string
+			selection: string
 			resolution: string
 			embeddedAudioInfo: string
 			status: string
