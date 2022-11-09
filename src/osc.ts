@@ -426,6 +426,9 @@ export class OSC {
 					break
 				case 'audioLevels':
 					this.instance.showLog('console', 'audioLevels' + data.address + JSON.stringify(data.args))
+					let channel = parseInt(data.args[0].value)
+					this.instance.ZoomAudioLevelData[channel] = { level:parseInt(data.args[1].value) }
+					this.instance.updateVariables()
 					break
 				case 'audioRouting':
 					this.instance.showLog('console', 'audioRouting' + data.address + JSON.stringify(data.args))

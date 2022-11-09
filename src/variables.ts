@@ -71,6 +71,7 @@ export class Variables {
 		let groupPositionVariables = []
 		let userVariables = []
 		let outputVariables = []
+		let audioLevelVariables = []
 		for (let index = 0; index < this.instance.ZoomGroupData.length; index++) {
 			for (let position = 1; position < 50; position++) {
 				groupPositionVariables.push({
@@ -98,7 +99,6 @@ export class Variables {
 		for (const key in this.instance.ZoomOutputData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomOutputData, key)) {
 				const output = this.instance.ZoomOutputData[key]
-				
 				outputVariables.push({
 					label: `Output ${output.outputNumber} name`,
 					name: `Output${output.outputNumber}name`,
@@ -114,6 +114,17 @@ export class Variables {
 				outputVariables.push({
 					label: `Output ${output.outputNumber} status`,
 					name: `Output${output.outputNumber}status`,
+				})
+			}
+		}
+		console.log('this.instance.ZoomAudioLevelData',this.instance.ZoomAudioLevelData);
+		
+		for (const key in this.instance.ZoomAudioLevelData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioLevelData, key)) {
+				// const channel = this.instance.ZoomAudioLevelData[key]
+				audioLevelVariables.push({
+					label: `Channel ${key} audiolevel`,
+					name: `Channel${key}`,
 				})
 			}
 		}
@@ -134,13 +145,15 @@ export class Variables {
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
 		const userVariablesDef: Set<InstanceVariableDefinition> = new Set(userVariables)
 		const outputVariablesDef: Set<InstanceVariableDefinition> = new Set(outputVariables)
+		const audioLevelVariablesDef: Set<InstanceVariableDefinition> = new Set(audioLevelVariables)
 		const groupPositionVariablesDef: Set<InstanceVariableDefinition> = new Set(groupPositionVariables)
 		const gallery: Set<InstanceVariableDefinition> = new Set([{ label: 'gallery count', name: 'galleryCount' }])
 
 		let filteredVariables = [
+			...outputVariablesDef,
+			...audioLevelVariablesDef,
 			...globalSettings,
 			...userVariablesDef,
-			...outputVariablesDef,
 			...gallery,
 			...galleryVariablesDef,
 			...selectUsersVariables,
@@ -162,6 +175,12 @@ export class Variables {
 				newVariables[`Output${output.outputNumber}resolution`] = output.resolution
 				newVariables[`Output${output.outputNumber}mode`] = output.mode
 				newVariables[`Output${output.outputNumber}status`] = output.status
+			}
+		}
+		for (const key in this.instance.ZoomAudioLevelData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioLevelData, key)) {
+				const channel = this.instance.ZoomAudioLevelData[key]
+				newVariables[`Channel${key}`] = channel.level
 			}
 		}
 		if (this.instance.ZoomClientDataObj.selectedCallers.length === 0) {
