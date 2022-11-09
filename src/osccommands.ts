@@ -95,10 +95,10 @@ const ISOActions: actionType = {
 		singleUser: null,
 		type: 'ISO',
 	},
-	pauseISOEngine: {
-		description: 'Pause ISO Engine',
-		shortDescription: 'pauseISOEngine',
-		command: '/pauseISOEngine',
+	standbyISOEngine: {
+		description: 'Standby ISO Engine',
+		shortDescription: 'standbyISOEngine',
+		command: '/standbyISOEngine',
 		singleUser: null,
 		type: 'ISO',
 	},
