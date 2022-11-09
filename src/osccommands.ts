@@ -125,7 +125,7 @@ const ISOActions: actionType = {
 		args: ['output'],
 		type: 'ISO',
 	},
-	enableOdisableOutpututput: {
+	disableOutput: {
 		description: 'disableOutput',
 		shortDescription: 'disableOutput',
 		command: '/disableOutput',
