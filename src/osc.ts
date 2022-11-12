@@ -473,7 +473,7 @@ export class OSC {
 	 * @description Check OSC connection status and format command to send to Zoom
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
-		this.instance.showLog('console', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
+		// this.instance.showLog('console', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		this.udpPort.send(
 			{
 				address: path,
@@ -485,10 +485,10 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = () => {
-		// this.sendCommand('/zoom/getEngineState',[])
-		// this.sendCommand('/zoom/getAudioLevel',[])
-		// this.sendCommand('/zoom/getOutputRouting',[])
-		// this.sendCommand('/zoom/getAudioRouting',[])
+		this.sendCommand('/zoom/getEngineState',[])
+		this.sendCommand('/zoom/getAudioLevel',[])
+		this.sendCommand('/zoom/getOutputRouting',[])
+		this.sendCommand('/zoom/getAudioRouting',[])
 	}
 
 	/**
