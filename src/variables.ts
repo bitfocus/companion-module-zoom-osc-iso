@@ -117,8 +117,21 @@ export class Variables {
 				})
 			}
 		}
-		console.log('this.instance.ZoomAudioLevelData',this.instance.ZoomAudioLevelData);
-		
+
+		for (const key in this.instance.ZoomAudioRoutingData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioRoutingData, key)) {
+				const audioOutput = this.instance.ZoomAudioRoutingData[key]
+				outputVariables.push({
+					label: `Output ${audioOutput.channel} name`,
+					name: `Output${audioOutput.channel}name`,
+				})
+				outputVariables.push({
+					label: `Output ${audioOutput.channel} mode`,
+					name: `Output${audioOutput.channel}mode`,
+				})
+			}
+		}
+
 		for (const key in this.instance.ZoomAudioLevelData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioLevelData, key)) {
 				// const channel = this.instance.ZoomAudioLevelData[key]
@@ -175,6 +188,13 @@ export class Variables {
 				newVariables[`Output${output.outputNumber}resolution`] = output.resolution
 				newVariables[`Output${output.outputNumber}mode`] = output.mode
 				newVariables[`Output${output.outputNumber}status`] = output.status
+			}
+		}
+		for (const key in this.instance.ZoomAudioRoutingData) {
+			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioRoutingData, key)) {
+				const output = this.instance.ZoomAudioRoutingData[key]
+				newVariables[`Output${output.channel}name`] = output.audio_device
+				newVariables[`Output${output.channel}mode`] = output.mode
 			}
 		}
 		for (const key in this.instance.ZoomAudioLevelData) {

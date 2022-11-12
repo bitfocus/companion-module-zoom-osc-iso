@@ -93,7 +93,20 @@ class ZoomInstance extends instance_skel<Config> {
 	// Array with all audiolevel information
 	public ZoomAudioLevelData: {
 		[key: number]: {
+			channel: number
 			level: number
+		}
+	} = {}
+
+	// Array with all audiolevel information
+	public ZoomAudioRoutingData: {
+		[key: number]: {
+			audio_device: string
+			num_channels: number
+			channel: number
+			mode: string
+			gain_reduction: number
+			selection: string
 		}
 	} = {}
 
