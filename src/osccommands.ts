@@ -191,7 +191,7 @@ const ISOActions: actionType = {
 	acceptRecordingConsent: {
 		description: 'Accept Recording Consent',
 		shortDescription: 'acceptRecordingConsent',
-		command: '/zoom/acceptRecordingConsent',
+		command: '/acceptRecordingConsent',
 		singleUser: null,
 		type: 'ISO',
 	},
