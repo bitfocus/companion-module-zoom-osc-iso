@@ -326,7 +326,7 @@ export class OSC {
 					break
 
 				case 'pong':
-					this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+					// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 					// {any pingArg (zero if none sent)}
 					// {str zoomOSCversion}
 					// {int subscribeMode}
@@ -403,7 +403,6 @@ export class OSC {
 					break
 
 				case 'listCleared':
-					this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.selectedCallers.length = 0
 					this.instance.ZoomVariableLink.length = 0
 					for (const key of Object.keys(this.instance.ZoomUserData)) {
