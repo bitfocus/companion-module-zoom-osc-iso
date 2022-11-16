@@ -191,7 +191,7 @@ export class OSC {
 
 					switch (zoomPart3) {
 						case 'list':
-							this.instance.showLog('OSC', 'receiving list data' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving list data' + JSON.stringify(data))
 							// {int targetIndex}, {str userName}, {int galleryIndex}, {int zoomID}
 							// {int targetCount}
 							// {int listCount}
@@ -243,7 +243,6 @@ export class OSC {
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
-
 							break
 						case 'handRaised':
 							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
@@ -251,7 +250,6 @@ export class OSC {
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
-
 							break
 						case 'handLowered':
 							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
@@ -323,7 +321,6 @@ export class OSC {
 					break
 
 				case 'galleryCount':
-					this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
 					this.instance.variables?.updateVariables()
 					break
@@ -339,31 +336,30 @@ export class OSC {
 					// {int number of users in call}
 					// {int isPro (1=true, 0-false)}
 					let versionInfo = data.args[1].value as string
-					if (versionInfo !== this.instance.ZoomClientDataObj.zoomOSCVersion) {
-						// Only do this when version actually has changed
-						switch (versionInfo.substring(0, 4)) {
-							case 'ZISO':
-								this.instance.config.version = ZoomVersion.ZoomISO
-								this.zoomISOPuller = setInterval(() => {
-									this.sendISOPullingCommands()
-								}, 5000)
-								break
-							case 'ZOSC':
-								this.instance.config.version = ZoomVersion.ZoomOSC
-								if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
-								break
-							default:
-								// Default to ZoomOSC no pulling of data
-								this.instance.config.version = ZoomVersion.ZoomOSC
-								this.instance.showLog(
-									'console',
-									`Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`
-								)
-								break
-						}
-						this.instance.saveConfig()
-						this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value as string
+					switch (versionInfo.substring(0, 4)) {
+						case 'ZISO':
+							this.instance.config.version = ZoomVersion.ZoomISO
+							this.zoomISOPuller = setInterval(
+								() => {
+									if (this.instance.config.pulling !== 0) {
+										this.sendISOPullingCommands()
+									}
+								},
+								this.instance.config.pulling === 0 ? 5000 : this.instance.config.pulling
+							)
+							break
+						case 'ZOSC':
+							this.instance.config.version = ZoomVersion.ZoomOSC
+							if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+							break
+						default:
+							// Default to ZoomOSC no pulling of data
+							this.instance.config.version = ZoomVersion.ZoomOSC
+							this.instance.showLog('console', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
+							break
 					}
+					this.instance.saveConfig()
+					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value as string
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
 					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
@@ -425,7 +421,7 @@ export class OSC {
 					this.instance.checkFeedbacks('engineState')
 					break
 				case 'audioLevels':
-					this.instance.showLog('console', 'audioLevels' + data.address + JSON.stringify(data.args))
+					// this.instance.showLog('console', 'audioLevels' + data.address + JSON.stringify(data.args))
 					this.instance.ZoomAudioLevelData[parseInt(data.args[0].value)] = {
 						channel: parseInt(data.args[0].value),
 						level: parseInt(data.args[1].value),
@@ -439,10 +435,10 @@ export class OSC {
 						channel: parseInt(data.args[2].value),
 						mode: data.args[3].value,
 						gain_reduction: parseInt(data.args[4].value),
-						selection: data.args[5].value
+						selection: data.args[5].value,
 					}
 					this.instance.updateVariables()
-					this.instance.showLog('console', JSON.stringify(this.instance.ZoomAudioRoutingData))
+					// this.instance.showLog('console', JSON.stringify(this.instance.ZoomAudioRoutingData))
 					break
 				case 'outputRouting':
 					let outputNumber = parseInt(data.args[1].value)
@@ -485,10 +481,10 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = () => {
-		this.sendCommand('/zoom/getEngineState',[])
-		this.sendCommand('/zoom/getAudioLevel',[])
-		this.sendCommand('/zoom/getOutputRouting',[])
-		this.sendCommand('/zoom/getAudioRouting',[])
+		this.sendCommand('/zoom/getEngineState', [])
+		this.sendCommand('/zoom/getAudioLevels', [])
+		this.sendCommand('/zoom/getOutputRouting', [])
+		this.sendCommand('/zoom/getAudioRouting', [])
 	}
 
 	/**

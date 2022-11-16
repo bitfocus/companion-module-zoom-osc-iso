@@ -8,6 +8,7 @@ export interface Config {
 	version: number
 	selectionMethod: number
 	numberOfGroups: number
+	pulling: number
 }
 enum ZoomVersion {
 	ZoomOSC = 0,
@@ -62,6 +63,15 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 				{ id: ZoomVersion.ZoomOSC, label: 'ZoomOSC' },
 			],
 			default: ZoomVersion.ZoomOSC,
+			width: 6,
+		},
+		{
+			type: 'number',
+			id: 'pulling',
+			label: 'Pull data in ms (only for ZoomISO)',
+			default: 5,
+			min: 1000,
+			max: 60000,
 			width: 6,
 		},
 		{

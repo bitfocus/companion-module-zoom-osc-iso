@@ -174,7 +174,7 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateConfig(config: Config): void {
 		this.showLog('debug', 'changing config!')
-
+		
 		this.config = config
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
@@ -187,6 +187,8 @@ class ZoomInstance extends instance_skel<Config> {
 		this.OSC?.destroy()
 		this.OSC = new OSC(this)
 		this.updateInstance()
+		// Get version and start pulling (if needed)
+		this.OSC.sendCommand('/zoom/ping')
 	}
 
 	/**
@@ -197,6 +199,8 @@ class ZoomInstance extends instance_skel<Config> {
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
 		this.ZoomUserOffline = []
+		this.ZoomAudioLevelData = []
+		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		this.OSC?.destroy()
 	}
@@ -206,7 +210,7 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateVariables(): void {
 		if (this.variables) {
-			this.showLog('console', 'updating variables')
+			// this.showLog('console', 'updating variables')
 
 			this.variables.updateDefinitions()
 			this.variables.updateVariables()
