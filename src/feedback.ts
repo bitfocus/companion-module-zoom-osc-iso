@@ -371,7 +371,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 							instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'camera':
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
-						case 'handraised':
+						case 'handRaised':
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
 						case 'activeSpeaker':
 							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
