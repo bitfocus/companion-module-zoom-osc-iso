@@ -204,7 +204,7 @@ export class OSC {
 							break
 						case 'activeSpeaker':
 							if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
-								this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+								// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
 								this.instance.variables?.updateVariables()
 								this.instance.checkFeedbacks('indexBased')
@@ -214,7 +214,7 @@ export class OSC {
 							}
 							break
 						case 'videoOn':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].videoOn = true
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
@@ -222,7 +222,7 @@ export class OSC {
 
 							break
 						case 'videoOff':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].videoOn = false
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
@@ -230,7 +230,7 @@ export class OSC {
 
 							break
 						case 'mute':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].mute = true
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
@@ -238,21 +238,21 @@ export class OSC {
 
 							break
 						case 'unMute':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].mute = false
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 							break
 						case 'handRaised':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].handRaised = true
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
 							this.instance.checkFeedbacks('groupBased')
 							break
 						case 'handLowered':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].handRaised = false
 							this.instance.checkFeedbacks('indexBased')
 							this.instance.checkFeedbacks('galleryBased')
@@ -260,11 +260,11 @@ export class OSC {
 
 							break
 						case 'online':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'offline':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
 							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
@@ -272,7 +272,7 @@ export class OSC {
 							this.updateLoop = true
 							break
 						case 'userNameChanged':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
 							let findIndex = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
 							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
@@ -281,8 +281,11 @@ export class OSC {
 						case 'chat':
 							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							break
+						case 'audioStatus':
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							break
 						case 'roleChanged':
-							this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
+							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
 							break
 						case 'stoppedSpeaking':
@@ -308,6 +311,7 @@ export class OSC {
 					break
 
 				case 'galleryOrder':
+					// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.galleryOrder.length = 0
 					data.args.forEach((order: { type: string; value: number }) => {
 						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
