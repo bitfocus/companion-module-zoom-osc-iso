@@ -216,7 +216,9 @@ export class Variables {
 						})
 					}
 				} else {
-					selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
+					if (this.instance.ZoomUserData[zoomID]) {
+						selectedCallers.push(this.instance.ZoomUserData[zoomID].userName)
+					}
 				}
 			})
 			newVariables['selectedCallers'] = selectedCallers.toString()
