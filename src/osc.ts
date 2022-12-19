@@ -1,5 +1,6 @@
-import ZoomInstance from '.'
-import { OSCSomeArguments } from '../../../instance_skel_types'
+import { InstanceBaseExt } from './utils'
+
+import { OSCSomeArguments } from '@companion-module/base'
 const osc = require('osc')
 
 interface ZoomOSCResponse {
@@ -34,7 +35,7 @@ export class OSC {
 	private updatePresetsLoop: NodeJS.Timer | undefined
 	private zoomISOPuller: NodeJS.Timer | undefined
 
-	constructor(instance: ZoomInstance) {
+	constructor(instance: InstanceBaseExt<>) {
 		this.instance = instance
 
 		this.instance.updateVariables()
