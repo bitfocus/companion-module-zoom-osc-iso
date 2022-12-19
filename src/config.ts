@@ -1,6 +1,6 @@
-import { SomeCompanionConfigField } from '../../../instance_skel_types'
+import { SomeCompanionConfigField } from '@companion-module/base'
 
-export interface Config {
+export interface ZoomConfig {
 	label: string
 	host: string
 	tx_port: number

@@ -1,34 +1,64 @@
-import instance_skel = require('../../../instance_skel')
 import {
-	CompanionActions,
+	CompanionActionDefinitions,
+	InstanceBase,
+	InstanceStatus,
 	CompanionConfigField,
-	CompanionFeedbacks,
-	CompanionPreset,
-	CompanionSystem,
-} from '../../../instance_skel_types'
-import { Config } from './config'
+	// CompanionFeedbackDefinitions,
+	// CompanionPresetDefinitions,
+	// CompanionSystem,
+	runEntrypoint,
+	SomeCompanionConfigField,
+	CompanionVariableValues,
+} from '@companion-module/base'
+import { ZoomConfig } from './config'
 import { getActions } from './actions'
 import { getConfigFields } from './config'
-import { getFeedbacks } from './feedback'
-import { getPresets, getSelectUsersPresets } from './presets'
+// import { getFeedbacks } from './feedback'
+// import { getPresets, getSelectUsersPresets } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
 
 /**
  * Companion instance class for Zoom
  */
-class ZoomInstance extends instance_skel<Config> {
-	static GetUpgradeScripts() {
-		return [
-			// any existing upgrade scripts go here
-			instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
-				microphoneLive: true,
-				camera: true,
-				handRaised: true,
-				selectedUser: true,
-			}),
-		]
+class ZoomInstance extends InstanceBase<ZoomConfig> {
+	public config: ZoomConfig = {
+		label: '',
+		host: '',
+		tx_port: 0,
+		rx_port: 0,
+		version: 0,
+		selectionMethod: 0,
+		numberOfGroups: 0,
+		pulling: 0
 	}
+
+	public async configUpdated(config: ZoomConfig): Promise<void> {
+		this.config = config
+		const variables: CompanionVariableValues = {}
+		this.setVariableValues(variables)
+
+		this.showLog('debug', 'changing config!')
+
+		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
+			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+			this.ZoomGroupData[index] = {
+				groupName: `Group ${index + 1}`,
+				users: [],
+			}
+		}
+		this.OSC?.destroy()
+		this.OSC = new OSC(this)
+		this.updateInstance()
+		// Get version and start pulling (if needed)
+		this.OSC.sendCommand('/zoom/ping')
+
+	}
+	getConfigFields(): SomeCompanionConfigField[] {
+		throw new Error('Method not implemented.')
+	}
+
 
 	// Global call settings
 	public ZoomClientDataObj: {
@@ -89,7 +119,7 @@ class ZoomInstance extends instance_skel<Config> {
 			status: string
 		}
 	} = {}
-	
+
 	// Array with all audiolevel information
 	public ZoomAudioLevelData: {
 		[key: number]: {
@@ -134,11 +164,11 @@ class ZoomInstance extends instance_skel<Config> {
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
 
-	constructor(system: CompanionSystem, id: string, config: Config) {
-		super(system, id, config)
-		this.system = system
-		this.config = config
-		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
+	constructor(internal: unknown) {
+		super(internal)
+		// this.system = system
+		// this.config = config
+		// this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
 		// Setup groups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
@@ -151,13 +181,15 @@ class ZoomInstance extends instance_skel<Config> {
 	/**
 	 * @description triggered on instance being enabled
 	 */
-	public init(): void {
+	public async init(config: ZoomConfig): Promise<void> {
 		// New Module warning
 		this.log('info', `Welcome, Zoom module is loading`)
-		this.status(this.STATUS_WARNING, 'Connecting')
+		this.updateStatus(InstanceStatus.Connecting)
 		this.variables = new Variables(this)
 		this.variables.updateDefinitions()
 		this.OSC = new OSC(this)
+
+		await this.configUpdated(config)
 	}
 
 	/**
@@ -172,29 +204,28 @@ class ZoomInstance extends instance_skel<Config> {
 	 * @param config new configuration data
 	 * @description triggered every time the config for this instance is saved
 	 */
-	public updateConfig(config: Config): void {
-		this.showLog('debug', 'changing config!')
-		
-		this.config = config
-		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
-			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-			this.ZoomGroupData[index] = {
-				groupName: `Group ${index + 1}`,
-				users: [],
-			}
-		}
-		this.OSC?.destroy()
-		this.OSC = new OSC(this)
-		this.updateInstance()
-		// Get version and start pulling (if needed)
-		this.OSC.sendCommand('/zoom/ping')
-	}
+	// public updateConfig(config: ZoomConfig): void {
+		// this.showLog('debug', 'changing config!')
+
+		// if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
+		// 	this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+		// for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+		// 	this.ZoomGroupData[index] = {
+		// 		groupName: `Group ${index + 1}`,
+		// 		users: [],
+		// 	}
+		// }
+		// this.OSC?.destroy()
+		// this.OSC = new OSC(this)
+		// this.updateInstance()
+		// // Get version and start pulling (if needed)
+		// this.OSC.sendCommand('/zoom/ping')
+	// }
 
 	/**
 	 * @description close connections and stop timers/intervals
 	 */
-	public readonly destroy = (): void => {
+	async destroy() {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
@@ -250,15 +281,15 @@ class ZoomInstance extends instance_skel<Config> {
 	 */
 	public updateInstance(): void {
 		// Cast actions and feedbacks from Zoom types to Companion types
-		const actions = getActions(this) as CompanionActions
-		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = [...getSelectUsersPresets(this), ...getPresets(this)] as CompanionPreset[]
+		const actions = getActions(this) as CompanionActionDefinitions
+		// const feedbacks = getFeedbacks(this) as CompanionFeedbackDefinitions
+		// const presets = [...getSelectUsersPresets(this), ...getPresets(this)] as CompanionPresetDefinitions[]
 
-		this.setActions(actions)
-		this.setFeedbackDefinitions(feedbacks)
-		this.setPresetDefinitions(presets)
+		this.setActionDefinitions(actions)
+		// this.setFeedbackDefinitions(feedbacks)
+		// this.setPresetDefinitions(presets)
 		this.updateVariables()
 	}
 }
 
-export = ZoomInstance
+runEntrypoint(ZoomInstance, [])

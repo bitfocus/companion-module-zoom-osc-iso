@@ -3,8 +3,9 @@ import {
 	CompanionInputFieldColor,
 	CompanionInputFieldDropdown,
 	CompanionInputFieldNumber,
-	CompanionInputFieldTextWithVariablesInput,
-} from '../../../instance_skel_types'
+	CompanionInputFieldTextInput,
+	InstanceBase,
+} from '@companion-module/base'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
@@ -28,14 +29,14 @@ enum EmbeddedAudioMode {
 export interface Options {
 	userSelectedInfo: SomeCompanionConfigField
 
-	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	path: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	customArgs: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	message: EnforceDefault<CompanionInputFieldTextInput, string>
+	password: EnforceDefault<CompanionInputFieldTextInput, string>
+	zak: EnforceDefault<CompanionInputFieldTextInput, string>
+	name: EnforceDefault<CompanionInputFieldTextInput, string>
+	userName: EnforceDefault<CompanionInputFieldTextInput, string>
+	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
+	path: EnforceDefault<CompanionInputFieldTextInput, string>
+	customArgs: EnforceDefault<CompanionInputFieldTextInput, string>
 
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
@@ -83,20 +84,20 @@ export const rgb = (red: number, green: number, blue: number): number => {
 
 export const options: Options = {
 	userSelectedInfo: {
-		type: 'text',
+		type: 'textinput',
 		id: 'info',
 		width: 12,
 		label: 'Make sure you select a user or a group first, via presets',
-		value: '',
+		useVariables: true,
 	},
 	message: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Message',
 		id: 'msg',
 		default: '',
 	},
 	name: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Name',
 		id: 'name',
 		default: '',
@@ -118,25 +119,25 @@ export const options: Options = {
 		max: 256,
 	},
 	userName: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'username (keep blank when you pre-select)',
 		id: 'userName',
 		default: '',
 	},
 	meetingID: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Meeting ID',
 		id: 'meetingID',
 		default: '',
 	},
 	path: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'absolute path',
 		id: 'path',
 		default: '',
 	},
 	customArgs: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Arguments JSON style',
 		id: 'customArgs',
 		default: '{type: "i", value: 0}',
@@ -235,13 +236,13 @@ export const options: Options = {
 		default: 0,
 	},
 	password: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Password(optional)',
 		id: 'password',
 		default: '',
 	},
 	zak: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Zak',
 		id: 'zak',
 		default: '',
@@ -429,4 +430,15 @@ export const formatTime = (time: number, interval: 'ms' | 's', format: TimeForma
 
 	const result = `${format.includes('hh') ? `${hh}:` : ''}${mm}:${ss}${format.includes('ms') ? `.${ms}` : ''}`
 	return result
+}
+
+export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
+	[x: string]: any
+	ZoomVariableLink: any
+	variables: any
+	ZoomClientDataObj: any
+	OSC: any
+	ZoomGroupData: any
+	ZoomUserData: any
+	config: TConfig
 }

@@ -1,11 +1,6 @@
-import {
-	CompanionActionEventInfo,
-	CompanionActionEvent,
-	SomeCompanionInputField,
-	CompanionActions,
-} from '../../../instance_skel_types'
-import ZoomInstance from './index'
-import { options, arrayRemove, arrayAddRemove } from './utils'
+import { CompanionActionEvent, CompanionActionDefinitions, SomeCompanionActionInputField } from '@companion-module/base'
+import { options, arrayRemove, arrayAddRemove, InstanceBaseExt } from './utils'
+import { ZoomConfig} from './config'
 
 const { Actions, ISOActions } = require('./osccommands')
 
@@ -25,7 +20,7 @@ interface GlobalActionCallback {
 export type GlobalActionCallbacks = GlobalActionCallback
 
 // Force options to have a default to prevent sending undefined values
-type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
+type InputFieldWithDefault = Exclude<SomeCompanionActionInputField, 'default'> & { default: string | number | boolean | null }
 
 // Actions specific to Zoom
 export interface ZoomAction<T> {
@@ -34,7 +29,7 @@ export interface ZoomAction<T> {
 	options: InputFieldWithDefault[]
 	callback: (
 		action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>,
-		info: Readonly<CompanionActionEventInfo | null>
+		info: Readonly<CompanionActionEvent | null>
 	) => void
 	subscribe?: (action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>) => void
 	unsubscribe?: (action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>) => void
@@ -45,7 +40,7 @@ export interface ZoomAction<T> {
  * @param instance Give the instance so we can extract data
  * @returns CompanionActions
  */
-export function getActions(instance: ZoomInstance): CompanionActions {
+export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions {
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_GROUPS: { id: string; label: string }[] = []
@@ -61,7 +56,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			}
 		}
 	}
-	instance.ZoomGroupData.forEach((group, index) => {
+	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
 		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
 	})
 	let CHOICES_POSITION = []
@@ -126,7 +121,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	 */
 	const sendActionCommand = (
 		action: Readonly<GlobalActionCallbacks>,
-		_info?: CompanionActionEventInfo | null
+		_info?: CompanionActionEvent | null
 	): void => {
 		// Construct command
 		let oscPath = action.options.command
@@ -136,8 +131,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 
 	// Create all actions
 	let actionsObj
-	if( instance.config.version === 1 ) {
-		actionsObj = {...Actions, ...ISOActions}
+	if (instance.config.version === 1) {
+		actionsObj = { ...Actions, ...ISOActions }
 	} else {
 		actionsObj = Actions
 	}
@@ -551,7 +546,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					'',
 					ISOActions[action.options.actionID].singleUser
 				)
-				
+
 				const sendToCommand: any = {
 					id: ISOActions[action.options.actionID].shortDescription,
 					options: {
@@ -586,7 +581,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				} else {
 					instance.config.selectionMethod = action.options.selectionMethod
 				}
-				instance.saveConfig()
+				// instance.saveConfig()
 				instance.checkFeedbacks('selectionMethod')
 				instance.checkFeedbacks('groupBased')
 			},
@@ -694,7 +689,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			options: [groupOption],
 			callback: (action: { options: { group: number } }) => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.ZoomGroupData[action.options.group].users?.forEach((user) => {
+				instance.ZoomGroupData[action.options.group].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
 				instance.variables?.updateVariables()
@@ -873,8 +868,12 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				if (action.options.groupOption === 'set') {
 					instance.ZoomGroupData[action.options.group].users.length = 0
 				}
-				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
-					if (!instance.ZoomGroupData[action.options.group].users.find((o) => o.zoomID === zoomID)) {
+				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {
+					if (
+						!instance.ZoomGroupData[action.options.group].users.find(
+							(o: { zoomID: string | number }) => o.zoomID === zoomID
+						)
+					) {
 						instance.ZoomGroupData[action.options.group].users.push({
 							zoomID: zoomID,
 							userName: instance.ZoomUserData[zoomID].userName,
@@ -931,7 +930,9 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				}
 				sendActionCommand(sendToCommand)
 				instance.ZoomUserData[action.options.user].userName = action.options.name
-				let index = instance.ZoomVariableLink.findIndex((finduser) => finduser.zoomId === action.options.user)
+				let index = instance.ZoomVariableLink.findIndex(
+					(finduser: { zoomId: number }) => finduser.zoomId === action.options.user
+				)
 				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name
 				instance.variables?.updateVariables()
 			},
