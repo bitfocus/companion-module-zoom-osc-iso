@@ -1,6 +1,7 @@
 import { InstanceBaseExt } from './utils'
 
 import { OSCSomeArguments } from '@companion-module/base'
+import { ZoomConfig } from './config'
 const osc = require('osc')
 
 interface ZoomOSCResponse {
@@ -23,7 +24,7 @@ enum SubscribeMode {
 }
 
 export class OSC {
-	private readonly instance: ZoomInstance
+	private readonly instance: InstanceBaseExt<ZoomConfig>
 	private oscHost: string = ''
 	private oscTXPort: number = 9099
 	private oscRXPort: number = 1234
@@ -35,7 +36,7 @@ export class OSC {
 	private updatePresetsLoop: NodeJS.Timer | undefined
 	private zoomISOPuller: NodeJS.Timer | undefined
 
-	constructor(instance: InstanceBaseExt<>) {
+	constructor(instance: InstanceBaseExt<ZoomConfig>) {
 		this.instance = instance
 
 		this.instance.updateVariables()
@@ -133,7 +134,7 @@ export class OSC {
 		let zoomId = parseInt(data.args[3].value)
 		// Only when a user is not in offline array
 		if (!this.instance.ZoomUserOffline[zoomId]) {
-			let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+			let index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
@@ -268,14 +269,14 @@ export class OSC {
 							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
-							let index = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+							let index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.showLog('debug', 'Removed:' + this.instance.ZoomVariableLink.splice(index, 1))
 							this.updateLoop = true
 							break
 						case 'userNameChanged':
 							// this.instance.showLog('OSC', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
-							let findIndex = this.instance.ZoomVariableLink.findIndex((id) => id.zoomId === zoomId)
+							let findIndex = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
 							this.instance.variables?.updateVariables()
 							break
@@ -363,7 +364,7 @@ export class OSC {
 							this.instance.showLog('console', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
 							break
 					}
-					this.instance.saveConfig()
+					this.instance.saveConfig(this.instance.config)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = data.args[1].value as string
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
