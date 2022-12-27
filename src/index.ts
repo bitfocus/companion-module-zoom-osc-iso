@@ -4,19 +4,28 @@ import {
 	InstanceStatus,
 	CompanionConfigField,
 	// CompanionFeedbackDefinitions,
-	// CompanionPresetDefinitions,
 	// CompanionSystem,
 	runEntrypoint,
 	SomeCompanionConfigField,
 	CompanionVariableValues,
+	// CompanionPresetDefinitions,
 } from '@companion-module/base'
-import { ZoomConfig } from './config'
+import { getConfigFields, ZoomConfig } from './config'
 import { getActions } from './actions'
-import { getConfigFields } from './config'
 // import { getFeedbacks } from './feedback'
 // import { getPresets, getSelectUsersPresets } from './presets'
 import { Variables } from './variables'
 import { OSC } from './osc'
+import {
+	ZoomAudioLevelDataInterface,
+	ZoomAudioRoutingDataInterface,
+	ZoomClientDataObjInterface,
+	ZoomGroupDataInterface,
+	ZoomOutputDataInterface,
+	ZoomUserDataInterface,
+	ZoomUserOfflineInterface,
+	ZoomVariableLinkInterface,
+} from './utils'
 
 /**
  * Companion instance class for Zoom
@@ -30,7 +39,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		version: 0,
 		selectionMethod: 0,
 		numberOfGroups: 0,
-		pulling: 0
+		pulling: 0,
 	}
 
 	public async configUpdated(config: ZoomConfig): Promise<void> {
@@ -53,29 +62,13 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.updateInstance()
 		// Get version and start pulling (if needed)
 		this.OSC.sendCommand('/zoom/ping')
-
 	}
 	getConfigFields(): SomeCompanionConfigField[] {
 		throw new Error('Method not implemented.')
 	}
 
-
 	// Global call settings
-	public ZoomClientDataObj: {
-		last_response: number
-		subscribeMode: number
-		selectedCallers: number[]
-		selectedOutputs: number[]
-		selectedAudioOutputs: number[]
-		activeSpeaker: string
-		isSpeaking: string
-		zoomOSCVersion: string | number
-		callStatus: string | number
-		galleryCount: number
-		galleryOrder: number[]
-		numberOfGroups: number
-		engineState: number
-	} = {
+	public ZoomClientDataObj: ZoomClientDataObjInterface = {
 		last_response: 0,
 		selectedCallers: [],
 		selectedOutputs: [],
@@ -91,75 +84,22 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		engineState: -1,
 	}
 	// Array with all callers
-	public ZoomUserData: {
-		[key: number]: {
-			zoomId: number
-			userName: string
-			targetIndex: number
-			galleryIndex: number
-			mute?: boolean
-			videoOn?: boolean
-			handRaised?: boolean
-			userRole?: number
-			users: number[]
-		}
-	} = {}
+	public ZoomUserData: ZoomUserDataInterface = {}
 
 	// Array with all output information
-	public ZoomOutputData: {
-		[key: number]: {
-			numberOfOutputs: number
-			outputNumber: number
-			enabled: boolean
-			outputName: string
-			mode: string
-			selection: string
-			resolution: string
-			embeddedAudioInfo: string
-			status: string
-		}
-	} = {}
+	public ZoomOutputData: ZoomOutputDataInterface = {}
 
 	// Array with all audiolevel information
-	public ZoomAudioLevelData: {
-		[key: number]: {
-			channel: number
-			level: number
-		}
-	} = {}
+	public ZoomAudioLevelData: ZoomAudioLevelDataInterface = {}
 
 	// Array with all audiolevel information
-	public ZoomAudioRoutingData: {
-		[key: number]: {
-			audio_device: string
-			num_channels: number
-			channel: number
-			mode: string
-			gain_reduction: number
-			selection: string
-		}
-	} = {}
+	public ZoomAudioRoutingData: ZoomAudioRoutingDataInterface = {}
 
-	public ZoomGroupData: {
-		groupName: string
-		users: { zoomID: number; userName: string }[]
-	}[] = []
+	public ZoomGroupData: ZoomGroupDataInterface[] = []
 
-	public ZoomUserOffline: {
-		[key: number]: {
-			zoomId: number
-			userName: string
-			targetIndex: number
-			galleryIndex: number
-			mute?: boolean
-			videoOn?: boolean
-			handRaised?: boolean
-			userRole?: number
-			users: number[]
-		}
-	} = {}
+	public ZoomUserOffline: ZoomUserOfflineInterface = {}
 
-	public ZoomVariableLink: { zoomId: number; userName: string }[] = []
+	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
 	public OSC: OSC | null = null
 	public variables: Variables | null = null
@@ -205,21 +145,21 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 * @description triggered every time the config for this instance is saved
 	 */
 	// public updateConfig(config: ZoomConfig): void {
-		// this.showLog('debug', 'changing config!')
+	// this.showLog('debug', 'changing config!')
 
-		// if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
-		// 	this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-		// for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-		// 	this.ZoomGroupData[index] = {
-		// 		groupName: `Group ${index + 1}`,
-		// 		users: [],
-		// 	}
-		// }
-		// this.OSC?.destroy()
-		// this.OSC = new OSC(this)
-		// this.updateInstance()
-		// // Get version and start pulling (if needed)
-		// this.OSC.sendCommand('/zoom/ping')
+	// if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
+	// 	this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+	// for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+	// 	this.ZoomGroupData[index] = {
+	// 		groupName: `Group ${index + 1}`,
+	// 		users: [],
+	// 	}
+	// }
+	// this.OSC?.destroy()
+	// this.OSC = new OSC(this)
+	// this.updateInstance()
+	// // Get version and start pulling (if needed)
+	// this.OSC.sendCommand('/zoom/ping')
 	// }
 
 	/**
@@ -283,7 +223,10 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActionDefinitions
 		// const feedbacks = getFeedbacks(this) as CompanionFeedbackDefinitions
-		// const presets = [...getSelectUsersPresets(this), ...getPresets(this)] as CompanionPresetDefinitions[]
+		// const presets = [
+		// 	...getSelectUsersPresets(this.ZoomGroupData, this.ZoomUserData),
+		// 	...getPresets(this.config),
+		// ] as CompanionPresetDefinitions[]
 
 		this.setActionDefinitions(actions)
 		// this.setFeedbackDefinitions(feedbacks)
