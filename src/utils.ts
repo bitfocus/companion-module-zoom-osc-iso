@@ -26,6 +26,90 @@ enum EmbeddedAudioMode {
 	ISO = 2,
 }
 
+export interface ZoomClientDataObjInterface {
+	last_response: number
+	subscribeMode: number
+	selectedCallers: number[]
+	selectedOutputs: number[]
+	selectedAudioOutputs: number[]
+	activeSpeaker: string
+	isSpeaking: string
+	zoomOSCVersion: string | number
+	callStatus: string | number
+	galleryCount: number
+	galleryOrder: number[]
+	numberOfGroups: number
+	engineState: number
+}
+export interface ZoomUserDataInterface {
+	[key: number]: {
+		zoomId: number
+		userName: string
+		targetIndex: number
+		galleryIndex: number
+		mute?: boolean
+		videoOn?: boolean
+		handRaised?: boolean
+		userRole?: number
+		users: number[]
+	}
+}
+
+export interface ZoomOutputDataInterface {
+	[key: number]: {
+		numberOfOutputs: number
+		outputNumber: number
+		enabled: boolean
+		outputName: string
+		mode: string
+		selection: string
+		resolution: string
+		embeddedAudioInfo: string
+		status: string
+	}
+}
+
+export interface ZoomAudioLevelDataInterface {
+	[key: number]: {
+		channel: number
+		level: number
+	}
+}
+
+export interface ZoomAudioRoutingDataInterface {
+	[key: number]: {
+		audio_device: string
+		num_channels: number
+		channel: number
+		mode: string
+		gain_reduction: number
+		selection: string
+	}
+}
+
+export interface ZoomUserOfflineInterface {
+	[key: number]: {
+		zoomId: number
+		userName: string
+		targetIndex: number
+		galleryIndex: number
+		mute?: boolean
+		videoOn?: boolean
+		handRaised?: boolean
+		userRole?: number
+		users: number[]
+	}
+}
+
+export interface ZoomGroupDataInterface {
+	groupName: string
+	users: { zoomID: number; userName: string }[]
+}
+
+export interface ZoomVariableLinkInterface {
+	zoomId: number
+	userName: string
+}
 export interface Options {
 	userSelectedInfo: SomeCompanionConfigField
 
