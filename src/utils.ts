@@ -177,7 +177,7 @@ export const options: Options = {
 	message: {
 		type: 'textinput',
 		label: 'Message',
-		id: 'msg',
+		id: 'message',
 		default: '',
 	},
 	name: {
