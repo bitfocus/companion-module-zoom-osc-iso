@@ -7,7 +7,6 @@ import {
 import { ZoomConfig } from './config'
 import { arrayAddRemove, arrayRemove, InstanceBaseExt, options } from './utils'
 
-// const { Actions, ISOActions } = require('./osccommands')
 const select = { single: true, multi: false }
 
 export enum ActionId {
