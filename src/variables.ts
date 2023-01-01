@@ -1,8 +1,9 @@
-import ZoomInstance from './'
 import _ from 'lodash'
+import { ZoomConfig } from './config'
+import { InstanceBaseExt } from './utils'
 
 interface InstanceVariableDefinition {
-	label: string
+	variableId: string
 	name: string
 	type?: string
 }
@@ -16,9 +17,9 @@ enum engineState {
 	enabled = 'enabled',
 }
 export class Variables {
-	private readonly instance: ZoomInstance
+	private readonly instance: InstanceBaseExt<ZoomConfig>
 
-	constructor(instance: ZoomInstance) {
+	constructor(instance: InstanceBaseExt<ZoomConfig>) {
 		this.instance = instance
 	}
 
@@ -28,13 +29,7 @@ export class Variables {
 	 * @description Retrieves instance variable from any Zoom instances
 	 */
 	public readonly get = (variable: string): string | undefined => {
-		let data
-
-		this.instance.parseVariables(variable, (value) => {
-			data = value
-		})
-
-		return data
+		return this.instance.getVariableValue(variable)?.toString()
 	}
 
 	/**
@@ -42,13 +37,7 @@ export class Variables {
 	 * @description Updates or removes variable for current instance
 	 */
 	public readonly set = (variables: InstanceVariableValue): void => {
-		const newVariables: { [variableId: string]: string | undefined } = {}
-
-		for (const name in variables) {
-			newVariables[name] = variables[name]?.toString()
-		}
-
-		this.instance.setVariables(newVariables)
+		this.instance.setVariables(variables)
 	}
 
 	/**
@@ -57,15 +46,15 @@ export class Variables {
 	public readonly updateDefinitions = (): void => {
 		const globalSettings: Set<InstanceVariableDefinition> = new Set([
 			// Status
-			{ label: 'Zoom version', name: 'zoomVersion' },
-			{ label: 'Call Status', name: 'callStatus' },
-			{ label: 'Engine Status', name: 'engineState' },
-			{ label: 'Selected callers/groups', name: 'selectedCallers' },
-			{ label: 'Selected number of callers/groups', name: 'selectedNumberOfCallers' },
-			{ label: 'Number of selectable groups', name: 'numberOfGroups' },
-			{ label: 'Number of users in call', name: 'numberOfUsers' },
-			{ label: 'Is speaking', name: 'isSpeaking' },
-			{ label: 'Active speaking', name: 'activeSpeaker' },
+			{ name: 'Zoom version', variableId: 'zoomVersion' },
+			{ name: 'Call Status', variableId: 'callStatus' },
+			{ name: 'Engine Status', variableId: 'engineState' },
+			{ name: 'Selected callers/groups', variableId: 'selectedCallers' },
+			{ name: 'Selected number of callers/groups', variableId: 'selectedNumberOfCallers' },
+			{ name: 'Number of selectable groups', variableId: 'numberOfGroups' },
+			{ name: 'Number of users in call', variableId: 'numberOfUsers' },
+			{ name: 'Is speaking', variableId: 'isSpeaking' },
+			{ name: 'Active speaking', variableId: 'activeSpeaker' },
 		])
 		// Groups
 		let groupPositionVariables = []
@@ -75,45 +64,45 @@ export class Variables {
 		for (let index = 0; index < this.instance.ZoomGroupData.length; index++) {
 			for (let position = 1; position < 50; position++) {
 				groupPositionVariables.push({
-					label: `Group${index + 1} Position ${position}`,
-					name: `Group${index + 1}Position${position}`,
+					name: `Group${index + 1} Position ${position}`,
+					variableId: `Group${index + 1}Position${position}`,
 				})
 			}
 			userVariables.push({
-				label: `Inside group`,
-				name: `InsideGroup${index + 1}`,
+				name: `Inside group`,
+				variableId: `InsideGroup${index + 1}`,
 			})
-			userVariables.push({ label: `name`, name: `Group${index + 1}` })
+			userVariables.push({ name: `name`, variableId: `Group${index + 1}` })
 			userVariables.push({
-				label: `Callers In Group ${index + 1}`,
-				name: `CallersInGroup${index + 1}`,
+				name: `Callers In Group ${index + 1}`,
+				variableId: `CallersInGroup${index + 1}`,
 			})
 		}
 		for (const key in this.instance.ZoomUserData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomUserData, key)) {
 				const user = this.instance.ZoomUserData[key]
 				if (user.zoomId > this.instance.ZoomClientDataObj.numberOfGroups)
-					userVariables.push({ label: `name`, name: user.zoomId.toString() })
+					userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
 			}
 		}
 		for (const key in this.instance.ZoomOutputData) {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomOutputData, key)) {
 				const output = this.instance.ZoomOutputData[key]
 				outputVariables.push({
-					label: `Output ${output.outputNumber} name`,
-					name: `Output${output.outputNumber}name`,
+					name: `Output ${output.outputNumber} name`,
+					variableId: `Output${output.outputNumber}name`,
 				})
 				outputVariables.push({
-					label: `Output ${output.outputNumber} resolution`,
-					name: `Output${output.outputNumber}resolution`,
+					name: `Output ${output.outputNumber} resolution`,
+					variableId: `Output${output.outputNumber}resolution`,
 				})
 				outputVariables.push({
-					label: `Output ${output.outputNumber} mode`,
-					name: `Output${output.outputNumber}mode`,
+					name: `Output ${output.outputNumber} mode`,
+					variableId: `Output${output.outputNumber}mode`,
 				})
 				outputVariables.push({
-					label: `Output ${output.outputNumber} status`,
-					name: `Output${output.outputNumber}status`,
+					name: `Output ${output.outputNumber} status`,
+					variableId: `Output${output.outputNumber}status`,
 				})
 			}
 		}
@@ -122,12 +111,12 @@ export class Variables {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioRoutingData, key)) {
 				const audioOutput = this.instance.ZoomAudioRoutingData[key]
 				outputVariables.push({
-					label: `Output ${audioOutput.channel} name`,
-					name: `Output${audioOutput.channel}name`,
+					name: `Output ${audioOutput.channel} name`,
+					variableId: `Output${audioOutput.channel}name`,
 				})
 				outputVariables.push({
-					label: `Output ${audioOutput.channel} mode`,
-					name: `Output${audioOutput.channel}mode`,
+					name: `Output ${audioOutput.channel} mode`,
+					variableId: `Output${audioOutput.channel}mode`,
 				})
 			}
 		}
@@ -136,23 +125,23 @@ export class Variables {
 			if (Object.prototype.hasOwnProperty.call(this.instance.ZoomAudioLevelData, key)) {
 				// const channel = this.instance.ZoomAudioLevelData[key]
 				audioLevelVariables.push({
-					label: `Channel ${key} audiolevel`,
-					name: `Channel${key}`,
+					name: `Channel ${key} audiolevel`,
+					variableId: `Channel${key}`,
 				})
 			}
 		}
 		let galleryVariables = []
 		for (let index = 1; index < 50; index++) {
 			galleryVariables.push({
-				label: `Gallery position ${index}`,
 				name: `Gallery position ${index}`,
+				variableId: `Gallery position ${index}`,
 			})
 		}
 		let selectUsersVariables = []
 		for (let index = 1; index < 1000; index++) {
 			selectUsersVariables.push({
-				label: `Participant ${index}`,
-				name: `Participant${index}`,
+				name: `Participant ${index}`,
+				variableId: `Participant${index}`,
 			})
 		}
 		const galleryVariablesDef: Set<InstanceVariableDefinition> = new Set(galleryVariables)
@@ -160,7 +149,7 @@ export class Variables {
 		const outputVariablesDef: Set<InstanceVariableDefinition> = new Set(outputVariables)
 		const audioLevelVariablesDef: Set<InstanceVariableDefinition> = new Set(audioLevelVariables)
 		const groupPositionVariablesDef: Set<InstanceVariableDefinition> = new Set(groupPositionVariables)
-		const gallery: Set<InstanceVariableDefinition> = new Set([{ label: 'gallery count', name: 'galleryCount' }])
+		const gallery: Set<InstanceVariableDefinition> = new Set([{ name: 'gallery count', variableId: 'galleryCount' }])
 
 		let filteredVariables = [
 			...outputVariablesDef,
@@ -208,10 +197,10 @@ export class Variables {
 			newVariables['selectedNumberOfCallers'] = '0'
 		} else {
 			let selectedCallers: string[] = []
-			this.instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
+			this.instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: number) => {
 				if (zoomID < this.instance.ZoomClientDataObj.numberOfGroups + 1) {
 					if (this.instance.ZoomUserData[zoomID]) {
-						this.instance.ZoomUserData[zoomID].users.forEach((user) => {
+						this.instance.ZoomUserData[zoomID].users.forEach((user: string | number) => {
 							selectedCallers.push(this.instance.ZoomUserData[user].userName)
 						})
 					}
@@ -241,10 +230,10 @@ export class Variables {
 		}
 
 		let allUsers = ''
-		this.instance.ZoomGroupData.forEach((group, index) => {
+		this.instance.ZoomGroupData.forEach((group: { users: any[]; groupName: string | number | undefined }, index: number) => {
 			newVariables[`CallersInGroup${index + 1}`] = group.users?.length
 			newVariables[`Group${index + 1}`] = group.groupName
-			group.users?.forEach((user) => {
+			group.users?.forEach((user: { zoomID: string | number }) => {
 				allUsers += this.instance.ZoomUserData[user.zoomID].userName + ' '
 			})
 			for (let position = 1; position < 50; position++) {
