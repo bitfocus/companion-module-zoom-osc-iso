@@ -14,7 +14,7 @@ enum ZoomVersion {
 	ZoomOSC = 0,
 	ZoomISO = 1,
 }
-export const getConfigFields = (): SomeCompanionConfigField[] => {
+export const GetConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{
 			type: 'textinput',
