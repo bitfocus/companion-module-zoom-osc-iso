@@ -2,19 +2,17 @@ import {
 	CompanionActionDefinitions,
 	InstanceBase,
 	InstanceStatus,
-	CompanionConfigField,
 	// CompanionFeedbackDefinitions,
 	// CompanionSystem,
 	runEntrypoint,
 	SomeCompanionConfigField,
-	CompanionVariableValues,
 	// CompanionPresetDefinitions,
 } from '@companion-module/base'
-import { getConfigFields, ZoomConfig } from './config'
+import { GetConfigFields, ZoomConfig } from './config'
 import { getActions } from './actions'
 // import { getFeedbacks } from './feedback'
 // import { getPresets, getSelectUsersPresets } from './presets'
-import { Variables } from './variables'
+import { InitVariables, updateVariables } from './variables'
 import { OSC } from './osc'
 import {
 	ZoomAudioLevelDataInterface,
@@ -44,8 +42,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 	public async configUpdated(config: ZoomConfig): Promise<void> {
 		this.config = config
-		const variables: CompanionVariableValues = {}
-		this.setVariableValues(variables)
 
 		this.showLog('debug', 'changing config!')
 
@@ -64,7 +60,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.OSC.sendCommand('/zoom/ping')
 	}
 	getConfigFields(): SomeCompanionConfigField[] {
-		throw new Error('Method not implemented.')
+		return GetConfigFields()
 	}
 
 	// Global call settings
@@ -102,7 +98,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
 	public OSC: OSC | null = null
-	public variables: Variables | null = null
 
 	constructor(internal: unknown) {
 		super(internal)
@@ -122,45 +117,22 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 * @description triggered on instance being enabled
 	 */
 	public async init(config: ZoomConfig): Promise<void> {
-		// New Module warning
+		this.config = config
+		await this.configUpdated(this.config)
+
+		InitVariables(this)
+		// this.setPresetDefinitions(GetPresetsList())
+		// this.setFeedbackDefinitions(GetFeedbacksList())
+		this.setActionDefinitions(
+			getActions(this)
+		)
+		updateVariables(this)
 		this.log('info', `Welcome, Zoom module is loading`)
 		this.updateStatus(InstanceStatus.Connecting)
-		this.variables = new Variables(this)
-		this.variables.updateDefinitions()
 		this.OSC = new OSC(this)
 
 		await this.configUpdated(config)
 	}
-
-	/**
-	 * @returns config options
-	 * @description generates the config options available for this instance
-	 */
-	public readonly config_fields = (): CompanionConfigField[] => {
-		return getConfigFields()
-	}
-
-	/**
-	 * @param config new configuration data
-	 * @description triggered every time the config for this instance is saved
-	 */
-	// public updateConfig(config: ZoomConfig): void {
-	// this.showLog('debug', 'changing config!')
-
-	// if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
-	// 	this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-	// for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-	// 	this.ZoomGroupData[index] = {
-	// 		groupName: `Group ${index + 1}`,
-	// 		users: [],
-	// 	}
-	// }
-	// this.OSC?.destroy()
-	// this.OSC = new OSC(this)
-	// this.updateInstance()
-	// // Get version and start pulling (if needed)
-	// this.OSC.sendCommand('/zoom/ping')
-	// }
 
 	/**
 	 * @description close connections and stop timers/intervals
@@ -174,18 +146,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		this.OSC?.destroy()
-	}
-
-	/**
-	 * @description Create and update variables
-	 */
-	public updateVariables(): void {
-		if (this.variables) {
-			// this.showLog('console', 'updating variables')
-
-			this.variables.updateDefinitions()
-			this.variables.updateVariables()
-		}
 	}
 
 	/**
@@ -222,6 +182,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public updateInstance(): void {
 		// Cast actions and feedbacks from Zoom types to Companion types
 		const actions = getActions(this) as CompanionActionDefinitions
+		InitVariables(this)
+		updateVariables(this)
+
 		// const feedbacks = getFeedbacks(this) as CompanionFeedbackDefinitions
 		// const presets = [
 		// 	...getSelectUsersPresets(this.ZoomGroupData, this.ZoomUserData),
@@ -231,7 +194,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.setActionDefinitions(actions)
 		// this.setFeedbackDefinitions(feedbacks)
 		// this.setPresetDefinitions(presets)
-		this.updateVariables()
 	}
 }
 
