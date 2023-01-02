@@ -2,6 +2,7 @@ import { InstanceBaseExt } from './utils'
 
 import { OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
+import { InitVariables, updateVariables } from './variables'
 const osc = require('osc')
 
 interface ZoomOSCResponse {
@@ -39,7 +40,6 @@ export class OSC {
 	constructor(instance: InstanceBaseExt<ZoomConfig>) {
 		this.instance = instance
 
-		this.instance.updateVariables()
 		// Connect to ZoomOSC
 		this.Connect()
 			.then(() => {
@@ -158,7 +158,8 @@ export class OSC {
 			} else {
 				this.instance.showLog('debug', 'wrong arguments in OSC feedback')
 			}
-			this.instance.updateVariables()
+			InitVariables(this.instance)
+			updateVariables(this.instance)
 		}
 	}
 
@@ -431,7 +432,7 @@ export class OSC {
 						channel: parseInt(data.args[0].value),
 						level: parseInt(data.args[1].value),
 					}
-					this.instance.updateVariables()
+					updateVariables(this.instance)
 					break
 				case 'audioRouting':
 					this.instance.ZoomAudioRoutingData[parseInt(data.args[2].value)] = {
@@ -442,7 +443,7 @@ export class OSC {
 						gain_reduction: parseInt(data.args[4].value),
 						selection: data.args[5].value,
 					}
-					this.instance.updateVariables()
+					updateVariables(this.instance)
 					// this.instance.showLog('console', JSON.stringify(this.instance.ZoomAudioRoutingData))
 					break
 				case 'outputRouting':
