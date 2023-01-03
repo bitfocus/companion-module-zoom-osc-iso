@@ -118,7 +118,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	public async init(config: ZoomConfig): Promise<void> {
 		this.config = config
-		await this.configUpdated(this.config)
+		// await this.configUpdated(this.config)
 
 		InitVariables(this)
 		// this.setPresetDefinitions(GetPresetsList())
@@ -130,8 +130,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.log('info', `Welcome, Zoom module is loading`)
 		this.updateStatus(InstanceStatus.Connecting)
 		this.OSC = new OSC(this)
-
-		await this.configUpdated(config)
 	}
 
 	/**
