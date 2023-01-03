@@ -50,8 +50,10 @@ export enum ActionId {
 	nextParticipants = 'next_Participants',
 	previousParticipants = 'previous_Participants',
 	selectOutput = 'select_Output',
-	selectAudioOutput = 'select_Audio_Output',
-	takeSelectedOutputs = 'take_Selected_Outputs',
+	selectAudioChannel = 'select_Audio_Channel',
+	applyOutput = 'apply_Output',
+	applyChannel = 'apply_Channel',
+	applyOutputs = 'apply_Outputs',
 	pin = 'pin',
 	addPin = 'add_Pin',
 	openBreakoutRooms = 'open_Breakout_Rooms',
@@ -86,7 +88,7 @@ export enum ActionId {
 	admitSomeoneFromWaitingRoom = 'admitSomeoneFromWaitingRoom',
 	sendSomeoneToWaitingRoom = 'sendSomeoneToWaitingRoom',
 	allowWebinarAttendeeToSpeak = 'allowWebinarAttendeeToSpeak',
-	shutUpWebinarAttendee = 'shutUpWebinarAttendee',
+	disallowToSpeak = 'disallowToSpeak',
 	startScreenShareWithPrimaryScreen = 'startScreenShareWithPrimaryScreen',
 	cycleSharedCameraToNextAvailable = 'cycleSharedCameraToNextAvailable',
 	gotoNextGalleryPage = 'gotoNextGalleryPage',
@@ -132,7 +134,7 @@ export enum ActionId {
 	closeBreakoutRooms = 'closeBreakoutRooms',
 	deleteAllBreakoutRooms = 'deleteAllBreakoutRooms',
 	admitEveryoneFromWaitingRoom = 'admitEveryoneFromWaitingRoom',
-	ejectAllWebinarAttendees = 'ejectAllWebinarAttendees',
+	ejectAll = 'ejectAll',
 	pauseLocalRecording = 'pauseLocalRecording',
 	resumeLocalRecording = 'resumeLocalRecording',
 	stopLocalRecording = 'stopLocalRecording',
@@ -399,8 +401,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.output],
 			callback: (action): void => {
 				// type: 'ISO'
-				let command = createCommand('/outputISO', '', false)
-				command.args.push({ type: 's', value: action.options.userName })
+				let command = createCommand('/outputISO', action.options.userName as string, false)
 				command.args.push({ type: 'i', value: action.options.output })
 
 				const sendToCommand = {
@@ -418,8 +419,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.output],
 			callback: (action): void => {
 				// type: 'ISO'
-				let command = createCommand('/audioISO', '', true)
-				command.args.push({ type: 's', value: action.options.userName })
+				let command = createCommand('/audioISO', action.options.userName as string, true)
 				command.args.push({ type: 'i', value: action.options.output })
 
 				const sendToCommand = {
@@ -741,7 +741,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						if ((action.options.user as number) < instance.ZoomClientDataObj.numberOfGroups + 1)
-							instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
+							instance.ZoomClientDataObj.selectedCallers.push(action.options.user as number)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
@@ -983,8 +983,8 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 					) {
 						instance.ZoomGroupData[action.options.group as number].users.push({
-							zoomID: zoomID,
-							userName: instance.ZoomUserData[zoomID].userName,
+							zoomID: zoomID as number,
+							userName: instance.ZoomUserData[zoomID as number].userName,
 						})
 					}
 				})
@@ -1034,11 +1034,11 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					},
 				}
 				sendActionCommand(sendToCommand)
-				instance.ZoomUserData[action.options.user as number].userName = action.options.name
+				instance.ZoomUserData[action.options.user as number].userName = action.options.name as string
 				let index = instance.ZoomVariableLink.findIndex(
 					(finduser: { zoomId: number }) => finduser.zoomId === action.options.user
 				)
-				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name
+				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name as string
 				instance.variables?.updateVariables()
 			},
 		},
@@ -1046,7 +1046,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Rename Group',
 			options: [groupOption, options.name],
 			callback: (action) => {
-				instance.ZoomGroupData[action.options.group as number].groupName = action.options.name
+				instance.ZoomGroupData[action.options.group as number].groupName = action.options.name as string
 				instance.variables?.updateVariables()
 			},
 		},
@@ -1064,7 +1064,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			],
 			callback: (action) => {
 				// Grap the items you want to see
-				let numberToShift = action.options.shift
+				let numberToShift = action.options.shift as number
 				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(0, numberToShift)
 				instance.ZoomVariableLink.splice(0, numberToShift)
 				instance.ZoomVariableLink.push(...itemsToShift)
@@ -1103,30 +1103,78 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Select output',
 			options: [outputOption],
 			callback: (action) => {
-				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output)
+				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output as number)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output)
+					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output as number)
 				}
 				instance.checkFeedbacks('output')
 			},
 		},
-		[ActionId.selectAudioOutput]: {
-			name: 'Select audio output',
+		[ActionId.selectAudioChannel]: {
+			name: 'Select audio channel',
 			options: [outputOption],
 			callback: (action) => {
-				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output)
+				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output as number)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedAudioOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output)
+					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output as number)
 				}
 				instance.checkFeedbacks('audioOutput')
 			},
 		},
-		[ActionId.takeSelectedOutputs]: {
-			name: 'Take selected outputs',
+		[ActionId.applyOutput]: {
+			name: 'Apply output',
+			options: [],
+			callback: () => {
+				let args: { type: string; value: string | number }[] = []
+				if (instance.ZoomClientDataObj.selectedCallers[0] && instance.ZoomClientDataObj.selectedOutputs[0]) {
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[0] })
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[0] })
+					const sendToCommand: any = {
+						id: 'outputISO',
+						options: {
+							command: '/zoom/zoomID/outputISO',
+							args: args,
+						},
+					}
+					sendActionCommand(sendToCommand)
+					// reset arrays
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.ZoomClientDataObj.selectedOutputs.length = 0
+					instance.variables?.updateVariables()
+					instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased', 'output')
+				}
+			},
+		},
+		[ActionId.applyChannel]: {
+			name: 'Apply channel',
+			options: [],
+			callback: () => {
+				let args: { type: string; value: string | number }[] = []
+				if (instance.ZoomClientDataObj.selectedCallers[0] && instance.ZoomClientDataObj.selectedOutputs[0]) {
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[0] })
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[0] })
+					const sendToCommand: any = {
+						id: 'audioISO',
+						options: {
+							command: '/zoom/zoomID/audioISO',
+							args: args,
+						},
+					}
+					sendActionCommand(sendToCommand)
+					// reset arrays
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.ZoomClientDataObj.selectedOutputs.length = 0
+					instance.variables?.updateVariables()
+					instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased', 'output')
+				}
+			},
+		},
+		[ActionId.applyOutputs]: {
+			name: 'Apply selected outputs',
 			options: [],
 			callback: () => {
 				let args: { type: string; value: string | number }[] = []
@@ -1634,7 +1682,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.admitSomeoneFromWaitingRoom]: {
-			name: 'Admit Someone From Waiting Room',
+			name: 'Admit Participant',
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
@@ -1650,7 +1698,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.sendSomeoneToWaitingRoom]: {
-			name: 'Send Someone To Waiting Room',
+			name: 'Send To Waiting Room',
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
@@ -1666,7 +1714,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.allowWebinarAttendeeToSpeak]: {
-			name: 'Allow Webinar Attendee To Speak',
+			name: 'Allow to Speak',
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
@@ -1681,14 +1729,14 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				sendActionCommand(sendToCommand)
 			},
 		},
-		[ActionId.shutUpWebinarAttendee]: {
-			name: 'Shut Up Webinar Attendee',
+		[ActionId.disallowToSpeak]: {
+			name: 'Disallow to Speak',
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
 				let command = createCommand('/disallowToSpeak', action.options.userName as string, select.multi)
 				const sendToCommand = {
-					id: ActionId.shutUpWebinarAttendee,
+					id: ActionId.disallowToSpeak,
 					options: {
 						command: command.oscPath,
 						args: command.args,
@@ -2290,7 +2338,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.admitEveryoneFromWaitingRoom]: {
-			name: 'AdmitEveryoneFromWaiting Room',
+			name: 'Admit All',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -2305,14 +2353,14 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				sendActionCommand(sendToCommand)
 			},
 		},
-		[ActionId.ejectAllWebinarAttendees]: {
+		[ActionId.ejectAll]: {
 			name: 'Eject All Webinar Attendees',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
 				let command = createCommand('/ejectAttendees')
 				const sendToCommand = {
-					id: ActionId.ejectAllWebinarAttendees,
+					id: ActionId.ejectAll,
 					options: {
 						command: command.oscPath,
 						args: command.args,
