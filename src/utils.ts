@@ -518,11 +518,11 @@ export const formatTime = (time: number, interval: 'ms' | 's', format: TimeForma
 
 export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	[x: string]: any
-	ZoomVariableLink: any
+	ZoomVariableLink: ZoomVariableLinkInterface[]
 	// variables: any
-	ZoomClientDataObj: any
+	ZoomClientDataObj: ZoomClientDataObjInterface
 	OSC: any
-	ZoomGroupData: any
-	ZoomUserData: any
+	ZoomGroupData: ZoomGroupDataInterface[]
+	ZoomUserData: ZoomUserDataInterface
 	config: TConfig
 }
