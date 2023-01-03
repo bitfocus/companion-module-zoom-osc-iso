@@ -74,7 +74,8 @@ export class OSC {
 			this.oscHost = this.instance.config.host
 			this.oscTXPort = this.instance.config.tx_port
 			this.oscRXPort = this.instance.config.rx_port
-
+			console.log('port settings'+this.oscHost+this.oscTXPort+this.oscRXPort);
+			
 			this.udpPort = new osc.UDPPort({
 				localAddress: '0.0.0.0',
 				localPort: this.oscRXPort,
