@@ -42,7 +42,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 			if (zoomID < instance.ZoomClientDataObj.numberOfGroups + 1) {
 				if (instance.ZoomUserData[zoomID]) {
 					instance.ZoomUserData[zoomID].users.forEach((user: string | number) => {
-						selectedCallers.push(instance.ZoomUserData[user].userName)
+						selectedCallers.push(instance.ZoomUserData[user as number].userName)
 					})
 				}
 			} else {
@@ -75,7 +75,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variables[`CallersInGroup${index + 1}`] = group.users?.length
 		variables[`Group${index + 1}`] = group.groupName
 		group.users?.forEach((user: { zoomID: string | number }) => {
-			allUsers += instance.ZoomUserData[user.zoomID].userName + ' '
+			allUsers += instance.ZoomUserData[user.zoomID as number].userName + ' '
 		})
 		for (let position = 1; position < 50; position++) {
 			variables[`Group${index + 1}Position${position}`] = group.users[position - 1]
@@ -102,7 +102,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
-		variables[`Gallery position ${index}`] = instance.ZoomUserData[zoomID]
+		variables[`GalleryPosition ${index}`] = instance.ZoomUserData[zoomID]
 			? instance.ZoomUserData[zoomID].userName
 			: '-'
 	}
@@ -200,8 +200,8 @@ export function InitVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	let galleryVariables = []
 	for (let index = 1; index < 50; index++) {
 		galleryVariables.push({
-			name: `Gallery position ${index}`,
-			variableId: `Gallery position ${index}`,
+			name: `Gallery Position ${index}`,
+			variableId: `GalleryPosition${index}`,
 		})
 	}
 	let selectUsersVariables = []
