@@ -104,8 +104,8 @@ export function getFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group as string].users[(feedback.options.position as number) - 1]) {
-					let zoomID = instance.ZoomGroupData[feedback.options.group as string].users[(feedback.options.position as number) - 1].zoomID
+				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
+					let zoomID = instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1].zoomID
 					switch (feedback.options.type) {
 						case 'micLive':
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
@@ -332,7 +332,7 @@ export function getFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output)) {
+				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output as number)) {
 					return true
 				} else {
 					return false
@@ -357,7 +357,7 @@ export function getFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output)) {
+				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output as number)) {
 					return true
 				} else {
 					return false
