@@ -769,7 +769,7 @@ const Actions: actionType = {
 		type: 'Special',
 	},
 	ListUsers: {
-		description: 'Request list of users (will be removed)',
+		description: 'Request list of participants',
 		shortDescription: 'ListUsers',
 		command: '/list',
 		singleUser: null,

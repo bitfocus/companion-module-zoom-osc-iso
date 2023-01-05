@@ -2626,7 +2626,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.listUsers]: {
-			name: 'Request list of users (will be removed)',
+			name: 'Request list of Participants',
 			options: [],
 			callback: (): void => {
 				// type: 'Special'
