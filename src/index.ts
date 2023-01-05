@@ -11,7 +11,7 @@ import {
 import { GetConfigFields, ZoomConfig } from './config'
 import { getActions } from './actions'
 // import { getFeedbacks } from './feedback'
-// import { getPresets, getSelectUsersPresets } from './presets'
+import { GetPresetList } from './presets'
 import { InitVariables, updateVariables } from './variables'
 import { OSC } from './osc'
 import {
@@ -121,11 +121,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		// await this.configUpdated(this.config)
 
 		InitVariables(this)
-		// this.setPresetDefinitions(GetPresetsList())
+		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
 		// this.setFeedbackDefinitions(GetFeedbacksList())
-		this.setActionDefinitions(
-			getActions(this)
-		)
+		this.setActionDefinitions(getActions(this))
 		updateVariables(this)
 		this.log('info', `Welcome, Zoom module is loading`)
 		this.updateStatus(InstanceStatus.Connecting)
@@ -183,15 +181,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		InitVariables(this)
 		updateVariables(this)
 
-		// const feedbacks = getFeedbacks(this) as CompanionFeedbackDefinitions
-		// const presets = [
-		// 	...getSelectUsersPresets(this.ZoomGroupData, this.ZoomUserData),
-		// 	...getPresets(this.config),
-		// ] as CompanionPresetDefinitions[]
-
 		this.setActionDefinitions(actions)
 		// this.setFeedbackDefinitions(feedbacks)
-		// this.setPresetDefinitions(presets)
+		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
 	}
 }
 

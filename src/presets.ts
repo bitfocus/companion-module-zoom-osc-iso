@@ -29,7 +29,7 @@ interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 interface CompanionPresetDefinitionsExt {
 	[id: string]: CompanionPresetExt | undefined
 }
-export function getPresets(
+export function GetPresetList(
 	ZoomGroupData: ZoomGroupDataInterface[],
 	ZoomUserData: ZoomUserDataInterface
 ): CompanionPresetDefinitions {
