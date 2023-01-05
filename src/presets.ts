@@ -1408,7 +1408,7 @@ export function getPresets(
 	/**
 	 * Join/Leave/End Actions
 	 */
-	 presets[`Join_Meeting`] = {
+	presets[`Join_Meeting`] = {
 		type: 'button',
 		category: 'Join/Leave/End Actions',
 		name: `Join_Meeting`,
@@ -1421,7 +1421,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.joinMeeting, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Leave_Meeting`] = {
+	presets[`Leave_Meeting`] = {
 		type: 'button',
 		category: 'Join/Leave/End Actions',
 		name: `Leave_Meeting`,
@@ -1434,7 +1434,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.leaveMeeting, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`End_Meeting`] = {
+	presets[`End_Meeting`] = {
 		type: 'button',
 		category: 'Join/Leave/End Actions',
 		name: `End_Meeting`,
@@ -1447,7 +1447,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.endMeeting, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`ZAK_Join_Meeting`] = {
+	presets[`ZAK_Join_Meeting`] = {
 		type: 'button',
 		category: 'Join/Leave/End Actions',
 		name: `ZAK_Join_Meeting`,
@@ -1460,7 +1460,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.ZAKJoinMeeting, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`ZAK_Start_Meeting`] = {
+	presets[`ZAK_Start_Meeting`] = {
 		type: 'button',
 		category: 'Join/Leave/End Actions',
 		name: `ZAK_Start_Meeting`,
@@ -1477,7 +1477,7 @@ export function getPresets(
 	/**
 	 * Devices & Settings Actions
 	 */
-	 presets[`Set_Camera`] = {
+	presets[`Set_Camera`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Camera`,
@@ -1490,7 +1490,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.setCameraDevice, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Mic`] = {
+	presets[`Set_Mic`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Mic`,
@@ -1503,7 +1503,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.setMicDevice, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Camera`] = {
+	presets[`Set_Camera`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Camera`,
@@ -1516,7 +1516,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.setCameraDevice, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Mic_Level`] = {
+	presets[`Set_Mic_Level`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Mic_Level`,
@@ -1529,7 +1529,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.setMicLevel, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Speaker_Level`] = {
+	presets[`Set_Speaker_Level`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Speaker_Level`,
@@ -1542,7 +1542,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.setSpeakerVolume, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Enable_Original_Sound`] = {
+	presets[`Enable_Original_Sound`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Enable_Original_Sound`,
@@ -1555,7 +1555,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.enableOriginalSound, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Disable_Original_Sound`] = {
+	presets[`Disable_Original_Sound`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Disable_Original_Sound`,
@@ -1568,7 +1568,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.disableOriginalSound, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Enable_Mirror`] = {
+	presets[`Enable_Mirror`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Enable_Mirror`,
@@ -1581,7 +1581,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.enableMirrorVideo, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Disable_Mirror`] = {
+	presets[`Disable_Mirror`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Disable_Mirror`,
@@ -1594,7 +1594,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.disableMirrorVideo, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Enable_HD`] = {
+	presets[`Enable_HD`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Enable_HD`,
@@ -1607,7 +1607,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.enableHDVideo, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Disable_HD`] = {
+	presets[`Disable_HD`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Disable_HD`,
@@ -1620,7 +1620,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.disableHDVideo, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Window_XY`] = {
+	presets[`Set_Window_XY`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Window_XY`,
@@ -1633,7 +1633,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.SetWindowPosition, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Set_Window_Size`] = {
+	presets[`Set_Window_Size`] = {
 		type: 'button',
 		category: 'Devices & Settings Actions',
 		name: `Set_Window_Size`,
@@ -1650,7 +1650,7 @@ export function getPresets(
 	/**
 	 * Chat Actions
 	 */
-	 presets[`Send_Chat_Everyone`] = {
+	presets[`Send_Chat_Everyone`] = {
 		type: 'button',
 		category: 'Chat Actions',
 		name: `Send_Chat_Everyone`,
@@ -1663,7 +1663,7 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.sendAChatToEveryone, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	 presets[`Send_Chat_DM`] = {
+	presets[`Send_Chat_DM`] = {
 		type: 'button',
 		category: 'Chat Actions',
 		name: `Send_Chat_DM`,
@@ -1676,51 +1676,453 @@ export function getPresets(
 		steps: [{ down: [{ actionId: ActionId.sendAChatViaDM, options: {} }], up: [] }],
 		feedbacks: [],
 	}
+
+	/**
+	 * Sharing Actions
+	 */
+	presets[`Screen_Share`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Screen_Share`,
+		style: {
+			text: `Screen Share`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startScreenShare, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Screen_Share_Primary`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Screen_Share_Primary`,
+		style: {
+			text: `Screen Share Primary`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startScreenShareWithPrimaryScreen, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Share_Window`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Share_Window`,
+		style: {
+			text: `Share Window`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startShareWithWindow, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Share_Camera`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Share_Camera`,
+		style: {
+			text: `Share Camera`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startCameraShare, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Share_Audio`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Share_Audio`,
+		style: {
+			text: `Share Audio`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startAudioShare, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Cycle_Shared_Camera`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Cycle_Shared_Camera`,
+		style: {
+			text: `Cycle Shared Camera`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.cycleSharedCameraToNextAvailable, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Enable Optimize for Video`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Enable Optimize for Video`,
+		style: {
+			text: `Enable Optimize for Video`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.enableOptimizeVideoForSharing, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Disable_Optimize_for_Video`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Disable_Optimize_for_Video`,
+		style: {
+			text: `Disable Optimize for Video`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.disableOptimizeVideoForSharing, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+
+	/**
+	 * Breakout Actions
+	 */
+	presets[`Create_Breakout_Room`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Create_Breakout_Room`,
+		style: {
+			text: `Create Breakout Room`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.createBreakoutRoom, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Configure_Breakouts`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Configure_Breakouts`,
+		style: {
+			text: `Configure Breakouts`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.configureBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Delete_Breakout_Room`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Delete_Breakout_Room`,
+		style: {
+			text: `Delete Breakout Room`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.deleteBreakoutRoom, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Open_Breakouts`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Open_Breakouts`,
+		style: {
+			text: `Open Breakouts`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.openBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Close_Breakouts`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Close_Breakouts`,
+		style: {
+			text: `Close Breakouts`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.closeBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Delete_All_Breakouts`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Delete_All_Breakouts`,
+		style: {
+			text: `Delete All Breakouts`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.deleteAllBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Return_Self_to_Main_Room`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Return_Self_to_Main_Room`,
+		style: {
+			text: `Return Self to Main Room`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.returnSelfToMainMeeting, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Broadcast_Message_to_Breakouts`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Broadcast_Message_to_Breakouts`,
+		style: {
+			text: `Broadcast Message to Breakouts`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.broadcastMessageToBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+
+	/**
+	 * Recording Actions
+	 */
+	presets[`Start_Local_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Start_Local_Recording`,
+		style: {
+			text: `Start Local Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startLocalRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Pause_Local_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Pause_Local_Recording`,
+		style: {
+			text: `Pause Local Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.pauseLocalRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Resume_Local_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Resume_Local_Recording`,
+		style: {
+			text: `Resume Local Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.resumeLocalRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Stop_Local_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Stop_Local_Recording`,
+		style: {
+			text: `Stop Local Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.stopLocalRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Start_Cloud_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Start_Cloud_Recording`,
+		style: {
+			text: `Start Cloud Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.startCloudRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Pause_Cloud_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Pause_Cloud_Recording`,
+		style: {
+			text: `Pause Cloud Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.pauseCloudRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Resume_Cloud_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Resume_Cloud_Recording`,
+		style: {
+			text: `Resume Cloud Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.resumeCloudRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Stop_Cloud_Recording`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Stop_Cloud_Recording`,
+		style: {
+			text: `Stop Cloud Recording`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.stopCloudRecording, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Allow_to_Local_Record`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Allow_to_Local_Record`,
+		style: {
+			text: `Allow to Local Record`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.allowToRecord, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Disallow_to_Local_Record`] = {
+		type: 'button',
+		category: 'Recording Actions',
+		name: `Disallow_to_Local_Record`,
+		style: {
+			text: `Disallow to Local Record`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.disallowToRecord, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	/**
+	 * Data and Custom Actions
+	 */
+	presets[`Ping`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Ping`,
+		style: {
+			text: `Ping`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.pingZoomOSC, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Request_List_Participants`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Request_List_Participants`,
+		style: {
+			text: `Request List of Participants`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.listUsers, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Request_List_of_Breakout_Rooms`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Request_List_of_Breakout_Rooms`,
+		style: {
+			text: `Request List of Breakout Rooms`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.requestListOfBreakoutRooms, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Request_Gallery_Order`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Request_Gallery_Order`,
+		style: {
+			text: `Request Gallery Order`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.requestOrderOfGalleryView, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Request_Gallery_Count`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Request_Gallery_Count`,
+		style: {
+			text: `Request Gallery Count`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.requestGalleryCount, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Custom_Command`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Custom_Command`,
+		style: {
+			text: `Custom Command`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.customCommand, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Custom_Command_with_Arguments`] = {
+		type: 'button',
+		category: 'Data and Custom Actions',
+		name: `Custom_Command_with_Arguments`,
+		style: {
+			text: `Custom Command with Arguments`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(86, 221, 221),
+		},
+		steps: [{ down: [{ actionId: ActionId.customCommandWithArguments, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+
 	return presets
 
-
-
-// Sharing Actions
-// 	-->Screen Share
-// 	-->Screen Share Primary
-// 	-->Share Window
-// 	-->Share Camera
-// 	-->Share Audio
-// 	-->Cycle Shared Camera
-// 	-->Enable Optimize for Video
-// 	-->Disable Optimize for Video
-
-// Breakout Actions
-// 	-->Create Breakout Room
-// 	-->Configure Breakouts
-// 	-->Delete Breakout Room
-// 	-->Open Breakouts
-// 	-->Close Breakouts
-// 	-->Delete All Breakouts
-// 	-->Return Self to Main Room
-// 	-->Broadcast Message to Breakouts
-
-// Recording Actions
-// 	-->Start Local Recording
-// 	-->Pause Local Recording
-// 	-->Resume Local Recording
-// 	-->Stop Local Recording
-// 	-->Start Cloud Recording
-// 	-->Pause Cloud Recording
-// 	-->Resume Cloud Recording
-// 	-->Stop Cloud Recording
-// 	-->Allow to Local Record
-// 	-->Disallow to Local Record
-
-// Data and Custom Actions
-// 	-->Ping
-// 	-->Request List of Breakout Rooms
-// 	-->Request Participants List
-// 	-->Request Gallery Order
-// 	-->Request Gallery Count
-// 	-->Custom Command
-// 	-->Custom with Args
-
-// Group (x)...
-// 	-->(Group x Participants List)
+	// Group (x)...
+	// 	-->(Group x Participants List)
 }
