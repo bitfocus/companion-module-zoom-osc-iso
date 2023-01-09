@@ -1,15 +1,6 @@
-import {
-	CompanionActionDefinitions,
-	InstanceBase,
-	InstanceStatus,
-	// CompanionFeedbackDefinitions,
-	// CompanionSystem,
-	runEntrypoint,
-	SomeCompanionConfigField,
-	// CompanionPresetDefinitions,
-} from '@companion-module/base'
+import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
 import { GetConfigFields, ZoomConfig } from './config'
-import { getActions } from './actions'
+import { GetActions } from './actions'
 // import { getFeedbacks } from './feedback'
 import { GetPresetList } from './presets'
 import { InitVariables, updateVariables } from './variables'
@@ -38,29 +29,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		selectionMethod: 0,
 		numberOfGroups: 0,
 		pulling: 0,
-	}
-
-	public async configUpdated(config: ZoomConfig): Promise<void> {
-		this.config = config
-
-		this.showLog('debug', 'changing config!')
-
-		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
-			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-			this.ZoomGroupData[index] = {
-				groupName: `Group ${index + 1}`,
-				users: [],
-			}
-		}
-		this.OSC?.destroy()
-		this.OSC = new OSC(this)
-		this.updateInstance()
-		// Get version and start pulling (if needed)
-		this.OSC.sendCommand('/zoom/ping')
-	}
-	getConfigFields(): SomeCompanionConfigField[] {
-		return GetConfigFields()
 	}
 
 	// Global call settings
@@ -99,11 +67,14 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 	public OSC: OSC | null = null
 
+	/**
+	 *
+	 * @param internal
+	 */
 	constructor(internal: unknown) {
 		super(internal)
 		// this.system = system
 		// this.config = config
-		// this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
 		// Setup groups
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
@@ -114,20 +85,41 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 
 	/**
+	 *
+	 * @param config
+	 */
+	public async configUpdated(config: ZoomConfig): Promise<void> {
+		this.config = config
+		this.log('info', 'changing config!')
+		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
+			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+			this.ZoomGroupData[index] = {
+				groupName: `Group ${index + 1}`,
+				users: [],
+			}
+		}
+		if (this.OSC) this.OSC.destroy()
+		this.OSC = new OSC(this)
+		this.updateInstance()
+	}
+
+	/**
+	 *
+	 * @returns
+	 */
+	getConfigFields(): SomeCompanionConfigField[] {
+		return GetConfigFields()
+	}
+	/**
 	 * @description triggered on instance being enabled
+	 * @param config
 	 */
 	public async init(config: ZoomConfig): Promise<void> {
-		this.config = config
-		// await this.configUpdated(this.config)
-
-		InitVariables(this)
-		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
-		// this.setFeedbackDefinitions(GetFeedbacksList())
-		this.setActionDefinitions(getActions(this))
-		updateVariables(this)
 		this.log('info', `Welcome, Zoom module is loading`)
-		this.updateStatus(InstanceStatus.Connecting)
-		this.OSC = new OSC(this)
+
+		await this.configUpdated(config)
 	}
 
 	/**
@@ -177,11 +169,10 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	public updateInstance(): void {
 		// Cast actions and feedbacks from Zoom types to Companion types
-		const actions = getActions(this) as CompanionActionDefinitions
 		InitVariables(this)
 		updateVariables(this)
 
-		this.setActionDefinitions(actions)
+		this.setActionDefinitions(GetActions(this))
 		// this.setFeedbackDefinitions(feedbacks)
 		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
 	}
