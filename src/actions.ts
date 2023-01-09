@@ -2,6 +2,7 @@ import {
 	CompanionActionDefinition,
 	CompanionActionDefinitions,
 	CompanionActionEvent,
+	InputValue,
 	SomeCompanionActionInputField,
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
@@ -175,7 +176,7 @@ export enum ActionId {
  * @param instance Give the instance so we can extract data
  * @returns CompanionActions
  */
-export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions {
+export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions {
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_GROUPS: { id: string; label: string }[] = []
@@ -401,7 +402,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.output],
 			callback: (action): void => {
 				// type: 'ISO'
-				let command = createCommand('/outputISO', action.options.userName as string, false)
+				let command = createCommand('/outputISO', action.options.userName, false)
 				command.args.push({ type: 'i', value: action.options.output })
 
 				const sendToCommand = {
@@ -419,7 +420,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.output],
 			callback: (action): void => {
 				// type: 'ISO'
-				let command = createCommand('/audioISO', action.options.userName as string, true)
+				let command = createCommand('/audioISO', action.options.userName, true)
 				command.args.push({ type: 'i', value: action.options.output })
 
 				const sendToCommand = {
@@ -1206,7 +1207,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/pin', action.options.userName as string, select.single)
+				let command = createCommand('/pin', action.options.userName, select.single)
 				const sendToCommand = {
 					id: ActionId.pin,
 					options: {
@@ -1222,7 +1223,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/addPin', action.options.userName as string, select.multi)
+				let command = createCommand('/addPin', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.addPin,
 					options: {
@@ -1238,7 +1239,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/unPin', action.options.userName as string, select.multi)
+				let command = createCommand('/unPin', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.unpin,
 					options: {
@@ -1286,7 +1287,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/pin2', action.options.userName as string, select.single)
+				let command = createCommand('/pin2', action.options.userName, select.single)
 				const sendToCommand = {
 					id: ActionId.pinScreen2,
 					options: {
@@ -1302,7 +1303,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/unPin2', action.options.userName as string, select.single)
+				let command = createCommand('/unPin2', action.options.userName, select.single)
 				const sendToCommand = {
 					id: ActionId.unPinScreen2,
 					options: {
@@ -1334,7 +1335,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/togglePin2', action.options.userName as string, select.single)
+				let command = createCommand('/togglePin2', action.options.userName, select.single)
 				const sendToCommand = {
 					id: ActionId.togglePinScreen2,
 					options: {
@@ -1350,7 +1351,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/spot', action.options.userName as string, select.single)
+				let command = createCommand('/spot', action.options.userName, select.single)
 				const sendToCommand = {
 					id: ActionId.spotLight,
 					options: {
@@ -1366,7 +1367,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/addSpot', action.options.userName as string, select.multi)
+				let command = createCommand('/addSpot', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.addSpotlight,
 					options: {
@@ -1382,7 +1383,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/unSpot', action.options.userName as string, select.multi)
+				let command = createCommand('/unSpot', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.unSpotLight,
 					options: {
@@ -1398,7 +1399,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/toggleSpot', action.options.userName as string, select.multi)
+				let command = createCommand('/toggleSpot', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.toggleSpotlight,
 					options: {
@@ -1414,7 +1415,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/videoOn', action.options.userName as string, select.multi)
+				let command = createCommand('/videoOn', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.turnVideoOn,
 					options: {
@@ -1430,7 +1431,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/videoOff', action.options.userName as string, select.multi)
+				let command = createCommand('/videoOff', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.turnVideoOff,
 					options: {
@@ -1446,7 +1447,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/toggleVideo', action.options.userName as string, select.multi)
+				let command = createCommand('/toggleVideo', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.toggleVideoState,
 					options: {
@@ -1462,7 +1463,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/mute', action.options.userName as string, select.multi)
+				let command = createCommand('/mute', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.mute,
 					options: {
@@ -1478,7 +1479,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/unMute', action.options.userName as string, select.multi)
+				let command = createCommand('/unMute', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.unmute,
 					options: {
@@ -1494,7 +1495,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/toggleMute', action.options.userName as string, select.multi)
+				let command = createCommand('/toggleMute', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.toggleMuteState,
 					options: {
@@ -1510,7 +1511,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/raiseHand', action.options.userName as string, select.multi)
+				let command = createCommand('/raiseHand', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.raiseHand,
 					options: {
@@ -1526,7 +1527,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/lowerHand', action.options.userName as string, select.multi)
+				let command = createCommand('/lowerHand', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.lowerHand,
 					options: {
@@ -1542,7 +1543,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/toggleHand', action.options.userName as string, select.multi)
+				let command = createCommand('/toggleHand', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.toggleHand,
 					options: {
@@ -1558,7 +1559,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/makeHost', action.options.userName as string, select.multi)
+				let command = createCommand('/makeHost', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.makeHost,
 					options: {
@@ -1574,7 +1575,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/makeCoHost', action.options.userName as string, select.multi)
+				let command = createCommand('/makeCoHost', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.makeCoHost,
 					options: {
@@ -1590,7 +1591,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/revokeCoHost', action.options.userName as string, select.multi)
+				let command = createCommand('/revokeCoHost', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.revokeCoHost,
 					options: {
@@ -1606,7 +1607,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/reclaimHost', action.options.userName as string, select.multi)
+				let command = createCommand('/reclaimHost', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.reclaimHost,
 					options: {
@@ -1622,7 +1623,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/makePanelist', action.options.userName as string, select.multi)
+				let command = createCommand('/makePanelist', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.makePanelist,
 					options: {
@@ -1638,7 +1639,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/makeAttendee', action.options.userName as string, select.multi)
+				let command = createCommand('/makeAttendee', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.makeAttendee,
 					options: {
@@ -1654,7 +1655,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/eject', action.options.userName as string, select.multi)
+				let command = createCommand('/eject', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.ejectParticipant,
 					options: {
@@ -1670,7 +1671,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/returnToMainMeeting', action.options.userName as string, select.multi)
+				let command = createCommand('/returnToMainMeeting', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.returnSelfToMainMeeting,
 					options: {
@@ -1686,7 +1687,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/admit', action.options.userName as string, select.multi)
+				let command = createCommand('/admit', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.admitSomeoneFromWaitingRoom,
 					options: {
@@ -1702,7 +1703,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/sendToWaitingRoom', action.options.userName as string, select.multi)
+				let command = createCommand('/sendToWaitingRoom', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.sendSomeoneToWaitingRoom,
 					options: {
@@ -1718,7 +1719,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/allowToSpeak', action.options.userName as string, select.multi)
+				let command = createCommand('/allowToSpeak', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.allowWebinarAttendeeToSpeak,
 					options: {
@@ -1734,7 +1735,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/disallowToSpeak', action.options.userName as string, select.multi)
+				let command = createCommand('/disallowToSpeak', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.disallowToSpeak,
 					options: {
@@ -1798,7 +1799,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/allowToRecord', action.options.userName as string, select.multi)
+				let command = createCommand('/allowToRecord', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.allowToRecord,
 					options: {
@@ -1814,7 +1815,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/disallowToRecord', action.options.userName as string, select.multi)
+				let command = createCommand('/disallowToRecord', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.disallowToRecord,
 					options: {
@@ -2118,7 +2119,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/sendToBreakout', action.options.userName as string, select.multi)
+				let command = createCommand('/sendToBreakout', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.sendParticipantToBreakoutRoom,
 					options: {
@@ -2134,7 +2135,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/removeFromBreakout', action.options.userName as string, select.multi)
+				let command = createCommand('/removeFromBreakout', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.removeParticipantFromBreakoutRoom,
 					options: {
@@ -2150,7 +2151,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/assignToBreakout', action.options.userName as string, select.multi)
+				let command = createCommand('/assignToBreakout', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.assignParticipantToBreakoutRoom,
 					options: {
@@ -2166,7 +2167,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/unassignFromBreakout', action.options.userName as string, select.multi)
+				let command = createCommand('/unassignFromBreakout', action.options.userName, select.multi)
 				const sendToCommand = {
 					id: ActionId.unassignParticipantFromBreakoutRoom,
 					options: {
@@ -2696,7 +2697,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		// 	],
 		// 	callback: (action): void => {
 		// 		// type: 'User'
-		// 		let command = createCommand('/rename', action.options.userName as string, select.single)
+		// 		let command = createCommand('/rename', action.options.userName, select.single)
 		// 		command.args.push({ type: 'i', value: action.options.name})
 		// 		const sendToCommand = {
 		// 			id: ActionId.rename,
@@ -2714,7 +2715,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.intX, options.intY],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setWindowPosition', action.options.userName as string, select.single)
+				let command = createCommand('/setWindowPosition', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.intX })
 				command.args.push({ type: 'i', value: action.options.intY })
 				const sendToCommand = {
@@ -2732,7 +2733,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.intX, options.intY],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setWindowSize', action.options.userName as string, select.single)
+				let command = createCommand('/setWindowSize', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.intX })
 				command.args.push({ type: 'i', value: action.options.intY })
 				const sendToCommand = {
@@ -2750,7 +2751,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.id],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setBackground', action.options.userName as string, select.single)
+				let command = createCommand('/setBackground', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.id })
 				const sendToCommand = {
 					id: ActionId.setVirtualBackground,
@@ -2767,7 +2768,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.id],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setVideoFilter', action.options.userName as string, select.single)
+				let command = createCommand('/setVideoFilter', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.id })
 				const sendToCommand = {
 					id: ActionId.setVideoFilter,
@@ -2784,7 +2785,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.id],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setCameraDevice', action.options.userName as string, select.single)
+				let command = createCommand('/setCameraDevice', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.id })
 				const sendToCommand = {
 					id: ActionId.setCameraDevice,
@@ -2801,7 +2802,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.level],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setSpeakerVolume', action.options.userName as string, select.multi)
+				let command = createCommand('/setSpeakerVolume', action.options.userName, select.multi)
 				command.args.push({ type: 'i', value: action.options.level })
 				const sendToCommand = {
 					id: ActionId.setSpeakerVolume,
@@ -2818,7 +2819,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.id],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setSpeakerDevice', action.options.userName as string, select.single)
+				let command = createCommand('/setSpeakerDevice', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.id })
 				const sendToCommand = {
 					id: ActionId.setSpeakerDevice,
@@ -2835,7 +2836,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.id],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/setMicDevice', action.options.userName as string, select.single)
+				let command = createCommand('/setMicDevice', action.options.userName, select.single)
 				command.args.push({ type: 'i', value: action.options.id })
 				const sendToCommand = {
 					id: ActionId.setMicDevice,
@@ -2920,7 +2921,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.message],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/chat', action.options.userName as string, select.single)
+				let command = createCommand('/chat', action.options.userName, select.single)
 				command.args.push({ type: 's', value: action.options.message })
 				const sendToCommand = {
 					id: ActionId.sendAChatViaDM,
@@ -3115,7 +3116,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	 * @param name string
 	 * @returns object { argsCallers: { type: string; value: string | number }[]; oscPath: string }
 	 */
-	const createCommand = (OSCAction: string, name?: string, singleUser?: boolean | null) => {
+	const createCommand = (OSCAction: string, name?: InputValue | string | undefined, singleUser?: boolean | null) => {
 		let command: {
 			args: { type: string; value: any }[]
 			argsNames: { type: string; value: any }[]
@@ -3135,7 +3136,7 @@ export function getActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			// Check if override has been filled
 			if (name != '' && name != undefined) {
 				instance.showLog('debug', 'Override:' + name)
-				let value = instance.getVariableValue(name)
+				let value = instance.getVariableValue(name as string)
 				instance.showLog('console', 'Value of getVariable:' + value)
 				if (value !== undefined || '') name = value?.toString()
 
