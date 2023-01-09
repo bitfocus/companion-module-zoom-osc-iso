@@ -60,7 +60,8 @@ export class OSC {
 		this.oscHost = this.instance.config.host || '127.0.0.1'
 		this.oscTXPort = this.instance.config.tx_port || 9090
 		this.oscRXPort = this.instance.config.rx_port || 1234
-		this.instance.log('info', 'port settings' + this.oscHost + this.oscTXPort + this.oscRXPort)
+
+		this.instance.updateStatus(InstanceStatus.Connecting)
 
 		this.udpPort = new osc.UDPPort({
 			localAddress: '0.0.0.0',
