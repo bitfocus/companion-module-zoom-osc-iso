@@ -23,7 +23,7 @@ enum engineState {
 	enabled = 2,
 }
 
-export function getFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
+export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
 	// Create the choices
 	let CHOICES_POSITION = []
 	for (let index = 1; index < 1000; index++) {

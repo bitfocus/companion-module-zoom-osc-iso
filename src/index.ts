@@ -1,7 +1,7 @@
 import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
 import { GetConfigFields, ZoomConfig } from './config'
 import { GetActions } from './actions'
-// import { getFeedbacks } from './feedback'
+import { GetFeedbacks } from './feedback'
 import { GetPresetList } from './presets'
 import { InitVariables, updateVariables } from './variables'
 import { OSC } from './osc'
@@ -17,7 +17,7 @@ import {
 } from './utils'
 
 /**
- * Companion instance class for Zoom
+ * @description Companion instance class for Zoom
  */
 class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public config: ZoomConfig = {
@@ -68,24 +68,16 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public OSC: OSC | null = null
 
 	/**
-	 *
+	 * @description constructor
 	 * @param internal
 	 */
 	constructor(internal: unknown) {
 		super(internal)
-		// this.system = system
-		// this.config = config
-		// Setup groups
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-			this.ZoomGroupData[index] = {
-				groupName: `Group ${index + 1}`,
-				users: [],
-			}
-		}
+		
 	}
 
 	/**
-	 *
+	 * @description when config is updated
 	 * @param config
 	 */
 	public async configUpdated(config: ZoomConfig): Promise<void> {
@@ -106,8 +98,8 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 
 	/**
-	 *
-	 * @returns
+	 * @description get all config field information
+	 * @returns the config fields
 	 */
 	getConfigFields(): SomeCompanionConfigField[] {
 		return GetConfigFields()
@@ -117,7 +109,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 * @param config
 	 */
 	public async init(config: ZoomConfig): Promise<void> {
-		this.log('info', `Welcome, Zoom module is loading`)
+		this.log('info', `Welcome, Zoom module is being initialized`)
 
 		await this.configUpdated(config)
 	}
@@ -137,43 +129,14 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 
 	/**
-	 * @description function to handle logs
-	 * @param type isolate, console, OSC, debug, info
-	 * @param message
-	 */
-	public showLog(type: string, message: string): void {
-		switch (type) {
-			case 'isolate':
-				console.log(message)
-				break
-			case 'console':
-				console.log(message)
-				break
-			case 'OSC':
-				console.log(message)
-				break
-			case 'debug':
-				this.log('debug', message)
-				break
-			case 'info':
-				this.log('info', message)
-				break
-			case 'error':
-				this.log('error', message)
-				break
-		}
-	}
-
-	/**
-	 * @description sets actions, presets and feedbacks available for this instance
+	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
-		// Cast actions and feedbacks from Zoom types to Companion types
 		InitVariables(this)
 		updateVariables(this)
 
 		this.setActionDefinitions(GetActions(this))
-		// this.setFeedbackDefinitions(feedbacks)
+		this.setFeedbackDefinitions(GetFeedbacks(this))
 		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
 	}
 }
