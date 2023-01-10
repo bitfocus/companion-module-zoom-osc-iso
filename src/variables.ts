@@ -102,15 +102,13 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
-		variables[`GalleryPosition${padding(index, 2)}`] = zoomID
-			? instance.ZoomUserData[zoomID].userName
-			: '-'
+		variables[`GalleryPosition${padding(index, 2)}`] = zoomID ? instance.ZoomUserData[zoomID].userName : '-'
 	}
 
 	instance.setVariableValues(variables)
 }
 
-export function InitVariables(instance: InstanceBaseExt<ZoomConfig>): void {
+export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	const globalSettings: Set<CompanionVariableDefinition> = new Set([
 		// Status
 		{ name: 'Zoom version', variableId: 'zoomVersion' },
@@ -190,7 +188,6 @@ export function InitVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (const key in instance.ZoomAudioLevelData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioLevelData, key)) {
-			// const channel = instance.ZoomAudioLevelData[key]
 			audioLevelVariables.push({
 				name: `Channel ${key} audiolevel`,
 				variableId: `Channel${key}`,
