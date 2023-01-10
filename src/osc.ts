@@ -328,8 +328,8 @@ export class OSC {
 					// this.instance.saveConfig(this.instance.config)
 					this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 					this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-					if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
-						this.instance.log('info', `User data doesnt match with list info`)
+					// if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
+					// 	this.instance.log('info', `User data doesnt match with list info`)
 
 					this.needToPingPong = false
 					if (this.pingInterval) {
