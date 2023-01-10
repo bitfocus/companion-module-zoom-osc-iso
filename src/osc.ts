@@ -348,8 +348,6 @@ export class OSC {
 					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
-					this.instance.log('info', 'receiving:' + JSON.stringify(data))
-
 					break
 
 				case 'meetingStatus':
