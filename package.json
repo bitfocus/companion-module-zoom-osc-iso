@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
@@ -17,7 +17,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@companion-module/base": "~1.0.0",
+		"@companion-module/base": "~1.0.2",
 		"lodash": "^4.17.21",
 		"osc": "^2.4.3"
 	},
