@@ -68,7 +68,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'number',
 			id: 'pulling',
-			label: 'Pull data in seconds (only for ZoomISO)',
+			label: 'Sync iso configuration time in seconds (only for ZoomISO)',
 			default: 5,
 			min: 1,
 			max: 60,
