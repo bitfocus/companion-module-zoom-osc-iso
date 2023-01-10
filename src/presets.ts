@@ -1,11 +1,8 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
-
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
 const { images } = require('./images')
-import { ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
-
-export type PresetCategory = 'Select Users' | 'User presets' | 'Global Presets' | 'Special Presets'
+import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
 
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 	feedbacks: Array<
@@ -44,10 +41,10 @@ export function GetPresetList(
 			category: 'Select from Participants',
 			name: `Caller${index}`,
 			style: {
-				text: `${index}. $(zoomosc:Participant${index})`,
+				text: `${index}. $(zoomosc:Participant${padding(index, 3)})`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(125, 125, 125),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [
 				{
@@ -71,7 +68,7 @@ export function GetPresetList(
 						type: 'micLive',
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(255, 0, 0),
 					},
 				},
@@ -93,7 +90,7 @@ export function GetPresetList(
 						type: 'activeSpeaker',
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(0, 0, 255),
 					},
 				},
@@ -121,10 +118,10 @@ export function GetPresetList(
 			category: 'Select from Gallery',
 			name: `$(zoomosc:Gallery position ${index})`,
 			style: {
-				text: `Gal Pos ${index}\\n$(zoomosc:Gallery position ${index})`,
-				size: 'auto',
+				text: `Gal Pos ${index}\\n$(zoomosc:GalleryPosition${padding(index, 2)})`,
+				size: '14',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(125, 125, 125),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [
 				{
@@ -140,7 +137,7 @@ export function GetPresetList(
 						type: 'micLive',
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(255, 0, 0),
 					},
 				},
@@ -151,7 +148,7 @@ export function GetPresetList(
 						type: 'activeSpeaker',
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(0, 0, 255),
 					},
 				},
@@ -191,9 +188,9 @@ export function GetPresetList(
 		name: `Clear Participants`,
 		style: {
 			text: `Clear Participants ($(zoomosc:selectedNumberOfCallers))`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -210,9 +207,9 @@ export function GetPresetList(
 		name: `Selection Method`,
 		style: {
 			text: `Toggle Selection Method`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.selectionMethod, options: { selectionMethod: 2 } }], up: [] }],
 		feedbacks: [
@@ -243,9 +240,9 @@ export function GetPresetList(
 		name: `Single selection`,
 		style: {
 			text: `Single selection`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
 		feedbacks: [],
@@ -257,9 +254,9 @@ export function GetPresetList(
 		name: `Select by name`,
 		style: {
 			text: `Select by name`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.selectUserByName, options: { option: 'toggle' } }], up: [] }],
 		feedbacks: [
@@ -270,7 +267,7 @@ export function GetPresetList(
 					type: 'micLive',
 				},
 				style: {
-					color: combineRgb(255, 255, 255),
+					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(255, 0, 0),
 				},
 			},
@@ -292,7 +289,7 @@ export function GetPresetList(
 					type: 'activeSpeaker',
 				},
 				style: {
-					color: combineRgb(255, 255, 255),
+					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(0, 0, 255),
 				},
 			},
@@ -316,9 +313,9 @@ export function GetPresetList(
 		name: `Multiple selection`,
 		style: {
 			text: `Multiple selection`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.selectionMethod, options: { selectionMethod: 0 } }], up: [] }],
 		feedbacks: [],
@@ -330,9 +327,9 @@ export function GetPresetList(
 		name: `Next participants`,
 		style: {
 			text: `Next participants`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.nextParticipants, options: { shift: 30 } }], up: [] }],
 		feedbacks: [],
@@ -344,9 +341,9 @@ export function GetPresetList(
 		name: `Previous participants`,
 		style: {
 			text: `Previous participants`,
-			size: 'auto',
-			color: combineRgb(255, 255, 255),
-			bgcolor: combineRgb(125, 125, 125),
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.previousParticipants, options: { shift: 30 } }], up: [] }],
 		feedbacks: [],
@@ -359,9 +356,9 @@ export function GetPresetList(
 			name: `Make group: ${ZoomGroupData[index].groupName}`,
 			style: {
 				text: `Make group:\\n$(zoomosc:Group${index + 1})`,
-				size: 'auto',
-				color: combineRgb(255, 255, 255),
-				bgcolor: combineRgb(125, 125, 125),
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'set' } }], up: [] }],
 			feedbacks: [],
@@ -372,9 +369,9 @@ export function GetPresetList(
 			name: `Add to group: ${ZoomGroupData[index].groupName}`,
 			style: {
 				text: `Add to group:\\n$(zoomosc:Group${index + 1})`,
-				size: 'auto',
-				color: combineRgb(255, 255, 255),
-				bgcolor: combineRgb(125, 125, 125),
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'add' } }], up: [] }],
 			feedbacks: [],
@@ -385,9 +382,9 @@ export function GetPresetList(
 			name: `Clear group: ${ZoomGroupData[index].groupName}`,
 			style: {
 				text: `Clear group:\\n$(zoomosc:Group${index + 1})`,
-				size: 'auto',
-				color: combineRgb(255, 255, 255),
-				bgcolor: combineRgb(125, 125, 125),
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [{ down: [{ actionId: ActionId.clearGroup, options: { group: index } }], up: [] }],
 			feedbacks: [],
@@ -398,9 +395,9 @@ export function GetPresetList(
 			name: ZoomGroupData[index].groupName,
 			style: {
 				text: `Select\\n$(zoomosc:Group${index + 1}) ($(zoomosc:CallersInGroup${index + 1}))`,
-				size: 'auto',
-				color: combineRgb(255, 255, 255),
-				bgcolor: combineRgb(125, 125, 125),
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [{ down: [{ actionId: ActionId.selectGroup, options: { group: index } }], up: [] }],
 			feedbacks: [],
@@ -411,9 +408,9 @@ export function GetPresetList(
 			name: ZoomGroupData[index].groupName,
 			style: {
 				text: `Rename\\n$(zoomosc:Group${index + 1})`,
-				size: 'auto',
-				color: combineRgb(255, 255, 255),
-				bgcolor: combineRgb(125, 125, 125),
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
 			},
 			steps: [
 				{
@@ -430,9 +427,9 @@ export function GetPresetList(
 		// 		name: 'Group selection',
 		// 		style: {
 		// 			text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
-		// 			size: 'auto',
-		// 			color: combineRgb(255, 255, 255),
-		// 			bgcolor: combineRgb(125, 125, 125),
+		// 			size: '14',
+		// 			color: combineRgb(0, 0, 0),
+		// 			bgcolor: combineRgb(230, 230, 230),
 		// 		},
 		// 		steps: [
 		// 			{
@@ -493,9 +490,9 @@ export function GetPresetList(
 		name: 'Pin',
 		style: {
 			text: 'Pin',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -511,9 +508,9 @@ export function GetPresetList(
 		name: 'add_Pin',
 		style: {
 			text: 'Add Pin',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -529,9 +526,9 @@ export function GetPresetList(
 		name: 'un_Pin',
 		style: {
 			text: 'Un Pin',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -547,9 +544,9 @@ export function GetPresetList(
 		name: 'Toggle_Pin',
 		style: {
 			text: 'Toggle Pin',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -565,9 +562,9 @@ export function GetPresetList(
 		name: 'Pin_Screen_2',
 		style: {
 			text: 'Pin Screen 2',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -583,9 +580,9 @@ export function GetPresetList(
 		name: 'UnPin_Screen_2',
 		style: {
 			text: 'Un Pin Screen 2',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -601,9 +598,9 @@ export function GetPresetList(
 		name: 'Toggle_Screen_2',
 		style: {
 			text: 'Toggle Pin Screen 2',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -619,9 +616,9 @@ export function GetPresetList(
 		name: 'Clear_Pins',
 		style: {
 			text: 'Clear Pins',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -637,9 +634,9 @@ export function GetPresetList(
 		name: 'Spotlight',
 		style: {
 			text: 'Spotlight',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -655,9 +652,9 @@ export function GetPresetList(
 		name: 'Add_Spotlight',
 		style: {
 			text: 'Add to Spotlight',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -673,9 +670,9 @@ export function GetPresetList(
 		name: 'Un_Spotlight',
 		style: {
 			text: 'Un Spotlight',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -691,9 +688,9 @@ export function GetPresetList(
 		name: 'Toggle_Spotlight',
 		style: {
 			text: 'Toggle Spotlight',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -709,9 +706,9 @@ export function GetPresetList(
 		name: 'Clear_Spotlight',
 		style: {
 			text: 'Clear Spotlight',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -727,9 +724,9 @@ export function GetPresetList(
 		name: 'Set_Gallery_View',
 		style: {
 			text: 'Set Gallery View',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -745,9 +742,9 @@ export function GetPresetList(
 		name: 'Set_Speaker_View',
 		style: {
 			text: 'Set Speaker View',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -763,9 +760,9 @@ export function GetPresetList(
 		name: 'Next_Gallery_Page',
 		style: {
 			text: 'Next Gallery Page',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -781,9 +778,9 @@ export function GetPresetList(
 		name: 'Previous_Gallery_Page',
 		style: {
 			text: 'Previous Gallery Page',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -799,9 +796,9 @@ export function GetPresetList(
 		name: 'Show_Non_Video_Participants',
 		style: {
 			text: 'Show Non Video Participants',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -817,9 +814,9 @@ export function GetPresetList(
 		name: 'Hide_Non_Video_Participants',
 		style: {
 			text: 'Hide Non Video Participants',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -839,9 +836,9 @@ export function GetPresetList(
 		name: 'Video_On',
 		style: {
 			text: 'Turn Video On',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -857,9 +854,9 @@ export function GetPresetList(
 		name: 'Video_Off',
 		style: {
 			text: 'Turn Video Off',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -875,9 +872,9 @@ export function GetPresetList(
 		name: 'Toggle_Video',
 		style: {
 			text: 'Toggle Video State',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -893,9 +890,9 @@ export function GetPresetList(
 		name: 'Mute',
 		style: {
 			text: 'Mute',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -911,9 +908,9 @@ export function GetPresetList(
 		name: 'Mute_All',
 		style: {
 			text: 'Unmute',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -929,9 +926,9 @@ export function GetPresetList(
 		name: 'Mute_All',
 		style: {
 			text: 'Mute all',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -947,9 +944,9 @@ export function GetPresetList(
 		name: 'Unmute_All',
 		style: {
 			text: 'Unmute all',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -965,9 +962,9 @@ export function GetPresetList(
 		name: 'Toggle_mute',
 		style: {
 			text: 'Toggle mute',
-			size: '18',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(125, 125, 125),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [
 			{
@@ -987,11 +984,24 @@ export function GetPresetList(
 		name: `Apply_Output`,
 		style: {
 			text: `Apply Output`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(141, 218, 77),
 		},
 		steps: [{ down: [{ actionId: ActionId.applyOutput, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Apply_Outputs`] = {
+		type: 'button',
+		category: 'ZoomISO Output Actions',
+		name: `Apply_Outputs`,
+		style: {
+			text: `Apply Outputs`,
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(141, 218, 77),
+		},
+		steps: [{ down: [{ actionId: ActionId.applyOutputs, options: {} }], up: [] }],
 		feedbacks: [],
 	}
 	presets[`Apply_Channel`] = {
@@ -1000,9 +1010,9 @@ export function GetPresetList(
 		name: `Apply_Channel`,
 		style: {
 			text: `Apply Channel`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(141, 218, 77),
 		},
 		steps: [{ down: [{ actionId: ActionId.applyChannel, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1016,7 +1026,7 @@ export function GetPresetList(
 				text: `Select Output ${index}`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(86, 221, 221),
+				bgcolor: combineRgb(141, 218, 77),
 			},
 			steps: [
 				{
@@ -1036,7 +1046,7 @@ export function GetPresetList(
 						output: index,
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(255, 0, 0),
 					},
 				},
@@ -1052,7 +1062,7 @@ export function GetPresetList(
 				text: `Audio\nChannel ${index}`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(86, 221, 221),
+				bgcolor: combineRgb(141, 218, 77),
 			},
 			steps: [
 				{
@@ -1072,7 +1082,7 @@ export function GetPresetList(
 						output: index,
 					},
 					style: {
-						color: combineRgb(255, 255, 255),
+						color: combineRgb(0, 0, 0),
 						bgcolor: combineRgb(255, 0, 0),
 					},
 				},
@@ -1085,24 +1095,11 @@ export function GetPresetList(
 		name: `Select_Channel`,
 		style: {
 			text: `Select Channel`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(141, 218, 77),
 		},
-		steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: { output: 1} }], up: [] }],
-		feedbacks: [],
-	}
-	presets[`Apply_Outputs`] = {
-		type: 'button',
-		category: 'ZoomISO Output Actions',
-		name: `Apply_Outputs`,
-		style: {
-			text: `Apply Outputs`,
-			size: 'auto',
-			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
-		},
-		steps: [{ down: [{ actionId: ActionId.applyOutputs, options: {} }], up: [] }],
+		steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: { output: 1 } }], up: [] }],
 		feedbacks: [],
 	}
 
@@ -1115,9 +1112,9 @@ export function GetPresetList(
 		name: `Raise_Hand`,
 		style: {
 			text: `Raise Hand`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.raiseHand, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1128,9 +1125,9 @@ export function GetPresetList(
 		name: `Lower_Hand`,
 		style: {
 			text: `Lower Hand`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.lowerHand, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1141,9 +1138,9 @@ export function GetPresetList(
 		name: `Toggle_Hand`,
 		style: {
 			text: `Toggle Hand`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.toggleHand, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1154,9 +1151,9 @@ export function GetPresetList(
 		name: `Lower_All_Hands`,
 		style: {
 			text: `Lower All Hands`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.lowerAllHands, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1171,7 +1168,7 @@ export function GetPresetList(
 				name: user.userName,
 				style: {
 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-					size: 'auto',
+					size: '14',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(111, 222, 222),
 				},
@@ -1189,9 +1186,9 @@ export function GetPresetList(
 		name: `Make_Host`,
 		style: {
 			text: `Make Host`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.makeHost, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1202,9 +1199,9 @@ export function GetPresetList(
 		name: `Make_CoHost`,
 		style: {
 			text: `Make Co Host`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.makeCoHost, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1215,9 +1212,9 @@ export function GetPresetList(
 		name: `Revoke_CoHost`,
 		style: {
 			text: `Revoke CoHost`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.revokeCoHost, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1228,9 +1225,9 @@ export function GetPresetList(
 		name: `Reclaim_Host`,
 		style: {
 			text: `Reclaim Host`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.reclaimHost, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1241,9 +1238,9 @@ export function GetPresetList(
 		name: `Make_Panelist`,
 		style: {
 			text: `Make Panelist`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.makePanelist, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1254,9 +1251,9 @@ export function GetPresetList(
 		name: `Make_Attendee`,
 		style: {
 			text: `Make Attendee`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.makeAttendee, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1267,9 +1264,9 @@ export function GetPresetList(
 		name: `Eject_Participant`,
 		style: {
 			text: `Eject Participant`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.ejectParticipant, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1280,9 +1277,9 @@ export function GetPresetList(
 		name: `Eject_All`,
 		style: {
 			text: `Eject All`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.ejectAll, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1293,9 +1290,9 @@ export function GetPresetList(
 		name: `Admit_Participant`,
 		style: {
 			text: `Admit Participant`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.admitSomeoneFromWaitingRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1306,9 +1303,9 @@ export function GetPresetList(
 		name: `Admit_All_Participant`,
 		style: {
 			text: `Admit All`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.admitEveryoneFromWaitingRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1319,9 +1316,9 @@ export function GetPresetList(
 		name: `Send_to_Waiting_Room`,
 		style: {
 			text: `Send to Waiting Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.sendSomeoneToWaitingRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1332,9 +1329,9 @@ export function GetPresetList(
 		name: `Enable_Waiting_Room`,
 		style: {
 			text: `Enable Waiting Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableWaitingRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1345,9 +1342,9 @@ export function GetPresetList(
 		name: `Disable_Waiting_Room`,
 		style: {
 			text: `Disable Waiting Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableWaitingRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1358,9 +1355,9 @@ export function GetPresetList(
 		name: `Allow_To_speak`,
 		style: {
 			text: `Allow to Speak`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.allowWebinarAttendeeToSpeak, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1371,9 +1368,9 @@ export function GetPresetList(
 		name: `Disallow_To_speak`,
 		style: {
 			text: `Disallow to Speak`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disallowToSpeak, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1384,9 +1381,9 @@ export function GetPresetList(
 		name: `Enable_Users_Unmute`,
 		style: {
 			text: `Enable Users Unmute`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableUsersToUnmute, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1397,9 +1394,9 @@ export function GetPresetList(
 		name: `Disable_Users_Unmute`,
 		style: {
 			text: `Disable Users Unmute`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableUsersToUnmute, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1414,9 +1411,9 @@ export function GetPresetList(
 		name: `Join_Meeting`,
 		style: {
 			text: `Join Meeting`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.joinMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1427,9 +1424,9 @@ export function GetPresetList(
 		name: `Leave_Meeting`,
 		style: {
 			text: `Leave Meeting`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.leaveMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1440,9 +1437,9 @@ export function GetPresetList(
 		name: `End_Meeting`,
 		style: {
 			text: `End Meeting`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.endMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1453,9 +1450,9 @@ export function GetPresetList(
 		name: `ZAK_Join_Meeting`,
 		style: {
 			text: `ZAK Join Meeting`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.ZAKJoinMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1466,9 +1463,9 @@ export function GetPresetList(
 		name: `ZAK_Start_Meeting`,
 		style: {
 			text: `ZAK Start Meeting`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.ZAKStartMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1483,9 +1480,9 @@ export function GetPresetList(
 		name: `Set_Camera`,
 		style: {
 			text: `Set Camera`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.setCameraDevice, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1496,9 +1493,9 @@ export function GetPresetList(
 		name: `Set_Mic`,
 		style: {
 			text: `Set Mic`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.setMicDevice, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1509,9 +1506,9 @@ export function GetPresetList(
 		name: `Set_Camera`,
 		style: {
 			text: `Set Camera`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.setCameraDevice, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1522,9 +1519,9 @@ export function GetPresetList(
 		name: `Set_Mic_Level`,
 		style: {
 			text: `Set Mic Level`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.setMicLevel, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1535,9 +1532,9 @@ export function GetPresetList(
 		name: `Set_Speaker_Level`,
 		style: {
 			text: `Set Speaker Level`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.setSpeakerVolume, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1548,9 +1545,9 @@ export function GetPresetList(
 		name: `Enable_Original_Sound`,
 		style: {
 			text: `Enable Original Sound`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableOriginalSound, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1561,9 +1558,9 @@ export function GetPresetList(
 		name: `Disable_Original_Sound`,
 		style: {
 			text: `Disable Original Sound`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableOriginalSound, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1574,9 +1571,9 @@ export function GetPresetList(
 		name: `Enable_Mirror`,
 		style: {
 			text: `Enable Mirror`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableMirrorVideo, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1587,9 +1584,9 @@ export function GetPresetList(
 		name: `Disable_Mirror`,
 		style: {
 			text: `Disable Mirror`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableMirrorVideo, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1600,9 +1597,9 @@ export function GetPresetList(
 		name: `Enable_HD`,
 		style: {
 			text: `Enable HD`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableHDVideo, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1613,9 +1610,9 @@ export function GetPresetList(
 		name: `Disable_HD`,
 		style: {
 			text: `Disable HD`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableHDVideo, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1626,9 +1623,9 @@ export function GetPresetList(
 		name: `Set_Window_XY`,
 		style: {
 			text: `Set Window XY`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.SetWindowPosition, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1639,9 +1636,9 @@ export function GetPresetList(
 		name: `Set_Window_Size`,
 		style: {
 			text: `Set Window Size`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.SetWindowSize, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1656,9 +1653,9 @@ export function GetPresetList(
 		name: `Send_Chat_Everyone`,
 		style: {
 			text: `Send Chat Everyone`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.sendAChatToEveryone, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1669,9 +1666,9 @@ export function GetPresetList(
 		name: `Send_Chat_DM`,
 		style: {
 			text: `Send Chat DM`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.sendAChatViaDM, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1686,9 +1683,9 @@ export function GetPresetList(
 		name: `Screen_Share`,
 		style: {
 			text: `Screen Share`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startScreenShare, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1699,9 +1696,9 @@ export function GetPresetList(
 		name: `Screen_Share_Primary`,
 		style: {
 			text: `Screen Share Primary`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startScreenShareWithPrimaryScreen, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1712,9 +1709,9 @@ export function GetPresetList(
 		name: `Share_Window`,
 		style: {
 			text: `Share Window`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startShareWithWindow, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1725,9 +1722,9 @@ export function GetPresetList(
 		name: `Share_Camera`,
 		style: {
 			text: `Share Camera`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startCameraShare, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1738,9 +1735,9 @@ export function GetPresetList(
 		name: `Share_Audio`,
 		style: {
 			text: `Share Audio`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startAudioShare, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1751,9 +1748,9 @@ export function GetPresetList(
 		name: `Cycle_Shared_Camera`,
 		style: {
 			text: `Cycle Shared Camera`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.cycleSharedCameraToNextAvailable, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1764,9 +1761,9 @@ export function GetPresetList(
 		name: `Enable Optimize for Video`,
 		style: {
 			text: `Enable Optimize for Video`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.enableOptimizeVideoForSharing, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1777,9 +1774,9 @@ export function GetPresetList(
 		name: `Disable_Optimize_for_Video`,
 		style: {
 			text: `Disable Optimize for Video`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disableOptimizeVideoForSharing, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1794,9 +1791,9 @@ export function GetPresetList(
 		name: `Create_Breakout_Room`,
 		style: {
 			text: `Create Breakout Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.createBreakoutRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1807,9 +1804,9 @@ export function GetPresetList(
 		name: `Configure_Breakouts`,
 		style: {
 			text: `Configure Breakouts`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.configureBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1820,9 +1817,9 @@ export function GetPresetList(
 		name: `Delete_Breakout_Room`,
 		style: {
 			text: `Delete Breakout Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.deleteBreakoutRoom, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1833,9 +1830,9 @@ export function GetPresetList(
 		name: `Open_Breakouts`,
 		style: {
 			text: `Open Breakouts`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.openBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1846,9 +1843,9 @@ export function GetPresetList(
 		name: `Close_Breakouts`,
 		style: {
 			text: `Close Breakouts`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.closeBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1859,9 +1856,9 @@ export function GetPresetList(
 		name: `Delete_All_Breakouts`,
 		style: {
 			text: `Delete All Breakouts`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.deleteAllBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1872,9 +1869,9 @@ export function GetPresetList(
 		name: `Return_Self_to_Main_Room`,
 		style: {
 			text: `Return Self to Main Room`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.returnSelfToMainMeeting, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1885,9 +1882,9 @@ export function GetPresetList(
 		name: `Broadcast_Message_to_Breakouts`,
 		style: {
 			text: `Broadcast Message to Breakouts`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.broadcastMessageToBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1902,9 +1899,9 @@ export function GetPresetList(
 		name: `Start_Local_Recording`,
 		style: {
 			text: `Start Local Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startLocalRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1915,9 +1912,9 @@ export function GetPresetList(
 		name: `Pause_Local_Recording`,
 		style: {
 			text: `Pause Local Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.pauseLocalRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1928,9 +1925,9 @@ export function GetPresetList(
 		name: `Resume_Local_Recording`,
 		style: {
 			text: `Resume Local Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.resumeLocalRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1941,9 +1938,9 @@ export function GetPresetList(
 		name: `Stop_Local_Recording`,
 		style: {
 			text: `Stop Local Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.stopLocalRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1954,9 +1951,9 @@ export function GetPresetList(
 		name: `Start_Cloud_Recording`,
 		style: {
 			text: `Start Cloud Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startCloudRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1967,9 +1964,9 @@ export function GetPresetList(
 		name: `Pause_Cloud_Recording`,
 		style: {
 			text: `Pause Cloud Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.pauseCloudRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1980,9 +1977,9 @@ export function GetPresetList(
 		name: `Resume_Cloud_Recording`,
 		style: {
 			text: `Resume Cloud Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.resumeCloudRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -1993,9 +1990,9 @@ export function GetPresetList(
 		name: `Stop_Cloud_Recording`,
 		style: {
 			text: `Stop Cloud Recording`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.stopCloudRecording, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2006,9 +2003,9 @@ export function GetPresetList(
 		name: `Allow_to_Local_Record`,
 		style: {
 			text: `Allow to Local Record`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.allowToRecord, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2019,9 +2016,9 @@ export function GetPresetList(
 		name: `Disallow_to_Local_Record`,
 		style: {
 			text: `Disallow to Local Record`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.disallowToRecord, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2035,9 +2032,9 @@ export function GetPresetList(
 		name: `Ping`,
 		style: {
 			text: `Ping`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.pingZoomOSC, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2048,9 +2045,9 @@ export function GetPresetList(
 		name: `Request_List_Participants`,
 		style: {
 			text: `Request List of Participants`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.listUsers, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2061,9 +2058,9 @@ export function GetPresetList(
 		name: `Request_List_of_Breakout_Rooms`,
 		style: {
 			text: `Request List of Breakout Rooms`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.requestListOfBreakoutRooms, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2074,9 +2071,9 @@ export function GetPresetList(
 		name: `Request_Gallery_Order`,
 		style: {
 			text: `Request Gallery Order`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.requestOrderOfGalleryView, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2087,9 +2084,9 @@ export function GetPresetList(
 		name: `Request_Gallery_Count`,
 		style: {
 			text: `Request Gallery Count`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.requestGalleryCount, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2100,9 +2097,9 @@ export function GetPresetList(
 		name: `Custom_Command`,
 		style: {
 			text: `Custom Command`,
-			size: 'auto',
+			size: '14',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.customCommand, options: {} }], up: [] }],
 		feedbacks: [],
@@ -2113,9 +2110,9 @@ export function GetPresetList(
 		name: `Custom_Command_with_Arguments`,
 		style: {
 			text: `Custom Command with Arguments`,
-			size: 'auto',
+			size: '7',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(86, 221, 221),
+			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.customCommandWithArguments, options: {} }], up: [] }],
 		feedbacks: [],
