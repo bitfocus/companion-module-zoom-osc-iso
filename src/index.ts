@@ -3,7 +3,7 @@ import { GetConfigFields, ZoomConfig } from './config'
 import { GetActions } from './actions'
 import { GetFeedbacks } from './feedback'
 import { GetPresetList } from './presets'
-import { InitVariables, updateVariables } from './variables'
+import { initVariables, updateVariables } from './variables'
 import { OSC } from './osc'
 import {
 	ZoomAudioLevelDataInterface,
@@ -73,7 +73,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	constructor(internal: unknown) {
 		super(internal)
-		
 	}
 
 	/**
@@ -129,10 +128,23 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 
 	/**
+	 * @description update variables values
+	 */
+	public UpdateVariablesValues(): void {
+		updateVariables(this)
+	}
+
+	/**
+	 * @description init variables
+	 */
+	public InitVariables(): void {
+		initVariables(this)
+	}
+	/**
 	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
-		InitVariables(this)
+		initVariables(this)
 		updateVariables(this)
 
 		this.setActionDefinitions(GetActions(this))
