@@ -6,6 +6,7 @@ import {
 	SomeCompanionActionInputField,
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
+import { FeedbackId } from './feedback'
 import { arrayAddRemove, arrayRemove, InstanceBaseExt, options } from './utils'
 
 const select = { single: true, multi: false }
@@ -711,7 +712,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					instance.config.selectionMethod = action.options.selectionMethod as number
 				}
 				instance.saveConfig(instance.config)
-				instance.checkFeedbacks('selectionMethod', 'groupBased')
+				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased)
 			},
 		},
 		[ActionId.selectUser]: {
@@ -751,8 +752,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser', 'groupBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.groupBased)
 			},
 		},
 		[ActionId.selectUserByName]: {
@@ -801,8 +802,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 									)
 									break
 							}
-							instance.variables?.updateVariables()
-							instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+							instance.UpdateVariablesValues()
+							instance.checkFeedbacks(
+								FeedbackId.groupBased,
+								FeedbackId.indexBased,
+								FeedbackId.userNameBased,
+								FeedbackId.galleryBased
+							)
 						}
 					}
 				}
@@ -816,8 +822,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				instance.ZoomGroupData[action.options.group as number].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.selectUserFromGroupPosition]: {
@@ -860,8 +871,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.selectFromGalleryPosition]: {
@@ -902,8 +918,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.selectFromIndexPosition]: {
@@ -944,8 +965,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.clearParticipants]: {
@@ -953,8 +979,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [],
 			callback: () => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		// Group Actions
@@ -990,8 +1021,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					}
 				})
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.clearGroup]: {
@@ -999,9 +1035,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [groupOption],
 			callback: (action) => {
 				instance.ZoomGroupData[action.options.group as number].users.length = 0
-				instance.variables?.updateVariables()
-				instance.updateVariables()
-				instance.checkFeedbacks('groupBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(FeedbackId.groupBased)
 			},
 		},
 		[ActionId.removeFromGroup]: {
@@ -1015,7 +1050,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						}
 					}
 				}
-				instance.variables?.updateVariables()
+				instance.UpdateVariablesValues()
 			},
 		},
 		// Rename Actions
@@ -1040,7 +1075,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					(finduser: { zoomId: number }) => finduser.zoomId === action.options.user
 				)
 				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name as string
-				instance.variables?.updateVariables()
+				instance.UpdateVariablesValues()
 			},
 		},
 		[ActionId.renameGroup]: {
@@ -1048,7 +1083,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [groupOption, options.name],
 			callback: (action) => {
 				instance.ZoomGroupData[action.options.group as number].groupName = action.options.name as string
-				instance.variables?.updateVariables()
+				instance.UpdateVariablesValues()
 			},
 		},
 		[ActionId.nextParticipants]: {
@@ -1070,8 +1105,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				instance.ZoomVariableLink.splice(0, numberToShift)
 				instance.ZoomVariableLink.push(...itemsToShift)
 
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		[ActionId.previousParticipants]: {
@@ -1095,8 +1135,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
 
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		// ISO Actions
@@ -1110,7 +1155,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				} else {
 					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output as number)
 				}
-				instance.checkFeedbacks('output')
+				instance.checkFeedbacks(FeedbackId.output)
 			},
 		},
 		[ActionId.selectAudioChannel]: {
@@ -1123,7 +1168,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				} else {
 					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output as number)
 				}
-				instance.checkFeedbacks('audioOutput')
+				instance.checkFeedbacks(FeedbackId.audioOutput)
 			},
 		},
 		[ActionId.applyOutput]: {
@@ -1145,8 +1190,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// reset arrays
 					instance.ZoomClientDataObj.selectedCallers.length = 0
 					instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.variables?.updateVariables()
-					instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased', 'output')
+					instance.UpdateVariablesValues()
+					instance.checkFeedbacks(
+						FeedbackId.groupBased,
+						FeedbackId.indexBased,
+						FeedbackId.userNameBased,
+						FeedbackId.galleryBased,
+						FeedbackId.output
+					)
 				}
 			},
 		},
@@ -1169,8 +1220,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// reset arrays
 					instance.ZoomClientDataObj.selectedCallers.length = 0
 					instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.variables?.updateVariables()
-					instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased', 'output')
+					instance.UpdateVariablesValues()
+					instance.checkFeedbacks(
+						FeedbackId.groupBased,
+						FeedbackId.indexBased,
+						FeedbackId.userNameBased,
+						FeedbackId.galleryBased,
+						FeedbackId.output
+					)
 				}
 			},
 		},
@@ -1198,8 +1255,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// reset arrays
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomClientDataObj.selectedOutputs.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased', 'indexBased', 'userNameBased', 'galleryBased', 'output')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased,
+					FeedbackId.output
+				)
 			},
 		},
 		[ActionId.pin]: {
@@ -3020,13 +3083,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.joinMeeting]: {
 			name: 'Join Meeting',
-			options: [options.meetingID, options.name, options.password],
+			options: [options.meetingID, options.password, options.name],
 			callback: (action): void => {
 				// type: 'Special'
 				let command = createCommand('/joinMeeting')
 				command.args.push({ type: 's', value: action.options.meetingID })
-				command.args.push({ type: 's', value: action.options.name })
 				command.args.push({ type: 's', value: action.options.password })
+				command.args.push({ type: 's', value: action.options.name })
 				const sendToCommand = {
 					id: ActionId.joinMeeting,
 					options: {

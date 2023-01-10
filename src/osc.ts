@@ -1,7 +1,7 @@
 import { InstanceBaseExt } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
-import { InitVariables, updateVariables } from './variables'
+import { FeedbackId } from './feedback'
 const osc = require('osc')
 
 interface ZoomOSCResponse {
@@ -100,7 +100,7 @@ export class OSC {
 					this.instance.updateInstance()
 					this.updateLoop = false
 					// Make sure initial status is reflected
-					// this.instance.checkFeedbacks('indexBased', 'galleryBased', 'groupBased', 'selectionMethod', 'userNameBased')
+					this.instance.checkFeedbacks('indexBased', 'galleryBased', 'groupBased', 'selectionMethod', 'userNameBased')
 				}
 			}, 2000)
 		})
@@ -140,8 +140,8 @@ export class OSC {
 			} else {
 				this.instance.log('debug', 'wrong arguments in OSC feedback')
 			}
-			InitVariables(this.instance)
-			updateVariables(this.instance)
+			this.instance.InitVariables()
+			this.instance.UpdateVariablesValues()
 		}
 	}
 
@@ -191,57 +191,44 @@ export class OSC {
 							if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
-								this.instance.variables?.updateVariables()
-								this.instance.checkFeedbacks('indexBased')
-								this.instance.checkFeedbacks('userNameBased')
-								this.instance.checkFeedbacks('galleryBased')
-								this.instance.checkFeedbacks('groupBased')
+								this.instance.UpdateVariablesValues()
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.indexBased,
+									FeedbackId.galleryBased,
+									FeedbackId.groupBased
+								)
 							}
 							break
 						case 'videoOn':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].videoOn = true
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
-
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 							break
 						case 'videoOff':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].videoOn = false
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
-
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 							break
 						case 'mute':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].mute = true
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
-
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 							break
 						case 'unMute':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].mute = false
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 							break
 						case 'handRaised':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].handRaised = true
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 							break
 						case 'handLowered':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].handRaised = false
-							this.instance.checkFeedbacks('indexBased')
-							this.instance.checkFeedbacks('galleryBased')
-							this.instance.checkFeedbacks('groupBased')
+							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 
 							break
 						case 'online':
@@ -261,7 +248,7 @@ export class OSC {
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
 							let findIndex = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
-							this.instance.variables?.updateVariables()
+							this.instance.UpdateVariablesValues()
 							break
 						case 'chat':
 							this.instance.log('info', 'receiving:' + JSON.stringify(data))
@@ -272,6 +259,7 @@ export class OSC {
 						case 'roleChanged':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+							this.instance.UpdateVariablesValues()
 							break
 						case 'stoppedSpeaking':
 							// this.instance.log('info','receiving:' + data)
@@ -279,10 +267,7 @@ export class OSC {
 							break
 						case 'isSpeaking':
 							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
-							this.instance.variables?.updateVariables()
-							// this.instance.checkFeedbacks('indexBased')
-							// this.instance.checkFeedbacks('galleryBased')
-							// this.instance.checkFeedbacks('groupBased')
+							this.instance.UpdateVariablesValues()
 							break
 
 						default:
@@ -301,17 +286,14 @@ export class OSC {
 					data.args.forEach((order: { type: string; value: number }) => {
 						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
 					})
-					this.instance.variables?.updateDefinitions()
-					this.instance.variables?.updateVariables()
-					this.instance.checkFeedbacks('selectedUser')
-					this.instance.checkFeedbacks('indexBased')
-					this.instance.checkFeedbacks('galleryBased')
-					this.instance.checkFeedbacks('groupBased')
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
+					this.instance.checkFeedbacks('selectedUser', 'indexBased', 'galleryBased', 'groupBased')
 					break
 
 				case 'galleryCount':
 					this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
-					this.instance.variables?.updateVariables()
+					this.instance.UpdateVariablesValues()
 					break
 
 				case 'pong':
@@ -382,9 +364,9 @@ export class OSC {
 								delete this.instance.ZoomUserData[parseInt(key)]
 							}
 						}
-						this.instance.variables?.updateVariables()
+						this.instance.UpdateVariablesValues()
 					}
-					this.sendCommand('/zoom/ping')
+					this.needToPingPong = true
 					break
 
 				case 'listCleared':
@@ -395,13 +377,14 @@ export class OSC {
 							delete this.instance.ZoomUserData[parseInt(key)]
 						}
 					}
-					this.instance.variables?.updateVariables()
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
 					break
 
 				// ISO data
 				case 'engineState':
 					this.instance.ZoomClientDataObj.engineState = data.args[0].value
-					this.instance.variables?.updateVariables()
+					this.instance.UpdateVariablesValues()
 					this.instance.checkFeedbacks('engineState')
 					break
 				case 'audioLevels':
@@ -410,7 +393,8 @@ export class OSC {
 						channel: parseInt(data.args[0].value),
 						level: parseInt(data.args[1].value),
 					}
-					updateVariables(this.instance)
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
 					break
 				case 'audioRouting':
 					this.instance.ZoomAudioRoutingData[parseInt(data.args[2].value)] = {
@@ -421,8 +405,8 @@ export class OSC {
 						gain_reduction: parseInt(data.args[4].value),
 						selection: data.args[5].value,
 					}
-					updateVariables(this.instance)
-					// this.instance.log('info', JSON.stringify(this.instance.ZoomAudioRoutingData))
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
 					break
 				case 'outputRouting':
 					let outputNumber = parseInt(data.args[1].value)
@@ -437,8 +421,8 @@ export class OSC {
 						embeddedAudioInfo: data.args[7].value,
 						status: data.args[8].value,
 					}
-					this.instance.variables?.updateDefinitions()
-					this.instance.variables?.updateVariables()
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
 					break
 
 				default:
@@ -453,7 +437,7 @@ export class OSC {
 	 * @description Check OSC connection status and format command to send to Zoom
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
-		this.instance.log('info', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
+		// this.instance.log('info', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		this.udpPort.send(
 			{
 				address: path,
@@ -471,21 +455,21 @@ export class OSC {
 		this.sendCommand('/zoom/getAudioRouting', [])
 	}
 
-	/**
-	 * @description Check for config changes and start new connections/polling if needed
-	 */
-	public readonly update = (): void => {
-		const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
-		// if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
-		// 	this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
-		// 	// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
-		// }
-		if (hostCheck) {
-			this.oscHost = this.instance.config.host
-			this.oscRXPort = this.instance.config.rx_port
-			this.oscTXPort = this.instance.config.tx_port
-			this.instance.config = this.instance.config
-			this.Connect()
-		}
-	}
+	// /**
+	//  * @description Check for config changes and start new connections/polling if needed
+	//  */
+	// public readonly update = (): void => {
+	// 	const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
+	// 	// if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
+	// 	// 	this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
+	// 	// 	// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
+	// 	// }
+	// 	if (hostCheck) {
+	// 		this.oscHost = this.instance.config.host
+	// 		this.oscRXPort = this.instance.config.rx_port
+	// 		this.oscTXPort = this.instance.config.tx_port
+	// 		this.instance.config = this.instance.config
+	// 		this.Connect()
+	// 	}
+	// }
 }
