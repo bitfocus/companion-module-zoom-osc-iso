@@ -1,6 +1,6 @@
-import { SomeCompanionConfigField } from '../../../instance_skel_types'
+import { SomeCompanionConfigField } from '@companion-module/base'
 
-export interface Config {
+export interface ZoomConfig {
 	label: string
 	host: string
 	tx_port: number
@@ -14,7 +14,7 @@ enum ZoomVersion {
 	ZoomOSC = 0,
 	ZoomISO = 1,
 }
-export const getConfigFields = (): SomeCompanionConfigField[] => {
+export const GetConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{
 			type: 'textinput',
@@ -69,9 +69,9 @@ export const getConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'number',
 			id: 'pulling',
 			label: 'Sync iso configuration time in seconds (only for ZoomISO)',
-			default: 1,
+			default: 5,
 			min: 1,
-			max: 360,
+			max: 60,
 			width: 6,
 		},
 		{

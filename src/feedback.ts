@@ -1,131 +1,29 @@
-import ZoomInstance from './'
 import {
-	CompanionFeedbackEvent,
-	SomeCompanionInputField,
-	CompanionBankRequiredProps,
-	CompanionBankAdditionalStyleProps,
-	CompanionFeedbackEventInfo,
-	CompanionBankPNG,
-} from '../../../instance_skel_types'
-import { rgb } from './utils'
+	CompanionFeedbackDefinitions,
+	combineRgb,
+	CompanionFeedbackDefinition,
+} from '@companion-module/base'
+import { ZoomConfig } from './config'
+import { InstanceBaseExt } from './utils'
 
-export interface ZoomFeedbacks {
-	selectionMethod: ZoomFeedback<selectionMethodCallback>
-	groupBased: ZoomFeedback<groupBasedCallback>
-	indexBased: ZoomFeedback<indexBasedCallback>
-	galleryBased: ZoomFeedback<galleryBasedCallback>
-	userNameBased: ZoomFeedback<userNameBasedCallback>
-	output: ZoomFeedback<outputCallback>
-	audioOutput: ZoomFeedback<audioOutputCallback>
-	// Index signature
-	[key: string]: ZoomFeedback<any>
+
+export enum FeedbackId {
+	selectionMethod = 'selection_Method',
+	groupBased = 'group_Based',
+	indexBased = 'index_Based',
+	galleryBased = 'gallery_Based',
+	userNameBased = 'user_Name_Based',
+	output = 'output',
+	audioOutput = 'audio_Output',
+	engineState = "engine_State"
 }
 enum engineState {
 	disabled = 0,
 	standby = 1,
 	enabled = 2,
 }
-interface selectionMethodCallback {
-	type: 'selectionMethod'
-	options: Readonly<{
-		selectionMethod: number
-	}>
-}
-interface groupBasedCallback {
-	type: 'groupBased'
-	options: Readonly<{
-		group: number
-		position: number
-		type: string
-	}>
-}
-interface indexBasedCallback {
-	type: 'indexBased'
-	options: Readonly<{
-		position: number
-		type: string
-	}>
-}
-interface galleryBasedCallback {
-	type: 'galleryBased'
-	options: Readonly<{
-		position: number
-		type: string
-	}>
-}
 
-interface userNameBasedCallback {
-	type: 'userNameBased'
-	options: Readonly<{
-		type: string
-		name: string
-	}>
-}
-
-interface outputCallback {
-	type: 'output'
-	options: Readonly<{
-		output: number
-	}>
-}
-
-interface audioOutputCallback {
-	type: 'audioOutput'
-	options: Readonly<{
-		output: number
-	}>
-}
-
-// Callback type for Presets
-export type FeedbackCallbacks =
-	| selectionMethodCallback
-	| groupBasedCallback
-	| indexBasedCallback
-	| galleryBasedCallback
-	| userNameBasedCallback
-	| outputCallback
-	| audioOutputCallback
-
-// Force options to have a default to prevent sending undefined values
-type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
-
-// Zoom Boolean and Advanced feedback types
-interface ZoomFeedbackBoolean<T> {
-	type: 'boolean'
-	label: string
-	description: string
-	style: Partial<CompanionBankRequiredProps & CompanionBankAdditionalStyleProps>
-	options: InputFieldWithDefault[]
-	callback?: (
-		feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>,
-		bank: Readonly<CompanionBankPNG | null>,
-		info: Readonly<CompanionFeedbackEventInfo | null>
-	) => boolean
-	subscribe?: (feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>) => boolean
-	unsubscribe?: (feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>) => boolean
-}
-
-interface ZoomFeedbackAdvanced<T> {
-	type: 'advanced'
-	label: string
-	description: string
-	options: InputFieldWithDefault[]
-	callback?: (
-		feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>,
-		bank: Readonly<CompanionBankPNG | null>,
-		info: Readonly<CompanionFeedbackEventInfo | null>
-	) => Partial<CompanionBankRequiredProps & CompanionBankAdditionalStyleProps> | void
-	subscribe?: (
-		feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>
-	) => Partial<CompanionBankRequiredProps & CompanionBankAdditionalStyleProps> | void
-	unsubscribe?: (
-		feedback: Readonly<Omit<CompanionFeedbackEvent, 'options' | 'type'> & T>
-	) => Partial<CompanionBankRequiredProps & CompanionBankAdditionalStyleProps> | void
-}
-
-export type ZoomFeedback<T> = ZoomFeedbackBoolean<T> | ZoomFeedbackAdvanced<T>
-
-export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
+export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
 	// Create the choices
 	let CHOICES_POSITION = []
 	for (let index = 1; index < 1000; index++) {
@@ -140,12 +38,13 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 		CHOICES_GROUPS.push({ id: index.toString(), label: `Group ${index + 1}` })
 	}
 
-	return {
-		selectionMethod: {
+	const feedbacks: { [id in FeedbackId]: CompanionFeedbackDefinition | undefined } = {
+	
+		[FeedbackId.selectionMethod]: {
 			type: 'boolean',
-			label: 'selection method',
+			name: 'selection method',
 			description: 'Use of single or multi select',
-			style: {
+			defaultStyle: {
 				text: 'Single selection',
 			},
 			options: [
@@ -169,12 +68,12 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				}
 			},
 		},
-		groupBased: {
+		[FeedbackId.groupBased]: {
 			type: 'boolean',
-			label: 'In a group feedback',
+			name: 'In a group feedback',
 			description: 'Indicates feedback based on selection',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -205,8 +104,8 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1]) {
-					let zoomID = instance.ZoomGroupData[feedback.options.group].users[feedback.options.position - 1].zoomID
+				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
+					let zoomID = instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1].zoomID
 					switch (feedback.options.type) {
 						case 'micLive':
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
@@ -220,18 +119,18 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 								? true
 								: false
 						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
 					}
 				}
 				return false
 			},
 		},
-		indexBased: {
+		[FeedbackId.indexBased]: {
 			type: 'boolean',
-			label: 'index based feedback',
+			name: 'index based feedback',
 			description: 'Index based feedback',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -256,8 +155,8 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomVariableLink[feedback.options.position - 1]) {
-					let zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
+				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
+					let zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 					switch (feedback.options.type) {
 						case 'micLive':
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
@@ -271,18 +170,18 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 								? true
 								: false
 						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
 					}
 				}
 				return false
 			},
 		},
-		userNameBased: {
+		[FeedbackId.userNameBased]: {
 			type: 'boolean',
-			label: 'username based feedback',
+			name: 'username based feedback',
 			description: 'username based feedback',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -311,7 +210,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
-
+	
 						switch (feedback.options.type) {
 							case 'micLive':
 								return instance.ZoomUserData[zoomID].mute === false ? true : false
@@ -324,7 +223,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 									? true
 									: false
 							case 'selected':
-								return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
+								return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
 							default:
 								return false
 						}
@@ -333,12 +232,12 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				return false
 			},
 		},
-		galleryBased: {
+		[FeedbackId.galleryBased]: {
 			type: 'boolean',
-			label: 'Gallery based feedback',
+			name: 'Gallery based feedback',
 			description: 'Gallery based feedback',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -363,12 +262,12 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]) {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
 					let zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
-					switch (feedback.options.type) {
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]].zoomId
+					switch (feedback.options.type as string) {
 						case 'micLive':
-							instance.ZoomUserData[zoomID].mute === false ? true : false
+							return instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'camera':
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
 						case 'handRaised':
@@ -379,7 +278,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 								? true
 								: false
 						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element) => element === zoomID) ? true : false
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
 						default:
 							return false
 					}
@@ -387,12 +286,12 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				return false
 			},
 		},
-		engineState: {
+		[FeedbackId.engineState]: {
 			type: 'boolean',
-			label: 'Status of the engine feedback',
+			name: 'Status of the engine feedback',
 			description: 'Show feedback of the engine',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -415,12 +314,12 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				}
 			},
 		},
-		output: {
+		[FeedbackId.output]: {
 			type: 'boolean',
-			label: 'Selected output feedback',
+			name: 'Selected output feedback',
 			description: 'Selected output',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -433,19 +332,19 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output)) {
+				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output as number)) {
 					return true
 				} else {
 					return false
 				}
 			},
 		},
-		audioOutput: {
+		[FeedbackId.audioOutput]: {
 			type: 'boolean',
-			label: 'Selected audio output feedback',
+			name: 'Selected audio output feedback',
 			description: 'Selected audio output',
-			style: {
-				bgcolor: rgb(255, 0, 0),
+			defaultStyle: {
+				bgcolor: combineRgb(255, 0, 0),
 			},
 			options: [
 				{
@@ -458,7 +357,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output)) {
+				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output as number)) {
 					return true
 				} else {
 					return false
@@ -466,4 +365,6 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 			},
 		},
 	}
+	
+	return feedbacks
 }

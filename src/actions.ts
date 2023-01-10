@@ -1,43 +1,175 @@
 import {
-	CompanionActionEventInfo,
+	CompanionActionDefinition,
+	CompanionActionDefinitions,
 	CompanionActionEvent,
-	SomeCompanionInputField,
-	CompanionActions,
-} from '../../../instance_skel_types'
-import ZoomInstance from './index'
-import { options, arrayRemove, arrayAddRemove } from './utils'
+	InputValue,
+	SomeCompanionActionInputField,
+} from '@companion-module/base'
+import { ZoomConfig } from './config'
+import { FeedbackId } from './feedback'
+import { arrayAddRemove, arrayRemove, InstanceBaseExt, options } from './utils'
 
-const { Actions, ISOActions } = require('./osccommands')
+const select = { single: true, multi: false }
 
-/**
- * Define what is needed
- */
-interface GlobalActionCallback {
-	action: string
-	options: Readonly<{
-		command: string
-		args?: string
-		msg?: string
-		breakoutRoom?: string
-	}>
-}
-
-export type GlobalActionCallbacks = GlobalActionCallback
-
-// Force options to have a default to prevent sending undefined values
-type InputFieldWithDefault = Exclude<SomeCompanionInputField, 'default'> & { default: string | number | boolean | null }
-
-// Actions specific to Zoom
-export interface ZoomAction<T> {
-	label: string
-	description?: string
-	options: InputFieldWithDefault[]
-	callback: (
-		action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>,
-		info: Readonly<CompanionActionEventInfo | null>
-	) => void
-	subscribe?: (action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>) => void
-	unsubscribe?: (action: Readonly<Omit<CompanionActionEvent, 'options' | 'id'> & T>) => void
+export enum ActionId {
+	setAudioGainReduction = 'set_AudioGain_Reduction',
+	setOutputSelection = 'set_Output_Selection',
+	setAudioSelection = 'set_Audio_Selection',
+	setOutputEmbeddedAudio = 'set_Output_Embedded_Audio',
+	setVideoLossMode = 'set_VideoLoss_Mode',
+	setOutputName = 'set_Output_Name',
+	deleteOutput = 'delete_Output',
+	outputISO = 'output_ISO',
+	audioISO = 'audio_ISO',
+	startISOEngine = 'start_ISO_Engine',
+	stopISOEngine = 'stop_ISO_Engine',
+	standbyISOEngine = 'standby_ISO_Engine',
+	addOutput = 'add_Output',
+	setOutputCount = 'set_Output_Count',
+	enableOutput = 'enable_Output',
+	disableOutput = 'disable_Output',
+	loadISOConfig = 'load_ISO_Config',
+	saveISOConfig = 'save_ISO_Config',
+	mergeISOConfig = 'merge_ISO_Config',
+	getConfigPath = 'get_Config_Path',
+	setOutputMode = 'set_Output_Mode',
+	setOutputType = 'set_Output_Type',
+	setAudioMode = 'set_Audio_Mode',
+	acceptRecordingConsent = 'accept_Recording_Consent',
+	selectionMethod = 'selection_Method',
+	selectUser = 'select_User',
+	selectUserByName = 'select_User_By_Name',
+	selectGroup = 'select_Group',
+	selectUserFromGroupPosition = 'select_User_From_Group_Position',
+	selectFromGalleryPosition = 'select_From_Gallery_Position',
+	selectFromIndexPosition = 'select_From_Index_Position',
+	clearParticipants = 'clear_Participants',
+	addToGroup = 'add_To_Group',
+	clearGroup = 'clear_Group',
+	removeFromGroup = 'remove_From_Group',
+	rename = 'rename',
+	renameGroup = 'rename_Group',
+	nextParticipants = 'next_Participants',
+	previousParticipants = 'previous_Participants',
+	selectOutput = 'select_Output',
+	selectAudioChannel = 'select_Audio_Channel',
+	applyOutput = 'apply_Output',
+	applyChannel = 'apply_Channel',
+	applyOutputs = 'apply_Outputs',
+	pin = 'pin',
+	addPin = 'add_Pin',
+	openBreakoutRooms = 'open_Breakout_Rooms',
+	unpin = 'unpin',
+	clearPins = 'clear_Pins',
+	togglePin = 'toggle_Pin',
+	pinScreen2 = 'pin_Screen2',
+	unPinScreen2 = 'unPinScreen2',
+	clearPinsScreen2 = 'clearPinsScreen2',
+	togglePinScreen2 = 'togglePinScreen2',
+	addSpotlight = 'addSpotlight',
+	spotLight = 'spotLight',
+	unSpotLight = 'unSpotLight',
+	toggleSpotlight = 'toggleSpotlight',
+	turnVideoOn = 'turnVideoOn',
+	turnVideoOff = 'turnVideoOff',
+	toggleVideoState = 'toggleVideoState',
+	mute = 'mute',
+	unmute = 'unmute',
+	toggleMuteState = 'toggleMuteState',
+	raiseHand = 'raiseHand',
+	lowerHand = 'lowerHand',
+	toggleHand = 'toggleHand',
+	makeHost = 'makeHost',
+	makeCoHost = 'makeCoHost',
+	revokeCoHost = 'revokeCoHost',
+	reclaimHost = 'reclaimHost',
+	makePanelist = 'makePanelist',
+	makeAttendee = 'makeAttendee',
+	ejectParticipant = 'ejectParticipant',
+	returnSelfToMainMeeting = 'returnSelfToMainMeeting',
+	admitSomeoneFromWaitingRoom = 'admitSomeoneFromWaitingRoom',
+	sendSomeoneToWaitingRoom = 'sendSomeoneToWaitingRoom',
+	allowWebinarAttendeeToSpeak = 'allowWebinarAttendeeToSpeak',
+	disallowToSpeak = 'disallowToSpeak',
+	startScreenShareWithPrimaryScreen = 'startScreenShareWithPrimaryScreen',
+	cycleSharedCameraToNextAvailable = 'cycleSharedCameraToNextAvailable',
+	gotoNextGalleryPage = 'gotoNextGalleryPage',
+	gotoPreviousGalleryPage = 'gotoPreviousGalleryPage',
+	stopSharing = 'stopSharing',
+	allowToRecord = 'allowToRecord',
+	disallowToRecord = 'disallowToRecord',
+	hideNonVideoParticipants = 'hideNonVideoParticipants',
+	showNonVideoParticipants = 'showNonVideoParticipants',
+	setSpeakerView = 'setSpeakerView',
+	requestOrderOfGalleryView = 'requestOrderOfGalleryView',
+	configureBreakoutRooms = 'configureBreakoutRooms',
+	startCameraShare = 'startCameraShare',
+	listUsers = 'listUsers',
+	pingZoomOSC = 'pingZoomOSC',
+	disableWaitingRoom = 'disableWaitingRoom',
+	enableWaitingRoom = 'enableWaitingRoom',
+	requestGalleryCount = 'requestGalleryCount',
+	startLocalRecording = 'startLocalRecording',
+	sendParticipantToBreakoutRoom = 'sendParticipantToBreakoutRoom',
+	hideUserNamesOnVideo = 'hideUserNamesOnVideo',
+	showUserNamesOnVideo = 'showUserNamesOnVideo',
+	enableOriginalSound = 'enableOriginalSound',
+	disableOriginalSound = 'disableOriginalSound',
+	enableHDVideo = 'enableHDVideo',
+	disableHDVideo = 'disableHDVideo',
+	enableMirrorVideo = 'enableMirrorVideo',
+	disableMirrorVideo = 'disableMirrorVideo',
+	enableOptimizeVideoForSharing = 'enableOptimizeVideoForSharing',
+	disableOptimizeVideoForSharing = 'disableOptimizeVideoForSharing',
+	disableComputerSoundWhenSharing = 'disableComputerSoundWhenSharing',
+	removeParticipantFromBreakoutRoom = 'removeParticipantFromBreakoutRoom',
+	assignParticipantToBreakoutRoom = 'assignParticipantToBreakoutRoom',
+	unassignParticipantFromBreakoutRoom = 'unassignParticipantFromBreakoutRoom',
+	setGalleryView = 'setGalleryView',
+	muteAll = 'muteAll',
+	unmuteAll = 'unmuteAll',
+	clearSpotlight = 'clearSpotlight',
+	enableComputerSoundWhenSharing = 'enableComputerSoundWhenSharing',
+	disableUsersToUnmute = 'disableUsersToUnmute',
+	lowerAllHands = 'lowerAllHands',
+	enableUsersToUnmute = 'enableUsersToUnmute',
+	closeBreakoutRooms = 'closeBreakoutRooms',
+	deleteAllBreakoutRooms = 'deleteAllBreakoutRooms',
+	admitEveryoneFromWaitingRoom = 'admitEveryoneFromWaitingRoom',
+	ejectAll = 'ejectAll',
+	pauseLocalRecording = 'pauseLocalRecording',
+	resumeLocalRecording = 'resumeLocalRecording',
+	stopLocalRecording = 'stopLocalRecording',
+	startCloudRecording = 'startCloudRecording',
+	requestListOfBreakoutRooms = 'requestListOfBreakoutRooms',
+	leaveMeeting = 'leaveMeeting',
+	resumeCloudRecording = 'resumeCloudRecording',
+	stopCloudRecording = 'stopCloudRecording',
+	pauseCloudRecording = 'pauseCloudRecording',
+	endMeeting = 'endMeeting',
+	SetWindowPosition = 'SetWindowPosition',
+	SetWindowSize = 'SetWindowSize',
+	customCommandWithArguments = 'customCommandWithArguments',
+	customCommand = 'customCommand',
+	ZAKStartMeeting = 'ZAKStartMeeting',
+	ZAKJoinMeeting = 'ZAKJoinMeeting',
+	sendMessageToWaitingRoom = 'sendMessageToWaitingRoom',
+	startShareWithWindow = 'startShareWithWindow',
+	startAudioShare = 'startAudioShare',
+	startScreenShare = 'startScreenShare',
+	sendAChatViaDM = 'sendAChatViaDM',
+	sendAChatToEveryone = 'sendAChatToEveryone',
+	createBreakoutRoom = 'createBreakoutRoom',
+	deleteBreakoutRoom = 'deleteBreakoutRoom',
+	setMicLevel = 'setMicLevel',
+	setMicDevice = 'setMicDevice',
+	setSpeakerDevice = 'setSpeakerDevice',
+	setSpeakerVolume = 'setSpeakerVolume',
+	setCameraDevice = 'setCameraDevice',
+	setVideoFilter = 'setVideoFilter',
+	setVirtualBackground = 'setVirtualBackground',
+	broadcastMessageToBreakoutRooms = 'broadcastMessageToBreakoutRooms',
+	joinMeeting = 'joinMeeting',
 }
 
 /**
@@ -45,7 +177,7 @@ export interface ZoomAction<T> {
  * @param instance Give the instance so we can extract data
  * @returns CompanionActions
  */
-export function getActions(instance: ZoomInstance): CompanionActions {
+export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions {
 	// Make list of users ready for Companion
 	let CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	let CHOICES_GROUPS: { id: string; label: string }[] = []
@@ -61,7 +193,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 			}
 		}
 	}
-	instance.ZoomGroupData.forEach((group, index) => {
+	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
 		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
 	})
 	let CHOICES_POSITION = []
@@ -79,7 +211,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		CHOICES_OUTPUTS.push({ id: index.toString(), label: `Output ${index}` })
 	}
 
-	let userOption: InputFieldWithDefault = {
+	let userOption: any = {
 		type: 'dropdown',
 		label: 'User',
 		id: 'user',
@@ -87,7 +219,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		choices: CHOICES_USERS,
 	}
 
-	let galleryOrderOption: InputFieldWithDefault = {
+	let galleryOrderOption: SomeCompanionActionInputField = {
 		type: 'dropdown',
 		label: 'Position',
 		id: 'position',
@@ -95,7 +227,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		choices: CHOICES_POSITION,
 	}
 
-	let participantOption: InputFieldWithDefault = {
+	let participantOption: SomeCompanionActionInputField = {
 		type: 'dropdown',
 		label: 'Position',
 		id: 'position',
@@ -103,7 +235,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		choices: CHOICES_PARTICIPANT,
 	}
 
-	let groupOption: InputFieldWithDefault = {
+	let groupOption: SomeCompanionActionInputField = {
 		type: 'dropdown',
 		label: 'Group',
 		id: 'group',
@@ -111,7 +243,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		choices: CHOICES_GROUPS,
 	}
 
-	let outputOption: InputFieldWithDefault = {
+	let outputOption: SomeCompanionActionInputField = {
 		type: 'dropdown',
 		label: 'Output',
 		id: 'output',
@@ -125,8 +257,8 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 	 * @param _info
 	 */
 	const sendActionCommand = (
-		action: Readonly<GlobalActionCallbacks>,
-		_info?: CompanionActionEventInfo | null
+		action: { options: { command: any; args: any } },
+		_info?: CompanionActionEvent | null
 	): void => {
 		// Construct command
 		let oscPath = action.options.command
@@ -134,338 +266,18 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 		if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 	}
 
-	// Create all actions
-	let actionsObj
-	if( instance.config.version === 1 ) {
-		actionsObj = {...Actions, ...ISOActions}
-	} else {
-		actionsObj = Actions
-	}
-	let CHOICES_USER_ACTIONS: { id: string; label: string }[] = []
-	let CHOICES_GLOBAL_ACTIONS: { id: string; label: string }[] = []
-	let CHOICES_SPECIAL_ACTIONS: { id: string; label: string }[] = []
-	let CHOICES_ISO_ACTIONS: { id: string; label: string }[] = []
+	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
+		[ActionId.setAudioGainReduction]: {
+			name: 'set Audio Gain Reduction',
+			options: [options.channel, options.reductionAmount],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setAudioGainReduction')
+				command.args.push({ type: 'i', value: action.options.channel })
+				command.args.push({ type: 'i', value: action.options.reductionAmount })
 
-	for (const key in actionsObj) {
-		if (Object.prototype.hasOwnProperty.call(actionsObj, key)) {
-			const element = actionsObj[key]
-			element.label = element.description
-			element.options = []
-			// The array should only contain commands with arguments
-			if (element.args) {
-				element.args.forEach((argument: string) => {
-					switch (argument) {
-						case 'name':
-							element.options.push(options.name)
-							break
-						case 'userName':
-							element.options.push(options.userName)
-							break
-						case 'output':
-							element.options.push(options.output)
-							break
-						case 'path':
-							element.options.push(options.path)
-							break
-						case 'customArgs':
-							element.options.push(options.customArgs)
-							break
-						case 'mode':
-							element.options.push(options.isoEmbeddedAudioMode)
-							break
-						case 'channel':
-							element.options.push(options.channel)
-							break
-						case 'reduction_amount':
-							element.options.push(options.reductionAmount)
-							break
-						case 'exact_name_of_selection':
-							element.options.push(options.reductionAmount)
-							break
-						case 'videoLossMode':
-							element.options.push(options.videoLossMode)
-							break
-						case 'id':
-							element.options.push(options.id)
-							break
-						case 'level':
-							element.options.push(options.level)
-							break
-						case 'intX':
-							element.options.push(options.intX)
-							break
-						case 'intY':
-							element.options.push(options.intY)
-							break
-						case 'msg':
-							element.options.push(options.message)
-							break
-						case 'meetingID':
-							element.options.push(options.meetingID)
-							break
-						case 'password':
-							element.options.push(options.password)
-							break
-						case 'zak':
-							element.options.push(options.zak)
-							break
-						case 'subscribeLevel':
-							element.options.push(options.subscribeLevel)
-							break
-						case 'postCloseSeconds':
-							element.options.push(options.postCloseSeconds)
-							break
-						case 'allowChooseBreakout':
-							element.options.push(options.allowChooseBreakout)
-							break
-						case 'allowReturnAtWill':
-							element.options.push(options.allowReturnAtWill)
-							break
-						case 'autoMoveParticipants':
-							element.options.push(options.autoMoveParticipants)
-							break
-						case 'useTimer':
-							element.options.push(options.useTimer)
-							break
-						case 'closeWithTimer':
-							element.options.push(options.closeWithTimer)
-							break
-						case 'breakoutDurrationSeconds':
-							element.options.push(options.breakoutDurrationSeconds)
-							break
-						case 'count':
-							element.options.push(options.count)
-							break
-
-						default:
-							instance.showLog('console', 'Missed to add an option in actions: ' + argument)
-							break
-					}
-					//find options to create callback
-					element.callback = (action: any) => {
-						let args: { type: string; value: string | number }[] = []
-						element.options.forEach((option: { id: string }) => {
-							switch (option.id) {
-								case 'name':
-									args.push({ type: 's', value: action.options.name })
-									break
-								case 'videoLossMode':
-									args.push({ type: 's', value: action.options.videoLossMode })
-									break
-								case 'userName':
-									// Handled by createUserCommand
-									break
-								case 'output':
-									args.push({ type: 'i', value: action.options.output })
-									break
-								case 'path':
-									args.push({ type: 's', value: action.options.path })
-									break
-								case 'customArgs':
-									args.push(JSON.parse(action.options.customArgs))
-									break
-								case 'count':
-									args.push({ type: 'i', value: action.options.count })
-									break
-								case 'embeddedAudioMode':
-									args.push({ type: 'i', value: action.options.embeddedAudioMode })
-									break
-								case 'channel':
-									args.push({ type: 'i', value: action.options.channel })
-									break
-								case 'reduction_amount':
-									args.push({ type: 's', value: action.options.reduction_amount })
-									break
-								case 'exact_name_of_selection':
-									args.push({ type: 's', value: action.options.name })
-									break
-								case 'id':
-									args.push({ type: 'i', value: action.options.id })
-									break
-								case 'level':
-									args.push({ type: 'i', value: action.options.level })
-									break
-								case 'intX':
-									args.push({ type: 'i', value: action.options.intX })
-									break
-								case 'intY':
-									args.push({ type: 'i', value: action.options.intY })
-									break
-								case 'msg':
-									args.push({ type: 's', value: action.options.msg })
-									break
-								case 'meetingID':
-									args.push({ type: 's', value: action.options.meetingID })
-									break
-								case 'password':
-									args.push({ type: 's', value: action.options.password })
-									break
-								case 'zak':
-									args.push({ type: 's', value: action.options.zak })
-									break
-								case 'postCloseSeconds':
-									args.push({ type: 'i', value: action.postCloseSeconds })
-									break
-								case 'allowChooseBreakout':
-									args.push({ type: 'i', value: action.allowChooseBreakout })
-									break
-								case 'allowReturnAtWill':
-									args.push({ type: 'i', value: action.allowReturnAtWill })
-									break
-								case 'autoMoveParticipants':
-									args.push({ type: 'i', value: action.autoMoveParticipants })
-									break
-								case 'useTimer':
-									args.push({ type: 'i', value: action.useTimer })
-									break
-								case 'closeWithTimer':
-									args.push({ type: 'i', value: action.closeWithTimer })
-									break
-								case 'breakoutDurrationSeconds':
-									args.push({ type: 'i', value: action.breakoutDurrationSeconds })
-									break
-
-								default:
-									instance.showLog('console', 'Missed an argument to add in osc commands: ' + argument)
-									break
-							}
-						})
-						let command: {
-							args: any
-							oscPath: any
-							argsNames?: { type: string; value: string | number }[]
-							oscPathName?: string
-						}
-						if (element.command === '/customCommand') {
-							command = { oscPath: action.options.path, args: [] }
-						} else if (element.command === '/customCommandWithArguments') {
-							command = { oscPath: element.command, args: action.options.customArgs }
-						} else {
-							command = createCommand(
-								element.command,
-								action.options.userName ? action.options.userName : undefined,
-								element.singleUser
-							)
-							args.forEach((element) => {
-								command.args.push(element)
-							})
-						}
-
-						const sendToCommand: any = {
-							id: element.shortDescription,
-							options: {
-								command: command.oscPath,
-								args: command.args,
-							},
-						}
-						sendActionCommand(sendToCommand)
-					}
-				})
-			} else {
-				switch (element.type) {
-					case 'User':
-						CHOICES_USER_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						break
-					case 'Global':
-						CHOICES_GLOBAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						break
-					case 'Special':
-						CHOICES_SPECIAL_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						break
-					case 'ISO':
-						CHOICES_ISO_ACTIONS.push({ label: element.description, id: element.shortDescription })
-						break
-					default:
-						instance.showLog('console', 'wrong type ' + element.type)
-						break
-				}
-			}
-		}
-	}
-
-	/**
-	 * createUserCommand function to create oscPath and arguments for user
-	 * @param actionID string
-	 * @param name string
-	 * @returns object { argsCallers: { type: string; value: string | number }[]; oscPath: string }
-	 */
-	const createCommand = (actionID: string, name: string, singleUser: boolean | null) => {
-		let command: {
-			args: { type: string; value: string | number }[]
-			argsNames: { type: string; value: string | number }[]
-			oscPath: string
-			oscPathName: string
-		} = {
-			args: [],
-			argsNames: [],
-			oscPath: '',
-			oscPathName: '',
-		}
-		// If/When no user is involved set path and skip the rest
-		if (singleUser === null) {
-			command.oscPath = `/zoom${actionID}`
-		} else {
-			let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
-			// Check if override has been filled
-			if (name != '' && name != undefined) {
-				instance.showLog('debug', 'Override:' + name)
-				instance.getVariable(name, (value: string) => {
-					if (value !== undefined) name = value
-				})
-				if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
-					command.oscPath = `/zoom/${name.toLowerCase()}` + actionID
-				} else {
-					command.oscPath = `/zoom/userName` + actionID
-					command.args.push({ type: 's', value: name })
-				}
-				// Use the pre-selection options
-			} else {
-				if (Array.isArray(selectedCallers)) {
-					// should be otherwise somethings wrong
-					if (selectedCallers.length === 0) console.log('Select a caller first')
-					// When command is for one user only send first caller
-					if (singleUser) {
-						command.args.push({ type: 'i', value: selectedCallers[0] })
-						command.argsNames.push({ type: 's', value: instance.ZoomUserData[selectedCallers[0]].userName })
-					} else {
-						selectedCallers.forEach((caller) => {
-							command.args.push({ type: 'i', value: caller })
-							command.argsNames.push({ type: 's', value: instance.ZoomUserData[caller].userName })
-						})
-					}
-				} else {
-					instance.showLog('console', 'Wrong selection')
-				}
-				// Different path when more than one users are selected
-				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + actionID
-				command.oscPathName = (command.argsNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + actionID
-			}
-		}
-		return command
-	}
-
-	let extraActions = {
-		// Basic actions
-		UserActions: {
-			label: 'User actions: Basics',
-			options: [
-				options.userName,
-				{
-					type: 'dropdown',
-					label: 'User Action',
-					id: 'actionID',
-					default: 'Pin',
-					choices: CHOICES_USER_ACTIONS,
-				},
-			],
-			callback: (action: { options: { actionID: string; userName: string } }) => {
-				let command = createCommand(
-					Actions[action.options.actionID].command,
-					action.options.userName,
-					Actions[action.options.actionID].singleUser
-				)
-				const sendToCommand: any = {
-					id: Actions[action.options.actionID].shortDescription,
+				const sendToCommand = {
+					id: ActionId.setAudioGainReduction,
 					options: {
 						command: command.oscPath,
 						args: command.args,
@@ -474,97 +286,410 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				sendActionCommand(sendToCommand)
 			},
 		},
-		GlobalActions: {
-			label: 'Global actions: Basics',
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Global Action',
-					id: 'actionID',
-					default: 'MuteAll',
-					choices: CHOICES_GLOBAL_ACTIONS,
-				},
-			],
-			callback: (action: { options: { actionID: string } }) => {
-				let command = createCommand(Actions[action.options.actionID].command, '', null)
-				const sendToCommand: any = {
-					id: Actions[action.options.actionID].shortDescription,
+		[ActionId.setOutputSelection]: {
+			name: 'set Output Selection',
+			options: [options.output, options.reductionAmount],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputSelection')
+				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 'i', value: action.options.reductionAmount })
+
+				const sendToCommand = {
+					id: ActionId.setOutputSelection,
 					options: {
 						command: command.oscPath,
-						args: [],
-					},
-				}
-				if (Actions[action.options.actionID].shortDescription === 'LowerAllHands') {
-					instance.showLog('debug', 'action: Lower All Hands overide')
-					for (const key in instance.ZoomUserData) {
-						if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
-							const element = instance.ZoomUserData[key]
-							element.handRaised = false
-						}
-					}
-					instance.checkFeedbacks('handRaised')
-				}
-				sendActionCommand(sendToCommand)
-			},
-		},
-		SpecialActions: {
-			label: 'Special actions: Basics',
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Special Action',
-					id: 'actionID',
-					default: 'PingZoomOSC',
-					choices: CHOICES_SPECIAL_ACTIONS,
-				},
-			],
-			callback: (action: { options: { actionID: string } }) => {
-				let command = createCommand(
-					Actions[action.options.actionID].command,
-					'',
-					Actions[action.options.actionID].singleUser
-				)
-				const sendToCommand: any = {
-					id: Actions[action.options.actionID].shortDescription,
-					options: {
-						command: command.oscPath,
-						args: [],
+						args: command.args,
 					},
 				}
 				sendActionCommand(sendToCommand)
 			},
 		},
-		ISOActions: {
-			label: 'ISO actions: Basics',
-			options: [
-				{
-					type: 'dropdown',
-					label: 'ISO Action',
-					id: 'actionID',
-					default: 'startISOEngine',
-					choices: CHOICES_ISO_ACTIONS,
-				},
-			],
-			callback: (action: { options: { actionID: string } }) => {
-				let command = createCommand(
-					ISOActions[action.options.actionID].command,
-					'',
-					ISOActions[action.options.actionID].singleUser
-				)
-				
-				const sendToCommand: any = {
-					id: ISOActions[action.options.actionID].shortDescription,
+		[ActionId.setAudioSelection]: {
+			name: 'set Audio Selection',
+			options: [options.output, options.reductionAmount],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setAudioSelection')
+				command.args.push({ type: 'i', value: action.options.channel })
+				command.args.push({ type: 'i', value: action.options.reductionAmount })
+
+				const sendToCommand = {
+					id: ActionId.setAudioSelection,
 					options: {
 						command: command.oscPath,
-						args: [],
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setOutputEmbeddedAudio]: {
+			name: 'set Output Embedded Audio',
+			options: [options.output, options.mode],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputEmbeddedAudio')
+				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 'i', value: action.options.mode })
+
+				const sendToCommand = {
+					id: ActionId.setOutputEmbeddedAudio,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setVideoLossMode]: {
+			name: 'set Video Loss Mode',
+			options: [options.videoLossMode],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setVideoLossMode')
+				command.args.push({ type: 's', value: action.options.videoLossMode })
+
+				const sendToCommand = {
+					id: ActionId.setVideoLossMode,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setOutputName]: {
+			name: 'set Output Name',
+			options: [options.output, options.name],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputName')
+				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 's', value: action.options.name })
+
+				const sendToCommand = {
+					id: ActionId.setOutputName,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.deleteOutput]: {
+			name: 'delete Output',
+			options: [options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/deleteOutput')
+				command.args.push({ type: 'i', value: action.options.output })
+
+				const sendToCommand = {
+					id: ActionId.deleteOutput,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.outputISO]: {
+			name: 'output ISO',
+			options: [options.userName, options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/outputISO', action.options.userName, false)
+				command.args.push({ type: 'i', value: action.options.output })
+
+				const sendToCommand = {
+					id: ActionId.outputISO,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.audioISO]: {
+			name: 'audio ISO',
+			options: [options.userName, options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/audioISO', action.options.userName, true)
+				command.args.push({ type: 'i', value: action.options.output })
+
+				const sendToCommand = {
+					id: ActionId.audioISO,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startISOEngine]: {
+			name: 'Start ISO Engine',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/startISOEngine')
+
+				const sendToCommand = {
+					id: ActionId.startISOEngine,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.stopISOEngine]: {
+			name: 'Stop ISO Engine',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/stopISOEngine')
+
+				const sendToCommand = {
+					id: ActionId.stopISOEngine,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.standbyISOEngine]: {
+			name: 'Standby ISO Engine',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/standbyISOEngine')
+
+				const sendToCommand = {
+					id: ActionId.standbyISOEngine,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.addOutput]: {
+			name: 'addOutput',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/addOutput')
+
+				const sendToCommand = {
+					id: ActionId.addOutput,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setOutputCount]: {
+			name: 'set Output Count',
+			options: [options.count],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputCount')
+				command.args.push({ type: 'i', value: action.options.count })
+				const sendToCommand = {
+					id: ActionId.setOutputCount,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableOutput]: {
+			name: 'enableOutput',
+			options: [options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/enableOutput')
+				command.args.push({ type: 'i', value: action.options.output })
+				const sendToCommand = {
+					id: ActionId.setOutputCount,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableOutput]: {
+			name: 'disableOutput',
+			options: [options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/disableOutput')
+				command.args.push({ type: 'i', value: action.options.output })
+				const sendToCommand = {
+					id: ActionId.disableOutput,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.loadISOConfig]: {
+			name: 'Load Config',
+			options: [options.path],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/loadConfig')
+				command.args.push({ type: 'i', value: action.options.path })
+				const sendToCommand = {
+					id: ActionId.disableOutput,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.saveISOConfig]: {
+			name: 'Save Config',
+			options: [options.path],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/saveConfig')
+				command.args.push({ type: 'i', value: action.options.path })
+				const sendToCommand = {
+					id: ActionId.saveISOConfig,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.mergeISOConfig]: {
+			name: 'Merge Config',
+			options: [options.path],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/mergeConfig')
+				command.args.push({ type: 'i', value: action.options.path })
+				const sendToCommand = {
+					id: ActionId.mergeISOConfig,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.getConfigPath]: {
+			name: 'getConfig path',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/getConfigPath')
+				const sendToCommand = {
+					id: ActionId.getConfigPath,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setOutputMode]: {
+			name: 'setOutputMode',
+			options: [options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputMode')
+				command.args.push({ type: 'i', value: action.options.output })
+				const sendToCommand = {
+					id: ActionId.setOutputMode,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setOutputType]: {
+			name: 'setOutputType',
+			options: [options.output],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setOutputType')
+				command.args.push({ type: 'i', value: action.options.output })
+				const sendToCommand = {
+					id: ActionId.setOutputType,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setAudioMode]: {
+			name: 'setAudioMode',
+			options: [options.channel],
+			callback: (action): void => {
+				// type: 'ISO'
+				let command = createCommand('/setAudioMode')
+				command.args.push({ type: 'i', value: action.options.output })
+				const sendToCommand = {
+					id: ActionId.setAudioMode,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.acceptRecordingConsent]: {
+			name: 'Accept Recording Consent',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				let command = createCommand('/acceptRecordingConsent')
+				const sendToCommand = {
+					id: ActionId.acceptRecordingConsent,
+					options: {
+						command: command.oscPath,
+						args: command.args,
 					},
 				}
 				sendActionCommand(sendToCommand)
 			},
 		},
 		// Select Actions
-		selectionMethod: {
-			label: 'Selection method',
+		[ActionId.selectionMethod]: {
+			name: 'Selection method',
 			options: [
 				{
 					type: 'dropdown',
@@ -578,21 +703,20 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { selectionMethod: number } }) => {
+			callback: (action) => {
 				if (action.options.selectionMethod === 2) {
 					instance.config.selectionMethod === 1
 						? (instance.config.selectionMethod = 0)
 						: (instance.config.selectionMethod = 1)
 				} else {
-					instance.config.selectionMethod = action.options.selectionMethod
+					instance.config.selectionMethod = action.options.selectionMethod as number
 				}
-				instance.saveConfig()
-				instance.checkFeedbacks('selectionMethod')
-				instance.checkFeedbacks('groupBased')
+				instance.saveConfig(instance.config)
+				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased)
 			},
 		},
-		SelectUser: {
-			label: 'Preselect user',
+		[ActionId.selectUser]: {
+			name: 'Preselect user',
 			options: [
 				userOption,
 				{
@@ -607,34 +731,33 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { user: number; option: string } }) => {
+			callback: (action) => {
 				switch (action.options.option) {
 					case 'toggle':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user
+							action.options.user as number
 						)
 						break
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
-						if (action.options.user < instance.ZoomClientDataObj.numberOfGroups + 1)
-							instance.ZoomClientDataObj.selectedCallers.push(action.options.user)
+						if ((action.options.user as number) < instance.ZoomClientDataObj.numberOfGroups + 1)
+							instance.ZoomClientDataObj.selectedCallers.push(action.options.user as number)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user
+							action.options.user as number
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('selectedUser')
-				instance.checkFeedbacks('groupBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.groupBased)
 			},
 		},
-		SelectUserByName: {
-			label: 'Preselect user by name',
+		[ActionId.selectUserByName]: {
+			name: 'Preselect user by name',
 			options: [
 				{
 					type: 'textinput',
@@ -654,7 +777,7 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: async (action: { options: { name: string; option: string } }) => {
+			callback: async (action) => {
 				for (const key in instance.ZoomUserData) {
 					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 						const user = instance.ZoomUserData[key]
@@ -679,33 +802,37 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 									)
 									break
 							}
-							instance.variables?.updateVariables()
-							instance.checkFeedbacks('groupBased')
-							instance.checkFeedbacks('indexBased')
-							instance.checkFeedbacks('userNameBased')
-							instance.checkFeedbacks('galleryBased')
+							instance.UpdateVariablesValues()
+							instance.checkFeedbacks(
+								FeedbackId.groupBased,
+								FeedbackId.indexBased,
+								FeedbackId.userNameBased,
+								FeedbackId.galleryBased
+							)
 						}
 					}
 				}
 			},
 		},
-		SelectGroup: {
-			label: 'Preselect group',
+		[ActionId.selectGroup]: {
+			name: 'Preselect group',
 			options: [groupOption],
-			callback: (action: { options: { group: number } }) => {
+			callback: (action) => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.ZoomGroupData[action.options.group].users?.forEach((user) => {
+				instance.ZoomGroupData[action.options.group as number].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		selectUserFromGroupPosition: {
-			label: 'Preselect user',
+		[ActionId.selectUserFromGroupPosition]: {
+			name: 'Preselect user',
 			options: [
 				groupOption,
 				galleryOrderOption,
@@ -721,38 +848,40 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { group: number; position: number; option: string } }) => {
-				let position = action.options.position - 1
+			callback: (action) => {
+				let position = (action.options.position as number) - 1
 				switch (action.options.option) {
 					case 'toggle':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group].users[position].zoomID
+							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
 						)
 						break
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers.push(
-							instance.ZoomGroupData[action.options.group].users[position].zoomID
+							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
 						)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group].users[position].zoomID
+							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		SelectFromGalleryPosition: {
-			label: 'Preselect user/group',
+		[ActionId.selectFromGalleryPosition]: {
+			name: 'Preselect user/group',
 			options: [
 				galleryOrderOption,
 				{
@@ -767,37 +896,39 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { position: number; option: string } }) => {
+			callback: (action) => {
 				switch (action.options.option) {
 					case 'toggle':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
 						)
 						break
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers.push(
-							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
 						)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomClientDataObj.galleryOrder[action.options.position - 1]
+							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		SelectFromIndexPosition: {
-			label: 'Preselect user/group',
+		[ActionId.selectFromIndexPosition]: {
+			name: 'Preselect user/group',
 			options: [
 				participantOption,
 				{
@@ -812,50 +943,54 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { position: number; option: string } }) => {
+			callback: (action) => {
 				switch (action.options.option) {
 					case 'toggle':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomVariableLink[action.options.position - 1].zoomId
+							instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
 						)
 						break
 					case 'select':
 						if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers.push(
-							instance.ZoomVariableLink[action.options.position - 1].zoomId
+							instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
 						)
 						break
 					case 'remove':
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomVariableLink[action.options.position - 1].zoomId
+							instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
 						)
 						break
 				}
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		clearParticipants: {
-			label: 'Clear Participants',
+		[ActionId.clearParticipants]: {
+			name: 'Clear Participants',
 			options: [],
 			callback: () => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		// Group Actions
-		addToGroup: {
-			label: 'Add selection to group',
+		[ActionId.addToGroup]: {
+			name: 'Add selection to group',
 			options: [
 				groupOption,
 				{
@@ -869,55 +1004,60 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					],
 				},
 			],
-			callback: (action: { options: { group: number; groupOption: string } }) => {
+			callback: (action) => {
 				if (action.options.groupOption === 'set') {
-					instance.ZoomGroupData[action.options.group].users.length = 0
+					instance.ZoomGroupData[action.options.group as number].users.length = 0
 				}
-				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID) => {
-					if (!instance.ZoomGroupData[action.options.group].users.find((o) => o.zoomID === zoomID)) {
-						instance.ZoomGroupData[action.options.group].users.push({
-							zoomID: zoomID,
-							userName: instance.ZoomUserData[zoomID].userName,
+				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {
+					if (
+						!instance.ZoomGroupData[action.options.group as number].users.find(
+							(o: { zoomID: string | number }) => o.zoomID === zoomID
+						)
+					) {
+						instance.ZoomGroupData[action.options.group as number].users.push({
+							zoomID: zoomID as number,
+							userName: instance.ZoomUserData[zoomID as number].userName,
 						})
 					}
 				})
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		clearGroup: {
-			label: 'Clear group selection',
+		[ActionId.clearGroup]: {
+			name: 'Clear group selection',
 			options: [groupOption],
-			callback: (action: { options: { group: number } }) => {
-				instance.ZoomGroupData[action.options.group].users.length = 0
-				instance.variables?.updateVariables()
-				instance.updateVariables()
-				instance.checkFeedbacks('groupBased')
+			callback: (action) => {
+				instance.ZoomGroupData[action.options.group as number].users.length = 0
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(FeedbackId.groupBased)
 			},
 		},
-		removeFromGroup: {
-			label: 'Remove from group',
+		[ActionId.removeFromGroup]: {
+			name: 'Remove from group',
 			options: [userOption, groupOption],
-			callback: (action: { options: { user: number; group: number } }) => {
-				if (instance.ZoomUserData[action.options.group].users !== undefined) {
-					for (var i = 0; i < instance.ZoomUserData[action.options.group].users.length; i++) {
-						if (instance.ZoomUserData[action.options.group].users[i] === action.options.user) {
-							instance.ZoomUserData[action.options.group].users.splice(i, 1)
+			callback: (action) => {
+				if (instance.ZoomUserData[action.options.group as number].users !== undefined) {
+					for (var i = 0; i < instance.ZoomUserData[action.options.group as number].users.length; i++) {
+						if (instance.ZoomUserData[action.options.group as number].users[i] === action.options.user) {
+							instance.ZoomUserData[action.options.group as number].users.splice(i, 1)
 						}
 					}
 				}
-				instance.variables?.updateVariables()
+				instance.UpdateVariablesValues()
 			},
 		},
 		// Rename Actions
-		rename: {
-			label: 'Rename',
+		[ActionId.rename]: {
+			name: 'Rename',
 			options: [userOption, options.name],
-			callback: (action: { options: { user: number; name: string } }) => {
+			callback: (action) => {
 				let oscPath = `/zoom/zoomID/rename`
 				const sendToCommand: any = {
 					id: 'rename',
@@ -930,22 +1070,24 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					},
 				}
 				sendActionCommand(sendToCommand)
-				instance.ZoomUserData[action.options.user].userName = action.options.name
-				let index = instance.ZoomVariableLink.findIndex((finduser) => finduser.zoomId === action.options.user)
-				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name
-				instance.variables?.updateVariables()
+				instance.ZoomUserData[action.options.user as number].userName = action.options.name as string
+				let index = instance.ZoomVariableLink.findIndex(
+					(finduser: { zoomId: number }) => finduser.zoomId === action.options.user
+				)
+				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name as string
+				instance.UpdateVariablesValues()
 			},
 		},
-		renameGroup: {
-			label: 'Rename Group',
+		[ActionId.renameGroup]: {
+			name: 'Rename Group',
 			options: [groupOption, options.name],
-			callback: (action: { options: { group: number; name: string } }) => {
-				instance.ZoomGroupData[action.options.group].groupName = action.options.name
-				instance.variables?.updateVariables()
+			callback: (action) => {
+				instance.ZoomGroupData[action.options.group as number].groupName = action.options.name as string
+				instance.UpdateVariablesValues()
 			},
 		},
-		nextParticipants: {
-			label: 'nextParticipants',
+		[ActionId.nextParticipants]: {
+			name: 'nextParticipants',
 			options: [
 				{
 					type: 'number',
@@ -956,22 +1098,24 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					max: 32,
 				},
 			],
-			callback: (action: { options: { shift: number } }) => {
+			callback: (action) => {
 				// Grap the items you want to see
-				let numberToShift = action.options.shift
+				let numberToShift = action.options.shift as number
 				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(0, numberToShift)
 				instance.ZoomVariableLink.splice(0, numberToShift)
 				instance.ZoomVariableLink.push(...itemsToShift)
 
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
-		previousParticipants: {
-			label: 'previousParticipants',
+		[ActionId.previousParticipants]: {
+			name: 'previousParticipants',
 			options: [
 				{
 					type: 'number',
@@ -982,51 +1126,113 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 					max: 32,
 				},
 			],
-			callback: (action: { options: { shift: number } }) => {
+			callback: (action) => {
 				// Grap the items you want to see
-				let numberToShift = action.options.shift
+				let numberToShift = action.options.shift as number
 				// Be carefull for below/invallid index
 				let itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(-numberToShift)
 
 				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
 
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
 			},
 		},
 		// ISO Actions
-		selectOutput: {
-			label: 'Select output',
+		[ActionId.selectOutput]: {
+			name: 'Select output',
 			options: [outputOption],
-			callback: (action: { options: { output: number } }) => {
-				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output)
+			callback: (action) => {
+				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output as number)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output)
+					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output as number)
 				}
-				instance.checkFeedbacks('output')
+				instance.checkFeedbacks(FeedbackId.output)
 			},
 		},
-		selectAudioOutput: {
-			label: 'Select audio output',
+		[ActionId.selectAudioChannel]: {
+			name: 'Select audio channel',
 			options: [outputOption],
-			callback: (action: { options: { output: number } }) => {
-				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output)
+			callback: (action) => {
+				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output as number)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedAudioOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output)
+					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output as number)
 				}
-				instance.checkFeedbacks('audioOutput')
+				instance.checkFeedbacks(FeedbackId.audioOutput)
 			},
 		},
-		takeSelectedOutputs: {
-			label: 'Take selected outputs',
+		[ActionId.applyOutput]: {
+			name: 'Apply output',
+			options: [],
+			callback: () => {
+				let args: { type: string; value: string | number }[] = []
+				if (instance.ZoomClientDataObj.selectedCallers[0] && instance.ZoomClientDataObj.selectedOutputs[0]) {
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[0] })
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[0] })
+					const sendToCommand: any = {
+						id: 'outputISO',
+						options: {
+							command: '/zoom/zoomID/outputISO',
+							args: args,
+						},
+					}
+					sendActionCommand(sendToCommand)
+					// reset arrays
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.ZoomClientDataObj.selectedOutputs.length = 0
+					instance.UpdateVariablesValues()
+					instance.checkFeedbacks(
+						FeedbackId.groupBased,
+						FeedbackId.indexBased,
+						FeedbackId.userNameBased,
+						FeedbackId.galleryBased,
+						FeedbackId.output
+					)
+				}
+			},
+		},
+		[ActionId.applyChannel]: {
+			name: 'Apply channel',
+			options: [],
+			callback: () => {
+				let args: { type: string; value: string | number }[] = []
+				if (instance.ZoomClientDataObj.selectedCallers[0] && instance.ZoomClientDataObj.selectedOutputs[0]) {
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[0] })
+					args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[0] })
+					const sendToCommand: any = {
+						id: 'audioISO',
+						options: {
+							command: '/zoom/zoomID/audioISO',
+							args: args,
+						},
+					}
+					sendActionCommand(sendToCommand)
+					// reset arrays
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.ZoomClientDataObj.selectedOutputs.length = 0
+					instance.UpdateVariablesValues()
+					instance.checkFeedbacks(
+						FeedbackId.groupBased,
+						FeedbackId.indexBased,
+						FeedbackId.userNameBased,
+						FeedbackId.galleryBased,
+						FeedbackId.output
+					)
+				}
+			},
+		},
+		[ActionId.applyOutputs]: {
+			name: 'Apply selected outputs',
 			options: [],
 			callback: () => {
 				let args: { type: string; value: string | number }[] = []
@@ -1049,18 +1255,1985 @@ export function getActions(instance: ZoomInstance): CompanionActions {
 				// reset arrays
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomClientDataObj.selectedOutputs.length = 0
-				instance.variables?.updateVariables()
-				instance.checkFeedbacks('groupBased')
-				instance.checkFeedbacks('indexBased')
-				instance.checkFeedbacks('userNameBased')
-				instance.checkFeedbacks('galleryBased')
-				instance.checkFeedbacks('output')
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased,
+					FeedbackId.output
+				)
+			},
+		},
+		[ActionId.pin]: {
+			name: 'Pin',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/pin', action.options.userName, select.single)
+				const sendToCommand = {
+					id: ActionId.pin,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.addPin]: {
+			name: 'Add Pin',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/addPin', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.addPin,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unpin]: {
+			name: 'Unpin',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/unPin', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.unpin,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.clearPins]: {
+			name: 'Clear Pins',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/clearPin')
+				const sendToCommand = {
+					id: ActionId.clearPins,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.togglePin]: {
+			name: 'Toggle Pin',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/togglePin')
+				const sendToCommand = {
+					id: ActionId.togglePin,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.pinScreen2]: {
+			name: 'Pin Screen2',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/pin2', action.options.userName, select.single)
+				const sendToCommand = {
+					id: ActionId.pinScreen2,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unPinScreen2]: {
+			name: 'Unpin Screen2',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/unPin2', action.options.userName, select.single)
+				const sendToCommand = {
+					id: ActionId.unPinScreen2,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.clearPinsScreen2]: {
+			name: 'Clear PinsScreen2',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/clearPin2')
+				const sendToCommand = {
+					id: ActionId.clearPinsScreen2,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.togglePinScreen2]: {
+			name: 'Toggle PinScreen2',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/togglePin2', action.options.userName, select.single)
+				const sendToCommand = {
+					id: ActionId.togglePinScreen2,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.spotLight]: {
+			name: 'Spotlight',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/spot', action.options.userName, select.single)
+				const sendToCommand = {
+					id: ActionId.spotLight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.addSpotlight]: {
+			name: 'Add Spotlight',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/addSpot', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.addSpotlight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unSpotLight]: {
+			name: 'Un Spotlight',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/unSpot', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.unSpotLight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.toggleSpotlight]: {
+			name: 'Toggle Spotlight',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/toggleSpot', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.toggleSpotlight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.turnVideoOn]: {
+			name: 'Video On',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/videoOn', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.turnVideoOn,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.turnVideoOff]: {
+			name: 'Video Off',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/videoOff', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.turnVideoOff,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.toggleVideoState]: {
+			name: 'Toggle Video State',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/toggleVideo', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.toggleVideoState,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.mute]: {
+			name: 'Mute',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/mute', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.mute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unmute]: {
+			name: 'Unmute',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/unMute', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.unmute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.toggleMuteState]: {
+			name: 'Toggle Mute State',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/toggleMute', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.toggleMuteState,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.raiseHand]: {
+			name: 'Raise Hand',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/raiseHand', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.raiseHand,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.lowerHand]: {
+			name: 'Lower Hand',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/lowerHand', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.lowerHand,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.toggleHand]: {
+			name: 'Toggle Hand',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/toggleHand', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.toggleHand,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.makeHost]: {
+			name: 'Make Host',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/makeHost', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.makeHost,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.makeCoHost]: {
+			name: 'Make CoHost',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/makeCoHost', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.makeCoHost,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.revokeCoHost]: {
+			name: 'Revoke CoHost',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/revokeCoHost', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.revokeCoHost,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.reclaimHost]: {
+			name: 'Reclaim Host',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/reclaimHost', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.reclaimHost,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.makePanelist]: {
+			name: 'Make Panelist',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/makePanelist', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.makePanelist,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.makeAttendee]: {
+			name: 'Make Attendee',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/makeAttendee', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.makeAttendee,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.ejectParticipant]: {
+			name: 'Eject Participant',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/eject', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.ejectParticipant,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.returnSelfToMainMeeting]: {
+			name: 'Return Self To Main Meeting',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/returnToMainMeeting', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.returnSelfToMainMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.admitSomeoneFromWaitingRoom]: {
+			name: 'Admit Participant',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/admit', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.admitSomeoneFromWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.sendSomeoneToWaitingRoom]: {
+			name: 'Send To Waiting Room',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/sendToWaitingRoom', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.sendSomeoneToWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.allowWebinarAttendeeToSpeak]: {
+			name: 'Allow to Speak',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/allowToSpeak', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.allowWebinarAttendeeToSpeak,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disallowToSpeak]: {
+			name: 'Disallow to Speak',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/disallowToSpeak', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.disallowToSpeak,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startScreenShareWithPrimaryScreen]: {
+			name: 'Share Primary Screen',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/startScreenSharePrimary')
+				const sendToCommand = {
+					id: ActionId.startScreenShareWithPrimaryScreen,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.cycleSharedCameraToNextAvailable]: {
+			name: 'Cycle Shared Camera To Next Available',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/shareNextCamera')
+				const sendToCommand = {
+					id: ActionId.cycleSharedCameraToNextAvailable,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.stopSharing]: {
+			name: 'Stop Sharing',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/stopShare')
+				const sendToCommand = {
+					id: ActionId.stopSharing,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.allowToRecord]: {
+			name: 'Allow To Record',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/allowToRecord', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.allowToRecord,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disallowToRecord]: {
+			name: 'Disallow To Record',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/disallowToRecord', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.disallowToRecord,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.gotoNextGalleryPage]: {
+			name: 'Goto Next Gallery Page',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/galleryPageNext')
+				const sendToCommand = {
+					id: ActionId.gotoNextGalleryPage,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				const sendToCommandFollowUp = {
+					id: ActionId.requestOrderOfGalleryView,
+					options: {
+						command: '/zoom/getGalleryOrder',
+						args: [],
+					},
+				}
+				sendActionCommand(sendToCommand)
+				sendActionCommand(sendToCommandFollowUp)
+			},
+		},
+		[ActionId.gotoPreviousGalleryPage]: {
+			name: 'Goto Previous Gallery Page',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/galleryPagePrev')
+				const sendToCommand = {
+					id: ActionId.gotoPreviousGalleryPage,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				const sendToCommandFollowUp = {
+					id: ActionId.requestOrderOfGalleryView,
+					options: {
+						command: '/zoom/getGalleryOrder',
+						args: [],
+					},
+				}
+				sendActionCommand(sendToCommand)
+				sendActionCommand(sendToCommandFollowUp)
+			},
+		},
+		[ActionId.setSpeakerView]: {
+			name: 'Set Speaker View',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/setSpeakerView')
+				const sendToCommand = {
+					id: ActionId.setSpeakerView,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.showNonVideoParticipants]: {
+			name: 'Show Non Video Participants',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/showNonVideoParticipants')
+				const sendToCommand = {
+					id: ActionId.showNonVideoParticipants,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.hideNonVideoParticipants]: {
+			name: 'Hide Non Video Participants',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/hideNonVideoParticipants')
+				const sendToCommand = {
+					id: ActionId.hideNonVideoParticipants,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.showUserNamesOnVideo]: {
+			name: 'Show User Names On Video',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/showUserNames')
+				const sendToCommand = {
+					id: ActionId.showUserNamesOnVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.hideUserNamesOnVideo]: {
+			name: 'Hide User Names On Video',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/hideUserNames')
+				const sendToCommand = {
+					id: ActionId.hideUserNamesOnVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableOriginalSound]: {
+			name: 'Enable Original Sound',
+			options: [],
+			callback: (): void => {
+				// type: 'User'
+				let command = createCommand('/enableOriginalSound')
+				const sendToCommand = {
+					id: ActionId.enableOriginalSound,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableOriginalSound]: {
+			name: 'Disable Original Sound',
+			options: [],
+			callback: (): void => {
+				// type: 'User'
+				let command = createCommand('/disableOriginalSound')
+				const sendToCommand = {
+					id: ActionId.disableOriginalSound,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableHDVideo]: {
+			name: 'Enable HD Video',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/enableHDVideo')
+				const sendToCommand = {
+					id: ActionId.enableHDVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableHDVideo]: {
+			name: 'Disable HD Video',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/disableHDVideo')
+				const sendToCommand = {
+					id: ActionId.disableHDVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableMirrorVideo]: {
+			name: 'Enable Mirror Video',
+			options: [],
+			callback: (): void => {
+				// type: 'User'
+				let command = createCommand('/enableMirrorVideo')
+				const sendToCommand = {
+					id: ActionId.enableMirrorVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableMirrorVideo]: {
+			name: 'Disable Mirror Video',
+			options: [],
+			callback: (): void => {
+				// type: 'User'
+				let command = createCommand('/disableMirrorVideo')
+				const sendToCommand = {
+					id: ActionId.disableMirrorVideo,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableOptimizeVideoForSharing]: {
+			name: 'Enable Optimize Video For Sharing',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/enableOptimizeVideo')
+				const sendToCommand = {
+					id: ActionId.enableOptimizeVideoForSharing,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableOptimizeVideoForSharing]: {
+			name: 'Disable Optimize Video For Sharing',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/disableOptimizeVideo')
+				const sendToCommand = {
+					id: ActionId.disableOptimizeVideoForSharing,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableComputerSoundWhenSharing]: {
+			name: 'Enable Computer Sound When Sharing',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/enableComputerSoundWhenSharing')
+				const sendToCommand = {
+					id: ActionId.enableComputerSoundWhenSharing,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableComputerSoundWhenSharing]: {
+			name: 'Disable Computer Sound When Sharing',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/disableComputerSoundWhenSharing')
+				const sendToCommand = {
+					id: ActionId.disableComputerSoundWhenSharing,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.sendParticipantToBreakoutRoom]: {
+			name: 'Send Participant To BreakoutRoom',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/sendToBreakout', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.sendParticipantToBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.removeParticipantFromBreakoutRoom]: {
+			name: 'Remove Participant From BreakoutRoom',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/removeFromBreakout', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.removeParticipantFromBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.assignParticipantToBreakoutRoom]: {
+			name: 'Assign Participant To BreakoutRoom',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/assignToBreakout', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.assignParticipantToBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unassignParticipantFromBreakoutRoom]: {
+			name: 'Unassign Participant From BreakoutRoom',
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/unassignFromBreakout', action.options.userName, select.multi)
+				const sendToCommand = {
+					id: ActionId.unassignParticipantFromBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setGalleryView]: {
+			name: 'Set Gallery View',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/setGalleryView')
+				const sendToCommand = {
+					id: ActionId.setGalleryView,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.muteAll]: {
+			name: 'Mute All',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/all/mute')
+				const sendToCommand = {
+					id: ActionId.muteAll,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.unmuteAll]: {
+			name: 'Unmute All',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/all/unMute')
+				const sendToCommand = {
+					id: ActionId.unmuteAll,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.clearSpotlight]: {
+			name: 'Clear Spotlight',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/clearSpot')
+				const sendToCommand = {
+					id: ActionId.clearSpotlight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableUsersToUnmute]: {
+			name: 'Enable Users To Unmute',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/enableUsersUnmute')
+				const sendToCommand = {
+					id: ActionId.enableUsersToUnmute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableUsersToUnmute]: {
+			name: 'Disable Users ToUnmute',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/disableUsersUnmute')
+				const sendToCommand = {
+					id: ActionId.disableUsersToUnmute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.lowerAllHands]: {
+			name: 'Lower AllHands',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/lowerAllHands')
+				const sendToCommand = {
+					id: ActionId.lowerAllHands,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.openBreakoutRooms]: {
+			name: 'Open Breakout Rooms',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/openBreakouts')
+				const sendToCommand = {
+					id: ActionId.openBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.closeBreakoutRooms]: {
+			name: 'Close Breakout Rooms',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/closeBreakouts')
+				const sendToCommand = {
+					id: ActionId.closeBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.deleteAllBreakoutRooms]: {
+			name: 'Delete All Breakout Rooms',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/deleteAllBreakouts')
+				const sendToCommand = {
+					id: ActionId.deleteAllBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.admitEveryoneFromWaitingRoom]: {
+			name: 'Admit All',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/admitAll')
+				const sendToCommand = {
+					id: ActionId.admitEveryoneFromWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.ejectAll]: {
+			name: 'Eject All Webinar Attendees',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/ejectAttendees')
+				const sendToCommand = {
+					id: ActionId.ejectAll,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startLocalRecording]: {
+			name: 'Start Local Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/startLocalRecording')
+				const sendToCommand = {
+					id: ActionId.startLocalRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.pauseLocalRecording]: {
+			name: 'Pause Local Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/pauseLocalRecording')
+				const sendToCommand = {
+					id: ActionId.pauseLocalRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.resumeLocalRecording]: {
+			name: 'Resume Local Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/resumeLocalRecording')
+				const sendToCommand = {
+					id: ActionId.resumeLocalRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.stopLocalRecording]: {
+			name: 'Stop Local Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/stopLocalRecording')
+				const sendToCommand = {
+					id: ActionId.stopLocalRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startCloudRecording]: {
+			name: 'Start Cloud Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/startCloudRecording')
+				const sendToCommand = {
+					id: ActionId.startCloudRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.pauseCloudRecording]: {
+			name: 'Pause Cloud Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/pauseCloudRecording')
+				const sendToCommand = {
+					id: ActionId.pauseCloudRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.resumeCloudRecording]: {
+			name: 'Resume Cloud Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/resumeCloudRecording')
+				const sendToCommand = {
+					id: ActionId.resumeCloudRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.stopCloudRecording]: {
+			name: 'Stop Cloud Recording',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/stopCloudRecording')
+				const sendToCommand = {
+					id: ActionId.stopCloudRecording,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.requestGalleryCount]: {
+			name: 'Request GalleryCount',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/galCount')
+				const sendToCommand = {
+					id: ActionId.requestGalleryCount,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.requestListOfBreakoutRooms]: {
+			name: 'Request list of breakout rooms',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/listBreakouts')
+				const sendToCommand = {
+					id: ActionId.requestListOfBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.leaveMeeting]: {
+			name: 'Leave Meeting',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/leaveMeeting')
+				const sendToCommand = {
+					id: ActionId.leaveMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.endMeeting]: {
+			name: 'End Meeting',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/endMeeting')
+				const sendToCommand = {
+					id: ActionId.endMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.enableWaitingRoom]: {
+			name: 'Enable Waiting Room',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/enableWaitingRoom')
+				const sendToCommand = {
+					id: ActionId.enableWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.disableWaitingRoom]: {
+			name: 'Disable Waiting Room',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/disableWaitingRoom')
+				const sendToCommand = {
+					id: ActionId.disableWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.pingZoomOSC]: {
+			name: 'Ping Zoom OSC',
+			options: [],
+			callback: (): void => {
+				// type: 'Special'
+				let command = createCommand('/ping')
+				const sendToCommand = {
+					id: ActionId.pingZoomOSC,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.requestOrderOfGalleryView]: {
+			name: 'Request Order Of GalleryView',
+			options: [],
+			callback: (): void => {
+				// type: 'Special'
+				let command = createCommand('/getGalleryOrder')
+				const sendToCommand = {
+					id: ActionId.requestOrderOfGalleryView,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.listUsers]: {
+			name: 'Request list of Participants',
+			options: [],
+			callback: (): void => {
+				// type: 'Special'
+				let command = createCommand('/list')
+				const sendToCommand = {
+					id: ActionId.listUsers,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startCameraShare]: {
+			name: 'Start CameraShare',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				let command = createCommand('/me/startCameraShare')
+				const sendToCommand = {
+					id: ActionId.startCameraShare,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.configureBreakoutRooms]: {
+			name: 'Configure BreakoutRooms',
+			options: [
+				options.postCloseSeconds,
+				options.allowChooseBreakout,
+				options.allowReturnAtWill,
+				options.autoMoveParticipants,
+				options.useTimer,
+				options.closeWithTimer,
+				options.breakoutDurrationSeconds,
+			],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand('/configureBreakouts')
+				command.args.push({ type: 'i', value: action.options.postCloseSeconds })
+				command.args.push({ type: 'i', value: action.options.allowChooseBreakout })
+				command.args.push({ type: 'i', value: action.options.allowReturnAtWill })
+				command.args.push({ type: 'i', value: action.options.autoMoveParticipants })
+				command.args.push({ type: 'i', value: action.options.useTimer })
+				command.args.push({ type: 'i', value: action.options.closeWithTimer })
+				command.args.push({ type: 'i', value: action.options.breakoutDurrationSeconds })
+				const sendToCommand = {
+					id: ActionId.configureBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		// [ActionId.rename]: {
+		// 	name: 'Rename',
+		// 	options: [
+		// 		options.userName,
+		// 		options.name,
+		// 	],
+		// 	callback: (action): void => {
+		// 		// type: 'User'
+		// 		let command = createCommand('/rename', action.options.userName, select.single)
+		// 		command.args.push({ type: 'i', value: action.options.name})
+		// 		const sendToCommand = {
+		// 			id: ActionId.rename,
+		// 			options: {
+		// 				command: command.oscPath,
+		// 				args: command.args,
+		// 			},
+		// 		}
+		// 		sendActionCommand(sendToCommand)
+		// 	},
+		// },
+
+		[ActionId.SetWindowPosition]: {
+			name: 'Set Window Position',
+			options: [options.userName, options.intX, options.intY],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setWindowPosition', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.intX })
+				command.args.push({ type: 'i', value: action.options.intY })
+				const sendToCommand = {
+					id: ActionId.SetWindowPosition,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.SetWindowSize]: {
+			name: 'Set Window Size',
+			options: [options.userName, options.intX, options.intY],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setWindowSize', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.intX })
+				command.args.push({ type: 'i', value: action.options.intY })
+				const sendToCommand = {
+					id: ActionId.SetWindowSize,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setVirtualBackground]: {
+			name: 'Set Virtual Background',
+			options: [options.userName, options.id],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setBackground', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.setVirtualBackground,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setVideoFilter]: {
+			name: 'Set Video Filter',
+			options: [options.userName, options.id],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setVideoFilter', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.setVideoFilter,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setCameraDevice]: {
+			name: 'Set Camera Device',
+			options: [options.userName, options.id],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setCameraDevice', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.setCameraDevice,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setSpeakerVolume]: {
+			name: 'Set Speaker Volume',
+			options: [options.userName, options.level],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setSpeakerVolume', action.options.userName, select.multi)
+				command.args.push({ type: 'i', value: action.options.level })
+				const sendToCommand = {
+					id: ActionId.setSpeakerVolume,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setSpeakerDevice]: {
+			name: 'Set Speaker Device',
+			options: [options.userName, options.id],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setSpeakerDevice', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.setSpeakerDevice,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setMicDevice]: {
+			name: 'Set Mic Device',
+			options: [options.userName, options.id],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setMicDevice', action.options.userName, select.single)
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.setMicDevice,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.setMicLevel]: {
+			name: 'Set Mic Level',
+			options: [options.level],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/setMicLevel')
+				command.args.push({ type: 'i', value: action.options.level })
+				const sendToCommand = {
+					id: ActionId.setMicLevel,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startShareWithWindow]: {
+			name: 'Share Window',
+			options: [options.id],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/me/startWindowShare')
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.startShareWithWindow,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startAudioShare]: {
+			name: 'Start AudioShare',
+			options: [options.id],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/me/startAudioShare')
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.startAudioShare,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.startScreenShare]: {
+			name: 'Screen Share',
+			options: [options.id],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/me/startScreenShare')
+				command.args.push({ type: 'i', value: action.options.id })
+				const sendToCommand = {
+					id: ActionId.startScreenShare,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.sendAChatViaDM]: {
+			name: 'Chat Via DM',
+			options: [options.userName, options.message],
+			callback: (action): void => {
+				// type: 'User'
+				let command = createCommand('/chat', action.options.userName, select.single)
+				command.args.push({ type: 's', value: action.options.message })
+				const sendToCommand = {
+					id: ActionId.sendAChatViaDM,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.sendAChatToEveryone]: {
+			name: 'Send A Chat To Everyone',
+			options: [options.message],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/chatAll')
+				command.args.push({ type: 's', value: action.options.message })
+				const sendToCommand = {
+					id: ActionId.sendAChatToEveryone,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.createBreakoutRoom]: {
+			name: 'Create Breakout Room',
+			options: [options.name],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/createBreakout')
+				command.args.push({ type: 's', value: action.options.name })
+				const sendToCommand = {
+					id: ActionId.createBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.deleteBreakoutRoom]: {
+			name: 'Delete Breakout Room',
+			options: [options.name],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/deleteBreakout')
+				command.args.push({ type: 's', value: action.options.name })
+				const sendToCommand = {
+					id: ActionId.deleteBreakoutRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.broadcastMessageToBreakoutRooms]: {
+			name: 'Broadcast Message To Breakout Rooms',
+			options: [options.message],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/broadcastToBreakouts')
+				command.args.push({ type: 's', value: action.options.message })
+				const sendToCommand = {
+					id: ActionId.broadcastMessageToBreakoutRooms,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.sendMessageToWaitingRoom]: {
+			name: 'Send Message To Waiting Room',
+			options: [options.message],
+			callback: (action): void => {
+				// type: 'Global'
+				let command = createCommand('/messageWaitingRoom')
+				command.args.push({ type: 's', value: action.options.message })
+				const sendToCommand = {
+					id: ActionId.sendMessageToWaitingRoom,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.joinMeeting]: {
+			name: 'Join Meeting',
+			options: [options.meetingID, options.password, options.name],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand('/joinMeeting')
+				command.args.push({ type: 's', value: action.options.meetingID })
+				command.args.push({ type: 's', value: action.options.password })
+				command.args.push({ type: 's', value: action.options.name })
+				const sendToCommand = {
+					id: ActionId.joinMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.ZAKJoinMeeting]: {
+			name: 'ZAK Join Meeting',
+			options: [options.zak, options.meetingID, options.name],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand('/zakJoin')
+				command.args.push({ type: 's', value: action.options.zak })
+				command.args.push({ type: 's', value: action.options.meetingID })
+				command.args.push({ type: 's', value: action.options.name })
+				const sendToCommand = {
+					id: ActionId.ZAKJoinMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.ZAKStartMeeting]: {
+			name: 'ZAK Start Meeting',
+			options: [options.zak, options.meetingID, options.name],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand('/zakStart')
+				command.args.push({ type: 's', value: action.options.zak })
+				command.args.push({ type: 's', value: action.options.meetingID })
+				command.args.push({ type: 's', value: action.options.name })
+				const sendToCommand = {
+					id: ActionId.ZAKStartMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.customCommand]: {
+			name: 'Custom command',
+			options: [options.path],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand(action.options.path as string)
+				const sendToCommand = {
+					id: ActionId.customCommand,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.customCommandWithArguments]: {
+			name: 'Custom w/args',
+			options: [options.path, options.customArgs],
+			callback: (action): void => {
+				// type: 'Special'
+				let command = createCommand(action.options.path as string)
+				command.args.push(JSON.parse(action.options.customArgs as string))
+				const sendToCommand = {
+					id: ActionId.customCommandWithArguments,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
 			},
 		},
 	}
 
-	return {
-		...extraActions,
-		...actionsObj,
+	/**
+	 * createUserCommand function to create oscPath and arguments for user
+	 * @param actionID string
+	 * @param name string
+	 * @returns object { argsCallers: { type: string; value: string | number }[]; oscPath: string }
+	 */
+	const createCommand = (OSCAction: string, name?: InputValue | string | undefined, singleUser?: boolean | null) => {
+		let command: {
+			args: { type: string; value: any }[]
+			argsNames: { type: string; value: any }[]
+			oscPath: string
+			oscPathName: string
+		} = {
+			args: [],
+			argsNames: [],
+			oscPath: '',
+			oscPathName: '',
+		}
+		// If/When no user is involved set path and skip the rest
+		if (singleUser === null || singleUser === undefined) {
+			command.oscPath = `/zoom${OSCAction}`
+		} else {
+			let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
+			// Check if override has been filled
+			if (name != '' && name != undefined) {
+				instance.showLog('debug', 'Override:' + name)
+				let value = instance.getVariableValue(name as string)
+				instance.showLog('console', 'Value of getVariable:' + value)
+				if (value !== undefined || '') name = value?.toString()
+
+				if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
+					command.oscPath = `/zoom/${name.toLowerCase()}` + OSCAction
+				} else {
+					command.oscPath = `/zoom/userName` + OSCAction
+					command.args.push({ type: 's', value: name })
+				}
+				// Use the pre-selection options
+			} else {
+				if (Array.isArray(selectedCallers)) {
+					// should be otherwise somethings wrong
+					if (selectedCallers.length === 0) console.log('Select a caller first')
+					// When command is for one user only send first caller
+					if (singleUser) {
+						command.args.push({ type: 'i', value: selectedCallers[0] })
+						command.argsNames.push({ type: 's', value: instance.ZoomUserData[selectedCallers[0]].userName })
+					} else {
+						selectedCallers.forEach((caller) => {
+							command.args.push({ type: 'i', value: caller })
+							command.argsNames.push({ type: 's', value: instance.ZoomUserData[caller].userName })
+						})
+					}
+				} else {
+					instance.showLog('console', 'Wrong selection')
+				}
+				// Different path when more than one users are selected
+				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
+				command.oscPathName = (command.argsNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + OSCAction
+			}
+		}
+		return command
 	}
+
+	return actions
 }

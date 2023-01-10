@@ -3,8 +3,9 @@ import {
 	CompanionInputFieldColor,
 	CompanionInputFieldDropdown,
 	CompanionInputFieldNumber,
-	CompanionInputFieldTextWithVariablesInput,
-} from '../../../instance_skel_types'
+	CompanionInputFieldTextInput,
+	InstanceBase,
+} from '@companion-module/base'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
@@ -25,17 +26,101 @@ enum EmbeddedAudioMode {
 	ISO = 2,
 }
 
+export interface ZoomClientDataObjInterface {
+	last_response: number
+	subscribeMode: number
+	selectedCallers: number[]
+	selectedOutputs: number[]
+	selectedAudioOutputs: number[]
+	activeSpeaker: string
+	isSpeaking: string
+	zoomOSCVersion: string | number
+	callStatus: string | number
+	galleryCount: number
+	galleryOrder: number[]
+	numberOfGroups: number
+	engineState: number
+}
+export interface ZoomUserDataInterface {
+	[key: number]: {
+		zoomId: number
+		userName: string
+		targetIndex: number
+		galleryIndex: number
+		mute?: boolean
+		videoOn?: boolean
+		handRaised?: boolean
+		userRole?: number
+		users: number[]
+	}
+}
+
+export interface ZoomOutputDataInterface {
+	[key: number]: {
+		numberOfOutputs: number
+		outputNumber: number
+		enabled: boolean
+		outputName: string
+		mode: string
+		selection: string
+		resolution: string
+		embeddedAudioInfo: string
+		status: string
+	}
+}
+
+export interface ZoomAudioLevelDataInterface {
+	[key: number]: {
+		channel: number
+		level: number
+	}
+}
+
+export interface ZoomAudioRoutingDataInterface {
+	[key: number]: {
+		audio_device: string
+		num_channels: number
+		channel: number
+		mode: string
+		gain_reduction: number
+		selection: string
+	}
+}
+
+export interface ZoomUserOfflineInterface {
+	[key: number]: {
+		zoomId: number
+		userName: string
+		targetIndex: number
+		galleryIndex: number
+		mute?: boolean
+		videoOn?: boolean
+		handRaised?: boolean
+		userRole?: number
+		users: number[]
+	}
+}
+
+export interface ZoomGroupDataInterface {
+	groupName: string
+	users: { zoomID: number; userName: string }[]
+}
+
+export interface ZoomVariableLinkInterface {
+	zoomId: number
+	userName: string
+}
 export interface Options {
 	userSelectedInfo: SomeCompanionConfigField
 
-	message: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	password: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	zak: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	name: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	userName: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	meetingID: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	path: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
-	customArgs: EnforceDefault<CompanionInputFieldTextWithVariablesInput, string>
+	message: EnforceDefault<CompanionInputFieldTextInput, string>
+	password: EnforceDefault<CompanionInputFieldTextInput, string>
+	zak: EnforceDefault<CompanionInputFieldTextInput, string>
+	name: EnforceDefault<CompanionInputFieldTextInput, string>
+	userName: EnforceDefault<CompanionInputFieldTextInput, string>
+	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
+	path: EnforceDefault<CompanionInputFieldTextInput, string>
+	customArgs: EnforceDefault<CompanionInputFieldTextInput, string>
 
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
@@ -83,20 +168,20 @@ export const rgb = (red: number, green: number, blue: number): number => {
 
 export const options: Options = {
 	userSelectedInfo: {
-		type: 'text',
+		type: 'textinput',
 		id: 'info',
 		width: 12,
 		label: 'Make sure you select a user or a group first, via presets',
-		value: '',
+		useVariables: true,
 	},
 	message: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Message',
-		id: 'msg',
+		id: 'message',
 		default: '',
 	},
 	name: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Name',
 		id: 'name',
 		default: '',
@@ -118,25 +203,25 @@ export const options: Options = {
 		max: 256,
 	},
 	userName: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'username (keep blank when you pre-select)',
 		id: 'userName',
 		default: '',
 	},
 	meetingID: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Meeting ID',
 		id: 'meetingID',
 		default: '',
 	},
 	path: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'absolute path',
 		id: 'path',
 		default: '',
 	},
 	customArgs: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Arguments JSON style',
 		id: 'customArgs',
 		default: '{type: "i", value: 0}',
@@ -235,13 +320,13 @@ export const options: Options = {
 		default: 0,
 	},
 	password: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Password(optional)',
 		id: 'password',
 		default: '',
 	},
 	zak: {
-		type: 'textwithvariables',
+		type: 'textinput',
 		label: 'Zak',
 		id: 'zak',
 		default: '',
@@ -429,4 +514,23 @@ export const formatTime = (time: number, interval: 'ms' | 's', format: TimeForma
 
 	const result = `${format.includes('hh') ? `${hh}:` : ''}${mm}:${ss}${format.includes('ms') ? `.${ms}` : ''}`
 	return result
+}
+
+export const padding = (num: number, size: number): string => {
+	let converted = num.toString();
+    while (converted.length < size) converted = "0" + converted;
+    return converted;
+}
+
+export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
+	[x: string]: any
+	ZoomVariableLink: ZoomVariableLinkInterface[]
+	// variables: any
+	ZoomClientDataObj: ZoomClientDataObjInterface
+	OSC: any
+	ZoomGroupData: ZoomGroupDataInterface[]
+	ZoomUserData: ZoomUserDataInterface
+	config: TConfig
+	UpdateVariablesValues(): void
+	InitVariables(): void
 }

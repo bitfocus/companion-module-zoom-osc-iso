@@ -1,51 +1,38 @@
-import instance_skel = require('../../../instance_skel')
-import {
-	CompanionActions,
-	CompanionConfigField,
-	CompanionFeedbacks,
-	CompanionPreset,
-	CompanionSystem,
-} from '../../../instance_skel_types'
-import { Config } from './config'
-import { getActions } from './actions'
-import { getConfigFields } from './config'
-import { getFeedbacks } from './feedback'
-import { getPresets, getSelectUsersPresets } from './presets'
-import { Variables } from './variables'
+import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
+import { GetConfigFields, ZoomConfig } from './config'
+import { GetActions } from './actions'
+import { GetFeedbacks } from './feedback'
+import { GetPresetList } from './presets'
+import { initVariables, updateVariables } from './variables'
 import { OSC } from './osc'
+import {
+	ZoomAudioLevelDataInterface,
+	ZoomAudioRoutingDataInterface,
+	ZoomClientDataObjInterface,
+	ZoomGroupDataInterface,
+	ZoomOutputDataInterface,
+	ZoomUserDataInterface,
+	ZoomUserOfflineInterface,
+	ZoomVariableLinkInterface,
+} from './utils'
 
 /**
- * Companion instance class for Zoom
+ * @description Companion instance class for Zoom
  */
-class ZoomInstance extends instance_skel<Config> {
-	static GetUpgradeScripts() {
-		return [
-			// any existing upgrade scripts go here
-			instance_skel.CreateConvertToBooleanFeedbackUpgradeScript({
-				microphoneLive: true,
-				camera: true,
-				handRaised: true,
-				selectedUser: true,
-			}),
-		]
+class ZoomInstance extends InstanceBase<ZoomConfig> {
+	public config: ZoomConfig = {
+		label: '',
+		host: '',
+		tx_port: 0,
+		rx_port: 0,
+		version: 0,
+		selectionMethod: 0,
+		numberOfGroups: 0,
+		pulling: 0,
 	}
 
 	// Global call settings
-	public ZoomClientDataObj: {
-		last_response: number
-		subscribeMode: number
-		selectedCallers: number[]
-		selectedOutputs: number[]
-		selectedAudioOutputs: number[]
-		activeSpeaker: string
-		isSpeaking: string
-		zoomOSCVersion: string | number
-		callStatus: string | number
-		galleryCount: number
-		galleryOrder: number[]
-		numberOfGroups: number
-		engineState: number
-	} = {
+	public ZoomClientDataObj: ZoomClientDataObjInterface = {
 		last_response: 0,
 		selectedCallers: [],
 		selectedOutputs: [],
@@ -61,140 +48,75 @@ class ZoomInstance extends instance_skel<Config> {
 		engineState: -1,
 	}
 	// Array with all callers
-	public ZoomUserData: {
-		[key: number]: {
-			zoomId: number
-			userName: string
-			targetIndex: number
-			galleryIndex: number
-			mute?: boolean
-			videoOn?: boolean
-			handRaised?: boolean
-			userRole?: number
-			users: number[]
-		}
-	} = {}
+	public ZoomUserData: ZoomUserDataInterface = {}
 
 	// Array with all output information
-	public ZoomOutputData: {
-		[key: number]: {
-			numberOfOutputs: number
-			outputNumber: number
-			enabled: boolean
-			outputName: string
-			mode: string
-			selection: string
-			resolution: string
-			embeddedAudioInfo: string
-			status: string
-		}
-	} = {}
-	
-	// Array with all audiolevel information
-	public ZoomAudioLevelData: {
-		[key: number]: {
-			channel: number
-			level: number
-		}
-	} = {}
+	public ZoomOutputData: ZoomOutputDataInterface = {}
 
 	// Array with all audiolevel information
-	public ZoomAudioRoutingData: {
-		[key: number]: {
-			audio_device: string
-			num_channels: number
-			channel: number
-			mode: string
-			gain_reduction: number
-			selection: string
-		}
-	} = {}
+	public ZoomAudioLevelData: ZoomAudioLevelDataInterface = {}
 
-	public ZoomGroupData: {
-		groupName: string
-		users: { zoomID: number; userName: string }[]
-	}[] = []
+	// Array with all audiolevel information
+	public ZoomAudioRoutingData: ZoomAudioRoutingDataInterface = {}
 
-	public ZoomUserOffline: {
-		[key: number]: {
-			zoomId: number
-			userName: string
-			targetIndex: number
-			galleryIndex: number
-			mute?: boolean
-			videoOn?: boolean
-			handRaised?: boolean
-			userRole?: number
-			users: number[]
-		}
-	} = {}
+	public ZoomGroupData: ZoomGroupDataInterface[] = []
 
-	public ZoomVariableLink: { zoomId: number; userName: string }[] = []
+	public ZoomUserOffline: ZoomUserOfflineInterface = {}
+
+	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
 	public OSC: OSC | null = null
-	public variables: Variables | null = null
 
-	constructor(system: CompanionSystem, id: string, config: Config) {
-		super(system, id, config)
-		this.system = system
+	/**
+	 * @description constructor
+	 * @param internal
+	 */
+	constructor(internal: unknown) {
+		super(internal)
+	}
+
+	/**
+	 * @description when config is updated
+	 * @param config
+	 */
+	public async configUpdated(config: ZoomConfig): Promise<void> {
 		this.config = config
-		this.ZoomClientDataObj.numberOfGroups = this.config.numberOfGroups
-		// Setup groups
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
-			this.ZoomGroupData[index] = {
-				groupName: `Group ${index + 1}`,
-				users: [],
-			}
-		}
-	}
-
-	/**
-	 * @description triggered on instance being enabled
-	 */
-	public init(): void {
-		// New Module warning
-		this.log('info', `Welcome, Zoom module is loading`)
-		this.status(this.STATUS_WARNING, 'Connecting')
-		this.variables = new Variables(this)
-		this.variables.updateDefinitions()
-		this.OSC = new OSC(this)
-	}
-
-	/**
-	 * @returns config options
-	 * @description generates the config options available for this instance
-	 */
-	public readonly config_fields = (): CompanionConfigField[] => {
-		return getConfigFields()
-	}
-
-	/**
-	 * @param config new configuration data
-	 * @description triggered every time the config for this instance is saved
-	 */
-	public updateConfig(config: Config): void {
-		this.showLog('debug', 'changing config!')
-		
-		this.config = config
+		this.log('info', 'changing config!')
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
 			this.ZoomGroupData[index] = {
 				groupName: `Group ${index + 1}`,
 				users: [],
 			}
 		}
-		this.OSC?.destroy()
+		if (this.OSC) this.OSC.destroy()
 		this.OSC = new OSC(this)
 		this.updateInstance()
-		// Get version and start pulling (if needed)
-		this.OSC.sendCommand('/zoom/ping')
+	}
+
+	/**
+	 * @description get all config field information
+	 * @returns the config fields
+	 */
+	getConfigFields(): SomeCompanionConfigField[] {
+		return GetConfigFields()
+	}
+	/**
+	 * @description triggered on instance being enabled
+	 * @param config
+	 */
+	public async init(config: ZoomConfig): Promise<void> {
+		this.log('info', `Welcome, Zoom module is being initialized`)
+
+		await this.configUpdated(config)
 	}
 
 	/**
 	 * @description close connections and stop timers/intervals
 	 */
-	public readonly destroy = (): void => {
+	async destroy() {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
@@ -206,59 +128,29 @@ class ZoomInstance extends instance_skel<Config> {
 	}
 
 	/**
-	 * @description Create and update variables
+	 * @description update variables values
 	 */
-	public updateVariables(): void {
-		if (this.variables) {
-			// this.showLog('console', 'updating variables')
-
-			this.variables.updateDefinitions()
-			this.variables.updateVariables()
-		}
+	public UpdateVariablesValues(): void {
+		updateVariables(this)
 	}
 
 	/**
-	 * @description function to handle logs
-	 * @param type isolate, console, OSC, debug, info
-	 * @param message
+	 * @description init variables
 	 */
-	public showLog(type: string, message: string): void {
-		switch (type) {
-			case 'isolate':
-				console.log(message)
-				break
-			case 'console':
-				console.log(message)
-				break
-			case 'OSC':
-				console.log(message)
-				break
-			case 'debug':
-				this.log('debug', message)
-				break
-			case 'info':
-				this.log('info', message)
-				break
-			case 'error':
-				this.log('error', message)
-				break
-		}
+	public InitVariables(): void {
+		initVariables(this)
 	}
-
 	/**
-	 * @description sets actions, presets and feedbacks available for this instance
+	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
-		// Cast actions and feedbacks from Zoom types to Companion types
-		const actions = getActions(this) as CompanionActions
-		const feedbacks = getFeedbacks(this) as CompanionFeedbacks
-		const presets = [...getSelectUsersPresets(this), ...getPresets(this)] as CompanionPreset[]
+		initVariables(this)
+		updateVariables(this)
 
-		this.setActions(actions)
-		this.setFeedbackDefinitions(feedbacks)
-		this.setPresetDefinitions(presets)
-		this.updateVariables()
+		this.setActionDefinitions(GetActions(this))
+		this.setFeedbackDefinitions(GetFeedbacks(this))
+		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData))
 	}
 }
 
-export = ZoomInstance
+runEntrypoint(ZoomInstance, [])
