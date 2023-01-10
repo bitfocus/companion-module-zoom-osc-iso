@@ -516,6 +516,12 @@ export const formatTime = (time: number, interval: 'ms' | 's', format: TimeForma
 	return result
 }
 
+export const padding = (num: number, size: number): string => {
+	let converted = num.toString();
+    while (converted.length < size) converted = "0" + converted;
+    return converted;
+}
+
 export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	[x: string]: any
 	ZoomVariableLink: ZoomVariableLinkInterface[]

@@ -1,6 +1,6 @@
 import { CompanionVariableDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from './config'
-import { InstanceBaseExt } from './utils'
+import { InstanceBaseExt, padding } from './utils'
 
 enum engineState {
 	disabled = 'disabled',
@@ -94,7 +94,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	}
 	// Use the participant selection
 	for (let index = 1; index < 1000; index++) {
-		variables[`Participant${index}`] = instance.ZoomVariableLink[index - 1]
+		variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
 			? instance.ZoomVariableLink[index - 1].userName
 			: '-'
 	}
@@ -102,7 +102,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
-		variables[`GalleryPosition ${index}`] = instance.ZoomUserData[zoomID]
+		variables[`GalleryPosition${padding(index, 2)}`] = zoomID
 			? instance.ZoomUserData[zoomID].userName
 			: '-'
 	}
@@ -201,14 +201,14 @@ export function InitVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	for (let index = 1; index < 50; index++) {
 		galleryVariables.push({
 			name: `Gallery Position ${index}`,
-			variableId: `GalleryPosition${index}`,
+			variableId: `GalleryPosition${padding(index, 2)}`,
 		})
 	}
 	let selectUsersVariables = []
 	for (let index = 1; index < 1000; index++) {
 		selectUsersVariables.push({
 			name: `Participant ${index}`,
-			variableId: `Participant${index}`,
+			variableId: `Participant${padding(index, 3)}`,
 		})
 	}
 	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
