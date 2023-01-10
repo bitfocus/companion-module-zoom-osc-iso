@@ -47,7 +47,7 @@ export function GetPresetList(
 				text: `${index}. $(zoomosc:Participant${index})`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(192, 255, 192),
+				bgcolor: combineRgb(125, 125, 125),
 			},
 			steps: [
 				{
@@ -124,7 +124,7 @@ export function GetPresetList(
 				text: `Gal Pos ${index}\\n$(zoomosc:Gallery position ${index})`,
 				size: 'auto',
 				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(255, 255, 192),
+				bgcolor: combineRgb(125, 125, 125),
 			},
 			steps: [
 				{
@@ -259,7 +259,7 @@ export function GetPresetList(
 			text: `Select by name`,
 			size: 'auto',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(255, 191, 128),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [{ down: [{ actionId: ActionId.selectUserByName, options: { option: 'toggle' } }], up: [] }],
 		feedbacks: [
@@ -495,7 +495,7 @@ export function GetPresetList(
 			text: 'Pin',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -513,7 +513,7 @@ export function GetPresetList(
 			text: 'Add Pin',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -531,7 +531,7 @@ export function GetPresetList(
 			text: 'Un Pin',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -549,7 +549,7 @@ export function GetPresetList(
 			text: 'Toggle Pin',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -567,7 +567,7 @@ export function GetPresetList(
 			text: 'Pin Screen 2',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -585,7 +585,7 @@ export function GetPresetList(
 			text: 'Un Pin Screen 2',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -603,7 +603,7 @@ export function GetPresetList(
 			text: 'Toggle Pin Screen 2',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -621,7 +621,7 @@ export function GetPresetList(
 			text: 'Clear Pins',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -639,7 +639,7 @@ export function GetPresetList(
 			text: 'Spotlight',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -657,7 +657,7 @@ export function GetPresetList(
 			text: 'Add to Spotlight',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -675,7 +675,7 @@ export function GetPresetList(
 			text: 'Un Spotlight',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -693,7 +693,7 @@ export function GetPresetList(
 			text: 'Toggle Spotlight',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -711,7 +711,7 @@ export function GetPresetList(
 			text: 'Clear Spotlight',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -729,7 +729,7 @@ export function GetPresetList(
 			text: 'Set Gallery View',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -747,7 +747,7 @@ export function GetPresetList(
 			text: 'Set Speaker View',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -765,7 +765,7 @@ export function GetPresetList(
 			text: 'Next Gallery Page',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -783,7 +783,7 @@ export function GetPresetList(
 			text: 'Previous Gallery Page',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -801,7 +801,7 @@ export function GetPresetList(
 			text: 'Show Non Video Participants',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -819,7 +819,7 @@ export function GetPresetList(
 			text: 'Hide Non Video Participants',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -841,7 +841,7 @@ export function GetPresetList(
 			text: 'Turn Video On',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -859,7 +859,7 @@ export function GetPresetList(
 			text: 'Turn Video Off',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -877,7 +877,7 @@ export function GetPresetList(
 			text: 'Toggle Video State',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -895,7 +895,7 @@ export function GetPresetList(
 			text: 'Mute',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -913,7 +913,7 @@ export function GetPresetList(
 			text: 'Unmute',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -931,7 +931,7 @@ export function GetPresetList(
 			text: 'Mute all',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -949,7 +949,7 @@ export function GetPresetList(
 			text: 'Unmute all',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -967,7 +967,7 @@ export function GetPresetList(
 			text: 'Toggle mute',
 			size: '18',
 			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(192, 192, 255),
+			bgcolor: combineRgb(125, 125, 125),
 		},
 		steps: [
 			{
@@ -1089,7 +1089,7 @@ export function GetPresetList(
 			color: combineRgb(0, 0, 0),
 			bgcolor: combineRgb(86, 221, 221),
 		},
-		steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: {} }], up: [] }],
+		steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: { output: 1} }], up: [] }],
 		feedbacks: [],
 	}
 	presets[`Apply_Outputs`] = {
