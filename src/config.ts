@@ -1,5 +1,5 @@
 import { SomeCompanionConfigField } from '@companion-module/base'
-import { ZoomVersion } from './utils'
+// import { ZoomVersion } from './utils'
 
 export interface ZoomConfig {
 	label: string
@@ -52,17 +52,17 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			default: 1,
 			width: 6,
 		},
-		{
-			type: 'dropdown',
-			id: 'version',
-			label: 'Using ZoomOSC or ZoomISO',
-			choices: [
-				{ id: ZoomVersion.ZoomISO, label: 'ZoomISO' },
-				{ id: ZoomVersion.ZoomOSC, label: 'ZoomOSC' },
-			],
-			default: ZoomVersion.ZoomOSC,
-			width: 6,
-		},
+		// {
+		// 	type: 'dropdown',
+		// 	id: 'version',
+		// 	label: 'Using ZoomOSC or ZoomISO',
+		// 	choices: [
+		// 		{ id: ZoomVersion.ZoomISO, label: 'ZoomISO' },
+		// 		{ id: ZoomVersion.ZoomOSC, label: 'ZoomOSC' },
+		// 	],
+		// 	default: ZoomVersion.ZoomOSC,
+		// 	width: 6,
+		// },
 		{
 			type: 'dropdown',
 			id: 'pulling',
