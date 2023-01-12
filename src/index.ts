@@ -81,6 +81,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	public async configUpdated(config: ZoomConfig): Promise<void> {
 		this.config = config
+		this.saveConfig(config)
 		this.log('info', 'changing config!')
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
