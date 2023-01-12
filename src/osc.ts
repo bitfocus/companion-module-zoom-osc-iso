@@ -314,7 +314,7 @@ export class OSC {
 										this.sendISOPullingCommands()
 									}
 								},
-								this.instance.config.pulling === 0 ? 5000 : this.instance.config.pulling * 1000
+								this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling
 							)
 							break
 						case 'ZOSC':

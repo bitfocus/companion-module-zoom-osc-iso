@@ -66,12 +66,15 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			width: 6,
 		},
 		{
-			type: 'number',
+			type: 'dropdown',
 			id: 'pulling',
 			label: 'Sync iso configuration time in seconds (only for ZoomISO)',
-			default: 5,
-			min: 1,
-			max: 60,
+			choices: [
+				{ id: 1000, label: 'Fast (1000msec)' },
+				{ id: 2500, label: 'Medium (2500msec)' },
+				{ id: 5000, label: 'Slow (5000msec)' },
+			],
+			default: 1000,
 			width: 6,
 		},
 		{
