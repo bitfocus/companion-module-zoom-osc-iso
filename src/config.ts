@@ -1,4 +1,5 @@
 import { SomeCompanionConfigField } from '@companion-module/base'
+import { ZoomVersion } from './utils'
 
 export interface ZoomConfig {
 	label: string
@@ -10,10 +11,7 @@ export interface ZoomConfig {
 	numberOfGroups: number
 	pulling: number
 }
-enum ZoomVersion {
-	ZoomOSC = 0,
-	ZoomISO = 1,
-}
+
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
 	return [
 		{

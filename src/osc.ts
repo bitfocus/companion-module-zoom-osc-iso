@@ -1,4 +1,4 @@
-import { InstanceBaseExt } from './utils'
+import { InstanceBaseExt, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
@@ -11,10 +11,7 @@ interface ZoomOSCResponse {
 		value: any
 	}[]
 }
-enum ZoomVersion {
-	ZoomOSC = 0,
-	ZoomISO = 1,
-}
+
 enum SubscribeMode {
 	None = 0,
 	TargetList = 1,

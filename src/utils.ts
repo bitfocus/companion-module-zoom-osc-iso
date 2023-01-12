@@ -26,6 +26,11 @@ enum EmbeddedAudioMode {
 	ISO = 2,
 }
 
+export enum ZoomVersion {
+	ZoomOSC = 0,
+	ZoomISO = 1,
+}
+
 export interface ZoomClientDataObjInterface {
 	last_response: number
 	subscribeMode: number

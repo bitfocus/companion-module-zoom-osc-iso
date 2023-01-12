@@ -1,8 +1,9 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
 import { ActionId } from './actions'
+import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
 const { images } = require('./images')
-import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
+import { padding, ZoomGroupDataInterface, ZoomUserDataInterface, ZoomVersion } from './utils'
 
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 	feedbacks: Array<
@@ -28,7 +29,8 @@ interface CompanionPresetDefinitionsExt {
 }
 export function GetPresetList(
 	ZoomGroupData: ZoomGroupDataInterface[],
-	ZoomUserData: ZoomUserDataInterface
+	ZoomUserData: ZoomUserDataInterface,
+	Config: ZoomConfig
 ): CompanionPresetDefinitions {
 	const presets: CompanionPresetDefinitionsExt = {}
 
@@ -977,130 +979,131 @@ export function GetPresetList(
 	/**
 	 * ZoomISO Output Actions
 	 */
-
-	presets[`Apply_Output`] = {
-		type: 'button',
-		category: 'ZoomISO Output Actions',
-		name: `Apply_Output`,
-		style: {
-			text: `Apply Output`,
-			size: '14',
-			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(141, 218, 77),
-		},
-		steps: [{ down: [{ actionId: ActionId.applyOutput, options: {} }], up: [] }],
-		feedbacks: [],
-	}
-	presets[`Apply_Outputs`] = {
-		type: 'button',
-		category: 'ZoomISO Output Actions',
-		name: `Apply_Outputs`,
-		style: {
-			text: `Apply Outputs`,
-			size: '14',
-			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(141, 218, 77),
-		},
-		steps: [{ down: [{ actionId: ActionId.applyOutputs, options: {} }], up: [] }],
-		feedbacks: [],
-	}
-	presets[`Apply_Channel`] = {
-		type: 'button',
-		category: 'ZoomISO Output Actions',
-		name: `Apply_Channel`,
-		style: {
-			text: `Apply Channel`,
-			size: '14',
-			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(141, 218, 77),
-		},
-		steps: [{ down: [{ actionId: ActionId.applyChannel, options: {} }], up: [] }],
-		feedbacks: [],
-	}
-	for (let index = 1; index < 8; index++) {
-		presets[`Select_Output_${index}`] = {
+	if (Config.version === ZoomVersion.ZoomISO) {
+		presets[`Apply_Output`] = {
 			type: 'button',
 			category: 'ZoomISO Output Actions',
-			name: `Select Output ${index}`,
+			name: `Apply_Output`,
 			style: {
-				text: `Select Output ${index}`,
+				text: `Apply Output`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(141, 218, 77),
 			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionId.selectOutput,
-							options: { output: index },
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [
-				{
-					feedbackId: FeedbackId.output,
-					options: {
-						output: index,
-					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 0, 0),
-					},
-				},
-			],
+			steps: [{ down: [{ actionId: ActionId.applyOutput, options: {} }], up: [] }],
+			feedbacks: [],
 		}
-	}
-	for (let index = 1; index < 8; index++) {
-		presets[`Select_Audio_Channel ${index}`] = {
+		presets[`Apply_Outputs`] = {
 			type: 'button',
 			category: 'ZoomISO Output Actions',
-			name: `Audio\nChannel ${index}`,
+			name: `Apply_Outputs`,
 			style: {
-				text: `Audio\nChannel ${index}`,
+				text: `Apply Outputs`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(141, 218, 77),
 			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionId.selectAudioChannel,
-							options: { output: index },
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [
-				{
-					feedbackId: FeedbackId.audioOutput,
-					options: {
-						output: index,
-					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 0, 0),
-					},
-				},
-			],
+			steps: [{ down: [{ actionId: ActionId.applyOutputs, options: {} }], up: [] }],
+			feedbacks: [],
 		}
-	}
-	presets[`Select_Channel`] = {
-		type: 'button',
-		category: 'ZoomISO Output Actions',
-		name: `Select_Channel`,
-		style: {
-			text: `Select Channel`,
-			size: '14',
-			color: combineRgb(0, 0, 0),
-			bgcolor: combineRgb(141, 218, 77),
-		},
-		steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: { output: 1 } }], up: [] }],
-		feedbacks: [],
+		presets[`Apply_Channel`] = {
+			type: 'button',
+			category: 'ZoomISO Output Actions',
+			name: `Apply_Channel`,
+			style: {
+				text: `Apply Channel`,
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(141, 218, 77),
+			},
+			steps: [{ down: [{ actionId: ActionId.applyChannel, options: {} }], up: [] }],
+			feedbacks: [],
+		}
+		for (let index = 1; index < 8; index++) {
+			presets[`Select_Output_${index}`] = {
+				type: 'button',
+				category: 'ZoomISO Output Actions',
+				name: `Select Output ${index}`,
+				style: {
+					text: `Select Output ${index}`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(141, 218, 77),
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionId.selectOutput,
+								options: { output: index },
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [
+					{
+						feedbackId: FeedbackId.output,
+						options: {
+							output: index,
+						},
+						style: {
+							color: combineRgb(0, 0, 0),
+							bgcolor: combineRgb(255, 0, 0),
+						},
+					},
+				],
+			}
+		}
+		for (let index = 1; index < 8; index++) {
+			presets[`Select_Audio_Channel ${index}`] = {
+				type: 'button',
+				category: 'ZoomISO Output Actions',
+				name: `Audio\nChannel ${index}`,
+				style: {
+					text: `Audio\nChannel ${index}`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(141, 218, 77),
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionId.selectAudioChannel,
+								options: { output: index },
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [
+					{
+						feedbackId: FeedbackId.audioOutput,
+						options: {
+							output: index,
+						},
+						style: {
+							color: combineRgb(0, 0, 0),
+							bgcolor: combineRgb(255, 0, 0),
+						},
+					},
+				],
+			}
+		}
+		presets[`Select_Channel`] = {
+			type: 'button',
+			category: 'ZoomISO Output Actions',
+			name: `Select_Channel`,
+			style: {
+				text: `Select Channel`,
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(141, 218, 77),
+			},
+			steps: [{ down: [{ actionId: ActionId.selectAudioChannel, options: { output: 1 } }], up: [] }],
+			feedbacks: [],
+		}
 	}
 
 	/**
