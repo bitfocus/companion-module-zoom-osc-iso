@@ -11,10 +11,10 @@ interface ZoomOSCResponse {
 		value: any
 	}[]
 }
-// enum ZoomVersion {
-// 	ZoomOSC = 0,
-// 	ZoomISO = 1,
-// }
+enum ZoomVersion {
+	ZoomOSC = 0,
+	ZoomISO = 1,
+}
 enum SubscribeMode {
 	None = 0,
 	TargetList = 1,
@@ -316,9 +316,13 @@ export class OSC {
 								},
 								this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling
 							)
+							this.instance.config.version = ZoomVersion.ZoomISO
+							this.instance.saveConfig(this.instance.config)
 							break
 						case 'ZOSC':
 							if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+							this.instance.config.version = ZoomVersion.ZoomOSC
+							this.instance.saveConfig(this.instance.config)
 							break
 						default:
 							// Default to ZoomOSC no pulling of data
