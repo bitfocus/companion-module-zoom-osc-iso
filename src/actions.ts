@@ -2984,7 +2984,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			options: [options.userName, options.message],
 			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/chat', action.options.userName, select.single)
+				let command = createCommand('/chat', action.options.userName, select.multi)
 				command.args.push({ type: 's', value: action.options.message })
 				const sendToCommand = {
 					id: ActionId.sendAChatViaDM,
