@@ -1,5 +1,4 @@
 import { SomeCompanionConfigField } from '@companion-module/base'
-// import { ZoomVersion } from './utils'
 
 export interface ZoomConfig {
 	label: string
@@ -14,6 +13,13 @@ export interface ZoomConfig {
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
 	return [
+		{
+			type: 'static-text',
+			width: 12,
+			value: 'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
+			id: 'info on license',
+			label: 'Important note'
+		},
 		{
 			type: 'textinput',
 			id: 'host',
