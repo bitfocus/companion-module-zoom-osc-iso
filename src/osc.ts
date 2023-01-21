@@ -153,7 +153,6 @@ export class OSC {
 
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
-			this.instance.updateStatus(InstanceStatus.Ok)
 			this.instance.ZoomClientDataObj.last_response = Date.now()
 			switch (zoomPart2) {
 				case 'me':
@@ -166,7 +165,7 @@ export class OSC {
 					if (!this.instance.ZoomUserData[zoomId]) {
 						if (this.instance.ZoomUserOffline[zoomId]) {
 							// The zoomID was already there so this probably is a ghost ID
-							this.instance.log('info', 'User just went offline, do nothing')
+							// this.instance.log('debug', 'User just went offline, do nothing')
 						} else {
 							await this.createZoomUser(data)
 						}
@@ -239,7 +238,7 @@ export class OSC {
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
 							let index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-							this.instance.log('debug', 'Removed:' + this.instance.ZoomVariableLink.splice(index, 1))
+							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
 							this.updateLoop = true
 							break
 						case 'userNameChanged':
@@ -280,7 +279,7 @@ export class OSC {
 					break
 
 				case 'galleryOrder':
-					// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.galleryOrder.length = 0
 					data.args.forEach((order: { type: string; value: number }) => {
 						this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
@@ -304,6 +303,10 @@ export class OSC {
 					// // {int number of users in call}
 					// // {int isPro (1=true, 0-false)}
 					let versionInfo = data.args[1].value as string
+					if (data.args[7].value === 1) this.instance.updateStatus(InstanceStatus.Ok)
+					else if (data.args[7].value === 0 || data.args[1].value.includes('lite'))
+						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
+					this.instance.log('debug', (versionInfo + ' pro? ' + data.args[7].value) as string)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 					switch (versionInfo.substring(0, 4)) {
 						case 'ZISO':
