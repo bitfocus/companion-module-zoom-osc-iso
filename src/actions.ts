@@ -2179,10 +2179,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.sendParticipantToBreakoutRoom]: {
 			name: 'Send Participant To BreakoutRoom',
-			options: [options.userName],
+			options: [options.userName, options.breakoutName],
 			callback: (action): void => {
 				// type: 'User'
 				let command = createCommand('/sendToBreakout', action.options.userName, select.multi)
+				command.args.push({ type: 's', value: action.options.breakoutName as string })
 				const sendToCommand = {
 					id: ActionId.sendParticipantToBreakoutRoom,
 					options: {
@@ -3198,9 +3199,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			let selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 			// Check if override has been filled
 			if (name != '' && name != undefined) {
-				instance.showLog('debug', 'Override:' + name)
+				instance.log('debug', 'Override:' + name)
 				let value = instance.getVariableValue(name as string)
-				instance.showLog('console', 'Value of getVariable:' + value)
+				instance.log('debug', 'Value of getVariable:' + value)
 				if (value !== undefined || '') name = value?.toString()
 
 				if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
@@ -3225,7 +3226,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						})
 					}
 				} else {
-					instance.showLog('console', 'Wrong selection')
+					instance.log('debug', 'Wrong selection, no array')
 				}
 				// Different path when more than one users are selected
 				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction

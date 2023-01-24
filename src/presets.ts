@@ -1784,6 +1784,19 @@ export function GetPresetList(
 	/**
 	 * Breakout Actions
 	 */
+	presets[`Send_Participant_To_BreakoutRoom`] = {
+		type: 'button',
+		category: 'Breakout Actions',
+		name: `Send_Participant_To_BreakoutRoom`,
+		style: {
+			text: `Send To BreakoutRoom`,
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [{ down: [{ actionId: ActionId.sendParticipantToBreakoutRoom, options: {} }], up: [] }],
+		feedbacks: [],
+	}
 	presets[`Create_Breakout_Room`] = {
 		type: 'button',
 		category: 'Breakout Actions',

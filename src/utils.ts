@@ -122,6 +122,7 @@ export interface Options {
 	password: EnforceDefault<CompanionInputFieldTextInput, string>
 	zak: EnforceDefault<CompanionInputFieldTextInput, string>
 	name: EnforceDefault<CompanionInputFieldTextInput, string>
+	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
 	userName: EnforceDefault<CompanionInputFieldTextInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
 	path: EnforceDefault<CompanionInputFieldTextInput, string>
@@ -189,6 +190,12 @@ export const options: Options = {
 		type: 'textinput',
 		label: 'Name',
 		id: 'name',
+		default: '',
+	},
+	breakoutName: {
+		type: 'textinput',
+		label: 'Name of breakout room',
+		id: 'breakoutName',
 		default: '',
 	},
 	channel: {
