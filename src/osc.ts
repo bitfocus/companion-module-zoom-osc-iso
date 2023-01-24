@@ -306,7 +306,7 @@ export class OSC {
 					if (data.args[7].value === 1) this.instance.updateStatus(InstanceStatus.Ok)
 					else if (data.args[7].value === 0 || data.args[1].value.includes('lite'))
 						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
-					this.instance.log('debug', (versionInfo + ' pro? ' + data.args[7].value) as string)
+					this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 					switch (versionInfo.substring(0, 4)) {
 						case 'ZISO':
