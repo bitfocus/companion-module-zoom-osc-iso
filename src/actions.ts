@@ -263,6 +263,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		// Construct command
 		let oscPath = action.options.command
 		let args = action.options.args
+		instance.log('debug', `Sending ${JSON.stringify(oscPath)}, with arguments ${JSON.stringify(args)}`)
 		if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 	}
 
@@ -3214,7 +3215,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			} else {
 				if (Array.isArray(selectedCallers)) {
 					// should be otherwise somethings wrong
-					if (selectedCallers.length === 0) console.log('Select a caller first')
+					if (selectedCallers.length === 0) {
+						console.log('Select a caller first')
+						// return something to prevent users from sending a command
+					}
 					// When command is for one user only send first caller
 					if (singleUser) {
 						command.args.push({ type: 'i', value: selectedCallers[0] })
