@@ -102,7 +102,9 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
-		variables[`GalleryPosition${padding(index, 2)}`] = zoomID ? instance.ZoomUserData[zoomID].userName : '-'
+		variables[`GalleryPosition${padding(index, 2)}`] = instance.ZoomUserData[zoomID]
+			? instance.ZoomUserData[zoomID].userName
+			: '-'
 	}
 
 	instance.setVariableValues(variables)
@@ -127,7 +129,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	let outputVariables = []
 	let audioLevelVariables = []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
-		for (let position = 1; position < 50; position++) {
+		for (let position = 1; position < 2; position++) {
 			groupPositionVariables.push({
 				name: `Group${index + 1} Position ${position}`,
 				variableId: `Group${index + 1}Position${position}`,
@@ -195,19 +197,27 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		}
 	}
 	let galleryVariables = []
-	for (let index = 1; index < 50; index++) {
-		galleryVariables.push({
-			name: `Gallery Position ${index}`,
-			variableId: `GalleryPosition${padding(index, 2)}`,
-		})
-	}
+	// for (let index = 1; index < 50; index++) {
+	// 	galleryVariables.push({
+	// 		name: `Gallery Position ${index}`,
+	// 		variableId: `GalleryPosition${padding(index, 2)}`,
+	// 	})
+	// }
+	galleryVariables.push({
+		name: `Gallery Position ${1}`,
+		variableId: `GalleryPosition${padding(1, 2)}`,
+	})
 	let selectUsersVariables = []
-	for (let index = 1; index < 1000; index++) {
-		selectUsersVariables.push({
-			name: `Participant ${index}`,
-			variableId: `Participant${padding(index, 3)}`,
-		})
-	}
+	// for (let index = 1; index < 1000; index++) {
+	// 	selectUsersVariables.push({
+	// 		name: `Participant ${index}`,
+	// 		variableId: `Participant${padding(index, 3)}`,
+	// 	})
+	// }
+	selectUsersVariables.push({
+		name: `Participant ${1}`,
+		variableId: `Participant${padding(1, 3)}`,
+	})
 	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
 	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)
 	const outputVariablesDef: Set<CompanionVariableDefinition> = new Set(outputVariables)

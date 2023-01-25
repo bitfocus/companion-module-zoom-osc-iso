@@ -73,6 +73,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	constructor(internal: unknown) {
 		super(internal)
+		this.instanceOptions.disableVariableValidation = true
 	}
 
 	/**
