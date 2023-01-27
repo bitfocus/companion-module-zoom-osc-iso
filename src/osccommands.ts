@@ -969,7 +969,7 @@ const Actions: actionType = {
 		description: 'Join Meeting',
 		shortDescription: 'JoinMeeting',
 		command: '/joinMeeting',
-		args: ['meetingID', 'name', 'password'],
+		args: ['meetingID', 'password', 'name'],
 		singleUser: null,
 		type: 'Special',
 	},
