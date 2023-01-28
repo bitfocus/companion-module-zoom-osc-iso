@@ -55,7 +55,7 @@ const ISOActions: actionType = {
 		command: '/setOutputName',
 		type: 'ISO',
 		singleUser: null,
-		args: ['output','name'],
+		args: ['output', 'name'],
 	},
 	deleteOutput: {
 		description: 'delete Output',
@@ -494,14 +494,14 @@ const Actions: actionType = {
 		description: 'Enable Original Sound',
 		shortDescription: 'EnableOriginalSound',
 		command: '/enableOriginalSound',
-		singleUser: null,
+		singleUser: true,
 		type: 'User',
 	},
 	DisableOriginalSound: {
 		description: 'Disable Original Sound',
 		shortDescription: 'DisableOriginalSound',
 		command: '/disableOriginalSound',
-		singleUser: null,
+		singleUser: true,
 		type: 'User',
 	},
 	EnableHDVideo: {
@@ -515,14 +515,14 @@ const Actions: actionType = {
 		description: 'Disable HD Video',
 		shortDescription: 'DisableHDVideo',
 		command: '/me/disableHDVideo',
-		singleUser: null,
+		singleUser: true,
 		type: 'Global',
 	},
 	EnableMirrorVideo: {
 		description: 'Enable Mirror Video',
 		shortDescription: 'EnableMirrorVideo',
 		command: '/enableMirrorVideo',
-		singleUser: null,
+		singleUser: true,
 		type: 'User',
 	},
 	DisableMirrorVideo: {
@@ -806,7 +806,6 @@ const Actions: actionType = {
 		singleUser: true,
 		args: ['userName', 'name'],
 	},
-	
 
 	// /getAudioLevel*
 	// /zoomosc/audioLevels
@@ -820,7 +819,6 @@ const Actions: actionType = {
 	// /zoomosc/videoLoss {int output_num, string output_name, string selection}
 	// /zoomosc/videoResume {int output_num, string output_name, string selection}
 
-	
 	SetWindowPosition: {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
