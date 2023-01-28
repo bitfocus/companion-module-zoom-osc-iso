@@ -368,7 +368,7 @@ export function getFeedbacks(instance: ZoomInstance): ZoomFeedbacks {
 						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
 					switch (feedback.options.type) {
 						case 'micLive':
-							instance.ZoomUserData[zoomID].mute === false ? true : false
+							return instance.ZoomUserData[zoomID].mute === false ? true : false
 						case 'camera':
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
 						case 'handRaised':
