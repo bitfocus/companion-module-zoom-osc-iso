@@ -149,7 +149,7 @@ export class OSC {
 					userName: data.args[1].value,
 					galleryIndex: data.args[2].value,
 					videoOn: data.args[8].value === 1 ? true : false,
-					mute: data.args[9].value === 1 ? true : false,
+					mute: data.args[9].value === 0 ? true : false,
 					handRaised: data.args[10].value === 1 ? true : false,
 					users: [],
 				}
