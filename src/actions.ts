@@ -2020,10 +2020,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.enableOriginalSound]: {
 			name: 'Enable Original Sound',
-			options: [],
-			callback: (): void => {
+			options: [options.userName],
+			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/enableOriginalSound')
+				let command = createCommand('/enableOriginalSound', action.options.userName, true)
 				const sendToCommand = {
 					id: ActionId.enableOriginalSound,
 					options: {
@@ -2036,10 +2036,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.disableOriginalSound]: {
 			name: 'Disable Original Sound',
-			options: [],
-			callback: (): void => {
+			options: [options.userName],
+			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/disableOriginalSound')
+				let command = createCommand('/disableOriginalSound', action.options.userName, true)
 				const sendToCommand = {
 					id: ActionId.disableOriginalSound,
 					options: {
@@ -2084,10 +2084,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.enableMirrorVideo]: {
 			name: 'Enable Mirror Video',
-			options: [],
-			callback: (): void => {
+			options: [options.userName],
+			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/enableMirrorVideo')
+				let command = createCommand('/enableMirrorVideo', action.options.userName, true)
 				const sendToCommand = {
 					id: ActionId.enableMirrorVideo,
 					options: {
@@ -2100,10 +2100,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.disableMirrorVideo]: {
 			name: 'Disable Mirror Video',
-			options: [],
-			callback: (): void => {
+			options: [options.userName],
+			callback: (action): void => {
 				// type: 'User'
-				let command = createCommand('/disableMirrorVideo')
+				let command = createCommand('/disableMirrorVideo', action.options.userName, true)
 				const sendToCommand = {
 					id: ActionId.disableMirrorVideo,
 					options: {
