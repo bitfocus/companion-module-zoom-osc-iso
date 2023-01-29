@@ -1243,16 +1243,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedCallers[index] })
 						args.push({ type: 'i', value: instance.ZoomClientDataObj.selectedOutputs[index] })
 					}
-				}
 
-				const sendToCommand: any = {
-					id: 'outputISO',
-					options: {
-						command: '/zoom/zoomID/outputISO',
-						args: args,
-					},
+					const sendToCommand: any = {
+						id: 'outputISO',
+						options: {
+							command: '/zoom/zoomID/outputISO',
+							args: args,
+						},
+					}
+					sendActionCommand(sendToCommand)
+					args = [];
 				}
-				sendActionCommand(sendToCommand)
+			
 				// reset arrays
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomClientDataObj.selectedOutputs.length = 0
