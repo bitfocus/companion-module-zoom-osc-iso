@@ -1187,7 +1187,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 							args: args,
 						},
 					}
-
 					sendActionCommand(sendToCommand)
 					// reset arrays
 					instance.ZoomClientDataObj.selectedCallers.length = 0
