@@ -75,7 +75,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variables[`CallersInGroup${index + 1}`] = group.users?.length
 		variables[`Group${index + 1}`] = group.groupName
 		group.users?.forEach((user: { zoomID: string | number }) => {
-			allUsers += instance.ZoomUserData[user.zoomID as number].userName + ' '
+			allUsers += instance.ZoomUserData[user.zoomID as number] ? instance.ZoomUserData[user.zoomID as number].userName + ' ' : ''
 		})
 		for (let position = 1; position < 50; position++) {
 			variables[`Group${index + 1}Position${position}`] = group.users[position - 1]
