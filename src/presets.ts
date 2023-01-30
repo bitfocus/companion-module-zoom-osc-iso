@@ -420,66 +420,66 @@ export function GetPresetList(
 			],
 			feedbacks: [],
 		}
-		// for (let position = 1; position < 50; position++) {
-		// 	presets[`Group${index + 1}_Position${position}`] = {
-		// 		type: 'button',
-		// 		category: `Manage Selections & Groups`,
-		// 		name: 'Group selection',
-		// 		style: {
-		// 			text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
-		// 			size: '14',
-		// 			color: combineRgb(0, 0, 0),
-		// 			bgcolor: combineRgb(230, 230, 230),
-		// 		},
-		// 		steps: [
-		// 			{
-		// 				down: [
-		// 					{
-		// 						actionId: ActionId.selectUserFromGroupPosition,
-		// 						options: { group: index, position: position, option: 'toggle' },
-		// 					},
-		// 				],
-		// 				up: [],
-		// 			},
-		// 		],
-		// 		feedbacks: [
-		// 			{
-		// 				feedbackId: FeedbackId.groupBased,
-		// 				options: {
-		// 					group: index,
-		// 					position: position,
-		// 					type: 'selected',
-		// 				},
-		// 				style: {
-		// 					color: combineRgb(0, 0, 0),
-		// 					bgcolor: combineRgb(255, 255, 0),
-		// 				},
-		// 			},
-		// 			{
-		// 				feedbackId: FeedbackId.groupBased,
-		// 				options: {
-		// 					group: index,
-		// 					position: position,
-		// 					type: 'micLive',
-		// 				},
-		// 				style: {
-		// 					bgcolor: combineRgb(255, 0, 0),
-		// 				},
-		// 			},
-		// 			{
-		// 				feedbackId: FeedbackId.groupBased,
-		// 				options: {
-		// 					group: index,
-		// 					position: position,
-		// 					type: 'handRaised',
-		// 				},
-		// 				style: {
-		// 					png64: images.handRaised,
-		// 				},
-		// 			},
-		// 		],
-		// 	}
-		// }
+		for (let position = 1; position < 50; position++) {
+			presets[`Group${index + 1}_Position${position}`] = {
+				type: 'button',
+				category: `Manage Selections & Groups`,
+				name: 'Group selection',
+				style: {
+					text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionId.selectUserFromGroupPosition,
+								options: { group: index, position: position, option: 'toggle' },
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: 'selected',
+						},
+						style: {
+							color: combineRgb(0, 0, 0),
+							bgcolor: combineRgb(255, 255, 0),
+						},
+					},
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: 'micLive',
+						},
+						style: {
+							bgcolor: combineRgb(255, 0, 0),
+						},
+					},
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: 'handRaised',
+						},
+						style: {
+							png64: images.handRaised,
+						},
+					},
+				],
+			}
+		}
 	}
 	/**
 	 * Pin/Spotlight & View Actions
