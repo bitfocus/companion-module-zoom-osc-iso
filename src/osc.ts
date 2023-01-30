@@ -285,7 +285,11 @@ export class OSC {
 						case 'roleChanged':
 							// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
-							if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
+							if (data.args[4].value === UserRole.Participant) {
+								let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								delete this.instance.ZoomGroupData[0].users[index]
+								this.updateLoop = true
+							} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
 								let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
 								if (index === -1) {
 									this.instance.ZoomGroupData[0].users.push({
