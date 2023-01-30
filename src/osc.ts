@@ -12,6 +12,12 @@ interface ZoomOSCResponse {
 	}[]
 }
 
+enum UserRole {
+	Host = 1,
+	CoHost = 2,
+	Participant = 3,
+}
+
 enum SubscribeMode {
 	None = 0,
 	TargetList = 1,
@@ -126,15 +132,37 @@ export class OSC {
 					users: [],
 				}
 			} else if (data.args.length > 8) {
+				// {int targetIndex}
+				// {str userName}
+				// {int galleryIndex}
+				// {int zoomID}
+				// {int targetCount}
+				// {int listCount}
+				// {int userRole}
+				// {int onlineStatus}
+				// {int videoStatus}
+				// {int audioStatus}
+				// {int handRaised}
+				this.instance.log('debug', `${data.args[1].value}, user role ${data.args[6].value}`)
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
 					targetIndex: data.args[0].value,
 					userName: data.args[1].value,
 					galleryIndex: data.args[2].value,
+					userRole: data.args[6].value,
 					videoOn: data.args[8].value === 1 ? true : false,
 					mute: data.args[9].value === 0 ? true : false,
 					handRaised: data.args[10].value === 1 ? true : false,
 					users: [],
+				}
+				if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {
+					let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+					if (index === -1) {
+						this.instance.ZoomGroupData[0].users.push({
+							zoomID: zoomId,
+							userName: data.args[1].value,
+						})
+					}
 				}
 			} else {
 				this.instance.log('debug', 'wrong arguments in OSC feedback')
@@ -255,8 +283,19 @@ export class OSC {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							break
 						case 'roleChanged':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+							// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+							if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
+								let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								if (index === -1) {
+									this.instance.ZoomGroupData[0].users.push({
+										zoomID: zoomId,
+										userName: data.args[1].value,
+									})
+									this.instance.log('debug', `added host: ${data.args[1].value}`)
+								}
+								this.updateLoop = true
+							}
 							this.instance.UpdateVariablesValues()
 							break
 						case 'stoppedSpeaking':
@@ -363,6 +402,7 @@ export class OSC {
 					if (data.args[0].value === 0) {
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
+						this.instance.ZoomGroupData = []
 						for (const key of Object.keys(this.instance.ZoomUserData)) {
 							if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
 								delete this.instance.ZoomUserData[parseInt(key)]
