@@ -1150,11 +1150,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Select output',
 			options: [outputOption],
 			callback: (action) => {
-				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output as number)
+				const outputNumber: number = parseInt(action.options.output as string)
+				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(outputNumber)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output as number)
+					instance.ZoomClientDataObj.selectedOutputs.push(outputNumber)
 				}
 				instance.checkFeedbacks(FeedbackId.output)
 			},
