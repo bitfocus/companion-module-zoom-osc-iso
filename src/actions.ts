@@ -208,7 +208,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	let CHOICES_OUTPUTS = []
 	// Change this to actual created output, get that with pulling
 	for (let index = 1; index < 10; index++) {
-		CHOICES_OUTPUTS.push({ id: index.toString(), label: `Output ${index}` })
+		CHOICES_OUTPUTS.push({ id: index, label: `Output ${index}` })
 	}
 
 	let userOption: any = {
@@ -247,7 +247,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		type: 'dropdown',
 		label: 'Output',
 		id: 'output',
-		default: '1',
+		default: 1,
 		choices: CHOICES_OUTPUTS,
 	}
 
@@ -1150,12 +1150,15 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Select output',
 			options: [outputOption],
 			callback: (action) => {
-				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(action.options.output as number)
+				const outputNumber: number = action.options.output as number;
+				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(outputNumber)
+				// instance.log('debug', `outputNumber: ${outputNumber} selectedOutputs: ${JSON.stringify(instance.ZoomClientDataObj.selectedOutputs)}`)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedOutputs.push(action.options.output as number)
+					instance.ZoomClientDataObj.selectedOutputs.push(outputNumber)
 				}
+				// instance.log('debug', `outputNumber: ${outputNumber} selectedOutputs: ${JSON.stringify(instance.ZoomClientDataObj.selectedOutputs)}`)
 				instance.checkFeedbacks(FeedbackId.output)
 			},
 		},

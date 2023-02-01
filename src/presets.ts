@@ -1016,7 +1016,7 @@ export function GetPresetList(
 		steps: [{ down: [{ actionId: ActionId.applyChannel, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	for (let index = 1; index < 8; index++) {
+	for (let index = 1; index < 9; index++) {
 		presets[`Select_Output_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Output Actions',
@@ -1052,7 +1052,7 @@ export function GetPresetList(
 			],
 		}
 	}
-	for (let index = 1; index < 8; index++) {
+	for (let index = 1; index < 9; index++) {
 		presets[`Select_Audio_Channel ${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Output Actions',
