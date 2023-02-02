@@ -833,7 +833,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.selectUserFromGroupPosition]: {
-			name: 'Preselect user',
+			name: 'Preselect user by group Position',
 			options: [
 				groupOption,
 				galleryOrderOption,
@@ -882,7 +882,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.selectFromGalleryPosition]: {
-			name: 'Preselect user/group',
+			name: 'Preselect user by Gallery Position',
 			options: [
 				galleryOrderOption,
 				{
@@ -929,7 +929,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.selectFromIndexPosition]: {
-			name: 'Preselect user/group',
+			name: 'Preselect user by Participant Index',
 			options: [
 				participantOption,
 				{
