@@ -70,8 +70,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.groupBased]: {
 			type: 'boolean',
-			name: 'In a group feedback',
-			description: 'Indicates feedback based on selection',
+			name: 'Group based feedback',
+			description: 'Position 1 - 999',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 			},
@@ -127,8 +127,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.indexBased]: {
 			type: 'boolean',
-			name: 'index based feedback',
-			description: 'Index based feedback',
+			name: 'Participant index based feedback',
+			description: 'Feedback based on index of the participant',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 			},
@@ -178,8 +178,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.userNameBased]: {
 			type: 'boolean',
-			name: 'username based feedback',
-			description: 'username based feedback',
+			name: 'Username based feedback',
+			description: 'type in username',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 			},
@@ -235,7 +235,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		[FeedbackId.galleryBased]: {
 			type: 'boolean',
 			name: 'Gallery based feedback',
-			description: 'Gallery based feedback',
+			description: 'Position 1 - 49',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
 			},
