@@ -348,53 +348,55 @@ export function GetPresetList(
 		steps: [{ down: [{ actionId: ActionId.previousParticipants, options: { shift: 30 } }], up: [] }],
 		feedbacks: [],
 	}
-	// Add to group presets
+	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
-		presets[`Make_group_${ZoomGroupData[index].groupName}`] = {
-			type: 'button',
-			category: 'Manage Selections & Groups',
-			name: `Make group: ${ZoomGroupData[index].groupName}`,
-			style: {
-				text: `Make group:\\n$(zoomosc:Group${index + 1})`,
-				size: '14',
-				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(230, 230, 230),
-			},
-			steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'set' } }], up: [] }],
-			feedbacks: [],
-		}
-		presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
-			type: 'button',
-			category: 'Manage Selections & Groups',
-			name: `Add to group: ${ZoomGroupData[index].groupName}`,
-			style: {
-				text: `Add to group:\\n$(zoomosc:Group${index + 1})`,
-				size: '14',
-				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(230, 230, 230),
-			},
-			steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'add' } }], up: [] }],
-			feedbacks: [],
-		}
-		presets[`Clear_group_${ZoomGroupData[index].groupName}`] = {
-			type: 'button',
-			category: 'Manage Selections & Groups',
-			name: `Clear group: ${ZoomGroupData[index].groupName}`,
-			style: {
-				text: `Clear group:\\n$(zoomosc:Group${index + 1})`,
-				size: '14',
-				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(230, 230, 230),
-			},
-			steps: [{ down: [{ actionId: ActionId.clearGroup, options: { group: index } }], up: [] }],
-			feedbacks: [],
+		if (index !== 0) {
+			presets[`Make_group_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections & Groups',
+				name: `Make group: ${ZoomGroupData[index].groupName}`,
+				style: {
+					text: `Make group:\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'set' } }], up: [] }],
+				feedbacks: [],
+			}
+			presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections & Groups',
+				name: `Add to group: ${ZoomGroupData[index].groupName}`,
+				style: {
+					text: `Add to group:\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'add' } }], up: [] }],
+				feedbacks: [],
+			}
+			presets[`Clear_group_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections & Groups',
+				name: `Clear group: ${ZoomGroupData[index].groupName}`,
+				style: {
+					text: `Clear group:\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [{ down: [{ actionId: ActionId.clearGroup, options: { group: index } }], up: [] }],
+				feedbacks: [],
+			}
 		}
 		presets[`Select_${ZoomGroupData[index].groupName}`] = {
 			type: 'button',
 			category: 'Manage Selections & Groups',
 			name: ZoomGroupData[index].groupName,
 			style: {
-				text: `Select\\n$(zoomosc:Group${index + 1}) ($(zoomosc:CallersInGroup${index + 1}))`,
+				text: `Select\\n$(zoomosc:Group${index}) ($(zoomosc:CallersInGroup${index}))`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
@@ -407,7 +409,7 @@ export function GetPresetList(
 			category: 'Manage Selections & Groups',
 			name: ZoomGroupData[index].groupName,
 			style: {
-				text: `Rename\\n$(zoomosc:Group${index + 1})`,
+				text: `Rename\\n$(zoomosc:Group${index})`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
@@ -420,13 +422,14 @@ export function GetPresetList(
 			],
 			feedbacks: [],
 		}
+
 		for (let position = 1; position < 50; position++) {
-			presets[`Group${index + 1}_Position${position}`] = {
+			presets[`Group${index}_Position${position}`] = {
 				type: 'button',
 				category: `Manage Selections & Groups`,
 				name: 'Group selection',
 				style: {
-					text: `$(zoomosc:Group${index + 1})-${position}\\n$(zoomosc:Group${index + 1}Position${position})`,
+					text: `$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
 					size: '14',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
@@ -481,6 +484,7 @@ export function GetPresetList(
 			}
 		}
 	}
+
 	/**
 	 * Pin/Spotlight & View Actions
 	 */

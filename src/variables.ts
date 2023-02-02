@@ -72,17 +72,17 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	let allUsers = ''
 	instance.ZoomGroupData.forEach((group: { users: any[]; groupName: string | number | undefined }, index: number) => {
-		variables[`CallersInGroup${index + 1}`] = group.users?.length
-		variables[`Group${index + 1}`] = group.groupName
+		variables[`CallersInGroup${index}`] = group.users?.length
+		variables[`Group${index}`] = group.groupName
 		group.users?.forEach((user: { zoomID: string | number }) => {
 			allUsers += instance.ZoomUserData[user.zoomID as number] ? instance.ZoomUserData[user.zoomID as number].userName + ' ' : ''
 		})
 		for (let position = 1; position < 50; position++) {
-			variables[`Group${index + 1}Position${position}`] = group.users[position - 1]
+			variables[`Group${index}Position${position}`] = group.users[position - 1]
 				? group.users[position - 1].userName
 				: '-'
 		}
-		variables[`InsideGroup${index + 1}`] = allUsers
+		variables[`InsideGroup${index}`] = allUsers
 		allUsers = '' // reset values
 	})
 	// "normal" users
@@ -128,21 +128,25 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	let userVariables = []
 	let outputVariables = []
 	let audioLevelVariables = []
-	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
+	groupPositionVariables.push({
+		name: `Group${0} Position ${1}`,
+		variableId: `Group${0}Position${1}`,
+	})
+	for (let index = 1; index < instance.ZoomGroupData.length; index++) {
 		for (let position = 1; position < 2; position++) {
 			groupPositionVariables.push({
-				name: `Group${index + 1} Position ${position}`,
-				variableId: `Group${index + 1}Position${position}`,
+				name: `Group${index} Position ${position}`,
+				variableId: `Group${index}Position${position}`,
 			})
 		}
 		userVariables.push({
 			name: `Inside group`,
-			variableId: `InsideGroup${index + 1}`,
+			variableId: `InsideGroup${index}`,
 		})
-		userVariables.push({ name: `name`, variableId: `Group${index + 1}` })
+		userVariables.push({ name: `name`, variableId: `Group${index}` })
 		userVariables.push({
-			name: `Callers In Group ${index + 1}`,
-			variableId: `CallersInGroup${index + 1}`,
+			name: `Callers In Group ${index}`,
+			variableId: `CallersInGroup${index}`,
 		})
 	}
 	for (const key in instance.ZoomUserData) {

@@ -87,9 +87,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
 
-		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups; index++) {
+		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups + 1; index++) {
 			this.ZoomGroupData[index] = {
-				groupName: index === 0 ? 'Hosts' : `Group ${index + 1}`,
+				groupName: index === 0 ? 'Hosts' : `Group ${index}`,
 				users: [],
 			}
 		}
