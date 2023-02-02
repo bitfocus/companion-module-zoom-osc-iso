@@ -184,7 +184,7 @@ export function GetPresetList(
 	//clear selection
 	presets[`Clear_Participants`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Clear Participants`,
 		style: {
 			text: `Clear Participants ($(zoomosc:selectedNumberOfCallers))`,
@@ -203,7 +203,7 @@ export function GetPresetList(
 	// Selection method
 	presets[`Toggle_Selection_Method`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Selection Method`,
 		style: {
 			text: `Toggle Selection Method`,
@@ -236,7 +236,7 @@ export function GetPresetList(
 	// Single selection
 	presets[`Single_selection`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Single selection`,
 		style: {
 			text: `Single selection`,
@@ -250,7 +250,7 @@ export function GetPresetList(
 	// Select by name
 	presets[`Select_by_name`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Select by name`,
 		style: {
 			text: `Select by name`,
@@ -309,7 +309,7 @@ export function GetPresetList(
 	// Multiple selection
 	presets[`Multiple_selection`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Multiple selection`,
 		style: {
 			text: `Multiple selection`,
@@ -323,7 +323,7 @@ export function GetPresetList(
 	// Next participants
 	presets[`Next_participants`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Next participants`,
 		style: {
 			text: `Next participants`,
@@ -337,7 +337,7 @@ export function GetPresetList(
 	// Previous participants
 	presets[`Previous _participants`] = {
 		type: 'button',
-		category: 'Manage Selections & Groups',
+		category: 'Manage Selections of Participants',
 		name: `Previous participants`,
 		style: {
 			text: `Previous participants`,
@@ -353,7 +353,7 @@ export function GetPresetList(
 		if (index !== 0) {
 			presets[`Make_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
-				category: 'Manage Selections & Groups',
+				category: 'Manage Selections of Groups',
 				name: `Make group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Make group:\\n$(zoomosc:Group${index})`,
@@ -366,7 +366,7 @@ export function GetPresetList(
 			}
 			presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
-				category: 'Manage Selections & Groups',
+				category: 'Manage Selections of Groups',
 				name: `Add to group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Add to group:\\n$(zoomosc:Group${index})`,
@@ -379,7 +379,7 @@ export function GetPresetList(
 			}
 			presets[`Clear_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
-				category: 'Manage Selections & Groups',
+				category: 'Manage Selections of Groups',
 				name: `Clear group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Clear group:\\n$(zoomosc:Group${index})`,
@@ -391,25 +391,12 @@ export function GetPresetList(
 				feedbacks: [],
 			}
 		}
-		presets[`Select_${ZoomGroupData[index].groupName}`] = {
-			type: 'button',
-			category: 'Manage Selections & Groups',
-			name: ZoomGroupData[index].groupName,
-			style: {
-				text: `Select\\n$(zoomosc:Group${index}) ($(zoomosc:CallersInGroup${index}))`,
-				size: '14',
-				color: combineRgb(0, 0, 0),
-				bgcolor: combineRgb(230, 230, 230),
-			},
-			steps: [{ down: [{ actionId: ActionId.selectGroup, options: { group: index } }], up: [] }],
-			feedbacks: [],
-		}
 		presets[`Rename_${ZoomGroupData[index].groupName}`] = {
 			type: 'button',
-			category: 'Manage Selections & Groups',
+			category: 'Manage Selections of Groups',
 			name: ZoomGroupData[index].groupName,
 			style: {
-				text: `Rename\\n$(zoomosc:Group${index})`,
+				text: `Rename\\nGroup\\n$(zoomosc:Group${index})`,
 				size: '14',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
@@ -422,11 +409,25 @@ export function GetPresetList(
 			],
 			feedbacks: [],
 		}
+		presets[`Select_${ZoomGroupData[index].groupName}`] = {
+			type: 'button',
+			category: `Manage Selections of Groups`,
+			name: ZoomGroupData[index].groupName,
+			style: {
+				text: `Select\\n$(zoomosc:Group${index}) ($(zoomosc:CallersInGroup${index}))`,
+				size: '14',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
+			},
+			steps: [{ down: [{ actionId: ActionId.selectGroup, options: { group: index } }], up: [] }],
+			feedbacks: [],
+		}
+		
 
 		for (let position = 1; position < 50; position++) {
 			presets[`Group${index}_Position${position}`] = {
 				type: 'button',
-				category: `Manage Selections & Groups`,
+				category: `Select ${ZoomGroupData[index].groupName} participants`,
 				name: 'Group selection',
 				style: {
 					text: `$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
