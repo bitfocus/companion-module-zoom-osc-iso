@@ -2,7 +2,7 @@ import { InstanceBaseExt, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
-const osc = require('osc')
+const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
 	address: string
@@ -28,14 +28,14 @@ enum SubscribeMode {
 
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
-	private oscHost: string = ''
-	private oscTXPort: number = 9099
-	private oscRXPort: number = 1234
+	private oscHost = ''
+	private oscTXPort = 9099
+	private oscRXPort = 1234
 	private udpPort: any
-	private updateLoop: boolean = true
-	private needToPingPong: boolean = true
+	private updateLoop = true
+	private needToPingPong = true
 	private pingInterval: NodeJS.Timer | undefined
-	private pingIntervalTime: number = 2000
+	private pingIntervalTime = 2000
 	private updatePresetsLoop: NodeJS.Timer | undefined
 	private zoomISOPuller: NodeJS.Timer | undefined
 
@@ -54,12 +54,13 @@ export class OSC {
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
 		if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+		return
 	}
 
 	/**
 	 * @description Create a OSC connection to Zoom
 	 */
-	public readonly Connect = () => {
+	public readonly Connect = (): void => {
 		this.oscHost = this.instance.config.host || '127.0.0.1'
 		this.oscTXPort = this.instance.config.tx_port || 9090
 		this.oscRXPort = this.instance.config.rx_port || 1234
@@ -75,6 +76,7 @@ export class OSC {
 		// Listen for incoming OSC messages.
 		this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
 			// this.instance.log('info', JSON.stringify(oscMsg))
+			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
 			this.processData(oscMsg)
 		})
 
@@ -109,6 +111,8 @@ export class OSC {
 				}
 			}, 2000)
 		})
+
+		return
 	}
 
 	/**
@@ -118,10 +122,10 @@ export class OSC {
 	 * @returns promise
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
-		let zoomId = parseInt(data.args[3].value)
+		const zoomId = parseInt(data.args[3].value)
 		// Only when a user is not in offline array
 		if (!this.instance.ZoomUserOffline[zoomId]) {
-			let index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+			const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
@@ -156,7 +160,7 @@ export class OSC {
 					users: [],
 				}
 				if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {
-					let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+					const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
 					if (index === -1) {
 						this.instance.ZoomGroupData[0].users.push({
 							zoomID: zoomId,
@@ -173,10 +177,10 @@ export class OSC {
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
-		let recvMsg = data.address.toString().split('/')
-		let zoomPart1 = recvMsg[1] // zoom, zoomosc
-		let zoomPart2 = recvMsg[2] // user, me, pong, galleryShape etc.
-		let zoomPart3 = recvMsg[3]
+		const recvMsg = data.address.toString().split('/')
+		const zoomPart1 = recvMsg[1] // zoom, zoomosc
+		const zoomPart2 = recvMsg[2] // user, me, pong, galleryShape etc.
+		const zoomPart3 = recvMsg[3]
 		let zoomId: number
 
 		// Do a switch block to go fast through the rest of the data
@@ -211,7 +215,7 @@ export class OSC {
 							// {int videoStatus}
 							// {int audioStatus}
 							// {int handRaised}
-							this.createZoomUser(data).then(() => (this.updateLoop = true))
+							await this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'activeSpeaker':
 							if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
@@ -259,23 +263,27 @@ export class OSC {
 							break
 						case 'online':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.createZoomUser(data).then(() => (this.updateLoop = true))
+							await this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
-						case 'offline':
+						case 'offline': {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 							delete this.instance.ZoomUserData[zoomId]
-							let index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+							const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
 							this.updateLoop = true
 							break
-						case 'userNameChanged':
+						}
+						case 'userNameChanged': {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
-							let findIndex = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+							const findIndex = this.instance.ZoomVariableLink.findIndex(
+								(id: { zoomId: number }) => id.zoomId === zoomId
+							)
 							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
 							this.instance.UpdateVariablesValues()
 							break
+						}
 						case 'chat':
 							this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							break
@@ -286,11 +294,11 @@ export class OSC {
 							// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
 							if (data.args[4].value === UserRole.Participant) {
-								let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
 								delete this.instance.ZoomGroupData[0].users[index]
 								this.updateLoop = true
 							} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
-								let index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
 								if (index === -1) {
 									this.instance.ZoomGroupData[0].users.push({
 										zoomID: zoomId,
@@ -337,7 +345,7 @@ export class OSC {
 					this.instance.UpdateVariablesValues()
 					break
 
-				case 'pong':
+				case 'pong': {
 					// // {str zoomOSCversion}
 					// // {int subscribeMode}
 					// // {int galTrackMode}
@@ -345,7 +353,7 @@ export class OSC {
 					// // {int number of targets}
 					// // {int number of users in call}
 					// // {int isPro (1=true, 0-false)}
-					let versionInfo = data.args[1].value as string
+					const versionInfo = data.args[1].value as string
 					if (data.args[7].value === 1) this.instance.updateStatus(InstanceStatus.Ok)
 					else if (data.args[7].value === 0 || data.args[1].value.includes('lite'))
 						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
@@ -398,7 +406,7 @@ export class OSC {
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
 					break
-
+				}
 				case 'meetingStatus':
 					this.instance.log('info', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
@@ -456,8 +464,8 @@ export class OSC {
 					this.instance.InitVariables()
 					this.instance.UpdateVariablesValues()
 					break
-				case 'outputRouting':
-					let outputNumber = parseInt(data.args[1].value)
+				case 'outputRouting': {
+					const outputNumber = parseInt(data.args[1].value)
 					this.instance.ZoomOutputData[outputNumber] = {
 						numberOfOutputs: data.args[0].value,
 						outputNumber: data.args[1].value,
@@ -472,7 +480,7 @@ export class OSC {
 					this.instance.InitVariables()
 					this.instance.UpdateVariablesValues()
 					break
-
+				}
 				default:
 					this.instance.log('info', 'No Case provided for:' + data.address)
 					this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
@@ -496,11 +504,12 @@ export class OSC {
 		)
 	}
 
-	public readonly sendISOPullingCommands = () => {
+	public readonly sendISOPullingCommands = (): void => {
 		this.sendCommand('/zoom/getEngineState', [])
 		this.sendCommand('/zoom/getAudioLevels', [])
 		this.sendCommand('/zoom/getOutputRouting', [])
 		this.sendCommand('/zoom/getAudioRouting', [])
+		return
 	}
 
 	// /**

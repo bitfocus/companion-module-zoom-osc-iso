@@ -55,7 +55,7 @@ const ISOActions: actionType = {
 		command: '/setOutputName',
 		type: 'ISO',
 		singleUser: null,
-		args: ['output','name'],
+		args: ['output', 'name'],
 	},
 	deleteOutput: {
 		description: 'delete Output',
@@ -806,7 +806,6 @@ const Actions: actionType = {
 		singleUser: true,
 		args: ['userName', 'name'],
 	},
-	
 
 	// /getAudioLevel*
 	// /zoomosc/audioLevels
@@ -820,7 +819,6 @@ const Actions: actionType = {
 	// /zoomosc/videoLoss {int output_num, string output_name, string selection}
 	// /zoomosc/videoResume {int output_num, string output_name, string selection}
 
-	
 	SetWindowPosition: {
 		description: 'Set Window Position',
 		shortDescription: 'SetWindowPosition',
