@@ -204,8 +204,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					],
 				},
 			],
-			callback: (feedback) => {
-				let name = feedback.options.name
+			callback: async (feedback, context) => {
+				let name = await context.parseVariablesInString(feedback.options.name as string)
 				let zoomID = 0
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {

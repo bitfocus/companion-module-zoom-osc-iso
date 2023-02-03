@@ -779,10 +779,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				},
 			],
 			callback: async (action) => {
+				let selectedName = await instance.parseVariablesInString(action.options.name as string);
 				for (const key in instance.ZoomUserData) {
 					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
 						const user = instance.ZoomUserData[key]
-						if (user.userName === action.options.name) {
+						if (user.userName === selectedName) {
 							switch (action.options.option) {
 								case 'toggle':
 									if (instance.config.selectionMethod === 1) instance.ZoomClientDataObj.selectedCallers.length = 0
