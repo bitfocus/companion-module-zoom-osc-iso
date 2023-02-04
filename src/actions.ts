@@ -129,6 +129,7 @@ export enum ActionId {
 	setGalleryView = 'setGalleryView',
 	muteAll = 'muteAll',
 	unmuteAll = 'unmuteAll',
+	muteAllExcept = 'muteAllExcept',
 	clearSpotlight = 'clearSpotlight',
 	enableComputerSoundWhenSharing = 'enableComputerSoundWhenSharing',
 	disableUsersToUnmute = 'disableUsersToUnmute',
@@ -2326,6 +2327,22 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				sendActionCommand(sendToCommand)
 			},
 		},
+		[ActionId.muteAllExcept]: {
+			name: 'Mute All Except',
+			options: [],
+			callback: (): void => {
+				// type: 'User'
+				const command = createCommand('/Mute', '', false, true)
+				const sendToCommand = {
+					id: ActionId.muteAllExcept,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
 		[ActionId.clearSpotlight]: {
 			name: 'Clear Spotlight',
 			options: [],
@@ -3228,15 +3245,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	 * @param name string
 	 * @returns object { argsCallers: { type: string; value: string | number }[]; oscPath: string }
 	 */
-	const createCommand = (OSCAction: string, name?: InputValue | string | undefined, singleUser?: boolean | null) => {
+	const createCommand = (
+		OSCAction: string,
+		name?: InputValue | string | undefined,
+		singleUser?: boolean | null,
+		allExcept?: boolean | null
+	) => {
 		const command: {
 			args: { type: string; value: any }[]
-			argsNames: { type: string; value: any }[]
 			oscPath: string
 			oscPathName: string
 		} = {
 			args: [],
-			argsNames: [],
 			oscPath: '',
 			oscPathName: '',
 		}
@@ -3269,19 +3289,21 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// When command is for one user only send first caller
 					if (singleUser) {
 						command.args.push({ type: 'i', value: selectedCallers[0] })
-						command.argsNames.push({ type: 's', value: instance.ZoomUserData[selectedCallers[0]].userName })
 					} else {
 						selectedCallers.forEach((caller) => {
 							command.args.push({ type: 'i', value: caller })
-							command.argsNames.push({ type: 's', value: instance.ZoomUserData[caller].userName })
 						})
 					}
 				} else {
 					instance.log('debug', 'Wrong selection, no array')
 				}
 				// Different path when more than one users are selected
-				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
-				command.oscPathName = (command.argsNames.length > 1 ? `/zoom/users/userName` : `/zoom/userName`) + OSCAction
+				if (allExcept) {
+					command.oscPath =
+						(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoomallExecpt/zoomID`) + OSCAction
+				} else {
+					command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
+				}
 			}
 		}
 		return command
