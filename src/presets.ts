@@ -4,6 +4,14 @@ import { FeedbackId } from './feedback'
 const { images } = require('./images') // eslint-disable-line
 import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
 
+enum feedbackType {
+	selected = 0,
+	micLive = 1,
+	handRaised = 2,
+	camera = 3,
+	activeSpeaker = 4,
+}
+
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 	feedbacks: Array<
 		{
@@ -65,7 +73,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'micLive',
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -76,7 +84,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'handRaised',
+						type: feedbackType.handRaised,
 						handRaised: 1,
 					},
 					style: {
@@ -87,7 +95,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'activeSpeaker',
+						type: feedbackType.activeSpeaker,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -98,7 +106,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'selected',
+						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -134,7 +142,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'micLive',
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -145,7 +153,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'activeSpeaker',
+						type: feedbackType.activeSpeaker,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -156,8 +164,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'handRaised',
-						handRaised: 1,
+						type: feedbackType.handRaised,
 					},
 					style: {
 						png64: images.handRaised,
@@ -167,7 +174,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'selected',
+						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -264,7 +271,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'micLive',
+					type: feedbackType.micLive,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -275,8 +282,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'handRaised',
-					handRaised: 1,
+					type: feedbackType.handRaised,
 				},
 				style: {
 					png64: images.handRaised,
@@ -286,7 +292,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'activeSpeaker',
+					type: feedbackType.activeSpeaker,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -297,7 +303,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'selected',
+					type: feedbackType.selected,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -451,7 +457,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'selected',
+							type: feedbackType.selected,
 						},
 						style: {
 							color: combineRgb(0, 0, 0),
@@ -463,7 +469,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'micLive',
+							type: feedbackType.micLive,
 						},
 						style: {
 							bgcolor: combineRgb(255, 0, 0),
@@ -474,7 +480,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'handRaised',
+							type: feedbackType.handRaised,
 						},
 						style: {
 							png64: images.handRaised,
