@@ -51,6 +51,7 @@ export enum ActionId {
 	renameGroup = 'rename_Group',
 	nextParticipants = 'next_Participants',
 	previousParticipants = 'previous_Participants',
+	resetParticipants = 'reset_Participants',
 	selectOutput = 'select_Output',
 	selectAudioChannel = 'select_Audio_Channel',
 	applyOutput = 'apply_Output',
@@ -1142,6 +1143,28 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
+
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased,
+					FeedbackId.galleryBased
+				)
+			},
+		},
+		[ActionId.resetParticipants]: {
+			name: 'resetParticipants',
+			description: 'This will reset the order based on the original meeting',
+			options: [],
+			callback: () => {
+				instance.ZoomVariableLink.length = 0
+				for (const key in instance.ZoomUserData) {
+					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+						const user = instance.ZoomUserData[key]
+						instance.ZoomVariableLink.push({ zoomId: user.zoomId, userName: user.userName })
+					}
+				}
 
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
