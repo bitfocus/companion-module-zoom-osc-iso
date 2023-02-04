@@ -960,6 +960,24 @@ export function GetPresetList(
 		],
 		feedbacks: [],
 	}
+	presets['mute_all_except'] = {
+		type: 'button',
+		category: 'Video/Audio Actions',
+		name: 'mute_all_except',
+		style: {
+			text: 'Mute All Except',
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [
+			{
+				down: [{ actionId: ActionId.muteAllExcept, options: {} }],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
 	presets['Toggle_mute'] = {
 		type: 'button',
 		category: 'Video/Audio Actions',

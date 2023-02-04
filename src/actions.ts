@@ -2329,10 +2329,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.muteAllExcept]: {
 			name: 'Mute All Except',
-			options: [],
-			callback: (): void => {
+			options: [options.userName],
+			callback: (action): void => {
 				// type: 'User'
-				const command = createCommand('/Mute', '', false, true)
+				const command = createCommand('/Mute', action.options.userName, false, true)
 				const sendToCommand = {
 					id: ActionId.muteAllExcept,
 					options: {
