@@ -1,11 +1,13 @@
-## ZoomOSC/ISO module
+
+# ZoomOSC/ISO module
 
 This module is rebuild for the new version (> 4.0.5) of Zoom OSC/Zoom ISO V2.
 
-It is mainly based on the principle of selecting a caller or caller group first and then do an user action. Most of what you need you'll find in the presets. Of course you can use Global actions also.
+It is mainly based on the principle of selecting a caller or caller group first and then do an user action. Most of what you need you'll find in the presets. 
 
-### Selection of participants
+## Selection of participants
 
+Before you can do an user action like   pin
 There is a multi or single selection mode. This option is settable in the config or with the predefined presets. This way easy selection is possible.
 There are 4-ways of selecting a participant;
 
