@@ -2329,10 +2329,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.muteAllExcept]: {
 			name: 'Mute All Except',
-			options: [options.userName],
-			callback: (action): void => {
+			options: [],
+			callback: (): void => {
 				// type: 'User'
-				const command = createCommand('/Mute', action.options.userName, false, true)
+				const command = createCommand('/Mute', '', false, true)
 				const sendToCommand = {
 					id: ActionId.muteAllExcept,
 					options: {
@@ -3300,7 +3300,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// Different path when more than one users are selected
 				if (allExcept) {
 					command.oscPath =
-						(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoomallExecpt/zoomID`) + OSCAction
+						(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoom/allExecpt/zoomID`) + OSCAction
 				} else {
 					command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
 				}
