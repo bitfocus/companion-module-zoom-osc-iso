@@ -1693,6 +1693,19 @@ export function GetPresetList(
 		steps: [{ down: [{ actionId: ActionId.startScreenShare, options: {} }], up: [] }],
 		feedbacks: [],
 	}
+	presets[`Stop_Share`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Stop_Share`,
+		style: {
+			text: `Stop Share`,
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [{ down: [{ actionId: ActionId.stopSharing, options: {} }], up: [] }],
+		feedbacks: [],
+	}
 	presets[`Screen_Share_Primary`] = {
 		type: 'button',
 		category: 'Sharing Actions',
