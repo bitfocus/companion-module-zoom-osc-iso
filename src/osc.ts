@@ -337,7 +337,7 @@ export class OSC {
 					})
 					this.instance.InitVariables()
 					this.instance.UpdateVariablesValues()
-					this.instance.checkFeedbacks('selectedUser', 'indexBased', 'galleryBased', 'groupBased')
+					this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
 					break
 
 				case 'galleryCount':
