@@ -755,7 +755,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						break
 				}
 				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.groupBased)
+				instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.groupBased, FeedbackId.userNameBased)
 			},
 		},
 		[ActionId.selectUserByName]: {
@@ -2388,6 +2388,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					},
 				}
 				sendActionCommand(sendToCommand)
+				for (const key in instance.ZoomUserData) {
+					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+						const user = instance.ZoomUserData[key]
+						user.handRaised = false
+					}
+				}
+				instance.checkFeedbacks(
+					FeedbackId.galleryBased,
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased
+				)
 			},
 		},
 		[ActionId.openBreakoutRooms]: {
