@@ -7,7 +7,7 @@ import {
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
-import { arrayAddRemove, arrayRemove, InstanceBaseExt, options } from './utils'
+import { arrayAddRemove, arrayRemove, InstanceBaseExt, options, ZoomGroupDataInterface } from './utils'
 
 const select = { single: true, multi: false }
 
@@ -1072,11 +1072,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					},
 				}
 				sendActionCommand(sendToCommand)
-				instance.ZoomUserData[action.options.user as number].userName = action.options.name as string
-				const index = instance.ZoomVariableLink.findIndex(
-					(finduser: { zoomId: number }) => finduser.zoomId === action.options.user
-				)
+				// Also update locally
+				let ZoomID = action.options.user as number
+				instance.ZoomUserData[ZoomID].userName = action.options.name as string
+				// Update position and group
+				const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === ZoomID)
 				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name as string
+				instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
+					group.users.forEach((user) => {
+						if (user.zoomID === ZoomID) user.userName = action.options.name as string
+					})
+				})
 				instance.UpdateVariablesValues()
 			},
 		},
