@@ -78,6 +78,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 				{ id: 1000, label: 'Fast (1000msec)' },
 				{ id: 2500, label: 'Medium (2500msec)' },
 				{ id: 5000, label: 'Slow (5000msec)' },
+				{ id: 60000, label: 'Extra Slow (10000msec)' },
 			],
 			default: 1000,
 			width: 6,
