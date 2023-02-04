@@ -16,9 +16,10 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'static-text',
 			width: 12,
-			value: 'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
+			value:
+				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
 			id: 'info on license',
-			label: 'Important note'
+			label: 'Important note',
 		},
 		{
 			type: 'textinput',

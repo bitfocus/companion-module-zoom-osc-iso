@@ -1,7 +1,7 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
-const { images } = require('./images')
+const { images } = require('./images') // eslint-disable-line
 import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
 
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
@@ -422,7 +422,6 @@ export function GetPresetList(
 			steps: [{ down: [{ actionId: ActionId.selectGroup, options: { group: index } }], up: [] }],
 			feedbacks: [],
 		}
-		
 
 		for (let position = 1; position < 50; position++) {
 			presets[`Group${index}_Position${position}`] = {
