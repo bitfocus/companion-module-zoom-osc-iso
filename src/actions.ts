@@ -977,7 +977,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.clearParticipants]: {
-			name: 'Clear Participants',
+			name: 'Clear Selections',
 			options: [],
 			callback: () => {
 				instance.ZoomClientDataObj.selectedCallers.length = 0
@@ -1417,8 +1417,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.spotLight]: {
-			name: 'Spotlight',
-			options: [options.userName],
+			name: 'Single Spotlight',
+			options: [options.singleUserName],
 			callback: (action): void => {
 				// type: 'User'
 				let command = createCommand('/spot', action.options.userName, select.single)

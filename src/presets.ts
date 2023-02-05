@@ -185,9 +185,9 @@ export function GetPresetList(
 	presets[`Clear_Participants`] = {
 		type: 'button',
 		category: 'Manage Selections of Participants',
-		name: `Clear Participants`,
+		name: `Clear Selections`,
 		style: {
-			text: `Clear Participants ($(zoomosc:selectedNumberOfCallers))`,
+			text: `Clear Selections ($(zoomosc:selectedNumberOfCallers))`,
 			size: '14',
 			color: combineRgb(0, 0, 0),
 			bgcolor: combineRgb(230, 230, 230),
@@ -638,7 +638,7 @@ export function GetPresetList(
 		category: 'Pin/Spotlight & View Actions',
 		name: 'Spotlight',
 		style: {
-			text: 'Spotlight',
+			text: 'Single Spotlight',
 			size: '14',
 			color: combineRgb(0, 0, 0),
 			bgcolor: combineRgb(230, 230, 230),
