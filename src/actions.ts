@@ -1090,7 +1090,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				sendActionCommand(sendToCommand)
 				// Also update locally
-				let ZoomID = action.options.user as number
+				const ZoomID = action.options.user as number
 				instance.ZoomUserData[ZoomID].userName = action.options.name as string
 				// Update position and group
 				const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === ZoomID)
