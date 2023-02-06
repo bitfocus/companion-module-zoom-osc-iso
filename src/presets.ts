@@ -50,7 +50,7 @@ export function GetPresetList(
 			name: `Caller${index}`,
 			style: {
 				text: `${index}. $(zoomosc:Participant${padding(index, 3)})`,
-				size: '14',
+				size: 'auto',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
 			},
@@ -127,7 +127,7 @@ export function GetPresetList(
 			name: `$(zoomosc:Gallery position ${index})`,
 			style: {
 				text: `Gal Pos ${index}\\n$(zoomosc:GalleryPosition${padding(index, 2)})`,
-				size: '14',
+				size: 'auto',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
 			},
@@ -261,7 +261,7 @@ export function GetPresetList(
 		name: `Select by name`,
 		style: {
 			text: `Select by name`,
-			size: '14',
+			size: 'auto',
 			color: combineRgb(0, 0, 0),
 			bgcolor: combineRgb(230, 230, 230),
 		},
@@ -436,7 +436,7 @@ export function GetPresetList(
 				name: 'Group selection',
 				style: {
 					text: `$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
-					size: '14',
+					size: 'auto',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
 				},
