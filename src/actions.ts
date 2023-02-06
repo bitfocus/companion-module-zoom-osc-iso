@@ -1076,28 +1076,29 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.rename]: {
 			name: 'Rename',
 			options: [userOption, options.name],
-			callback: (action) => {
+			callback: async (action) => {
+				const selectedName = await instance.parseVariablesInString(action.options.name as string)
+				const ZoomID = action.options.user as number
 				const oscPath = `/zoom/zoomID/rename`
 				const sendToCommand: any = {
 					id: 'rename',
 					options: {
 						command: oscPath,
 						args: [
-							{ type: 'i', value: action.options.user },
-							{ type: 's', value: action.options.name },
+							{ type: 'i', value: ZoomID },
+							{ type: 's', value: selectedName },
 						],
 					},
 				}
 				sendActionCommand(sendToCommand)
 				// Also update locally
-				const ZoomID = action.options.user as number
-				instance.ZoomUserData[ZoomID].userName = action.options.name as string
+				instance.ZoomUserData[ZoomID].userName = selectedName
 				// Update position and group
 				const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === ZoomID)
-				if (index !== -1) instance.ZoomVariableLink[index].userName = action.options.name as string
+				if (index !== -1) instance.ZoomVariableLink[index].userName = selectedName
 				instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
 					group.users.forEach((user) => {
-						if (user.zoomID === ZoomID) user.userName = action.options.name as string
+						if (user.zoomID === ZoomID) user.userName = selectedName
 					})
 				})
 				instance.UpdateVariablesValues()
