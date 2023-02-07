@@ -1019,12 +1019,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					default: 'add',
 					choices: [
 						{ label: 'Add', id: 'add' },
-						{ label: 'Set', id: 'set' },
+						{ label: 'Replace', id: 'replace' },
 					],
 				},
 			],
 			callback: (action) => {
-				if (action.options.groupOption === 'set') {
+				if (action.options.groupOption === 'replace') {
 					instance.ZoomGroupData[action.options.group as number].users.length = 0
 				}
 				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {

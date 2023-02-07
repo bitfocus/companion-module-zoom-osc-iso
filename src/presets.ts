@@ -357,17 +357,19 @@ export function GetPresetList(
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
 		if (index !== 0) {
-			presets[`Make_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Replace_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
-				name: `Make group: ${ZoomGroupData[index].groupName}`,
+				name: `Replace ${ZoomGroupData[index].groupName} participants`,
 				style: {
-					text: `Make group:\\n$(zoomosc:Group${index})`,
+					text: `Replace\\n$(zoomosc:Group${index})\\nparticipants`,
 					size: '14',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
 				},
-				steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'set' } }], up: [] }],
+				steps: [
+					{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'replace' } }], up: [] },
+				],
 				feedbacks: [],
 			}
 			presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
