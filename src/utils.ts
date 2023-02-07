@@ -123,7 +123,6 @@ export interface Options {
 	zak: EnforceDefault<CompanionInputFieldTextInput, string>
 	name: EnforceDefault<CompanionInputFieldTextInput, string>
 	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
-	singleUserName: EnforceDefault<CompanionInputFieldTextInput, string>
 	userName: EnforceDefault<CompanionInputFieldTextInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
 	path: EnforceDefault<CompanionInputFieldTextInput, string>
@@ -215,15 +214,9 @@ export const options: Options = {
 		min: 1,
 		max: 256,
 	},
-	singleUserName: {
-		type: 'textinput',
-		label: 'single username (keep blank when you pre-select)',
-		id: 'userName',
-		default: '',
-	},
 	userName: {
 		type: 'textinput',
-		label: 'username (keep blank when you pre-select)',
+		label: 'single username (keep blank when you pre-select)',
 		id: 'userName',
 		default: '',
 	},
