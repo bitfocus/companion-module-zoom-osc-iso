@@ -1,8 +1,16 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
-const { images } = require('./images')
+const { images } = require('./images') // eslint-disable-line
 import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
+
+enum feedbackType {
+	selected = 0,
+	micLive = 1,
+	handRaised = 2,
+	camera = 3,
+	activeSpeaker = 4,
+}
 
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 	feedbacks: Array<
@@ -42,7 +50,7 @@ export function GetPresetList(
 			name: `Caller${index}`,
 			style: {
 				text: `${index}. $(zoomosc:Participant${padding(index, 3)})`,
-				size: '14',
+				size: 'auto',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
 			},
@@ -65,7 +73,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'micLive',
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -76,7 +84,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'handRaised',
+						type: feedbackType.handRaised,
 						handRaised: 1,
 					},
 					style: {
@@ -87,7 +95,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'activeSpeaker',
+						type: feedbackType.activeSpeaker,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -98,7 +106,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: 'selected',
+						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -119,7 +127,7 @@ export function GetPresetList(
 			name: `$(zoomosc:Gallery position ${index})`,
 			style: {
 				text: `Gal Pos ${index}\\n$(zoomosc:GalleryPosition${padding(index, 2)})`,
-				size: '14',
+				size: 'auto',
 				color: combineRgb(0, 0, 0),
 				bgcolor: combineRgb(230, 230, 230),
 			},
@@ -134,7 +142,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'micLive',
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -145,7 +153,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'activeSpeaker',
+						type: feedbackType.activeSpeaker,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -156,8 +164,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'handRaised',
-						handRaised: 1,
+						type: feedbackType.handRaised,
 					},
 					style: {
 						png64: images.handRaised,
@@ -167,7 +174,7 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: 'selected',
+						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
@@ -254,7 +261,7 @@ export function GetPresetList(
 		name: `Select by name`,
 		style: {
 			text: `Select by name`,
-			size: '14',
+			size: 'auto',
 			color: combineRgb(0, 0, 0),
 			bgcolor: combineRgb(230, 230, 230),
 		},
@@ -264,7 +271,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'micLive',
+					type: feedbackType.micLive,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -275,8 +282,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'handRaised',
-					handRaised: 1,
+					type: feedbackType.handRaised,
 				},
 				style: {
 					png64: images.handRaised,
@@ -286,7 +292,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'activeSpeaker',
+					type: feedbackType.activeSpeaker,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -297,7 +303,7 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: 'selected',
+					type: feedbackType.selected,
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
@@ -351,17 +357,19 @@ export function GetPresetList(
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
 		if (index !== 0) {
-			presets[`Make_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Replace_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
-				name: `Make group: ${ZoomGroupData[index].groupName}`,
+				name: `Replace ${ZoomGroupData[index].groupName} participants`,
 				style: {
-					text: `Make group:\\n$(zoomosc:Group${index})`,
+					text: `Replace\\n$(zoomosc:Group${index})\\nparticipants`,
 					size: '14',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
 				},
-				steps: [{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'set' } }], up: [] }],
+				steps: [
+					{ down: [{ actionId: ActionId.addToGroup, options: { group: index, groupOption: 'replace' } }], up: [] },
+				],
 				feedbacks: [],
 			}
 			presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
@@ -388,6 +396,19 @@ export function GetPresetList(
 					bgcolor: combineRgb(230, 230, 230),
 				},
 				steps: [{ down: [{ actionId: ActionId.clearGroup, options: { group: index } }], up: [] }],
+				feedbacks: [],
+			}
+			presets[`Remove_from_group_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections of Groups',
+				name: `Remove_from group: ${ZoomGroupData[index].groupName}`,
+				style: {
+					text: `Remove from\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [{ down: [{ actionId: ActionId.removeFromGroup, options: { group: index } }], up: [] }],
 				feedbacks: [],
 			}
 		}
@@ -422,7 +443,6 @@ export function GetPresetList(
 			steps: [{ down: [{ actionId: ActionId.selectGroup, options: { group: index } }], up: [] }],
 			feedbacks: [],
 		}
-		
 
 		for (let position = 1; position < 50; position++) {
 			presets[`Group${index}_Position${position}`] = {
@@ -431,7 +451,7 @@ export function GetPresetList(
 				name: 'Group selection',
 				style: {
 					text: `$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
-					size: '14',
+					size: 'auto',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
 				},
@@ -452,7 +472,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'selected',
+							type: feedbackType.selected,
 						},
 						style: {
 							color: combineRgb(0, 0, 0),
@@ -464,7 +484,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'micLive',
+							type: feedbackType.micLive,
 						},
 						style: {
 							bgcolor: combineRgb(255, 0, 0),
@@ -475,7 +495,7 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: 'handRaised',
+							type: feedbackType.handRaised,
 						},
 						style: {
 							png64: images.handRaised,
@@ -956,6 +976,24 @@ export function GetPresetList(
 		steps: [
 			{
 				down: [{ actionId: ActionId.unmuteAll, options: {} }],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
+	presets['mute_all_except'] = {
+		type: 'button',
+		category: 'Video/Audio Actions',
+		name: 'mute_all_except',
+		style: {
+			text: 'Mute All Except',
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [
+			{
+				down: [{ actionId: ActionId.muteAllExcept, options: {} }],
 				up: [],
 			},
 		],
@@ -1692,6 +1730,19 @@ export function GetPresetList(
 			bgcolor: combineRgb(230, 230, 230),
 		},
 		steps: [{ down: [{ actionId: ActionId.startScreenShare, options: {} }], up: [] }],
+		feedbacks: [],
+	}
+	presets[`Stop_Share`] = {
+		type: 'button',
+		category: 'Sharing Actions',
+		name: `Stop_Share`,
+		style: {
+			text: `Stop Share`,
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [{ down: [{ actionId: ActionId.stopSharing, options: {} }], up: [] }],
 		feedbacks: [],
 	}
 	presets[`Screen_Share_Primary`] = {

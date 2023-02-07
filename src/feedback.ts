@@ -1,11 +1,6 @@
-import {
-	CompanionFeedbackDefinitions,
-	combineRgb,
-	CompanionFeedbackDefinition,
-} from '@companion-module/base'
+import { CompanionFeedbackDefinitions, combineRgb, CompanionFeedbackDefinition } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { InstanceBaseExt } from './utils'
-
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -15,7 +10,7 @@ export enum FeedbackId {
 	userNameBased = 'user_Name_Based',
 	output = 'output',
 	audioOutput = 'audio_Output',
-	engineState = "engine_State"
+	engineState = 'engine_State',
 }
 enum engineState {
 	disabled = 0,
@@ -23,23 +18,21 @@ enum engineState {
 	enabled = 2,
 }
 
+enum feedbackType {
+	selected = 0,
+	micLive = 1,
+	handRaised = 2,
+	camera = 3,
+	activeSpeaker = 4,
+}
+
 export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
-	// Create the choices
-	let CHOICES_POSITION = []
-	for (let index = 1; index < 1000; index++) {
-		CHOICES_POSITION.push({ id: index.toString(), label: `Position ${index}` })
-	}
-	let CHOICES_GALLERY = []
-	for (let index = 1; index < 50; index++) {
-		CHOICES_GALLERY.push({ id: index.toString(), label: `Gallery position ${index}` })
-	}
-	let CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
+	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: `Group ${index + 1}` })
 	}
 
 	const feedbacks: { [id in FeedbackId]: CompanionFeedbackDefinition | undefined } = {
-	
 		[FeedbackId.selectionMethod]: {
 			type: 'boolean',
 			name: 'selection method',
@@ -84,42 +77,48 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					choices: CHOICES_GROUPS,
 				},
 				{
-					type: 'dropdown',
+					type: 'number',
 					label: 'Position',
 					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
+					default: 1,
+					min: 1,
+					max: 999,
 				},
 				{
 					type: 'dropdown',
 					label: 'Type of feedback',
 					id: 'type',
-					default: 'selected',
+					default: feedbackType.selected,
 					choices: [
-						{ id: 'selected', label: 'Selected' },
-						{ id: 'micLive', label: 'Mic Live' },
-						{ id: 'handRaised', label: 'Hand Raised' },
-						{ id: 'camera', label: 'Camera Live' },
+						{ id: feedbackType.selected, label: 'Selected' },
+						{ id: feedbackType.micLive, label: 'Mic Live' },
+						{ id: feedbackType.handRaised, label: 'Hand Raised' },
+						{ id: feedbackType.camera, label: 'Camera Live' },
+						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
 					],
 				},
 			],
 			callback: (feedback) => {
 				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
-					let zoomID = instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1].zoomID
+					const zoomID =
+						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
+							.zoomID
 					switch (feedback.options.type) {
-						case 'micLive':
+						case feedbackType.micLive:
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
-						case 'camera':
+						case feedbackType.camera:
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
-						case 'handRaised':
+						case feedbackType.handRaised:
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
-						case 'activeSpeaker':
+						case feedbackType.activeSpeaker:
 							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
 								instance.ZoomUserData[zoomID].mute === false
 								? true
 								: false
-						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
+						case feedbackType.selected:
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)
+								? true
+								: false
 					}
 				}
 				return false
@@ -134,43 +133,46 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			},
 			options: [
 				{
-					type: 'dropdown',
+					type: 'number',
 					label: 'Index',
 					id: 'position',
-					default: '1',
-					choices: CHOICES_POSITION,
+					default: 1,
+					min: 1,
+					max: 999,
 				},
 				{
 					type: 'dropdown',
 					label: 'Type of feedback',
 					id: 'type',
-					default: 'selected',
+					default: feedbackType.selected,
 					choices: [
-						{ id: 'selected', label: 'Selected' },
-						{ id: 'micLive', label: 'Mic Live' },
-						{ id: 'handRaised', label: 'Hand Raised' },
-						{ id: 'camera', label: 'Camera off' },
-						{ id: 'activeSpeaker', label: 'Active speaker' },
+						{ id: feedbackType.selected, label: 'Selected' },
+						{ id: feedbackType.micLive, label: 'Mic Live' },
+						{ id: feedbackType.handRaised, label: 'Hand Raised' },
+						{ id: feedbackType.camera, label: 'Camera Live' },
+						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
 					],
 				},
 			],
 			callback: (feedback) => {
 				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
-					let zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
+					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 					switch (feedback.options.type) {
-						case 'micLive':
+						case feedbackType.micLive:
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
-						case 'camera':
+						case feedbackType.camera:
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
-						case 'handRaised':
+						case feedbackType.handRaised:
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
-						case 'activeSpeaker':
+						case feedbackType.activeSpeaker:
 							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
 								instance.ZoomUserData[zoomID].mute === false
 								? true
 								: false
-						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
+						case feedbackType.selected:
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)
+								? true
+								: false
 					}
 				}
 				return false
@@ -194,36 +196,38 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					type: 'dropdown',
 					label: 'Type of feedback',
 					id: 'type',
-					default: 'selected',
+					default: feedbackType.selected,
 					choices: [
-						{ id: 'selected', label: 'Selected' },
-						{ id: 'micLive', label: 'Mic Live' },
-						{ id: 'handRaised', label: 'Hand Raised' },
-						{ id: 'camera', label: 'Camera off' },
-						{ id: 'activeSpeaker', label: 'Active speaker' },
+						{ id: feedbackType.selected, label: 'Selected' },
+						{ id: feedbackType.micLive, label: 'Mic Live' },
+						{ id: feedbackType.handRaised, label: 'Hand Raised' },
+						{ id: feedbackType.camera, label: 'Camera Live' },
+						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
 					],
 				},
 			],
 			callback: async (feedback, context) => {
-				let name = await context.parseVariablesInString(feedback.options.name as string)
+				const name = await context.parseVariablesInString(feedback.options.name as string)
 				let zoomID = 0
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
-	
+
 						switch (feedback.options.type) {
-							case 'micLive':
+							case feedbackType.micLive:
 								return instance.ZoomUserData[zoomID].mute === false ? true : false
-							case 'camera':
+							case feedbackType.camera:
 								return instance.ZoomUserData[zoomID].videoOn === false ? true : false
-							case 'handRaised':
+							case feedbackType.handRaised:
 								return instance.ZoomUserData[zoomID].handRaised === true ? true : false
-							case 'activeSpeaker':
+							case feedbackType.activeSpeaker:
 								return instance.ZoomClientDataObj.activeSpeaker === name && instance.ZoomUserData[zoomID].mute === false
 									? true
 									: false
-							case 'selected':
-								return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
+							case feedbackType.selected:
+								return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)
+									? true
+									: false
 							default:
 								return false
 						}
@@ -241,44 +245,48 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			},
 			options: [
 				{
-					type: 'dropdown',
+					type: 'number',
 					label: 'Gallery position',
 					id: 'position',
-					default: '1',
-					choices: CHOICES_GALLERY,
+					default: 1,
+					min: 1,
+					max: 49,
 				},
 				{
 					type: 'dropdown',
 					label: 'Type of feedback',
 					id: 'type',
-					default: 'selected',
+					default: feedbackType.selected,
 					choices: [
-						{ id: 'selected', label: 'Selected' },
-						{ id: 'micLive', label: 'Mic Live' },
-						{ id: 'handRaised', label: 'Hand Raised' },
-						{ id: 'camera', label: 'Camera off' },
-						{ id: 'activeSpeaker', label: 'Active Speaker' },
+						{ id: feedbackType.selected, label: 'Selected' },
+						{ id: feedbackType.micLive, label: 'Mic Live' },
+						{ id: feedbackType.handRaised, label: 'Hand Raised' },
+						{ id: feedbackType.camera, label: 'Camera Live' },
+						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
 					],
 				},
 			],
 			callback: (feedback) => {
 				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
-					let zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]].zoomId
-					switch (feedback.options.type as string) {
-						case 'micLive':
+					const zoomID =
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
+							.zoomId
+					switch (feedback.options.type) {
+						case feedbackType.micLive:
 							return instance.ZoomUserData[zoomID].mute === false ? true : false
-						case 'camera':
+						case feedbackType.camera:
 							return instance.ZoomUserData[zoomID].videoOn === false ? true : false
-						case 'handRaised':
+						case feedbackType.handRaised:
 							return instance.ZoomUserData[zoomID].handRaised === true ? true : false
-						case 'activeSpeaker':
+						case feedbackType.activeSpeaker:
 							return instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
 								instance.ZoomUserData[zoomID].mute === false
 								? true
 								: false
-						case 'selected':
-							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
+						case feedbackType.selected:
+							return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)
+								? true
+								: false
 						default:
 							return false
 					}
@@ -365,6 +373,6 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			},
 		},
 	}
-	
+
 	return feedbacks
 }

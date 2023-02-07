@@ -37,7 +37,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variables['selectedCallers'] = 'nothing selected'
 		variables['selectedNumberOfCallers'] = '0'
 	} else {
-		let selectedCallers: string[] = []
+		const selectedCallers: string[] = []
 		instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: number) => {
 			if (zoomID < instance.ZoomClientDataObj.numberOfGroups + 1) {
 				if (instance.ZoomUserData[zoomID]) {
@@ -75,7 +75,9 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variables[`CallersInGroup${index}`] = group.users?.length
 		variables[`Group${index}`] = group.groupName
 		group.users?.forEach((user: { zoomID: string | number }) => {
-			allUsers += instance.ZoomUserData[user.zoomID as number] ? instance.ZoomUserData[user.zoomID as number].userName + ' ' : ''
+			allUsers += instance.ZoomUserData[user.zoomID as number]
+				? instance.ZoomUserData[user.zoomID as number].userName + ' '
+				: ''
 		})
 		for (let position = 1; position < 50; position++) {
 			variables[`Group${index}Position${position}`] = group.users[position - 1]
@@ -124,10 +126,10 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		{ name: 'Active speaking', variableId: 'activeSpeaker' },
 	])
 	// Groups
-	let groupPositionVariables = []
-	let userVariables = []
-	let outputVariables = []
-	let audioLevelVariables = []
+	const groupPositionVariables = []
+	const userVariables = []
+	const outputVariables = []
+	const audioLevelVariables = []
 	groupPositionVariables.push({
 		name: `Group${0} Position ${1}`,
 		variableId: `Group${0}Position${1}`,
@@ -200,7 +202,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 			})
 		}
 	}
-	let galleryVariables = []
+	const galleryVariables = []
 	// for (let index = 1; index < 50; index++) {
 	// 	galleryVariables.push({
 	// 		name: `Gallery Position ${index}`,
@@ -211,7 +213,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		name: `Gallery Position ${1}`,
 		variableId: `GalleryPosition${padding(1, 2)}`,
 	})
-	let selectUsersVariables = []
+	const selectUsersVariables = []
 	// for (let index = 1; index < 1000; index++) {
 	// 	selectUsersVariables.push({
 	// 		name: `Participant ${index}`,
@@ -229,7 +231,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	const groupPositionVariablesDef: Set<CompanionVariableDefinition> = new Set(groupPositionVariables)
 	const gallery: Set<CompanionVariableDefinition> = new Set([{ name: 'gallery count', variableId: 'galleryCount' }])
 
-	let filteredVariables = [
+	const filteredVariables = [
 		...outputVariablesDef,
 		...audioLevelVariablesDef,
 		...globalSettings,

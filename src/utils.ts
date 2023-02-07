@@ -496,7 +496,7 @@ export const options: Options = {
 	},
 }
 
-export const arrayRemove = (arr: Array<number>, value: number) => {
+export const arrayRemove = (arr: Array<number>, value: number): Array<number> => {
 	return arr.filter(function (element) {
 		return element != value
 	})
@@ -504,9 +504,9 @@ export const arrayRemove = (arr: Array<number>, value: number) => {
 
 export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => {
 	// Find a index of the value (use this so we can use it for remove)
-	let index = arr.findIndex((element) => element === value)
+	const index = arr.findIndex((element) => element === value)
 	// Create a temp array
-	let tempArr = arr
+	const tempArr = arr
 	if (index === -1) {
 		tempArr.push(value)
 		return tempArr
@@ -536,9 +536,9 @@ export const formatTime = (time: number, interval: 'ms' | 's', format: TimeForma
 }
 
 export const padding = (num: number, size: number): string => {
-	let converted = num.toString();
-    while (converted.length < size) converted = "0" + converted;
-    return converted;
+	let converted = num.toString()
+	while (converted.length < size) converted = '0' + converted
+	return converted
 }
 
 export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
