@@ -1384,10 +1384,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.togglePin]: {
 			name: 'Toggle Pin',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand('/me/togglePin')
+			options: [options.userName],
+			callback: (action): void => {
+				// type: 'User'
+				const command = createCommand('/togglePin', action.options.userName, false)
 				const sendToCommand = {
 					id: ActionId.togglePin,
 					options: {
