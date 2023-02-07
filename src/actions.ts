@@ -1497,7 +1497,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.spotLight]: {
 			name: 'Single Spotlight',
-			options: [options.singleUserName],
+			options: [options.userName],
 			callback: (action): void => {
 				// type: 'User'
 				const command = createCommand('/spot', action.options.userName, select.single)
