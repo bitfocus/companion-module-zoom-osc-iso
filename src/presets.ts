@@ -396,6 +396,19 @@ export function GetPresetList(
 				steps: [{ down: [{ actionId: ActionId.clearGroup, options: { group: index } }], up: [] }],
 				feedbacks: [],
 			}
+			presets[`Remove_from_group_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections of Groups',
+				name: `Remove_from group: ${ZoomGroupData[index].groupName}`,
+				style: {
+					text: `Remove from\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [{ down: [{ actionId: ActionId.removeFromGroup, options: { group: index } }], up: [] }],
+				feedbacks: [],
+			}
 		}
 		presets[`Rename_${ZoomGroupData[index].groupName}`] = {
 			type: 'button',

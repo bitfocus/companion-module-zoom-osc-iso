@@ -189,7 +189,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	const CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	const CHOICES_GROUPS: { id: string; label: string }[] = []
 	let CHOICES_USERS_DEFAULT = '0'
-	const CHOICES_GROUPS_DEFAULT = '0'
+	const CHOICES_GROUPS_DEFAULT = '1'
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
@@ -201,7 +201,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		}
 	}
 	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
-		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
+		if (index != 0) CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
 	})
 	const CHOICES_POSITION = []
 	for (let index = 1; index < 50; index++) {
@@ -1060,16 +1060,49 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.removeFromGroup]: {
 			name: 'Remove from group',
-			options: [userOption, groupOption],
-			callback: (action) => {
-				if (instance.ZoomUserData[action.options.group as number].users !== undefined) {
-					for (let i = 0; i < instance.ZoomUserData[action.options.group as number].users.length; i++) {
-						if (instance.ZoomUserData[action.options.group as number].users[i] === action.options.user) {
-							instance.ZoomUserData[action.options.group as number].users.splice(i, 1)
+			options: [options.userName, groupOption],
+			callback: async (action) => {
+				const group = action.options.group as number
+				const userName = action.options.userName as string
+				if (instance.ZoomGroupData[group] !== undefined) {
+					// When someone overides the selection by entering a name
+					if (userName !== '') {
+						if (userName.toLowerCase() === 'me' || userName.toLowerCase() === 'all')
+							instance.log('debug', 'dont use the me/all etc on the remove from group')
+						// Get variable if needed
+						const selectedName = await instance.parseVariablesInString(userName)
+						for (const key in instance.ZoomUserData) {
+							if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+								const user = instance.ZoomUserData[key]
+								if (user.userName === selectedName) {
+									if (instance.ZoomGroupData[group] !== undefined) {
+										for (let i = 0; i < instance.ZoomGroupData[group].users.length; i++) {
+											if (instance.ZoomGroupData[group].users[i].zoomID === user.zoomId) {
+												instance.ZoomGroupData[group].users.splice(i, 1)
+											}
+										}
+									}
+								}
+							}
 						}
+					} else {
+						// Use pre selection
+						instance.ZoomClientDataObj.selectedCallers.forEach((ZoomID) => {
+							for (let i = 0; i < instance.ZoomGroupData[group].users.length; i++) {
+								if (instance.ZoomGroupData[group].users[i].zoomID === ZoomID) {
+									instance.ZoomGroupData[group].users.splice(i, 1)
+									instance.log('debug', 'found and removed from group')
+								}
+							}
+						})
 					}
+
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.UpdateVariablesValues()
+					instance.checkFeedbacks(FeedbackId.groupBased)
+				} else {
+					instance.log('debug', 'No correct group selected')
 				}
-				instance.UpdateVariablesValues()
 			},
 		},
 		// Rename Actions
@@ -3300,12 +3333,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// should be otherwise somethings wrong
 					if (selectedCallers.length === 0) {
 						// return something to prevent users from sending a command
-						instance.log('debug','Select a caller first')
+						instance.log('debug', 'Select a caller first')
 					}
 					// When command is for one user only send first caller
 					if (singleUser) {
 						command.args.push({ type: 'i', value: selectedCallers[0] })
-						instance.log('debug','You have selected multiple participants but only the first one is allowed')
+						instance.log('debug', 'You have selected multiple participants but only the first one is allowed')
 					} else {
 						selectedCallers.forEach((caller) => {
 							command.args.push({ type: 'i', value: caller })
