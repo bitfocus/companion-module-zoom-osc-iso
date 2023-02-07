@@ -3299,12 +3299,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				if (Array.isArray(selectedCallers)) {
 					// should be otherwise somethings wrong
 					if (selectedCallers.length === 0) {
-						console.log('Select a caller first')
 						// return something to prevent users from sending a command
+						instance.log('debug','Select a caller first')
 					}
 					// When command is for one user only send first caller
 					if (singleUser) {
 						command.args.push({ type: 'i', value: selectedCallers[0] })
+						instance.log('debug','You have selected multiple participants but only the first one is allowed')
 					} else {
 						selectedCallers.forEach((caller) => {
 							command.args.push({ type: 'i', value: caller })
