@@ -35,6 +35,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public ZoomClientDataObj: ZoomClientDataObjInterface = {
 		last_response: 0,
 		selectedCallers: [],
+		PreviousSelectedCallers: [],
 		selectedOutputs: [],
 		selectedAudioOutputs: [],
 		subscribeMode: 0,
