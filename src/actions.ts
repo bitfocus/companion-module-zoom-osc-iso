@@ -135,6 +135,7 @@ export enum ActionId {
 	muteAll = 'muteAll',
 	unmuteAll = 'unmuteAll',
 	muteAllExcept = 'muteAllExcept',
+	muteAllExceptHost = 'muteAllExceptHost',
 	clearSpotlight = 'clearSpotlight',
 	enableComputerSoundWhenSharing = 'enableComputerSoundWhenSharing',
 	disableUsersToUnmute = 'disableUsersToUnmute',
@@ -2428,6 +2429,30 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				const command = createCommand('/Mute', userName, select.multi, true)
 				const sendToCommand = {
 					id: ActionId.muteAllExcept,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(sendToCommand)
+			},
+		},
+		[ActionId.muteAllExceptHost]: {
+			name: 'Mute All Except Host',
+			description: 'This will mute all but the ones in Group Hosts',
+			options: [options.userName],
+			callback: async (action): Promise<void> => {
+				// type: 'User'
+				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				if (userName === '') {
+					instance.ZoomClientDataObj.selectedCallers.length = 0
+					instance.ZoomGroupData[0].users.forEach((ZoomID) => {
+						instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
+					})
+				}
+				const command = createCommand('/Mute', userName, select.multi, true)
+				const sendToCommand = {
+					id: ActionId.muteAllExceptHost,
 					options: {
 						command: command.oscPath,
 						args: command.args,

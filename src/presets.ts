@@ -999,6 +999,24 @@ export function GetPresetList(
 		],
 		feedbacks: [],
 	}
+	presets['mute_all_except_hosts'] = {
+		type: 'button',
+		category: 'Video/Audio Actions',
+		name: 'Mute all except Hosts',
+		style: {
+			text: 'Mute All Except Hosts',
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [
+			{
+				down: [{ actionId: ActionId.muteAllExceptHost, options: {} }],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
 	presets['Toggle_mute'] = {
 		type: 'button',
 		category: 'Video/Audio Actions',
