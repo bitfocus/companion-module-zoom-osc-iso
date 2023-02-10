@@ -948,7 +948,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			},
 		},
 		[ActionId.selectFromIndexPosition]: {
-			name: 'Preselect user by Participant Index',
+			name: 'Preselect user by Participant Position',
 			options: [
 				participantOption,
 				{

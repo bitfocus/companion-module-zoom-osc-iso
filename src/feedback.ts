@@ -126,7 +126,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.indexBased]: {
 			type: 'boolean',
-			name: 'Participant index based feedback',
+			name: 'Participant position based feedback',
 			description: 'Feedback based on index of the participant',
 			defaultStyle: {
 				bgcolor: combineRgb(255, 0, 0),
@@ -134,7 +134,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			options: [
 				{
 					type: 'number',
-					label: 'Index',
+					label: 'Participant Position',
 					id: 'position',
 					default: 1,
 					min: 1,
