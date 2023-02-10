@@ -35,6 +35,7 @@ export interface ZoomClientDataObjInterface {
 	last_response: number
 	subscribeMode: number
 	selectedCallers: number[]
+	PreviousSelectedCallers: number[]
 	selectedOutputs: number[]
 	selectedAudioOutputs: number[]
 	activeSpeaker: string

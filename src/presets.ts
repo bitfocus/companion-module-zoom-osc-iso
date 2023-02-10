@@ -188,6 +188,24 @@ export function GetPresetList(
 	/**
 	 * Manage Selections & Groups
 	 */
+	presets[`Restore_Previous_Selection`] = {
+		type: 'button',
+		category: 'Manage Selections of Participants',
+		name: `Restore Previous Selection`,
+		style: {
+			text: `Restore Previous Selection`,
+			size: '14',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [
+			{
+				down: [{ actionId: ActionId.restorePreviousSelection, options: {} }],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
 	//clear selection
 	presets[`Clear_Participants`] = {
 		type: 'button',
