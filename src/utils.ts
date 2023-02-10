@@ -216,7 +216,7 @@ export const options: Options = {
 	},
 	userName: {
 		type: 'textinput',
-		label: 'username (keep blank when you pre-select)',
+		label: 'single username (keep blank when you pre-select)',
 		id: 'userName',
 		default: '',
 	},
