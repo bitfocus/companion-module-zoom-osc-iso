@@ -362,7 +362,7 @@ export function GetPresetList(
 				category: 'Manage Selections of Groups',
 				name: `Replace ${ZoomGroupData[index].groupName} participants`,
 				style: {
-					text: `Replace\\n$(zoomosc:Group${index})\\nparticipants`,
+					text: `Replace\\n$(zoomosc:Group${index})\\nparticip.`,
 					size: '14',
 					color: combineRgb(0, 0, 0),
 					bgcolor: combineRgb(230, 230, 230),
