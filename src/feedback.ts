@@ -29,7 +29,7 @@ enum feedbackType {
 export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
-		CHOICES_GROUPS.push({ id: index.toString(), label: `Group ${index + 1}` })
+		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
 	const feedbacks: { [id in FeedbackId]: CompanionFeedbackDefinition | undefined } = {
