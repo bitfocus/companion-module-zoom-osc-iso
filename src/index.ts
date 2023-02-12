@@ -16,6 +16,8 @@ import {
 	ZoomVariableLinkInterface,
 } from './utils'
 
+import { UpgradeV2ToV3 } from './upgrades'
+
 /**
  * @description Companion instance class for Zoom
  */
@@ -156,4 +158,4 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 }
 
-runEntrypoint(ZoomInstance, [])
+runEntrypoint(ZoomInstance, [UpgradeV2ToV3, UpgradeV2ToV3])
