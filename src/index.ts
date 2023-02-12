@@ -158,20 +158,4 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 }
 
-runEntrypoint(ZoomInstance, [
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-])
+runEntrypoint(ZoomInstance, [UpgradeV2ToV3, UpgradeV2ToV3])
