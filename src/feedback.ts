@@ -18,7 +18,7 @@ enum engineState {
 	enabled = 2,
 }
 
-enum feedbackType {
+export enum feedbackType {
 	selected = 0,
 	micLive = 1,
 	handRaised = 2,
