@@ -203,7 +203,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		}
 	}
 	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
-		if (index != 0) CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
+		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
 	})
 	const CHOICES_POSITION = []
 	for (let index = 1; index < 50; index++) {
