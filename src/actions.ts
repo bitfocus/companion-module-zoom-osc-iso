@@ -190,6 +190,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	// Make list of users ready for Companion
 	const CHOICES_USERS = [{ id: '0', label: 'no users' }]
 	const CHOICES_GROUPS: { id: string; label: string }[] = []
+	const CHOICES_GROUPS_NO_HOST: { id: string; label: string }[] = []
 	let CHOICES_USERS_DEFAULT = '0'
 	const CHOICES_GROUPS_DEFAULT = '1'
 	if (instance.ZoomUserData) {
@@ -204,6 +205,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	}
 	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
 		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
+		if (index != 0) CHOICES_GROUPS_NO_HOST.push({ id: index.toString(), label: group.groupName })
 	})
 	const CHOICES_POSITION = []
 	for (let index = 1; index < 50; index++) {
@@ -250,6 +252,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		id: 'group',
 		default: CHOICES_GROUPS_DEFAULT,
 		choices: CHOICES_GROUPS,
+	}
+	
+	const groupOptionNoHost: SomeCompanionActionInputField = {
+		type: 'dropdown',
+		label: 'Group',
+		id: 'group',
+		default: CHOICES_GROUPS_DEFAULT,
+		choices: CHOICES_GROUPS_NO_HOST,
 	}
 
 	const outputOption: SomeCompanionActionInputField = {
@@ -1055,7 +1065,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.addToGroup]: {
 			name: 'Add selection to group',
 			options: [
-				groupOption,
+				groupOptionNoHost,
 				{
 					type: 'dropdown',
 					label: 'Add or set',
@@ -1096,7 +1106,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.clearGroup]: {
 			name: 'Clear group selection',
-			options: [groupOption],
+			options: [groupOptionNoHost],
 			callback: (action) => {
 				instance.ZoomGroupData[action.options.group as number].users.length = 0
 				instance.UpdateVariablesValues()
@@ -1105,7 +1115,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.removeFromGroup]: {
 			name: 'Remove from group',
-			options: [options.userName, groupOption],
+			options: [options.userName, groupOptionNoHost],
 			callback: async (action) => {
 				const group = action.options.group as number
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
