@@ -219,6 +219,7 @@ export const options: Options = {
 		type: 'textinput',
 		label: 'single username (keep blank when you pre-select)',
 		id: 'userName',
+		useVariables: true,
 		default: '',
 	},
 	meetingID: {
