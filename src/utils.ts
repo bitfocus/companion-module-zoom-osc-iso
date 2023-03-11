@@ -492,12 +492,42 @@ export const options: Options = {
 	},
 }
 
+/**
+ * Returns a filtered array removing the requested value
+ * @param arr 
+ * @param value 
+ * @returns 
+ */
 export const arrayRemove = (arr: Array<number>, value: number): Array<number> => {
-	return arr.filter(function (element) {
+	return arr.filter(element => {
 		return element != value
 	})
 }
 
+/**
+ * Add's an Item to the array only when none existing
+ * @param arr 
+ * @param value 
+ * @returns 
+ */
+export const arrayAdd = (arr: Array<number>, value: number): Array<number> => {
+	const item = arr.find((element) => element === value)
+	// Create a temp array
+	const tempArr = arr
+	if (item === undefined) {
+		tempArr.push(value)
+		return tempArr
+	} else {
+		return tempArr
+	}
+}
+
+/**
+ * Add or remove an Item from the array
+ * @param arr 
+ * @param value 
+ * @returns 
+ */
 export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => {
 	// Find a index of the value (use this so we can use it for remove)
 	const index = arr.findIndex((element) => element === value)
