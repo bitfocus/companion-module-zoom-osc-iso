@@ -1,4 +1,4 @@
-import { SomeCompanionConfigField } from '@companion-module/base'
+import { Regex, SomeCompanionConfigField } from '@companion-module/base'
 
 export interface ZoomConfig {
 	label: string
@@ -27,6 +27,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Target host',
 			width: 6,
 			default: '127.0.0.1',
+			regex: Regex.IP
 		},
 		{
 			type: 'number',
