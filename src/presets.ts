@@ -2,7 +2,7 @@ import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
 const { images } = require('./images') // eslint-disable-line
-import { padding, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
+import { padding, ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
 
 enum feedbackType {
 	selected = 0,
@@ -36,7 +36,8 @@ interface CompanionPresetDefinitionsExt {
 }
 export function GetPresetList(
 	ZoomGroupData: ZoomGroupDataInterface[],
-	ZoomUserData: ZoomUserDataInterface
+	ZoomUserData: ZoomUserDataInterface,
+	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
 ): CompanionPresetDefinitions {
 	const presets: CompanionPresetDefinitionsExt = {}
 
@@ -1095,7 +1096,11 @@ export function GetPresetList(
 		steps: [{ down: [{ actionId: ActionId.applyChannel, options: {} }], up: [] }],
 		feedbacks: [],
 	}
-	for (let index = 1; index < 9; index++) {
+	for (
+		let index = 1;
+		index < (Object.keys(ZoomAudioRoutingData).length === 0 ? 9 : (Object.keys(ZoomAudioRoutingData).length + 1));
+		index++
+	) {
 		presets[`Select_Output_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Output Actions',

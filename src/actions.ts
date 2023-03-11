@@ -218,7 +218,15 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 	const CHOICES_OUTPUTS = []
 	// Change this to actual created output, get that with pulling
-	for (let index = 1; index < 10; index++) {
+
+	for (
+		let index = 1;
+		index <
+		(Object.keys(instance.ZoomAudioRoutingData).length === 0
+			? 9
+			: Object.keys(instance.ZoomAudioRoutingData).length + 1);
+		index++
+	) {
 		CHOICES_OUTPUTS.push({ id: index, label: `Output ${index}` })
 	}
 
