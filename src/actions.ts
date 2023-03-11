@@ -253,7 +253,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		default: CHOICES_GROUPS_DEFAULT,
 		choices: CHOICES_GROUPS,
 	}
-	
+
 	const groupOptionNoHost: SomeCompanionActionInputField = {
 		type: 'dropdown',
 		label: 'Group',
@@ -384,11 +384,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.setOutputName]: {
 			name: 'set Output Name',
 			options: [options.output, options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'ISO'
 				const command = createCommand('/setOutputName')
+				const newName = await instance.parseVariablesInString(action.options.name as string)
 				command.args.push({ type: 'i', value: action.options.output })
-				command.args.push({ type: 's', value: action.options.name })
+				command.args.push({ type: 's', value: newName })
 
 				const sendToCommand = {
 					id: ActionId.setOutputName,
@@ -792,12 +793,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.selectUserByName]: {
 			name: 'Preselect user by name',
 			options: [
-				{
-					type: 'textinput',
-					label: 'name',
-					id: 'name',
-					default: '',
-				},
+				options.name,
 				{
 					type: 'dropdown',
 					label: 'Option',
@@ -810,7 +806,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					],
 				},
 			],
-			callback: async (action) => {
+			callback: async (action): Promise<void> => {
 				const selectedName = await instance.parseVariablesInString(action.options.name as string)
 				for (const key in instance.ZoomUserData) {
 					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
@@ -1164,7 +1160,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Rename',
 			options: [userOption, options.name],
 			callback: async (action) => {
-				const selectedName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = await instance.parseVariablesInString(action.options.name as string)
 				const ZoomID = action.options.user as number
 				const oscPath = `/zoom/zoomID/rename`
 				const sendToCommand: any = {
@@ -1173,19 +1169,19 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						command: oscPath,
 						args: [
 							{ type: 'i', value: ZoomID },
-							{ type: 's', value: selectedName },
+							{ type: 's', value: newName },
 						],
 					},
 				}
 				sendActionCommand(sendToCommand)
 				// Also update locally
-				instance.ZoomUserData[ZoomID].userName = selectedName
+				instance.ZoomUserData[ZoomID].userName = newName
 				// Update position and group
 				const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === ZoomID)
-				if (index !== -1) instance.ZoomVariableLink[index].userName = selectedName
+				if (index !== -1) instance.ZoomVariableLink[index].userName = newName
 				instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
 					group.users.forEach((user) => {
-						if (user.zoomID === ZoomID) user.userName = selectedName
+						if (user.zoomID === ZoomID) user.userName = newName
 					})
 				})
 				instance.UpdateVariablesValues()
@@ -1194,8 +1190,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.renameGroup]: {
 			name: 'Rename Group',
 			options: [groupOption, options.name],
-			callback: (action) => {
-				instance.ZoomGroupData[action.options.group as number].groupName = action.options.name as string
+			callback: async (action) => {
+				const newName = await instance.parseVariablesInString(action.options.name as string)
+				instance.ZoomGroupData[action.options.group as number].groupName = newName
 				instance.UpdateVariablesValues()
 			},
 		},
@@ -3247,10 +3244,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.createBreakoutRoom]: {
 			name: 'Create Breakout Room',
 			options: [options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Global'
 				const command = createCommand('/createBreakout')
-				command.args.push({ type: 's', value: action.options.name })
+				const newName = await instance.parseVariablesInString(action.options.name as string)
+				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.createBreakoutRoom,
 					options: {
@@ -3264,10 +3262,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.deleteBreakoutRoom]: {
 			name: 'Delete Breakout Room',
 			options: [options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Global'
 				const command = createCommand('/deleteBreakout')
-				command.args.push({ type: 's', value: action.options.name })
+				const newName = await instance.parseVariablesInString(action.options.name as string)
+				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.deleteBreakoutRoom,
 					options: {
@@ -3315,12 +3314,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.joinMeeting]: {
 			name: 'Join Meeting',
 			options: [options.meetingID, options.password, options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Special'
 				const command = createCommand('/joinMeeting')
+				const newName = await instance.parseVariablesInString(action.options.name as string)
 				command.args.push({ type: 's', value: action.options.meetingID })
 				command.args.push({ type: 's', value: action.options.password })
-				command.args.push({ type: 's', value: action.options.name })
+				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.joinMeeting,
 					options: {
@@ -3334,12 +3334,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.ZAKJoinMeeting]: {
 			name: 'ZAK Join Meeting',
 			options: [options.zak, options.meetingID, options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Special'
 				const command = createCommand('/zakJoin')
+				const newName = await instance.parseVariablesInString(action.options.name as string)
 				command.args.push({ type: 's', value: action.options.zak })
 				command.args.push({ type: 's', value: action.options.meetingID })
-				command.args.push({ type: 's', value: action.options.name })
+				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.ZAKJoinMeeting,
 					options: {
@@ -3353,12 +3354,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.ZAKStartMeeting]: {
 			name: 'ZAK Start Meeting',
 			options: [options.zak, options.meetingID, options.name],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Special'
 				const command = createCommand('/zakStart')
+				const newName = await instance.parseVariablesInString(action.options.name as string)
 				command.args.push({ type: 's', value: action.options.zak })
 				command.args.push({ type: 's', value: action.options.meetingID })
-				command.args.push({ type: 's', value: action.options.name })
+				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.ZAKStartMeeting,
 					options: {

@@ -189,6 +189,7 @@ export const options: Options = {
 	},
 	name: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'Name',
 		id: 'name',
 		default: '',
