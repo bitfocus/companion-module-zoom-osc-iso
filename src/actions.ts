@@ -3331,8 +3331,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'Special'
 				const command = createCommand('/joinMeeting')
 				const newName = await instance.parseVariablesInString(action.options.name as string)
-				command.args.push({ type: 's', value: action.options.meetingID })
-				command.args.push({ type: 's', value: action.options.password })
+				const newNMeetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				const newNPassword = await instance.parseVariablesInString(action.options.password as string)
+				command.args.push({ type: 's', value: newNMeetingId })
+				command.args.push({ type: 's', value: newNPassword })
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionId.joinMeeting,
@@ -3387,17 +3389,36 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.customCommand]: {
 			name: 'Custom command',
 			options: [options.path],
-			callback: (action): void => {
+			callback: async (action): Promise<void> => {
 				// type: 'Special'
-				const command = createCommand(action.options.path as string)
-				const sendToCommand = {
-					id: ActionId.customCommand,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				const customPath = await instance.parseVariablesInString(action.options.path as string)
+				// Did they try a JSON object?
+				if (customPath.startsWith('{')) {
+					try {
+						const convertedString = JSON.parse(customPath)
+						const command = createCommand(convertedString)
+						const sendToCommand = {
+							id: ActionId.customCommand,
+							options: {
+								command: command.oscPath,
+								args: command.args,
+							},
+						}
+						sendActionCommand(sendToCommand)
+					} catch (error) {
+						instance.log('error', `Not a JSON value, ${customPath}`)
+					}
+				} else {
+					const command = createCommand(customPath)
+					const sendToCommand = {
+						id: ActionId.customCommand,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.customCommandWithArguments]: {
