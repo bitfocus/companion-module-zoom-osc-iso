@@ -196,6 +196,7 @@ export const options: Options = {
 	},
 	breakoutName: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'Name of breakout room',
 		id: 'breakoutName',
 		default: '',

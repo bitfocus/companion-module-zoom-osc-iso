@@ -2405,11 +2405,13 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.assignParticipantToBreakoutRoom]: {
 			name: 'Assign Participant To BreakoutRoom',
-			options: [options.userName],
+			options: [options.userName, options.breakoutName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const breakoutName = await instance.parseVariablesInString(action.options.breakoutName as string)
 				const command = createCommand('/assignToBreakout', userName, select.multi)
+				command.args.push({ type: 's', value: breakoutName})
 				const sendToCommand = {
 					id: ActionId.assignParticipantToBreakoutRoom,
 					options: {
