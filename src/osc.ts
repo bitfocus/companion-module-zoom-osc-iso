@@ -92,12 +92,12 @@ export class OSC {
 		// When the port is read
 		this.udpPort.on('ready', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
-			this.instance.updateStatus(InstanceStatus.Ok, 'Listening for first response')
+			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			// See if ZoomOSC is active
 			this.pingInterval = setInterval(() => {
 				if (this.needToPingPong) {
 					// Shall we leave this?
-					this.instance.updateStatus(InstanceStatus.Ok, 'checking connection')
+					this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
 					this.sendCommand('/zoom/ping')
 				}
 			}, this.pingIntervalTime)
