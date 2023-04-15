@@ -2521,18 +2521,15 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		[ActionId.muteAllExceptHost]: {
 			name: 'Mute All Except Host',
 			description: 'This will mute all but the ones in Group Hosts',
-			options: [options.userName],
-			callback: async (action): Promise<void> => {
-				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				if (userName === undefined || userName === '') {
-					instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-					// instance.ZoomClientDataObj.selectedCallers.length = 0
-					instance.ZoomGroupData[0].users.forEach((ZoomID) => {
-						instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
-					})
-				}
-				const command = createCommand('/Mute', userName, select.multi, true)
+			options: [],
+			callback: async (): Promise<void> => {
+				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+				// instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomGroupData[0].users.forEach((ZoomID) => {
+					instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
+				})
+
+				const command = createCommand('/Mute', undefined, select.multi, true)
 				const sendToCommand = {
 					id: ActionId.muteAllExceptHost,
 					options: {
