@@ -2525,7 +2525,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			callback: async (action): Promise<void> => {
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				if (userName === '') {
+				if (userName === undefined || userName === '') {
 					instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					instance.ZoomGroupData[0].users.forEach((ZoomID) => {
