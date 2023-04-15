@@ -7,7 +7,15 @@ import {
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
-import { arrayAdd, arrayAddRemove, arrayRemove, InstanceBaseExt, options, ZoomGroupDataInterface } from './utils'
+import {
+	arrayAdd,
+	arrayAddRemove,
+	arrayRemove,
+	InstanceBaseExt,
+	options,
+	userExist,
+	ZoomGroupDataInterface,
+} from './utils'
 
 const select = { single: true, multi: false }
 
@@ -196,7 +204,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	if (instance.ZoomUserData) {
 		CHOICES_USERS.length = 0
 		for (const key in instance.ZoomUserData) {
-			if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+			if (userExist(Number(key), instance.ZoomUserData)) {
 				const user = instance.ZoomUserData[key]
 				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
 				CHOICES_USERS_DEFAULT = user.zoomId.toString()
@@ -820,7 +828,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			callback: async (action): Promise<void> => {
 				const selectedName = await instance.parseVariablesInString(action.options.name as string)
 				for (const key in instance.ZoomUserData) {
-					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
 						if (user.userName === selectedName) {
 							switch (action.options.option) {
@@ -1090,16 +1098,19 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				if (action.options.groupOption === 'replace') {
 					instance.ZoomGroupData[action.options.group as number].users.length = 0
 				}
+
 				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {
-					if (
-						!instance.ZoomGroupData[action.options.group as number].users.find(
-							(o: { zoomID: string | number }) => o.zoomID === zoomID
-						)
-					) {
-						instance.ZoomGroupData[action.options.group as number].users.push({
-							zoomID: zoomID as number,
-							userName: instance.ZoomUserData[zoomID as number].userName,
-						})
+					if (userExist(Number(zoomID), instance.ZoomUserData)) {
+						if (
+							!instance.ZoomGroupData[action.options.group as number].users.find(
+								(o: { zoomID: string | number }) => o.zoomID === zoomID
+							)
+						) {
+							instance.ZoomGroupData[action.options.group as number].users.push({
+								zoomID: zoomID as number,
+								userName: instance.ZoomUserData[zoomID as number].userName,
+							})
+						}
 					}
 				})
 				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
@@ -1135,7 +1146,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 							instance.log('debug', 'dont use the me/all etc on the remove from group')
 						// Get variable if needed
 						for (const key in instance.ZoomUserData) {
-							if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+							if (userExist(Number(key), instance.ZoomUserData)) {
 								const user = instance.ZoomUserData[key]
 								if (user.userName === userName) {
 									if (instance.ZoomGroupData[group] !== undefined) {
@@ -1188,7 +1199,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				sendActionCommand(sendToCommand)
 				// Also update locally
-				instance.ZoomUserData[ZoomID].userName = newName
+				if (userExist(ZoomID, instance.ZoomUserData)) {
+					instance.ZoomUserData[ZoomID].userName = newName
+				}
+
 				// Update position and group
 				const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === ZoomID)
 				if (index !== -1) instance.ZoomVariableLink[index].userName = newName
@@ -1274,7 +1288,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			callback: () => {
 				instance.ZoomVariableLink.length = 0
 				for (const key in instance.ZoomUserData) {
-					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
 						instance.ZoomVariableLink.push({ zoomId: user.zoomId, userName: user.userName })
 					}
@@ -2411,7 +2425,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const breakoutName = await instance.parseVariablesInString(action.options.breakoutName as string)
 				const command = createCommand('/assignToBreakout', userName, select.multi)
-				command.args.push({ type: 's', value: breakoutName})
+				command.args.push({ type: 's', value: breakoutName })
 				const sendToCommand = {
 					id: ActionId.assignParticipantToBreakoutRoom,
 					options: {
@@ -2592,7 +2606,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				sendActionCommand(sendToCommand)
 				for (const key in instance.ZoomUserData) {
-					if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
 						user.handRaised = false
 					}

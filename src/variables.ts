@@ -1,6 +1,6 @@
 import { CompanionVariableDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from './config'
-import { InstanceBaseExt, padding } from './utils'
+import { InstanceBaseExt, padding, userExist } from './utils'
 
 enum engineState {
 	disabled = 'disabled',
@@ -40,13 +40,13 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		const selectedCallers: string[] = []
 		instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: number) => {
 			if (zoomID < instance.ZoomClientDataObj.numberOfGroups + 1) {
-				if (instance.ZoomUserData[zoomID]) {
+				if (userExist(zoomID, instance.ZoomUserData)) {
 					instance.ZoomUserData[zoomID].users.forEach((user: string | number) => {
 						selectedCallers.push(instance.ZoomUserData[user as number].userName)
 					})
 				}
 			} else {
-				if (instance.ZoomUserData[zoomID]) {
+				if (userExist(zoomID, instance.ZoomUserData)) {
 					selectedCallers.push(instance.ZoomUserData[zoomID].userName)
 				}
 			}
@@ -75,7 +75,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variables[`CallersInGroup${index}`] = group.users?.length
 		variables[`Group${index}`] = group.groupName
 		group.users?.forEach((user: { zoomID: string | number }) => {
-			allUsers += instance.ZoomUserData[user.zoomID as number]
+			allUsers += userExist(Number(user.zoomID), instance.ZoomUserData)
 				? instance.ZoomUserData[user.zoomID as number].userName + ' '
 				: ''
 		})
@@ -89,7 +89,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	})
 	// "normal" users
 	for (const key in instance.ZoomUserData) {
-		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+		if (userExist(Number(key), instance.ZoomUserData)) {
 			const user = instance.ZoomUserData[key]
 			variables[user.zoomId.toString()] = user.userName
 		}
@@ -104,7 +104,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
-		variables[`GalleryPosition${padding(index, 2)}`] = instance.ZoomUserData[zoomID]
+		variables[`GalleryPosition${padding(index, 2)}`] = userExist(Number(zoomID), instance.ZoomUserData)
 			? instance.ZoomUserData[zoomID].userName
 			: '-'
 	}
@@ -152,7 +152,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		})
 	}
 	for (const key in instance.ZoomUserData) {
-		if (Object.prototype.hasOwnProperty.call(instance.ZoomUserData, key)) {
+		if (userExist(Number(key), instance.ZoomUserData)) {
 			const user = instance.ZoomUserData[key]
 			if (user.zoomId > instance.ZoomClientDataObj.numberOfGroups)
 				userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
