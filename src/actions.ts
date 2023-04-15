@@ -1141,7 +1141,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				if (instance.ZoomGroupData[group] !== undefined) {
 					// When someone overides the selection by entering a name
-					if (userName !== '') {
+					if (userName !== undefined && userName !== '') {
 						if (userName.toLowerCase() === 'me' || userName.toLowerCase() === 'all')
 							instance.log('debug', 'dont use the me/all etc on the remove from group')
 						// Get variable if needed
