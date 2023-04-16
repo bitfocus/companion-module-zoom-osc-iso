@@ -307,20 +307,30 @@ export class OSC {
 							// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+							} else {
+								return
 							}
 
 							if (data.args[4].value === UserRole.Participant) {
-								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
-								delete this.instance.ZoomGroupData[0].users[index]
-								this.updateLoop = true
+								const index = this.instance.ZoomGroupData[0].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
+								if (index > -1) {
+									this.instance.ZoomGroupData[0].users.splice(index, 1)
+									this.instance.checkFeedbacks(FeedbackId.groupBased)
+									this.updateLoop = true
+								}
 							} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
-								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								const index = this.instance.ZoomGroupData[0].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
 								if (index === -1) {
 									this.instance.ZoomGroupData[0].users.push({
 										zoomID: zoomId,
 										userName: data.args[1].value,
 									})
 									this.instance.log('debug', `added host: ${data.args[1].value}`)
+									this.instance.checkFeedbacks(FeedbackId.groupBased)
 								}
 								this.updateLoop = true
 							}
