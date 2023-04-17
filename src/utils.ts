@@ -173,6 +173,13 @@ export const rgb = (red: number, green: number, blue: number): number => {
 	return ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff)
 }
 
+export const userExist = (zoomId: number, zoomUserData: ZoomUserDataInterface): boolean => {
+	if (Object.prototype.hasOwnProperty.call(zoomUserData, zoomId)) {
+		return true
+	}
+
+	return false
+}
 export const options: Options = {
 	userSelectedInfo: {
 		type: 'textinput',
@@ -495,21 +502,21 @@ export const options: Options = {
 
 /**
  * Returns a filtered array removing the requested value
- * @param arr 
- * @param value 
- * @returns 
+ * @param arr
+ * @param value
+ * @returns
  */
 export const arrayRemove = (arr: Array<number>, value: number): Array<number> => {
-	return arr.filter(element => {
+	return arr.filter((element) => {
 		return element != value
 	})
 }
 
 /**
  * Add's an Item to the array only when none existing
- * @param arr 
- * @param value 
- * @returns 
+ * @param arr
+ * @param value
+ * @returns
  */
 export const arrayAdd = (arr: Array<number>, value: number): Array<number> => {
 	const item = arr.find((element) => element === value)
@@ -525,9 +532,9 @@ export const arrayAdd = (arr: Array<number>, value: number): Array<number> => {
 
 /**
  * Add or remove an Item from the array
- * @param arr 
- * @param value 
- * @returns 
+ * @param arr
+ * @param value
+ * @returns
  */
 export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => {
 	// Find a index of the value (use this so we can use it for remove)

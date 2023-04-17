@@ -1,4 +1,4 @@
-import { InstanceBaseExt, ZoomVersion } from './utils'
+import { InstanceBaseExt, userExist, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
@@ -194,7 +194,7 @@ export class OSC {
 					// Set for all cases the ZoomCallerId
 					zoomId = parseInt(data.args[3].value)
 					// Check if user exists, returns -1 if not
-					if (!this.instance.ZoomUserData[zoomId]) {
+					if (!userExist(zoomId, this.instance.ZoomUserData)) {
 						if (this.instance.ZoomUserOffline[zoomId]) {
 							// The zoomID was already there so this probably is a ghost ID
 							// this.instance.log('debug', 'User just went offline, do nothing')
@@ -231,35 +231,46 @@ export class OSC {
 							}
 							break
 						case 'videoOn':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].videoOn = true
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].videoOn = true
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'videoOff':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].videoOn = false
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							this.instance.log('info', 'receiving:' + JSON.stringify(data))
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								this.instance.ZoomUserData[zoomId].videoOn = false
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'mute':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].mute = true
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].mute = true
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'unMute':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].mute = false
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].mute = false
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'handRaised':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].handRaised = true
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].handRaised = true
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'handLowered':
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].handRaised = false
-							this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
-
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].handRaised = false
+								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+							}
 							break
 						case 'online':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
@@ -276,35 +287,50 @@ export class OSC {
 						}
 						case 'userNameChanged': {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].userName = data.args[1].value
-							const findIndex = this.instance.ZoomVariableLink.findIndex(
-								(id: { zoomId: number }) => id.zoomId === zoomId
-							)
-							this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
-							this.instance.UpdateVariablesValues()
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								this.instance.ZoomUserData[zoomId].userName = data.args[1].value
+								const findIndex = this.instance.ZoomVariableLink.findIndex(
+									(id: { zoomId: number }) => id.zoomId === zoomId
+								)
+								this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
+								this.instance.UpdateVariablesValues()
+							}
 							break
 						}
 						case 'chat':
-							this.instance.log('info', 'receiving:' + JSON.stringify(data))
+							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							break
 						case 'audioStatus':
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							break
 						case 'roleChanged':
 							// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+							} else {
+								return
+							}
+
 							if (data.args[4].value === UserRole.Participant) {
-								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
-								delete this.instance.ZoomGroupData[0].users[index]
-								this.updateLoop = true
+								const index = this.instance.ZoomGroupData[0].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
+								if (index > -1) {
+									this.instance.ZoomGroupData[0].users.splice(index, 1)
+									this.instance.checkFeedbacks(FeedbackId.groupBased)
+									this.updateLoop = true
+								}
 							} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
-								const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
+								const index = this.instance.ZoomGroupData[0].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
 								if (index === -1) {
 									this.instance.ZoomGroupData[0].users.push({
 										zoomID: zoomId,
 										userName: data.args[1].value,
 									})
 									this.instance.log('debug', `added host: ${data.args[1].value}`)
+									this.instance.checkFeedbacks(FeedbackId.groupBased)
 								}
 								this.updateLoop = true
 							}
@@ -318,7 +344,6 @@ export class OSC {
 							this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
 							this.instance.UpdateVariablesValues()
 							break
-
 						default:
 							this.instance.log('info', 'No Case provided for:' + data.address)
 							this.instance.log('info', 'Arguments' + JSON.stringify(data.args))

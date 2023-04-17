@@ -2,7 +2,13 @@ import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
 const { images } = require('./images') // eslint-disable-line
-import { padding, ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
+import {
+	padding,
+	userExist,
+	ZoomAudioRoutingDataInterface,
+	ZoomGroupDataInterface,
+	ZoomUserDataInterface,
+} from './utils'
 
 enum feedbackType {
 	selected = 0,
@@ -1507,7 +1513,7 @@ export function GetPresetList(
 	}
 	// User selection
 	for (const key in ZoomUserData) {
-		if (Object.prototype.hasOwnProperty.call(ZoomUserData, key)) {
+		if (userExist(Number(key), ZoomUserData)) {
 			const user = ZoomUserData[key]
 			presets[`Rename_Participant_${user.zoomId}`] = {
 				type: 'button',
