@@ -302,6 +302,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 	}
 
+	const PreviousSelectedCallersSave = (): void => {
+		instance.ZoomClientDataObj.PreviousSelectedCallers = [...instance.ZoomClientDataObj.selectedCallers]
+	}
+
+	const PreviousSelectedCallersRestore = (): void => {
+		instance.ZoomClientDataObj.selectedCallers = [...instance.ZoomClientDataObj.PreviousSelectedCallers]
+	}
+
 	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
 		[ActionId.setAudioGainReduction]: {
 			name: 'set Audio Gain Reduction',
@@ -771,9 +779,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				},
 			],
 			callback: (action) => {
+				PreviousSelectedCallersSave()
 				switch (action.options.option) {
 					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection) {
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						}
@@ -783,7 +791,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'select':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection) {
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						}
@@ -793,7 +800,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'remove':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
 							action.options.user as number
@@ -831,9 +837,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
 						if (user.userName === selectedName) {
+							PreviousSelectedCallersSave()
 							switch (action.options.option) {
 								case 'toggle':
-									instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 									if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 										instance.ZoomClientDataObj.selectedCallers.length = 0
 									instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
@@ -842,7 +848,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 									)
 									break
 								case 'select':
-									instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 									if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 										instance.ZoomClientDataObj.selectedCallers.length = 0
 									instance.ZoomClientDataObj.selectedCallers = arrayAdd(
@@ -851,7 +856,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 									)
 									break
 								case 'remove':
-									instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 									instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 										instance.ZoomClientDataObj.selectedCallers,
 										user.zoomId
@@ -874,7 +878,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Preselect group',
 			options: [groupOption],
 			callback: (action) => {
-				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+				PreviousSelectedCallersSave()
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[action.options.group as number].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
@@ -907,9 +911,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			],
 			callback: (action) => {
 				const position = (action.options.position as number) - 1
+				PreviousSelectedCallersSave()
 				switch (action.options.option) {
 					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
@@ -918,7 +922,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'select':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
@@ -927,7 +930,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'remove':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
 							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
@@ -960,9 +962,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				},
 			],
 			callback: (action) => {
+				PreviousSelectedCallersSave()
 				switch (action.options.option) {
 					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
@@ -971,7 +973,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'select':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
@@ -980,7 +981,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'remove':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
 							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
@@ -1013,9 +1013,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				},
 			],
 			callback: (action) => {
+				PreviousSelectedCallersSave()
 				switch (action.options.option) {
 					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(
@@ -1024,7 +1024,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'select':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
 							instance.ZoomClientDataObj.selectedCallers.length = 0
 						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
@@ -1033,7 +1032,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						)
 						break
 					case 'remove':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
 						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 							instance.ZoomClientDataObj.selectedCallers,
 							instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
@@ -1053,7 +1051,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Clear Selections',
 			options: [],
 			callback: () => {
-				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+				PreviousSelectedCallersSave()
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
@@ -1068,7 +1066,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			name: 'Restore Previous Selections',
 			options: [],
 			callback: () => {
-				instance.ZoomClientDataObj.selectedCallers = instance.ZoomClientDataObj.PreviousSelectedCallers
+				PreviousSelectedCallersRestore()
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
 					FeedbackId.groupBased,
@@ -1113,7 +1111,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						}
 					}
 				})
-				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+
+				PreviousSelectedCallersSave()
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
@@ -1170,7 +1169,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 							}
 						})
 					}
-					instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+
+					PreviousSelectedCallersSave()
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					instance.UpdateVariablesValues()
 					instance.checkFeedbacks(FeedbackId.groupBased)
@@ -1350,7 +1350,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					}
 					sendActionCommand(sendToCommand)
 					// reset arrays
-					instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+					PreviousSelectedCallersSave()
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
 					instance.UpdateVariablesValues()
@@ -1381,7 +1381,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					}
 					sendActionCommand(sendToCommand)
 					// reset arrays
-					instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+					PreviousSelectedCallersSave()
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
 					instance.UpdateVariablesValues()
@@ -1419,7 +1419,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 
 				// reset arrays
-				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+				PreviousSelectedCallersSave()
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				// instance.ZoomClientDataObj.selectedOutputs.length = 0
 				instance.UpdateVariablesValues()
@@ -2523,7 +2523,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			description: 'This will mute all but the ones in Group Hosts',
 			options: [],
 			callback: async (): Promise<void> => {
-				instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+				PreviousSelectedCallersSave()
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[0].users.forEach((ZoomID) => {
 					instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
@@ -3479,7 +3479,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			command.oscPath = `/zoom${OSCAction}`
 		} else {
 			const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
-			instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+			PreviousSelectedCallersSave()
 			// Check if override has been filled
 			if (name != '' && name != undefined) {
 				instance.log('debug', 'Override:' + name)
@@ -3518,7 +3518,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 			}
 			// Clear selection after each action/command
-			instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+			PreviousSelectedCallersSave()
 			// instance.ZoomClientDataObj.selectedCallers.length = 0
 			instance.UpdateVariablesValues()
 			instance.checkFeedbacks(
