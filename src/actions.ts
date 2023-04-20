@@ -869,6 +869,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 								FeedbackId.userNameBased,
 								FeedbackId.galleryBased
 							)
+
+							break
 						}
 					}
 				}
@@ -1152,9 +1154,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 										for (let i = 0; i < instance.ZoomGroupData[group].users.length; i++) {
 											if (instance.ZoomGroupData[group].users[i].zoomID === user.zoomId) {
 												instance.ZoomGroupData[group].users.splice(i, 1)
+												break
 											}
 										}
 									}
+
+									break
 								}
 							}
 						}
@@ -1165,6 +1170,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 								if (instance.ZoomGroupData[group].users[i].zoomID === ZoomID) {
 									instance.ZoomGroupData[group].users.splice(i, 1)
 									instance.log('debug', 'found and removed from group')
+									break
 								}
 							}
 						})
@@ -2604,8 +2610,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				sendActionCommand(sendToCommand)
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {
-						const user = instance.ZoomUserData[key]
-						user.handRaised = false
+						instance.ZoomUserData[key].handRaised = false
 					}
 				}
 				instance.checkFeedbacks(
