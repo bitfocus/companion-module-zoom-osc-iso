@@ -40,12 +40,37 @@ interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 interface CompanionPresetDefinitionsExt {
 	[id: string]: CompanionPresetExt | undefined
 }
+
+interface FeedbackTypeOptions {
+	color?: number
+	bgcolor?: number
+	png64?: string
+}
+
 export function GetPresetList(
 	ZoomGroupData: ZoomGroupDataInterface[],
 	ZoomUserData: ZoomUserDataInterface,
 	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
 ): CompanionPresetDefinitions {
 	const presets: CompanionPresetDefinitionsExt = {}
+
+	const styles: { [key: string]: FeedbackTypeOptions } = {
+		micLive: {
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(255, 0, 0),
+		},
+		activeSpeaker: {
+			color: combineRgb(255, 255, 255),
+			bgcolor: combineRgb(0, 0, 255),
+		},
+		handRaised: {
+			png64: images.handRaised,
+		},
+		selected: {
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(255, 255, 0),
+		},
+	}
 
 	/**
 	 * Select from Participants
@@ -82,10 +107,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.micLive,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 0, 0),
-					},
+					style: styles.micLive,
 				},
 				{
 					feedbackId: FeedbackId.indexBased,
@@ -94,9 +116,7 @@ export function GetPresetList(
 						type: feedbackType.handRaised,
 						handRaised: 1,
 					},
-					style: {
-						png64: images.handRaised,
-					},
+					style: styles.handRaised,
 				},
 				{
 					feedbackId: FeedbackId.indexBased,
@@ -104,10 +124,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.activeSpeaker,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(0, 0, 255),
-					},
+					style: styles.activeSpeaker,
 				},
 				{
 					feedbackId: FeedbackId.indexBased,
@@ -115,10 +132,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.selected,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 255, 0),
-					},
+					style: styles.selected,
 				},
 			],
 		}
@@ -151,10 +165,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.micLive,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 0, 0),
-					},
+					style: styles.micLive,
 				},
 				{
 					feedbackId: FeedbackId.galleryBased,
@@ -162,10 +173,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.activeSpeaker,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(0, 0, 255),
-					},
+					style: styles.activeSpeaker,
 				},
 				{
 					feedbackId: FeedbackId.galleryBased,
@@ -173,9 +181,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.handRaised,
 					},
-					style: {
-						png64: images.handRaised,
-					},
+					style: styles.handRaised,
 				},
 				{
 					feedbackId: FeedbackId.galleryBased,
@@ -183,10 +189,7 @@ export function GetPresetList(
 						position: index,
 						type: feedbackType.selected,
 					},
-					style: {
-						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 255, 0),
-					},
+					style: styles.selected,
 				},
 			],
 		}
@@ -298,10 +301,7 @@ export function GetPresetList(
 					name: '',
 					type: feedbackType.micLive,
 				},
-				style: {
-					color: combineRgb(0, 0, 0),
-					bgcolor: combineRgb(255, 0, 0),
-				},
+				style: styles.micLive,
 			},
 			{
 				feedbackId: FeedbackId.userNameBased,
@@ -309,9 +309,7 @@ export function GetPresetList(
 					name: '',
 					type: feedbackType.handRaised,
 				},
-				style: {
-					png64: images.handRaised,
-				},
+				style: styles.handRaised,
 			},
 			{
 				feedbackId: FeedbackId.userNameBased,
@@ -319,10 +317,7 @@ export function GetPresetList(
 					name: '',
 					type: feedbackType.activeSpeaker,
 				},
-				style: {
-					color: combineRgb(0, 0, 0),
-					bgcolor: combineRgb(0, 0, 255),
-				},
+				style: styles.activeSpeaker,
 			},
 			{
 				feedbackId: FeedbackId.userNameBased,
@@ -330,10 +325,7 @@ export function GetPresetList(
 					name: '',
 					type: feedbackType.selected,
 				},
-				style: {
-					color: combineRgb(0, 0, 0),
-					bgcolor: combineRgb(255, 255, 0),
-				},
+				style: styles.selected,
 			},
 		],
 	}
@@ -499,10 +491,7 @@ export function GetPresetList(
 							position: position,
 							type: feedbackType.selected,
 						},
-						style: {
-							color: combineRgb(0, 0, 0),
-							bgcolor: combineRgb(255, 255, 0),
-						},
+						style: styles.selected,
 					},
 					{
 						feedbackId: FeedbackId.groupBased,
@@ -511,9 +500,7 @@ export function GetPresetList(
 							position: position,
 							type: feedbackType.micLive,
 						},
-						style: {
-							bgcolor: combineRgb(255, 0, 0),
-						},
+						style: styles.micLive,
 					},
 					{
 						feedbackId: FeedbackId.groupBased,
@@ -522,9 +509,7 @@ export function GetPresetList(
 							position: position,
 							type: feedbackType.handRaised,
 						},
-						style: {
-							png64: images.handRaised,
-						},
+						style: styles.handRaised,
 					},
 				],
 			}
