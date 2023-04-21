@@ -279,6 +279,13 @@ export class OSC {
 						case 'offline': {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
+
+							const hostGroupIndex = this.instance.ZoomGroupData[0].users.findIndex(
+								(id) => id !== null && id.zoomID === zoomId
+							)
+							if (hostGroupIndex > -1) {
+								this.instance.ZoomGroupData[0].users.splice(hostGroupIndex, 1)
+							}
 							delete this.instance.ZoomUserData[zoomId]
 							const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
