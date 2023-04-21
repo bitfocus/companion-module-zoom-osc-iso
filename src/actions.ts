@@ -3517,7 +3517,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// Different path when more than one users are selected
 				if (allExcept) {
 					command.oscPath =
-						(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoom/allExecpt/zoomID`) + OSCAction
+						(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoom/allExcept/zoomID`) + OSCAction
 				} else {
 					command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
 				}
