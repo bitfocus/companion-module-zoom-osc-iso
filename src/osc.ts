@@ -1,4 +1,4 @@
-import { InstanceBaseExt, userExist, ZoomVersion } from './utils'
+import { InstanceBaseExt, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
@@ -300,6 +300,15 @@ export class OSC {
 									(id: { zoomId: number }) => id.zoomId === zoomId
 								)
 								this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
+								this.instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
+									group.users.forEach((user) => {
+										if (user.zoomID === zoomId) {
+											user.userName = data.args[1].value
+											return
+										}
+									})
+								})
+
 								this.instance.UpdateVariablesValues()
 							}
 							break

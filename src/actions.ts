@@ -1227,7 +1227,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				if (index !== -1) instance.ZoomVariableLink[index].userName = newName
 				instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
 					group.users.forEach((user) => {
-						if (user.zoomID === ZoomID) user.userName = newName
+						if (user.zoomID === ZoomID) {
+							user.userName = newName
+							return
+						}
 					})
 				})
 				instance.UpdateVariablesValues()
