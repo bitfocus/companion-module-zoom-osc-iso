@@ -2,7 +2,6 @@ import {
 	CompanionFeedbackDefinitions,
 	combineRgb,
 	CompanionFeedbackDefinition,
-	// InputValue,
 	CompanionAdvancedFeedbackResult,
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
@@ -94,65 +93,6 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
-	// function feedbackResults(type: InputValue | undefined, zoomID: number): boolean {
-	// 	if (type === undefined) {
-	// 		return false
-	// 	}
-
-	// 	switch (type) {
-	// 		case feedbackType.micLive:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].mute === false
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.camera:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].videoOn === true
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.handRaised:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].handRaised === true
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.micOff:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].mute === true
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.cameraOff:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].videoOn === false
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.handLowered:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return instance.ZoomUserData[zoomID].handRaised === false
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.activeSpeaker:
-	// 			if (userExist(zoomID, instance.ZoomUserData)) {
-	// 				return (
-	// 					instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName &&
-	// 					instance.ZoomUserData[zoomID].mute === false
-	// 				)
-	// 			}
-
-	// 			return false
-	// 		case feedbackType.selected:
-	// 			return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
-
-	// 		default:
-	// 			return false
-	// 	}
-	// }
-
 	function feedbackResultsAdvanced(zoomID: number): CompanionAdvancedFeedbackResult {
 		// instance.log('debug', `feedback feedbackResultsAdvanced: zoomID: ${zoomID}`)
 		if (userExist(zoomID, instance.ZoomUserData)) {
@@ -222,13 +162,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			},
 		},
 		[FeedbackId.groupBased]: {
-			// type: 'boolean',
 			type: 'advanced',
 			name: 'Group based feedback',
 			description: 'Position 1 - 999',
-			// defaultStyle: {
-			// 	bgcolor: combineRgb(255, 0, 0),
-			// },
 			options: [
 				{
 					type: 'dropdown',
@@ -245,43 +181,23 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					min: 1,
 					max: 999,
 				},
-				// {
-				// 	type: 'dropdown',
-				// 	label: 'Type of feedback',
-				// 	id: 'type',
-				// 	default: feedbackType.selected,
-				// 	choices: [
-				// 		{ id: feedbackType.selected, label: 'Selected' },
-				// 		{ id: feedbackType.micLive, label: 'Mic Live' },
-				// 		{ id: feedbackType.handRaised, label: 'Hand Raised' },
-				// 		{ id: feedbackType.camera, label: 'Camera on' },
-				// 		{ id: feedbackType.micOff, label: 'Mic Off' },
-				// 		{ id: feedbackType.handLowered, label: 'Hand Lowered' },
-				// 		{ id: feedbackType.cameraOff, label: 'Camera Off' },
-				// 		{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
-				// 	],
-				// },
 			],
 			callback: (feedback) => {
 				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
 					const zoomID =
 						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
 							.zoomID
-					// return feedbackResults(feedback.options.type, zoomID)
+
 					return feedbackResultsAdvanced(zoomID)
 				}
-				// return false
+
 				return {}
 			},
 		},
 		[FeedbackId.indexBased]: {
-			// type: 'boolean',
 			type: 'advanced',
 			name: 'Participant position based feedback',
 			description: 'Feedback based on index of the participant',
-			// defaultStyle: {
-			// 	bgcolor: combineRgb(255, 0, 0),
-			// },
 			options: [
 				{
 					type: 'number',
@@ -291,42 +207,21 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					min: 1,
 					max: 999,
 				},
-				// {
-				// 	type: 'dropdown',
-				// 	label: 'Type of feedback',
-				// 	id: 'type',
-				// 	default: feedbackType.selected,
-				// 	choices: [
-				// 		{ id: feedbackType.selected, label: 'Selected' },
-				// 		{ id: feedbackType.micLive, label: 'Mic Live' },
-				// 		{ id: feedbackType.handRaised, label: 'Hand Raised' },
-				// 		{ id: feedbackType.camera, label: 'Camera on' },
-				// 		{ id: feedbackType.micOff, label: 'Mic Off' },
-				// 		{ id: feedbackType.handLowered, label: 'Hand Lowered' },
-				// 		{ id: feedbackType.cameraOff, label: 'Camera Off' },
-				// 		{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
-				// 	],
-				// },
 			],
 			callback: (feedback) => {
 				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
 					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 
-					// return feedbackResults(feedback.options.type, zoomID)
 					return feedbackResultsAdvanced(zoomID)
 				}
-				// return false
+
 				return {}
 			},
 		},
 		[FeedbackId.userNameBased]: {
-			// type: 'boolean',
 			type: 'advanced',
 			name: 'Username based feedback',
 			description: 'type in username',
-			// defaultStyle: {
-			// 	bgcolor: combineRgb(255, 0, 0),
-			// },
 			options: [
 				{
 					type: 'textinput',
@@ -334,22 +229,6 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					id: 'name',
 					default: '',
 				},
-				// {
-				// 	type: 'dropdown',
-				// 	label: 'Type of feedback',
-				// 	id: 'type',
-				// 	default: feedbackType.selected,
-				// 	choices: [
-				// 		{ id: feedbackType.selected, label: 'Selected' },
-				// 		{ id: feedbackType.micLive, label: 'Mic Live' },
-				// 		{ id: feedbackType.handRaised, label: 'Hand Raised' },
-				// 		{ id: feedbackType.camera, label: 'Camera on' },
-				// 		{ id: feedbackType.micOff, label: 'Mic Off' },
-				// 		{ id: feedbackType.handLowered, label: 'Hand Lowered' },
-				// 		{ id: feedbackType.cameraOff, label: 'Camera Off' },
-				// 		{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
-				// 	],
-				// },
 			],
 			callback: async (feedback, context) => {
 				const name = await context.parseVariablesInString(feedback.options.name as string)
@@ -358,22 +237,17 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
 
-						// return feedbackResults(feedback.options.type, zoomID)
 						return feedbackResultsAdvanced(zoomID)
 					}
 				}
-				// return false
+
 				return {}
 			},
 		},
 		[FeedbackId.galleryBased]: {
-			// type: 'boolean',
 			type: 'advanced',
 			name: 'Gallery based feedback',
 			description: 'Position 1 - 49',
-			// defaultStyle: {
-			// 	bgcolor: combineRgb(255, 0, 0),
-			// },
 			options: [
 				{
 					type: 'number',
@@ -383,22 +257,6 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					min: 1,
 					max: 49,
 				},
-				// {
-				// 	type: 'dropdown',
-				// 	label: 'Type of feedback',
-				// 	id: 'type',
-				// 	default: feedbackType.selected,
-				// 	choices: [
-				// 		{ id: feedbackType.selected, label: 'Selected' },
-				// 		{ id: feedbackType.micLive, label: 'Mic Live' },
-				// 		{ id: feedbackType.handRaised, label: 'Hand Raised' },
-				// 		{ id: feedbackType.camera, label: 'Camera on' },
-				// 		{ id: feedbackType.micOff, label: 'Mic Off' },
-				// 		{ id: feedbackType.handLowered, label: 'Hand Lowered' },
-				// 		{ id: feedbackType.cameraOff, label: 'Camera Off' },
-				// 		{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
-				// 	],
-				// },
 			],
 			callback: (feedback) => {
 				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
@@ -406,10 +264,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
 							.zoomId
 
-					// return feedbackResults(feedback.options.type, zoomID)
 					return feedbackResultsAdvanced(zoomID)
 				}
-				// return false
+
 				return {}
 			},
 		},
