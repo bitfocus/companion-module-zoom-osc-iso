@@ -35,7 +35,7 @@ export enum feedbackType {
 	cameraOff = 7,
 }
 
-type State = [boolean, boolean, boolean, boolean]
+type State = [boolean, boolean, boolean, boolean, boolean]
 interface StateMachine {
 	states: State[]
 	images: Record<string, string>
@@ -44,42 +44,74 @@ interface StateMachine {
 
 const stateMachine: StateMachine = {
 	states: [
-		[false, false, false, false],
-		[false, false, false, true],
-		[false, false, true, false],
-		[false, false, true, true],
-		[false, true, false, false],
-		[false, true, false, true],
-		[false, true, true, false],
-		[false, true, true, true],
-		[true, false, false, false],
-		[true, false, false, true],
-		[true, false, true, false],
-		[true, false, true, true],
-		[true, true, false, false],
-		[true, true, false, true],
-		[true, true, true, false],
-		[true, true, true, true],
+		[false, false, false, false, false],
+		[false, false, false, false, true],
+		[false, false, false, true, false],
+		[false, false, false, true, true],
+		[false, false, true, false, false],
+		[false, false, true, false, true],
+		[false, false, true, true, false],
+		[false, false, true, true, true],
+		[false, true, false, false, false],
+		[false, true, false, false, true],
+		[false, true, false, true, false],
+		[false, true, false, true, true],
+		[false, true, true, false, false],
+		[false, true, true, false, true],
+		[false, true, true, true, false],
+		[false, true, true, true, true],
+		[true, false, false, false, false],
+		[true, false, false, false, true],
+		[true, false, false, true, false],
+		[true, false, false, true, true],
+		[true, false, true, false, false],
+		[true, false, true, false, true],
+		[true, false, true, true, false],
+		[true, false, true, true, true],
+		[true, true, false, false, false],
+		[true, true, false, false, true],
+		[true, true, false, true, false],
+		[true, true, false, true, true],
+		[true, true, true, false, false],
+		[true, true, true, false, true],
+		[true, true, true, true, false],
+		[true, true, true, true, true],
 	],
 	images: {
-		'false,false,false,false': images.LG1,
-		'false,false,false,true': images.LG2,
-		'false,false,true,false': images.LG3,
-		'false,false,true,true': images.LG4,
-		'false,true,false,false': images.LG5,
-		'false,true,false,true': images.LG6,
-		'false,true,true,false': images.LG7,
-		'false,true,true,true': images.LG8,
-		'true,false,false,false': images.LG9,
-		'true,false,false,true': images.LG10,
-		'true,false,true,false': images.LG11,
-		'true,false,true,true': images.LG12,
-		'true,true,false,false': images.LG13,
-		'true,true,false,true': images.LG14,
-		'true,true,true,false': images.LG15,
-		'true,true,true,true': images.LG16,
+		'false,false,false,false,false': images.LG1,
+		'false,false,false,false,true': images.LG2,
+		'false,false,false,true,false': images.LG3,
+		'false,false,false,true,true': images.LG4,
+		'false,false,true,false,false': images.LG5,
+		'false,false,true,false,true': images.LG6,
+		'false,false,true,true,false': images.LG7,
+		'false,false,true,true,true': images.LG8,
+		'false,true,false,false,false': images.LG9,
+		'false,true,false,false,true': images.LG10,
+		'false,true,false,true,false': images.LG11,
+		'false,true,false,true,true': images.LG12,
+		'false,true,true,false,false': images.LG13,
+		'false,true,true,false,true': images.LG14,
+		'false,true,true,true,false': images.LG15,
+		'false,true,true,true,true': images.LG16,
+		'true,false,false,false,false': images.LG17,
+		'true,false,false,false,true': images.LG18,
+		'true,false,false,true,false': images.LG19,
+		'true,false,false,true,true': images.LG20,
+		'true,false,true,false,false': images.LG21,
+		'true,false,true,false,true': images.LG22,
+		'true,false,true,true,false': images.LG23,
+		'true,false,true,true,true': images.LG24,
+		'true,true,false,false,false': images.LG25,
+		'true,true,false,false,true': images.LG26,
+		'true,true,false,true,false': images.LG27,
+		'true,true,false,true,true': images.LG28,
+		'true,true,true,false,false': images.LG29,
+		'true,true,true,false,true': images.LG30,
+		'true,true,true,true,false': images.LG31,
+		'true,true,true,true,true': images.LG32,
 	},
-	currentState: [false, false, false, false],
+	currentState: [false, false, false, false, false],
 }
 
 function getImageForState(state: State): string {
@@ -101,6 +133,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				instance.ZoomUserData[zoomID].videoOn || false,
 				instance.ZoomUserData[zoomID].handRaised || false,
 				instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName || false,
+				instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) !== undefined || false,
 			]
 
 			// instance.log(
@@ -117,13 +150,13 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			stateMachine.currentState = stateMachine.states[stateIndex]
 			const image = getImageForState(stateMachine.currentState)
 
-			if (instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)) {
-				return {
-					png64: image,
-					color: combineRgb(0, 0, 0),
-					bgcolor: combineRgb(255, 255, 0),
-				}
-			}
+			// if (instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID)) {
+			// 	return {
+			// 		png64: image,
+			// 		color: combineRgb(0, 0, 0),
+			// 		bgcolor: combineRgb(255, 255, 0),
+			// 	}
+			// }
 
 			return {
 				png64: image,
