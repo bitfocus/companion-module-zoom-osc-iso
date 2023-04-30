@@ -31,6 +31,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		selectionMethod: 0,
 		numberOfGroups: 0,
 		pulling: 0,
+		feedbackImagesWithIcons: 1,
 	}
 
 	// Global call settings
