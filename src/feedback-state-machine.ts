@@ -141,7 +141,10 @@ export function feedbackResultsAdvanced(
 	if (userExist(zoomID, instance.ZoomUserData)) {
 		const participantState = getParticipantState(instance, zoomID)
 		const stateIndex = stateMachine.states.findIndex((state) => state.toString() === participantState.toString())
-		const image = getImageForState(stateMachine.states[stateIndex], instance.config.feedbackImagesWithIcons)
+		const image = getImageForState(
+			stateMachine.states[stateIndex],
+			instance.config.feedbackImagesWithIcons !== undefined ? instance.config.feedbackImagesWithIcons : 1
+		)
 
 		return {
 			png64: image,
