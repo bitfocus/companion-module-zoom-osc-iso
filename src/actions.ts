@@ -3657,15 +3657,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			// Clear selection after each action/command
 			if (command.isValidCommand) {
 				PreviousSelectedCallersSave()
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.galleryBased,
+					FeedbackId.groupBased,
+					FeedbackId.indexBased,
+					FeedbackId.userNameBased
+				)
 			}
-			// instance.ZoomClientDataObj.selectedCallers.length = 0
-			// instance.UpdateVariablesValues()
-			// instance.checkFeedbacks(
-			// 	FeedbackId.galleryBased,
-			// 	FeedbackId.groupBased,
-			// 	FeedbackId.indexBased,
-			// 	FeedbackId.userNameBased
-			// )
 		}
 		return command
 	}
