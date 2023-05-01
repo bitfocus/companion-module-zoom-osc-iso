@@ -483,16 +483,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'ISO'
 				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/outputISO', variableValue, select.multi)
-				command.args.push({ type: 'i', value: action.options.output })
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.output })
 
-				const sendToCommand = {
-					id: ActionId.outputISO,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+					const sendToCommand = {
+						id: ActionId.outputISO,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.audioISO]: {
@@ -502,16 +504,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'ISO'
 				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/audioISO', variableValue, select.single)
-				command.args.push({ type: 'i', value: action.options.output })
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.output })
 
-				const sendToCommand = {
-					id: ActionId.audioISO,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+					const sendToCommand = {
+						id: ActionId.audioISO,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.startISOEngine]: {
@@ -1461,14 +1465,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/pin', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.pin,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.pin,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.addPin]: {
@@ -1478,14 +1484,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/addPin', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.addPin,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.addPin,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.unpin]: {
@@ -1495,14 +1503,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/unPin', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.unpin,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.unpin,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.clearPins]: {
@@ -1528,14 +1538,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/togglePin', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.togglePin,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.togglePin,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.pinScreen2]: {
@@ -1545,14 +1557,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/pin2', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.pinScreen2,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.pinScreen2,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.unPinScreen2]: {
@@ -1562,14 +1576,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/unPin2', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.unPinScreen2,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.unPinScreen2,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.clearPinsScreen2]: {
@@ -1595,14 +1611,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/togglePin2', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.togglePinScreen2,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.togglePinScreen2,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.spotLight]: {
@@ -1612,14 +1630,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/spot', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.spotLight,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.spotLight,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.addSpotlight]: {
@@ -1629,14 +1649,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/addSpot', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.addSpotlight,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.addSpotlight,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.unSpotLight]: {
@@ -1646,14 +1668,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/unSpot', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.unSpotLight,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.unSpotLight,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.toggleSpotlight]: {
@@ -1663,14 +1687,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/toggleSpot', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.toggleSpotlight,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.toggleSpotlight,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.turnVideoOn]: {
@@ -1680,14 +1706,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/videoOn', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.turnVideoOn,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.turnVideoOn,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.turnVideoOff]: {
@@ -1697,14 +1725,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/videoOff', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.turnVideoOff,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.turnVideoOff,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.toggleVideoState]: {
@@ -1714,14 +1744,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/toggleVideo', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.toggleVideoState,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.toggleVideoState,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.mute]: {
@@ -1731,14 +1763,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/mute', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.mute,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.mute,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.unmute]: {
@@ -1748,14 +1782,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/unMute', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.unmute,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.unmute,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.toggleMuteState]: {
@@ -1765,14 +1801,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/toggleMute', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.toggleMuteState,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.toggleMuteState,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.raiseHand]: {
@@ -1782,14 +1820,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/raiseHand', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.raiseHand,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.raiseHand,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.lowerHand]: {
@@ -1799,14 +1839,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/lowerHand', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.lowerHand,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.lowerHand,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.toggleHand]: {
@@ -1816,14 +1858,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/toggleHand', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.toggleHand,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.toggleHand,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.makeHost]: {
@@ -1833,14 +1877,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/makeHost', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.makeHost,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.makeHost,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.makeCoHost]: {
@@ -1850,14 +1896,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/makeCoHost', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.makeCoHost,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.makeCoHost,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.revokeCoHost]: {
@@ -1867,14 +1915,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/revokeCoHost', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.revokeCoHost,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.revokeCoHost,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.reclaimHost]: {
@@ -1884,14 +1934,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/reclaimHost', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.reclaimHost,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.reclaimHost,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.makePanelist]: {
@@ -1901,14 +1953,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/makePanelist', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.makePanelist,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.makePanelist,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.makeAttendee]: {
@@ -1918,14 +1972,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/makeAttendee', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.makeAttendee,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.makeAttendee,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.ejectParticipant]: {
@@ -1935,14 +1991,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/eject', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.ejectParticipant,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.ejectParticipant,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.returnSelfToMainMeeting]: {
@@ -1952,14 +2010,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/returnToMainMeeting', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.returnSelfToMainMeeting,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.returnSelfToMainMeeting,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.admitSomeoneFromWaitingRoom]: {
@@ -1969,14 +2029,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/admit', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.admitSomeoneFromWaitingRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.admitSomeoneFromWaitingRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.sendSomeoneToWaitingRoom]: {
@@ -1986,14 +2048,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/sendToWaitingRoom', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.sendSomeoneToWaitingRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.sendSomeoneToWaitingRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.allowWebinarAttendeeToSpeak]: {
@@ -2003,14 +2067,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/allowToSpeak', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.allowWebinarAttendeeToSpeak,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.allowWebinarAttendeeToSpeak,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.disallowToSpeak]: {
@@ -2020,14 +2086,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/disallowToSpeak', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.disallowToSpeak,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.disallowToSpeak,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.startScreenShareWithPrimaryScreen]: {
@@ -2085,14 +2153,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/allowToRecord', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.allowToRecord,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.allowToRecord,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.disallowToRecord]: {
@@ -2102,14 +2172,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/disallowToRecord', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.disallowToRecord,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.disallowToRecord,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.gotoNextGalleryPage]: {
@@ -2247,14 +2319,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/enableOriginalSound', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.enableOriginalSound,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.enableOriginalSound,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.disableOriginalSound]: {
@@ -2264,14 +2338,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/disableOriginalSound', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.disableOriginalSound,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.disableOriginalSound,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.enableHDVideo]: {
@@ -2313,14 +2389,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/enableMirrorVideo', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.enableMirrorVideo,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.enableMirrorVideo,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.disableMirrorVideo]: {
@@ -2330,14 +2408,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/disableMirrorVideo', userName, select.single)
-				const sendToCommand = {
-					id: ActionId.disableMirrorVideo,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.disableMirrorVideo,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.enableOptimizeVideoForSharing]: {
@@ -2411,15 +2491,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/sendToBreakout', userName, select.multi)
-				command.args.push({ type: 's', value: action.options.breakoutName as string })
-				const sendToCommand = {
-					id: ActionId.sendParticipantToBreakoutRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 's', value: action.options.breakoutName as string })
+					const sendToCommand = {
+						id: ActionId.sendParticipantToBreakoutRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.removeParticipantFromBreakoutRoom]: {
@@ -2429,14 +2511,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/removeFromBreakout', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.removeParticipantFromBreakoutRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.removeParticipantFromBreakoutRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.assignParticipantToBreakoutRoom]: {
@@ -2447,15 +2531,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const breakoutName = await instance.parseVariablesInString(action.options.breakoutName as string)
 				const command = createCommand('/assignToBreakout', userName, select.multi)
-				command.args.push({ type: 's', value: breakoutName })
-				const sendToCommand = {
-					id: ActionId.assignParticipantToBreakoutRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 's', value: breakoutName })
+					const sendToCommand = {
+						id: ActionId.assignParticipantToBreakoutRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.unassignParticipantFromBreakoutRoom]: {
@@ -2465,14 +2551,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/unassignFromBreakout', userName, select.multi)
-				const sendToCommand = {
-					id: ActionId.unassignParticipantFromBreakoutRoom,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.unassignParticipantFromBreakoutRoom,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setGalleryView]: {
@@ -2530,14 +2618,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/Mute', userName, select.multi, true)
-				const sendToCommand = {
-					id: ActionId.muteAllExcept,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.muteAllExcept,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.muteAllExceptHost]: {
@@ -2552,14 +2642,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				})
 
 				const command = createCommand('/Mute', undefined, select.multi, true)
-				const sendToCommand = {
-					id: ActionId.muteAllExceptHost,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionId.muteAllExceptHost,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.clearSpotlight]: {
@@ -3043,16 +3135,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setWindowPosition', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.intX })
-				command.args.push({ type: 'i', value: action.options.intY })
-				const sendToCommand = {
-					id: ActionId.SetWindowPosition,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.intX })
+					command.args.push({ type: 'i', value: action.options.intY })
+					const sendToCommand = {
+						id: ActionId.SetWindowPosition,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.SetWindowSize]: {
@@ -3062,16 +3156,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setWindowSize', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.intX })
-				command.args.push({ type: 'i', value: action.options.intY })
-				const sendToCommand = {
-					id: ActionId.SetWindowSize,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.intX })
+					command.args.push({ type: 'i', value: action.options.intY })
+					const sendToCommand = {
+						id: ActionId.SetWindowSize,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setVirtualBackground]: {
@@ -3081,15 +3177,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setBackground', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.id })
-				const sendToCommand = {
-					id: ActionId.setVirtualBackground,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.id })
+					const sendToCommand = {
+						id: ActionId.setVirtualBackground,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setVideoFilter]: {
@@ -3099,15 +3197,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setVideoFilter', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.id })
-				const sendToCommand = {
-					id: ActionId.setVideoFilter,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.id })
+					const sendToCommand = {
+						id: ActionId.setVideoFilter,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setCameraDevice]: {
@@ -3117,15 +3217,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setCameraDevice', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.id })
-				const sendToCommand = {
-					id: ActionId.setCameraDevice,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.id })
+					const sendToCommand = {
+						id: ActionId.setCameraDevice,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setSpeakerVolume]: {
@@ -3135,15 +3237,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setSpeakerVolume', userName, select.multi)
-				command.args.push({ type: 'i', value: action.options.level })
-				const sendToCommand = {
-					id: ActionId.setSpeakerVolume,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.level })
+					const sendToCommand = {
+						id: ActionId.setSpeakerVolume,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setSpeakerDevice]: {
@@ -3153,15 +3257,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setSpeakerDevice', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.id })
-				const sendToCommand = {
-					id: ActionId.setSpeakerDevice,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.id })
+					const sendToCommand = {
+						id: ActionId.setSpeakerDevice,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setMicDevice]: {
@@ -3171,15 +3277,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const command = createCommand('/setMicDevice', userName, select.single)
-				command.args.push({ type: 'i', value: action.options.id })
-				const sendToCommand = {
-					id: ActionId.setMicDevice,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 'i', value: action.options.id })
+					const sendToCommand = {
+						id: ActionId.setMicDevice,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.setMicLevel]: {
@@ -3258,15 +3366,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
 				const message = await instance.parseVariablesInString(action.options.message as string)
 				const command = createCommand('/chat', userName, select.multi)
-				command.args.push({ type: 's', value: message })
-				const sendToCommand = {
-					id: ActionId.sendAChatViaDM,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
+				if (command.isValidCommand) {
+					command.args.push({ type: 's', value: message })
+					const sendToCommand = {
+						id: ActionId.sendAChatViaDM,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(sendToCommand)
 				}
-				sendActionCommand(sendToCommand)
 			},
 		},
 		[ActionId.sendAChatToEveryone]: {
@@ -3490,11 +3600,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			args: { type: string; value: any }[]
 			oscPath: string
 			oscPathName: string
+			isValidCommand: boolean
 		} = {
 			args: [],
 			oscPath: '',
 			oscPathName: '',
+			isValidCommand: true,
 		}
+
 		// If/When no user is involved set path and skip the rest
 		if (singleUser === null || singleUser === undefined) {
 			command.oscPath = `/zoom${OSCAction}`
@@ -3516,12 +3629,15 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// should be otherwise somethings wrong
 					if (selectedCallers.length === 0) {
 						// return something to prevent users from sending a command
-						instance.log('debug', 'Select a caller first')
+						instance.log('error', 'Select a caller first')
+						command.isValidCommand = false
 					}
 					// When command is for one user only send first caller
-					if (singleUser) {
+					else if (singleUser) {
 						command.args.push({ type: 'i', value: selectedCallers[0] })
-						instance.log('debug', 'You have selected multiple participants but only the first one is allowed')
+						if (selectedCallers.length > 1) {
+							instance.log('warn', 'You have selected multiple participants but only the first one is allowed')
+						}
 					} else {
 						selectedCallers.forEach((caller) => {
 							command.args.push({ type: 'i', value: caller })
@@ -3539,15 +3655,17 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 			}
 			// Clear selection after each action/command
-			PreviousSelectedCallersSave()
+			if (command.isValidCommand) {
+				PreviousSelectedCallersSave()
+			}
 			// instance.ZoomClientDataObj.selectedCallers.length = 0
-			instance.UpdateVariablesValues()
-			instance.checkFeedbacks(
-				FeedbackId.galleryBased,
-				FeedbackId.groupBased,
-				FeedbackId.indexBased,
-				FeedbackId.userNameBased
-			)
+			// instance.UpdateVariablesValues()
+			// instance.checkFeedbacks(
+			// 	FeedbackId.galleryBased,
+			// 	FeedbackId.groupBased,
+			// 	FeedbackId.indexBased,
+			// 	FeedbackId.userNameBased
+			// )
 		}
 		return command
 	}
