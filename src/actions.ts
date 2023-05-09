@@ -1929,11 +1929,10 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		},
 		[ActionId.reclaimHost]: {
 			name: 'Reclaim Host',
-			options: [options.userName],
-			callback: async (action): Promise<void> => {
-				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const command = createCommand('/reclaimHost', userName, select.multi)
+			options: [],
+			callback: () => {
+				// type: 'Global'
+				const command = createCommand('/reclaimHost')
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionId.reclaimHost,
