@@ -3653,16 +3653,15 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
 				}
 			}
-			// Clear selection after each action/command
 			if (command.isValidCommand) {
 				PreviousSelectedCallersSave()
-				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(
-					FeedbackId.galleryBased,
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
-					FeedbackId.userNameBased
-				)
+				// instance.UpdateVariablesValues()
+				// instance.checkFeedbacks(
+				// 	FeedbackId.galleryBased,
+				// 	FeedbackId.groupBased,
+				// 	FeedbackId.indexBased,
+				// 	FeedbackId.userNameBased
+				// )
 			}
 		}
 		return command
