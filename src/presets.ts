@@ -1,7 +1,7 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
 import { ActionId } from './actions'
 import { FeedbackId } from './feedback'
-const { images } = require('./images') // eslint-disable-line
+
 import {
 	padding,
 	userExist,
@@ -9,14 +9,6 @@ import {
 	ZoomGroupDataInterface,
 	ZoomUserDataInterface,
 } from './utils'
-
-enum feedbackType {
-	selected = 0,
-	micLive = 1,
-	handRaised = 2,
-	camera = 3,
-	activeSpeaker = 4,
-}
 
 interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 	feedbacks: Array<
@@ -39,29 +31,6 @@ interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 }
 interface CompanionPresetDefinitionsExt {
 	[id: string]: CompanionPresetExt | undefined
-}
-
-interface FeedbackTypeOptions {
-	color?: number
-	bgcolor?: number
-	png64?: string
-}
-const participantFeedbackStyles: { [key: string]: FeedbackTypeOptions } = {
-	micLive: {
-		color: combineRgb(0, 0, 0),
-		bgcolor: combineRgb(255, 0, 0),
-	},
-	activeSpeaker: {
-		color: combineRgb(255, 255, 255),
-		bgcolor: combineRgb(0, 0, 255),
-	},
-	handRaised: {
-		png64: images.handRaised,
-	},
-	selected: {
-		color: combineRgb(0, 0, 0),
-		bgcolor: combineRgb(255, 255, 0),
-	},
 }
 
 export function GetPresetList(
@@ -104,34 +73,11 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: feedbackType.micLive,
 					},
-					style: participantFeedbackStyles.micLive,
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.handRaised,
-						handRaised: 1,
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(230, 230, 230),
 					},
-					style: participantFeedbackStyles.handRaised,
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.activeSpeaker,
-					},
-					style: participantFeedbackStyles.activeSpeaker,
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.selected,
-					},
-					style: participantFeedbackStyles.selected,
 				},
 			],
 		}
@@ -162,34 +108,11 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: feedbackType.micLive,
 					},
-					style: participantFeedbackStyles.micLive,
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.handRaised,
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(230, 230, 230),
 					},
-					style: participantFeedbackStyles.handRaised,
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.activeSpeaker,
-					},
-					style: participantFeedbackStyles.activeSpeaker,
-				},
-
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.selected,
-					},
-					style: participantFeedbackStyles.selected,
 				},
 			],
 		}
@@ -299,33 +222,11 @@ export function GetPresetList(
 				feedbackId: FeedbackId.userNameBased,
 				options: {
 					name: '',
-					type: feedbackType.micLive,
 				},
-				style: participantFeedbackStyles.micLive,
-			},
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.handRaised,
+				style: {
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
 				},
-				style: participantFeedbackStyles.handRaised,
-			},
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.activeSpeaker,
-				},
-				style: participantFeedbackStyles.activeSpeaker,
-			},
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.selected,
-				},
-				style: participantFeedbackStyles.selected,
 			},
 		],
 	}
@@ -489,37 +390,11 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: feedbackType.micLive,
 						},
-						style: participantFeedbackStyles.micLive,
-					},
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.handRaised,
+						style: {
+							color: combineRgb(0, 0, 0),
+							bgcolor: combineRgb(230, 230, 230),
 						},
-						style: participantFeedbackStyles.handRaised,
-					},
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.activeSpeaker,
-						},
-						style: participantFeedbackStyles.activeSpeaker,
-					},
-
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.selected,
-						},
-						style: participantFeedbackStyles.selected,
 					},
 				],
 			}

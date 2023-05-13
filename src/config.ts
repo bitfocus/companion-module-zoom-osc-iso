@@ -9,6 +9,7 @@ export interface ZoomConfig {
 	selectionMethod: number
 	numberOfGroups: number
 	pulling: number
+	feedbackImagesWithIcons: number
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -91,6 +92,17 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			min: 1,
 			max: 100,
 			default: 2,
+			width: 6,
+		},
+		{
+			type: 'dropdown',
+			id: 'feedbackImagesWithIcons',
+			label: 'Participant Feedback With Icons',
+			choices: [
+				{ id: 0, label: 'Without Icons' },
+				{ id: 1, label: 'With Icons' },
+			],
+			default: 1,
 			width: 6,
 		},
 	]
