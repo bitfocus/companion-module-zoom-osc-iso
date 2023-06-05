@@ -1,6 +1,8 @@
 import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions } from '@companion-module/base'
 import { ActionId } from './actions'
-import { FeedbackId } from './feedback'
+import { FeedbackId, feedbackType } from './feedback'
+
+const { images } = require('./images') // eslint-disable-line
 
 import {
 	padding,
@@ -44,6 +46,44 @@ export function GetPresetList(
 	 * Select from Participants
 	 */
 	for (let index = 1; index < 1000; index++) {
+		presets[`Caller_${index}_Advanced`] = {
+			type: 'button',
+			category: 'Select from Participants Advanced',
+			name: `Caller${index}`,
+			style: {
+				text: `${index}. $(zoomosc:Participant${padding(index, 3)})`,
+				size: 'auto',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
+			},
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionId.selectFromIndexPosition,
+							options: {
+								position: index,
+								option: 'toggle',
+							},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [
+				{
+					feedbackId: FeedbackId.indexBasedAdvanced,
+					options: {
+						position: index,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(230, 230, 230),
+					},
+				},
+			],
+		}
+
 		presets[`Caller_${index}`] = {
 			type: 'button',
 			category: 'Select from Participants',
@@ -73,10 +113,44 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(230, 230, 230),
+						bgcolor: combineRgb(255, 0, 0),
+					},
+				},
+				{
+					feedbackId: FeedbackId.indexBased,
+					options: {
+						position: index,
+						type: feedbackType.handRaised,
+						handRaised: 1,
+					},
+					style: {
+						png64: images.handRaised,
+					},
+				},
+				{
+					feedbackId: FeedbackId.indexBased,
+					options: {
+						position: index,
+						type: feedbackType.activeSpeaker,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(0, 0, 255),
+					},
+				},
+				{
+					feedbackId: FeedbackId.indexBased,
+					options: {
+						position: index,
+						type: feedbackType.selected,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(255, 255, 0),
 					},
 				},
 			],
@@ -87,6 +161,36 @@ export function GetPresetList(
 	 * Select from Gallery
 	 */
 	for (let index = 1; index < 50; index++) {
+		presets[`Gallery_position_${index})_advanced`] = {
+			type: 'button',
+			category: 'Select from Gallery Advanced',
+			name: `$(zoomosc:Gallery position ${index})`,
+			style: {
+				text: `Gal Pos ${index}\\n$(zoomosc:GalleryPosition${padding(index, 2)})`,
+				size: 'auto',
+				color: combineRgb(0, 0, 0),
+				bgcolor: combineRgb(230, 230, 230),
+			},
+			steps: [
+				{
+					down: [{ actionId: ActionId.selectFromGalleryPosition, options: { position: index, option: 'toggle' } }],
+					up: [],
+				},
+			],
+			feedbacks: [
+				{
+					feedbackId: FeedbackId.galleryBasedAdvanced,
+					options: {
+						position: index,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(230, 230, 230),
+					},
+				},
+			],
+		}
+
 		presets[`Gallery_position_${index})`] = {
 			type: 'button',
 			category: 'Select from Gallery',
@@ -108,10 +212,43 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
+						type: feedbackType.micLive,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(230, 230, 230),
+						bgcolor: combineRgb(255, 0, 0),
+					},
+				},
+				{
+					feedbackId: FeedbackId.galleryBased,
+					options: {
+						position: index,
+						type: feedbackType.activeSpeaker,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(0, 0, 255),
+					},
+				},
+				{
+					feedbackId: FeedbackId.galleryBased,
+					options: {
+						position: index,
+						type: feedbackType.handRaised,
+					},
+					style: {
+						png64: images.handRaised,
+					},
+				},
+				{
+					feedbackId: FeedbackId.galleryBased,
+					options: {
+						position: index,
+						type: feedbackType.selected,
+					},
+					style: {
+						color: combineRgb(0, 0, 0),
+						bgcolor: combineRgb(255, 255, 0),
 					},
 				},
 			],
@@ -220,6 +357,64 @@ export function GetPresetList(
 		feedbacks: [
 			{
 				feedbackId: FeedbackId.userNameBased,
+				options: {
+					name: '',
+					type: feedbackType.micLive,
+				},
+				style: {
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(255, 0, 0),
+				},
+			},
+			{
+				feedbackId: FeedbackId.userNameBased,
+				options: {
+					name: '',
+					type: feedbackType.handRaised,
+				},
+				style: {
+					png64: images.handRaised,
+				},
+			},
+			{
+				feedbackId: FeedbackId.userNameBased,
+				options: {
+					name: '',
+					type: feedbackType.activeSpeaker,
+				},
+				style: {
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(0, 0, 255),
+				},
+			},
+			{
+				feedbackId: FeedbackId.userNameBased,
+				options: {
+					name: '',
+					type: feedbackType.selected,
+				},
+				style: {
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(255, 255, 0),
+				},
+			},
+		],
+	}
+
+	presets[`Select_by_name_advanced`] = {
+		type: 'button',
+		category: 'Manage Selections of Participants Advanced',
+		name: `Select by name`,
+		style: {
+			text: `Select by name`,
+			size: 'auto',
+			color: combineRgb(0, 0, 0),
+			bgcolor: combineRgb(230, 230, 230),
+		},
+		steps: [{ down: [{ actionId: ActionId.selectUserByName, options: { option: 'toggle' } }], up: [] }],
+		feedbacks: [
+			{
+				feedbackId: FeedbackId.userNameBasedAdvanced,
 				options: {
 					name: '',
 				},
@@ -387,6 +582,65 @@ export function GetPresetList(
 				feedbacks: [
 					{
 						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: feedbackType.selected,
+						},
+						style: {
+							color: combineRgb(0, 0, 0),
+							bgcolor: combineRgb(255, 255, 0),
+						},
+					},
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: feedbackType.micLive,
+						},
+						style: {
+							bgcolor: combineRgb(255, 0, 0),
+						},
+					},
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: feedbackType.handRaised,
+						},
+						style: {
+							png64: images.handRaised,
+						},
+					},
+				],
+			}
+
+			presets[`Group${index}_Position${position}_advanced`] = {
+				type: 'button',
+				category: `Select ${ZoomGroupData[index].groupName} participants Advanced`,
+				name: 'Group selection',
+				style: {
+					text: `$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
+					size: 'auto',
+					color: combineRgb(0, 0, 0),
+					bgcolor: combineRgb(230, 230, 230),
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionId.selectUserFromGroupPosition,
+								options: { group: index, position: position, option: 'toggle' },
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [
+					{
+						feedbackId: FeedbackId.groupBasedAdvanced,
 						options: {
 							group: index,
 							position: position,
