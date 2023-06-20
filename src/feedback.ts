@@ -12,8 +12,8 @@ export enum FeedbackId {
 	selectionMethod = 'selection_Method',
 	groupBased = 'group_Based',
 	groupBasedAdvanced = 'group_Based_Advanced',
-	indexBased = 'index_Based_Advanced',
-	indexBasedAdvanced = 'index_Based',
+	indexBased = 'index_Based',
+	indexBasedAdvanced = 'index_Based_Advanced',
 	galleryBased = 'gallery_Based',
 	galleryBasedAdvanced = 'gallery_Based_Advanced',
 	userNameBased = 'user_Name_Based',
@@ -185,7 +185,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.groupBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Group based feedback',
+			name: 'Group based feedback (advanced)',
 			description: 'Position 1 - 999',
 			options: [
 				{
@@ -260,7 +260,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.indexBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Participant position based feedback',
+			name: 'Participant position based feedback (advanced)',
 			description: 'Feedback based on index of the participant',
 			options: [
 				{
@@ -328,7 +328,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.userNameBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Username based feedback Advanced',
+			name: 'Username based feedback (advanced)',
 			description: 'type in username',
 			options: [
 				{
@@ -398,7 +398,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.galleryBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Gallery based feedback Advanced',
+			name: 'Gallery based feedback (advanced)',
 			description: 'Position 1 - 49',
 			options: [
 				{
