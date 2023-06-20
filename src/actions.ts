@@ -796,7 +796,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					instance.config.selectionMethod = action.options.selectionMethod as number
 				}
 				instance.saveConfig(instance.config)
-				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased)
+				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 			},
 		},
 		[ActionId.selectUser]: {
@@ -840,10 +840,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.indexBased,
-					FeedbackId.groupBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -892,10 +896,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 							}
 							instance.UpdateVariablesValues()
 							instance.checkFeedbacks(
-								FeedbackId.groupBased,
-								FeedbackId.indexBased,
 								FeedbackId.userNameBased,
-								FeedbackId.galleryBased
+								FeedbackId.userNameBasedAdvanced,
+								FeedbackId.indexBased,
+								FeedbackId.indexBasedAdvanced,
+								FeedbackId.galleryBased,
+								FeedbackId.galleryBasedAdvanced,
+								FeedbackId.groupBased,
+								FeedbackId.groupBasedAdvanced
 							)
 
 							break
@@ -915,10 +923,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				})
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -964,10 +976,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1012,10 +1028,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1059,10 +1079,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				}
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1074,10 +1098,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1088,10 +1116,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				PreviousSelectedCallersRestore()
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1135,10 +1167,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1148,7 +1184,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			callback: (action) => {
 				instance.ZoomGroupData[action.options.group as number].users.length = 0
 				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(FeedbackId.groupBased)
+				instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 			},
 		},
 		[ActionId.removeFromGroup]: {
@@ -1196,7 +1232,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					PreviousSelectedCallersSave()
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					instance.UpdateVariablesValues()
-					instance.checkFeedbacks(FeedbackId.groupBased)
+					instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 				} else {
 					instance.log('debug', 'No correct group selected')
 				}
@@ -1270,10 +1306,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1300,10 +1340,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1322,10 +1366,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
-					FeedbackId.galleryBased
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},
@@ -1381,10 +1429,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
 					instance.UpdateVariablesValues()
 					instance.checkFeedbacks(
-						FeedbackId.groupBased,
-						FeedbackId.indexBased,
 						FeedbackId.userNameBased,
+						FeedbackId.userNameBasedAdvanced,
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
 						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced,
 						FeedbackId.output
 					)
 				}
@@ -1412,10 +1464,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
 					instance.UpdateVariablesValues()
 					instance.checkFeedbacks(
-						FeedbackId.groupBased,
-						FeedbackId.indexBased,
 						FeedbackId.userNameBased,
+						FeedbackId.userNameBasedAdvanced,
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
 						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced,
 						FeedbackId.output
 					)
 				}
@@ -1450,10 +1506,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				// instance.ZoomClientDataObj.selectedOutputs.length = 0
 				instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
-					FeedbackId.groupBased,
-					FeedbackId.indexBased,
 					FeedbackId.userNameBased,
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
 					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced,
 					FeedbackId.output
 				)
 			},
@@ -2721,10 +2781,14 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 					}
 				}
 				instance.checkFeedbacks(
-					FeedbackId.galleryBased,
-					FeedbackId.groupBased,
+					FeedbackId.userNameBased,
+					FeedbackId.userNameBasedAdvanced,
 					FeedbackId.indexBased,
-					FeedbackId.userNameBased
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
 				)
 			},
 		},

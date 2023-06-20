@@ -224,9 +224,13 @@ export class OSC {
 								this.instance.UpdateVariablesValues()
 								this.instance.checkFeedbacks(
 									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
 									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
 									FeedbackId.galleryBased,
-									FeedbackId.groupBased
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
 								)
 							}
 							break
@@ -234,42 +238,96 @@ export class OSC {
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].videoOn = true
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'videoOff':
 							this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								this.instance.ZoomUserData[zoomId].videoOn = false
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'mute':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].mute = true
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'unMute':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].mute = false
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'handRaised':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].handRaised = true
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'handLowered':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].handRaised = false
-								this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
 							}
 							break
 						case 'online':
@@ -333,7 +391,7 @@ export class OSC {
 								)
 								if (index > -1) {
 									this.instance.ZoomGroupData[0].users.splice(index, 1)
-									this.instance.checkFeedbacks(FeedbackId.groupBased)
+									this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 									this.updateLoop = true
 								}
 							} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
@@ -346,7 +404,7 @@ export class OSC {
 										userName: data.args[1].value,
 									})
 									this.instance.log('debug', `added host: ${data.args[1].value}`)
-									this.instance.checkFeedbacks(FeedbackId.groupBased)
+									this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 								}
 								this.updateLoop = true
 							}
@@ -378,7 +436,14 @@ export class OSC {
 					})
 					this.instance.InitVariables()
 					this.instance.UpdateVariablesValues()
-					this.instance.checkFeedbacks(FeedbackId.indexBased, FeedbackId.galleryBased, FeedbackId.groupBased)
+					this.instance.checkFeedbacks(
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
+						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced
+					)
 					break
 
 				case 'galleryCount':
