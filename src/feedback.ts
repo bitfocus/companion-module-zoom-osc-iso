@@ -210,7 +210,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
 							.zoomID
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsAdvanced(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}
@@ -276,7 +276,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
 					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsAdvanced(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}
@@ -345,7 +345,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
 
-						return feedbackResultsAdvanced(instance, zoomID)
+						return feedbackResultsAdvanced(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 					}
 				}
 
@@ -416,7 +416,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
 							.zoomId
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsAdvanced(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}

@@ -97,10 +97,13 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'dropdown',
 			id: 'feedbackImagesWithIcons',
-			label: 'Participant Feedback With Icons',
+			label: 'Participant Multi-State Feedback Image Design',
 			choices: [
-				{ id: 0, label: 'Without Icons' },
-				{ id: 1, label: 'With Icons' },
+				{ id: 0, label: 'Icons at the Top (Only Active States)' },
+				{ id: 1, label: 'Icons at the Top (On and Off States)' },
+				{ id: 2, label: 'Icons at the Bottom (Only Active States)' },
+				{ id: 3, label: 'Icons at the Bottom (On and Off States)' },
+				{ id: 4, label: 'Turn Off Multi-State feedback' },
 			],
 			default: 1,
 			width: 6,
