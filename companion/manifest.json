@@ -11,6 +11,10 @@
 		{
 			"name": "JeffreyDavidsz",
 			"email": "jeffrey.davidsz@vicreo.eu"
+		},
+		{
+			"name": "Justin James",
+			"email": "digitaldrummerj@gmail.com"
 		}
 	],
 	"legacyIds": [],
@@ -21,12 +25,6 @@
 		"entrypoint": "../dist/index.js"
 	},
 	"manufacturer": "Zoom",
-	"products": [
-		"OSC/ISO"
-	],
-	"keywords": [
-		"zoom",
-		"ZoomOSC",
-		"ZoomISO"
-	]
+	"products": ["OSC/ISO"],
+	"keywords": ["zoom", "ZoomOSC", "ZoomISO"]
 }
