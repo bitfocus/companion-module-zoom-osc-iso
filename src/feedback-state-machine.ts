@@ -247,7 +247,7 @@ export function feedbackResultsAdvanced(
 		const stateIndex = stateMachine.states.findIndex((state) => state.toString() === participantState.toString())
 		const image = getImageForState(
 			stateMachine.states[stateIndex],
-			instance.config.feedbackImagesWithIcons !== undefined ? instance.config.feedbackImagesWithIcons : 1,
+			instance.config.feedbackImagesWithIcons !== undefined ? instance.config.feedbackImagesWithIcons : 3,
 			imageSize
 		)
 		return {

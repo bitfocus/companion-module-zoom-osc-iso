@@ -2,8 +2,6 @@ import { combineRgb, CompanionButtonPresetDefinition, CompanionPresetDefinitions
 import { ActionId } from './actions'
 import { FeedbackId, feedbackType } from './feedback'
 
-const { images } = require('./images') // eslint-disable-line
-
 import {
 	padding,
 	userExist,
@@ -52,10 +50,10 @@ export function GetPresetList(
 			name: `Caller${index}`,
 			style: {
 				text: `\\n${index}. $(zoomosc:Participant${padding(index, 3)})`,
-				size: 'auto',
+				size: '7',
 				color: combineRgb(255, 255, 255),
 				bgcolor: combineRgb(0, 0, 0),
-				alignment: 'center:bottom',
+				alignment: 'left:top',
 			},
 			steps: [
 				{
@@ -76,44 +74,11 @@ export function GetPresetList(
 					feedbackId: FeedbackId.indexBased,
 					options: {
 						position: index,
-						type: feedbackType.micLive,
-					},
-					style: {
-						color: combineRgb(255, 255, 255),
-						bgcolor: combineRgb(255, 0, 0),
-					},
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.handRaised,
-						handRaised: 1,
-					},
-					style: {
-						png64: images.handRaised,
-					},
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.activeSpeaker,
-					},
-					style: {
-						color: combineRgb(255, 255, 255),
-						bgcolor: combineRgb(0, 0, 255),
-					},
-				},
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
 						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 128, 0),
+						bgcolor: combineRgb(72, 72, 72),
 					},
 				},
 				{
@@ -139,11 +104,11 @@ export function GetPresetList(
 			category: 'Select from Gallery',
 			name: `$(zoomosc:Gallery position ${index})`,
 			style: {
-				text: `\\nGal ${index}\\n$(zoomosc:GalleryPosition${padding(index, 2)})`,
-				size: 'auto',
+				text: `\\n${index}. $(zoomosc:GalleryPosition${padding(index, 2)})`,
+				size: '7',
 				color: combineRgb(255, 255, 255),
 				bgcolor: combineRgb(0, 0, 0),
-				alignment: 'center:bottom',
+				alignment: 'left:top',
 			},
 			steps: [
 				{
@@ -156,43 +121,11 @@ export function GetPresetList(
 					feedbackId: FeedbackId.galleryBased,
 					options: {
 						position: index,
-						type: feedbackType.micLive,
-					},
-					style: {
-						color: combineRgb(255, 255, 255),
-						bgcolor: combineRgb(255, 0, 0),
-					},
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.activeSpeaker,
-					},
-					style: {
-						color: combineRgb(255, 255, 255),
-						bgcolor: combineRgb(0, 0, 255),
-					},
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.handRaised,
-					},
-					style: {
-						png64: images.handRaised,
-					},
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
 						type: feedbackType.selected,
 					},
 					style: {
 						color: combineRgb(0, 0, 0),
-						bgcolor: combineRgb(255, 128, 0),
+						bgcolor: combineRgb(72, 72, 72),
 					},
 				},
 				{
@@ -303,45 +236,13 @@ export function GetPresetList(
 		name: `Select by name`,
 		style: {
 			text: `Select by name`,
-			size: 'auto',
+			size: '7',
 			color: combineRgb(255, 255, 255),
 			bgcolor: combineRgb(0, 0, 0),
-			alignment: 'center:bottom',
+			alignment: 'left:top',
 		},
 		steps: [{ down: [{ actionId: ActionId.selectUserByName, options: { option: 'toggle' } }], up: [] }],
 		feedbacks: [
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.micLive,
-				},
-				style: {
-					color: combineRgb(255, 255, 255),
-					bgcolor: combineRgb(255, 0, 0),
-				},
-			},
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.handRaised,
-				},
-				style: {
-					png64: images.handRaised,
-				},
-			},
-			{
-				feedbackId: FeedbackId.userNameBased,
-				options: {
-					name: '',
-					type: feedbackType.activeSpeaker,
-				},
-				style: {
-					color: combineRgb(255, 255, 255),
-					bgcolor: combineRgb(0, 0, 255),
-				},
-			},
 			{
 				feedbackId: FeedbackId.userNameBased,
 				options: {
@@ -350,7 +251,7 @@ export function GetPresetList(
 				},
 				style: {
 					color: combineRgb(0, 0, 0),
-					bgcolor: combineRgb(255, 128, 0),
+					bgcolor: combineRgb(72, 72, 72),
 				},
 			},
 			{
@@ -504,11 +405,11 @@ export function GetPresetList(
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
 				name: 'Group selection',
 				style: {
-					text: `\\n$(zoomosc:Group${index})-${position}\\n$(zoomosc:Group${index}Position${position})`,
-					size: 'auto',
+					text: `\\n${position}. $(zoomosc:Group${index}Position${position})`,
+					size: '7',
 					color: combineRgb(255, 255, 255),
 					bgcolor: combineRgb(0, 0, 0),
-					alignment: 'center:bottom',
+					alignment: 'left:top',
 				},
 				steps: [
 					{
@@ -527,34 +428,11 @@ export function GetPresetList(
 						options: {
 							group: index,
 							position: position,
-							type: feedbackType.micLive,
-						},
-						style: {
-							color: combineRgb(255, 255, 255),
-							bgcolor: combineRgb(255, 0, 0),
-						},
-					},
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.handRaised,
-						},
-						style: {
-							png64: images.handRaised,
-						},
-					},
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
 							type: feedbackType.selected,
 						},
 						style: {
 							color: combineRgb(0, 0, 0),
-							bgcolor: combineRgb(255, 128, 0),
+							bgcolor: combineRgb(72, 72, 72),
 						},
 					},
 					{
