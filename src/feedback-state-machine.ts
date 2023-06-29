@@ -203,13 +203,6 @@ export function feedbackResultsMultiState(
 
 	if (userExist(zoomID, instance.ZoomUserData)) {
 		const participantState = getParticipantState(instance, zoomID)
-
-		instance.log(
-			'debug',
-			`feedback: user - ${JSON.stringify(
-				instance.ZoomUserData[zoomID]
-			)}, **** STATE **** - ${participantState}, *** Active Speaker *** ${instance.ZoomClientDataObj.activeSpeaker}`
-		)
 		const stateIndex = stateMachine.states.findIndex((state) => state.toString() === participantState.toString())
 		const image = getImageForState(
 			stateMachine.states[stateIndex],
