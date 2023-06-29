@@ -97,10 +97,9 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'dropdown',
 			id: 'feedbackImagesWithIcons',
-			label: 'Participant Multi-State Feedback Icon Location and Design',
+			label: 'Participant Multi-State Feedback Design',
 			choices: [
-				{ id: 0, label: 'Top (Only Active States)' },
-				{ id: 1, label: 'Top (On and Off States)' },
+				{ id: 0, label: 'Bottom (On and Off For Mic/Camera, Only on for Hand Raise)' },
 				{ id: 2, label: 'Bottom (Only Active States)' },
 				{ id: 3, label: 'Bottom (On and Off States)' },
 				{ id: 4, label: 'Disable' },

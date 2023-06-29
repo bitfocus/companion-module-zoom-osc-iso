@@ -3,20 +3,18 @@ import { ZoomConfig } from './config'
 import { InstanceBaseExt, userExist } from './utils'
 const { images } = require('./images') // eslint-disable-line
 
-type State = [boolean, boolean, boolean, boolean]
-interface StateMachine {
-	states: State[]
-	atTop: Record<string, string>
-	atTop58Height: Record<string, string>
+type FeedbackMultiState = [boolean, boolean, boolean, boolean]
+interface FeedbackMultiStateMachine {
+	states: FeedbackMultiState[]
+	atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised: Record<string, string>
+	atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised58Height: Record<string, string>
 	atBottom: Record<string, string>
 	atBottom58Height: Record<string, string>
-	atTopAll: Record<string, string>
-	atTop58HeightAll: Record<string, string>
 	atBottomAll: Record<string, string>
 	atBottom58HeightAll: Record<string, string>
 }
 
-const stateMachine: StateMachine = {
+const stateMachine: FeedbackMultiStateMachine = {
 	states: [
 		[false, false, false, false],
 		[false, false, false, false],
@@ -51,41 +49,41 @@ const stateMachine: StateMachine = {
 		[true, true, true, true],
 		[true, true, true, true],
 	],
-	atTop: {
-		'false,false,false,false': images.TopMicOn,
-		'false,false,false,true': images.TopMicOnActiveSpeaker,
-		'false,false,true,false': images.TopMicOnHandRaised,
-		'false,false,true,true': images.TopMicOnHandRaisedActiveSpeaker,
-		'false,true,false,false': images.TopMicOnCameraOn,
-		'false,true,false,true': images.TopMicOnCameraOnActiveSpeaker,
-		'false,true,true,false': images.TopMicOnCameraOnHandRaised,
-		'false,true,true,true': images.TopAllOn,
-		'true,false,false,false': images.TopAllOff,
-		'true,false,false,true': images.TopActiveSpeaker,
-		'true,false,true,false': images.TopHandRaised,
-		'true,false,true,true': images.TopHandRaisedActiveSpeaker,
-		'true,true,false,false': images.TopCameraOn,
-		'true,true,false,true': images.TopCameraOnActiveSpeaker,
-		'true,true,true,false': images.TopCameraOnHandRaised,
-		'true,true,true,true': images.TopCameraOnHandRaisedActiveSpeaker,
+	atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised: {
+		'false,false,false,false': images.BottomHRMicOn,
+		'false,false,false,true': images.BottomHRAllMicOnActiveSpeaker,
+		'false,false,true,false': images.BottomHRAllMicOnHandRaised,
+		'false,false,true,true': images.BottomHRAllMicOnHandRaisedActiveSpeaker,
+		'false,true,false,false': images.BottomHRAllMicOnCameraOn,
+		'false,true,false,true': images.BottomHRAllMicOnCameraOnActiveSpeaker,
+		'false,true,true,false': images.BottomHRAllMicOnCameraOnHandRaised,
+		'false,true,true,true': images.BottomHRAllAllOn,
+		'true,false,false,false': images.BottomHRAllAllOff,
+		'true,false,false,true': images.BottomHRAllActiveSpeaker,
+		'true,false,true,false': images.BottomHRAllHandRaised,
+		'true,false,true,true': images.BottomHRAllHandRaisedActiveSpeaker,
+		'true,true,false,false': images.BottomHRAllCameraOn,
+		'true,true,false,true': images.BottomHRAllCameraOnActiveSpeaker,
+		'true,true,true,false': images.BottomHRAllCameraOnHandRaised,
+		'true,true,true,true': images.BottomHRAllCameraOnHandRaisedActiveSpeaker,
 	},
-	atTop58Height: {
-		'false,false,false,false': images.Top58MicOn,
-		'false,false,false,true': images.Top58MicOnActiveSpeaker,
-		'false,false,true,false': images.Top58MicOnHandRaised,
-		'false,false,true,true': images.Top58MicOnHandRaisedActiveSpeaker,
-		'false,true,false,false': images.Top58MicOnCameraOn,
-		'false,true,false,true': images.Top58MicOnCameraOnActiveSpeaker,
-		'false,true,true,false': images.Top58MicOnCameraOnHandRaised,
-		'false,true,true,true': images.Top58AllOn,
-		'true,false,false,false': images.Top58AllOff,
-		'true,false,false,true': images.Top58ActiveSpeaker,
-		'true,false,true,false': images.Top58HandRaised,
-		'true,false,true,true': images.Top58HandRaisedActiveSpeaker,
-		'true,true,false,false': images.Top58CameraOn,
-		'true,true,false,true': images.Top58CameraOnActiveSpeaker,
-		'true,true,true,false': images.Top58CameraOnHandRaised,
-		'true,true,true,true': images.Top58CameraOnHandRaisedActiveSpeaker,
+	atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised58Height: {
+		'false,false,false,false': images.BottomHR58AllMicOn,
+		'false,false,false,true': images.BottomHR58AllMicOnActiveSpeaker,
+		'false,false,true,false': images.BottomHR58AllMicOnHandRaised,
+		'false,false,true,true': images.BottomHR58AllMicOnHandRaisedActiveSpeaker,
+		'false,true,false,false': images.BottomHR58AllMicOnCameraOn,
+		'false,true,false,true': images.BottomHR58AllMicOnCameraOnActiveSpeaker,
+		'false,true,true,false': images.BottomHR58AllMicOnCameraOnHandRaised,
+		'false,true,true,true': images.BottomHR58AllAllOn,
+		'true,false,false,false': images.BottomHR58AllAllOff,
+		'true,false,false,true': images.BottomHR58AllActiveSpeaker,
+		'true,false,true,false': images.BottomHR58AllHandRaised,
+		'true,false,true,true': images.BottomHR58AllHandRaisedActiveSpeaker,
+		'true,true,false,false': images.BottomHR58AllCameraOn,
+		'true,true,false,true': images.BottomHR58AllCameraOnActiveSpeaker,
+		'true,true,true,false': images.BottomHR58AllCameraOnHandRaised,
+		'true,true,true,true': images.BottomHR58AllCameraOnHandRaisedActiveSpeaker,
 	},
 	atBottom: {
 		'false,false,false,false': images.BottomMicOn,
@@ -122,42 +120,6 @@ const stateMachine: StateMachine = {
 		'true,true,false,true': images.Bottom58CameraOnActiveSpeaker,
 		'true,true,true,false': images.Bottom58CameraOnHandRaised,
 		'true,true,true,true': images.Bottom58CameraOnHandRaisedActiveSpeaker,
-	},
-	atTopAll: {
-		'false,false,false,false': images.TopAllMicOn,
-		'false,false,false,true': images.TopAllMicOnActiveSpeaker,
-		'false,false,true,false': images.TopAllMicOnHandRaised,
-		'false,false,true,true': images.TopAllMicOnHandRaisedActiveSpeaker,
-		'false,true,false,false': images.TopAllMicOnCameraOn,
-		'false,true,false,true': images.TopAllMicOnCameraOnActiveSpeaker,
-		'false,true,true,false': images.TopAllMicOnCameraOnHandRaised,
-		'false,true,true,true': images.TopAllAllOn,
-		'true,false,false,false': images.TopAllAllOff,
-		'true,false,false,true': images.TopAllActiveSpeaker,
-		'true,false,true,false': images.TopAllHandRaised,
-		'true,false,true,true': images.TopAllHandRaisedActiveSpeaker,
-		'true,true,false,false': images.TopAllCameraOn,
-		'true,true,false,true': images.TopAllCameraOnActiveSpeaker,
-		'true,true,true,false': images.TopAllCameraOnHandRaised,
-		'true,true,true,true': images.TopAllCameraOnHandRaisedActiveSpeaker,
-	},
-	atTop58HeightAll: {
-		'false,false,false,false': images.Top58AllMicOn,
-		'false,false,false,true': images.Top58AllMicOnActiveSpeaker,
-		'false,false,true,false': images.Top58AllMicOnHandRaised,
-		'false,false,true,true': images.Top58AllMicOnHandRaisedActiveSpeaker,
-		'false,true,false,false': images.Top58AllMicOnCameraOn,
-		'false,true,false,true': images.Top58AllMicOnCameraOnActiveSpeaker,
-		'false,true,true,false': images.Top58AllMicOnCameraOnHandRaised,
-		'false,true,true,true': images.Top58AllAllOn,
-		'true,false,false,false': images.Top58AllAllOff,
-		'true,false,false,true': images.Top58AllActiveSpeaker,
-		'true,false,true,false': images.Top58AllHandRaised,
-		'true,false,true,true': images.Top58AllHandRaisedActiveSpeaker,
-		'true,true,false,false': images.Top58AllCameraOn,
-		'true,true,false,true': images.Top58AllCameraOnActiveSpeaker,
-		'true,true,true,false': images.Top58AllCameraOnHandRaised,
-		'true,true,true,true': images.Top58AllCameraOnHandRaisedActiveSpeaker,
 	},
 	atBottomAll: {
 		'false,false,false,false': images.BottomAllMicOn,
@@ -197,43 +159,40 @@ const stateMachine: StateMachine = {
 	},
 }
 
-function getImageForState(state: State, feedbackImageType: number, imageSize: number): string {
+function getImageForState(state: FeedbackMultiState, feedbackImageType: number, imageSize: number): string {
 	const stateString = state.toString()
 	switch (feedbackImageType) {
-		case 1:
+		case 0:
 			if (imageSize === 58) {
-				return stateMachine.atTop58HeightAll[stateString]
+				return stateMachine.atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised58Height[stateString]
 			}
-			return stateMachine.atTopAll[stateString]
+			return stateMachine.atBottomOnOffForCameraMicActiveSpeakerAndOnlyOnForHandRaised[stateString]
 		case 2:
 			if (imageSize === 58) {
 				return stateMachine.atBottom58Height[stateString]
 			}
 			return stateMachine.atBottom[stateString]
 		case 3:
+		default:
 			if (imageSize === 58) {
 				return stateMachine.atBottom58HeightAll[stateString]
 			}
 			return stateMachine.atBottomAll[stateString]
-		default:
-			if (imageSize === 58) {
-				return stateMachine.atTop58Height[stateString]
-			}
-			return stateMachine.atTop[stateString]
 	}
 }
 
-function getParticipantState(instance: InstanceBaseExt<ZoomConfig>, zoomID: number): State {
+function getParticipantState(instance: InstanceBaseExt<ZoomConfig>, zoomID: number): FeedbackMultiState {
 	return [
-		instance.ZoomUserData[zoomID].mute || false,
-		instance.ZoomUserData[zoomID].videoOn || false,
-		instance.ZoomUserData[zoomID].handRaised || false,
-		(instance.ZoomClientDataObj.activeSpeaker === (instance.ZoomUserData[zoomID].userName || false)) === true &&
-			(instance.ZoomUserData[zoomID].mute || false) === false,
+		instance.ZoomUserData[zoomID].mute || false, // false = muted, true = unmuted
+		instance.ZoomUserData[zoomID].videoOn || false, // false = camera off, true = camera on
+		instance.ZoomUserData[zoomID].handRaised || false, // false = hand lowered, true = hand raised
+		instance.ZoomUserData[zoomID].userName !== undefined &&
+			(instance.ZoomUserData[zoomID].mute || false) === false &&
+			instance.ZoomClientDataObj.activeSpeaker === instance.ZoomUserData[zoomID].userName, // ensure that user is unmuted for active speaker
 	]
 }
 
-export function feedbackResultsAdvanced(
+export function feedbackResultsMultiState(
 	instance: InstanceBaseExt<ZoomConfig>,
 	zoomID: number,
 	imageSize: number
