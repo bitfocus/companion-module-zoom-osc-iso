@@ -17,6 +17,9 @@ import {
 	ZoomGroupDataInterface,
 } from './utils'
 
+import * as fs from 'fs'
+import * as os from 'os'
+
 const select = { single: true, multi: false }
 
 enum selectionMethod {
@@ -187,6 +190,8 @@ export enum ActionId {
 	broadcastMessageToBreakoutRooms = 'broadcastMessageToBreakoutRooms',
 	joinMeeting = 'joinMeeting',
 	restorePreviousSelection = 'restorePreviousSelection',
+	loadGroupFromFile = 'loadGroupFromFile',
+	saveGroupToFile = 'saveGroupToFile',
 }
 
 /**
@@ -344,6 +349,89 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	}
 
 	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
+		[ActionId.saveGroupToFile]: {
+			name: 'Save Group to File',
+			options: [
+				{
+					type: 'textinput',
+					label: 'File to Save (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+				groupOptionNoHost,
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const group = action.options.group as number
+				const users = instance.ZoomGroupData[group].users
+				let data = ''
+				for (const user of users) {
+					if (data !== '') {
+						data += os.EOL
+					}
+					data += user.userName
+				}
+
+				fs.writeFileSync(filepath, data)
+			},
+		},
+		[ActionId.loadGroupFromFile]: {
+			name: 'Load Group From File',
+			options: [
+				{
+					type: 'textinput',
+					label: 'File to Load (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+				groupOptionNoHost,
+			],
+			callback: async (action): Promise<void> => {
+				instance.log('debug', `restoreGroup: group - ${action.options.group}, file - ${action.options.filepath}`)
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const group = action.options.group as number
+				try {
+					fs.readFile(filepath, 'utf8', (err, data) => {
+						if (err) {
+							instance.log('error', `error reading file: ${JSON.stringify(err)}`)
+						} else {
+							const selectedNames = data.split('\r\n')
+							instance.log('debug', `restoreGroup: selectedNames - ${selectedNames}`)
+
+							for (const selectedName of selectedNames) {
+								instance.log('debug', `restoreGroup: checking user - ${selectedName}`)
+								for (const key in instance.ZoomUserData) {
+									if (userExist(Number(key), instance.ZoomUserData)) {
+										const user = instance.ZoomUserData[key]
+										instance.log('debug', `restoreGroup: foundUser - ${user.userName} - ${JSON.stringify(user)}`)
+										if (user.userName === selectedName) {
+											if (
+												!instance.ZoomGroupData[group].users.find(
+													(o: { zoomID: string | number }) => o !== null && o.zoomID === user.zoomId
+												)
+											) {
+												instance.ZoomGroupData[group].users.push({
+													zoomID: user.zoomId,
+													userName: user.userName,
+												})
+
+												instance.log('debug', `added user: ${user.userName} to group ${group}`)
+												instance.UpdateVariablesValues()
+												instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
+											}
+										}
+									}
+								}
+							}
+						}
+					})
+				} catch (error) {
+					instance.log('error', 'Error Reading File: ' + error)
+				}
+			},
+		},
 		[ActionId.setAudioGainReduction]: {
 			name: 'set Audio Gain Reduction',
 			options: [options.channel, options.reductionAmount],
