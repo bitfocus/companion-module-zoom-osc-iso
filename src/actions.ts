@@ -389,7 +389,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 				groupOptionNoHost,
 			],
 			callback: async (action): Promise<void> => {
-				instance.log('debug', `restoreGroup: group - ${action.options.group}, file - ${action.options.filepath}`)
 				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
 				const group = action.options.group as number
 				try {
@@ -398,14 +397,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 							instance.log('error', `error reading file: ${JSON.stringify(err)}`)
 						} else {
 							const selectedNames = data.split('\r\n')
-							instance.log('debug', `restoreGroup: selectedNames - ${selectedNames}`)
 
 							for (const selectedName of selectedNames) {
-								instance.log('debug', `restoreGroup: checking user - ${selectedName}`)
 								for (const key in instance.ZoomUserData) {
 									if (userExist(Number(key), instance.ZoomUserData)) {
 										const user = instance.ZoomUserData[key]
-										instance.log('debug', `restoreGroup: foundUser - ${user.userName} - ${JSON.stringify(user)}`)
 										if (user.userName === selectedName) {
 											if (
 												!instance.ZoomGroupData[group].users.find(
