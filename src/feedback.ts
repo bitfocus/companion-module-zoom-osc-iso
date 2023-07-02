@@ -5,7 +5,7 @@ import {
 	InputValue,
 } from '@companion-module/base'
 import { ZoomConfig } from './config'
-import { feedbackResultsAdvanced } from './feedback-state-machine'
+import { feedbackResultsMultiState } from './feedback-state-machine'
 import { InstanceBaseExt, userExist } from './utils'
 
 export enum FeedbackId {
@@ -185,7 +185,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.groupBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Group based feedback (advanced)',
+			name: 'Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Position 1 - 999',
 			options: [
 				{
@@ -210,7 +210,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
 							.zoomID
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}
@@ -260,7 +260,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.indexBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Participant position based feedback (advanced)',
+			name: 'Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Feedback based on index of the participant',
 			options: [
 				{
@@ -276,7 +276,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
 					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}
@@ -328,7 +328,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.userNameBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Username based feedback (advanced)',
+			name: 'Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'type in username',
 			options: [
 				{
@@ -345,7 +345,11 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
 
-						return feedbackResultsAdvanced(instance, zoomID)
+						return feedbackResultsMultiState(
+							instance,
+							zoomID,
+							feedback.image === undefined ? 72 : feedback.image.height
+						)
 					}
 				}
 
@@ -398,7 +402,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.galleryBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Gallery based feedback (advanced)',
+			name: 'Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Position 1 - 49',
 			options: [
 				{
@@ -416,7 +420,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
 							.zoomId
 
-					return feedbackResultsAdvanced(instance, zoomID)
+					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
 
 				return {}

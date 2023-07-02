@@ -521,8 +521,16 @@ export class OSC {
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
 						this.instance.ZoomGroupData = []
+						this.instance.log(
+							'debug',
+							`meetingStatus Offline: numberOfGroups - ${this.instance.ZoomClientDataObj.numberOfGroups}`
+						)
 						for (const key of Object.keys(this.instance.ZoomUserData)) {
 							if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+								this.instance.log(
+									'debug',
+									`meetingStatus Offline: numberOfGroups - ${JSON.stringify(this.instance.ZoomUserData[parseInt(key)])}`
+								)
 								delete this.instance.ZoomUserData[parseInt(key)]
 							}
 						}
