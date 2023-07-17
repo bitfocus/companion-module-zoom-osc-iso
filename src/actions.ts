@@ -17,6 +17,9 @@ import {
 	ZoomGroupDataInterface,
 } from './utils'
 
+import * as fs from 'fs'
+import * as os from 'os'
+
 const select = { single: true, multi: false }
 
 enum selectionMethod {
@@ -187,6 +190,7 @@ export enum ActionId {
 	broadcastMessageToBreakoutRooms = 'broadcastMessageToBreakoutRooms',
 	joinMeeting = 'joinMeeting',
 	restorePreviousSelection = 'restorePreviousSelection',
+	takeAttendance = 'takeAttendance',
 }
 
 /**
@@ -344,6 +348,41 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	}
 
 	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
+		[ActionId.takeAttendance]: {
+			name: 'Take Attendance',
+			options: [
+				{
+					type: 'textinput',
+					label: 'File to Save (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+				{
+					type: 'checkbox',
+					id: 'includeVideoState',
+					label: 'Include Video On/Off Status',
+					default: false,
+				},
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				let data = ''
+				for (const key in instance.ZoomUserData) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
+						if (data !== '') {
+							data += os.EOL
+						}
+						data += `${instance.ZoomUserData[key].userName}`
+						if (action.options.includeVideoState && instance.ZoomUserData[key].videoOn !== undefined) {
+							data += `,${instance.ZoomUserData[key].videoOn}`
+						}
+					}
+				}
+
+				fs.writeFileSync(filepath, data)
+			},
+		},
 		[ActionId.setAudioGainReduction]: {
 			name: 'set Audio Gain Reduction',
 			options: [options.channel, options.reductionAmount],
