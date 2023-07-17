@@ -37,9 +37,11 @@ export const buttonTextDefaultLength = 50
 export const buttonTextActiveSpeakerLength = 40
 export const alignmentTopLeft = 'left:top'
 export const alignmentTopCenter = 'center:top'
-export const feedbackStyleSelected: CompanionFeedbackButtonStyleResult = {
-	color: colorBlack,
-	bgcolor: colorDarkGray,
+export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult => {
+	return {
+		color: colorBlack,
+		bgcolor: colorDarkGray,
+	}
 }
 
 export const getParticipantStyleDefault = (

@@ -4,7 +4,7 @@ import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } f
 import {
 	CompanionPresetDefinitionsExt,
 	PresetFeedbackDefinition,
-	feedbackStyleSelected,
+	getFeedbackStyleSelected,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils'
@@ -183,7 +183,7 @@ export function GetPresetsGroups(
 						position: position,
 						type: feedbackType.selected,
 					},
-					style: feedbackStyleSelected,
+					style: getFeedbackStyleSelected(),
 				},
 			]
 

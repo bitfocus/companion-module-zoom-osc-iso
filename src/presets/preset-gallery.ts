@@ -5,7 +5,7 @@ import { ZoomConfig } from '../config'
 import {
 	CompanionPresetDefinitionsExt,
 	PresetFeedbackDefinition,
-	feedbackStyleSelected,
+	getFeedbackStyleSelected,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils'
@@ -21,7 +21,7 @@ export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): Co
 					position: index,
 					type: feedbackType.selected,
 				},
-				style: feedbackStyleSelected,
+				style: getFeedbackStyleSelected(),
 			},
 		]
 
