@@ -22,7 +22,7 @@
 		"osc": "^2.4.3"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "1.2.0",
+		"@companion-module/tools": "1.2.1",
 		"@types/node": "^18.0.0",
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.3",

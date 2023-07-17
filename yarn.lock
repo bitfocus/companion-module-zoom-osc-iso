@@ -23,10 +23,10 @@
     p-timeout "^4.1.0"
     tslib "^2.5.0"
 
-"@companion-module/tools@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@companion-module/tools/-/tools-1.2.0.tgz#5dd3518c476f6e824ae17741c25801050c0040b0"
-  integrity sha512-F+YaH2/Q3a6rm1ae+QpVOW4p3donRvbyYSbBcasyK919bZo6XLwUgwd/Mr1ZAoDWsqvy/VE3DUXBpZVLXpiV1Q==
+"@companion-module/tools@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@companion-module/tools/-/tools-1.2.1.tgz#c2679b9b821a513ed85616e382c6a832c216e425"
+  integrity sha512-lLKrbNDnwB8O0gjOQlQj0IeHo0eOC/2tfShRzwiIPoj5nBUjLr2pTJX1zRsDuWINs181bG1wVC+dYk7y7dwo5Q==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.50.0"
     "@typescript-eslint/parser" "^5.50.0"
@@ -38,7 +38,7 @@
     parse-author "^2.0.0"
     prettier "^2.8.3"
     tar "^6.1.13"
-    webpack "^5.75.0"
+    webpack "^5.76.0"
     webpack-cli "^5.0.1"
     zx "^7.1.1"
 
@@ -2624,7 +2624,7 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack@^5.75.0:
+webpack@^5.76.0:
   version "5.88.1"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.88.1.tgz#21eba01e81bd5edff1968aea726e2fbfd557d3f8"
   integrity sha512-FROX3TxQnC/ox4N+3xQoWZzvGXSuscxR32rbzjpXgEzWudJFEJBpdlkkob2ylrv5yzzufD1zph1OoFsLtm6stQ==
