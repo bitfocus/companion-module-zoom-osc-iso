@@ -1,12 +1,7 @@
-import {
-	CompanionFeedbackDefinitions,
-	combineRgb,
-	CompanionFeedbackDefinition,
-	InputValue,
-} from '@companion-module/base'
+import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { feedbackResultsMultiState } from './feedback-state-machine'
-import { InstanceBaseExt, userExist } from './utils'
+import { InstanceBaseExt, userExist, colorRed } from './utils'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -138,7 +133,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Group based feedback',
 			description: 'Position 1 - 999',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -221,7 +216,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Participant position based feedback',
 			description: 'Feedback based on index of the participant',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -287,7 +282,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Username based feedback',
 			description: 'type in username',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -361,7 +356,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Gallery based feedback',
 			description: 'Position 1 - 49',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -431,7 +426,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Status of the engine feedback',
 			description: 'Show feedback of the engine',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -459,7 +454,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Selected output feedback',
 			description: 'Selected output',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{
@@ -484,7 +479,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			name: 'Selected audio output feedback',
 			description: 'Selected audio output',
 			defaultStyle: {
-				bgcolor: combineRgb(255, 0, 0),
+				bgcolor: colorRed,
 			},
 			options: [
 				{

@@ -5,12 +5,21 @@ import {
 	CompanionInputFieldNumber,
 	CompanionInputFieldTextInput,
 	InstanceBase,
+	combineRgb,
 } from '@companion-module/base'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
 
 // Force options to have a default to prevent sending undefined values
 type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
+
+export const colorDarkGray = combineRgb(72, 72, 72)
+export const colorLightGray = combineRgb(230, 230, 230)
+export const colorBlack = combineRgb(0, 0, 0)
+export const colorWhite = combineRgb(255, 255, 255)
+export const colorRed = combineRgb(255, 0, 0)
+export const colorGreenOlive = combineRgb(141, 218, 77)
+export const colorTeal = combineRgb(111, 222, 222)
 
 enum SubscribeMode {
 	None = 0,
@@ -47,6 +56,7 @@ export interface ZoomClientDataObjInterface {
 	numberOfGroups: number
 	engineState: number
 }
+
 export interface ZoomUserDataInterface {
 	[key: number]: {
 		zoomId: number
@@ -159,7 +169,7 @@ export interface Options {
 	backgroundColorProgram: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorMicLive: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorYellow: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorGray: EnforceDefault<CompanionInputFieldColor, number>
+	backgroundcolorDarkGray: EnforceDefault<CompanionInputFieldColor, number>
 	backgroundColorGroup: EnforceDefault<CompanionInputFieldColor, number>
 }
 
@@ -180,6 +190,7 @@ export const userExist = (zoomId: number, zoomUserData: ZoomUserDataInterface): 
 
 	return false
 }
+
 export const options: Options = {
 	userSelectedInfo: {
 		type: 'textinput',
@@ -402,7 +413,7 @@ export const options: Options = {
 		id: 'bg_pvw',
 		default: rgb(0, 255, 0),
 	},
-	backgroundColorGray: {
+	backgroundcolorDarkGray: {
 		type: 'colorpicker',
 		label: 'Background color',
 		id: 'bg',

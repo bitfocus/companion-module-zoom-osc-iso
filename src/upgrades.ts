@@ -10,7 +10,7 @@ import { ZoomConfig } from './config'
 import { v2Actions, v2FeedbackTypes, v2Feedbacks } from './v2CommandsToUpgradeTov3'
 
 export function UpgradeV2toV3(
-	_context: CompanionUpgradeContext,
+	_context: CompanionUpgradeContext<ZoomConfig>,
 	_props: CompanionStaticUpgradeProps<ZoomConfig>
 ): CompanionStaticUpgradeResult<ZoomConfig> {
 	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
@@ -23,7 +23,7 @@ export function UpgradeV2toV3(
 }
 
 export function UpgradeV2ToV3(
-	_context: CompanionUpgradeContext,
+	_context: CompanionUpgradeContext<ZoomConfig>,
 	props: CompanionStaticUpgradeProps<ZoomConfig>
 ): CompanionStaticUpgradeResult<ZoomConfig> {
 	// let config: ZoomConfig = props.config;
