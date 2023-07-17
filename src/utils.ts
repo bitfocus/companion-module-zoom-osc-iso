@@ -1,6 +1,4 @@
 import {
-	SomeCompanionConfigField,
-	CompanionInputFieldColor,
 	CompanionInputFieldDropdown,
 	CompanionInputFieldNumber,
 	CompanionInputFieldTextInput,
@@ -21,18 +19,12 @@ export const colorRed = combineRgb(255, 0, 0)
 export const colorGreenOlive = combineRgb(141, 218, 77)
 export const colorTeal = combineRgb(111, 222, 222)
 
-enum SubscribeMode {
+export enum SubscribeMode {
 	None = 0,
 	TargetList = 1,
 	All = 2,
 	Panelists = 3,
 	OnlyGallery = 4,
-}
-
-enum EmbeddedAudioMode {
-	Mix = 0,
-	Off = 0,
-	ISO = 2,
 }
 
 export enum ZoomVersion {
@@ -127,50 +119,33 @@ export interface ZoomVariableLinkInterface {
 	userName: string
 }
 export interface Options {
-	userSelectedInfo: SomeCompanionConfigField
-
 	message: EnforceDefault<CompanionInputFieldTextInput, string>
-	password: EnforceDefault<CompanionInputFieldTextInput, string>
-	zak: EnforceDefault<CompanionInputFieldTextInput, string>
 	name: EnforceDefault<CompanionInputFieldTextInput, string>
 	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
+	channel: EnforceDefault<CompanionInputFieldNumber, number>
+	reductionAmount: EnforceDefault<CompanionInputFieldNumber, number>
 	userName: EnforceDefault<CompanionInputFieldTextInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
 	path: EnforceDefault<CompanionInputFieldTextInput, string>
 	customArgs: EnforceDefault<CompanionInputFieldTextInput, string>
-
+	videoLossMode: EnforceDefault<CompanionInputFieldDropdown, string>
 	intX: EnforceDefault<CompanionInputFieldNumber, number>
 	intY: EnforceDefault<CompanionInputFieldNumber, number>
 	level: EnforceDefault<CompanionInputFieldNumber, number>
 	output: EnforceDefault<CompanionInputFieldNumber, number>
 	count: EnforceDefault<CompanionInputFieldNumber, number>
-	channel: EnforceDefault<CompanionInputFieldNumber, number>
-	reductionAmount: EnforceDefault<CompanionInputFieldNumber, number>
 	mode: EnforceDefault<CompanionInputFieldNumber, number>
 	id: EnforceDefault<CompanionInputFieldNumber, number>
-	postCloseSeconds: EnforceDefault<CompanionInputFieldNumber, number>
-	breakoutDurrationSeconds: EnforceDefault<CompanionInputFieldNumber, number>
-
+	password: EnforceDefault<CompanionInputFieldTextInput, string>
+	zak: EnforceDefault<CompanionInputFieldTextInput, string>
+	video: EnforceDefault<CompanionInputFieldDropdown, number>
 	allowChooseBreakout: EnforceDefault<CompanionInputFieldDropdown, number>
+	postCloseSeconds: EnforceDefault<CompanionInputFieldNumber, number>
 	allowReturnAtWill: EnforceDefault<CompanionInputFieldDropdown, number>
 	autoMoveParticipants: EnforceDefault<CompanionInputFieldDropdown, number>
 	useTimer: EnforceDefault<CompanionInputFieldDropdown, number>
 	closeWithTimer: EnforceDefault<CompanionInputFieldDropdown, number>
-	mute: EnforceDefault<CompanionInputFieldDropdown, number>
-	subscribeLevel: EnforceDefault<CompanionInputFieldDropdown, number>
-	isoEmbeddedAudioMode: EnforceDefault<CompanionInputFieldDropdown, number>
-	handRaised: EnforceDefault<CompanionInputFieldDropdown, number>
-	video: EnforceDefault<CompanionInputFieldDropdown, number>
-	videoLossMode: EnforceDefault<CompanionInputFieldDropdown, string>
-
-	foregroundColor: EnforceDefault<CompanionInputFieldColor, number>
-	foregroundColorBlack: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorPreview: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorProgram: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorMicLive: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorYellow: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundcolorDarkGray: EnforceDefault<CompanionInputFieldColor, number>
-	backgroundColorGroup: EnforceDefault<CompanionInputFieldColor, number>
+	breakoutDurrationSeconds: EnforceDefault<CompanionInputFieldNumber, number>
 }
 
 /**
@@ -192,13 +167,6 @@ export const userExist = (zoomId: number, zoomUserData: ZoomUserDataInterface): 
 }
 
 export const options: Options = {
-	userSelectedInfo: {
-		type: 'textinput',
-		id: 'info',
-		width: 12,
-		label: 'Make sure you select a user or a group first, via presets',
-		useVariables: true,
-	},
 	message: {
 		type: 'textinput',
 		label: 'Message',
@@ -313,30 +281,6 @@ export const options: Options = {
 		max: 512,
 		default: 1,
 	},
-	subscribeLevel: {
-		type: 'dropdown',
-		label: 'Subscribtion level',
-		id: 'level',
-		choices: [
-			{ id: SubscribeMode.None, label: 'None' },
-			{ id: SubscribeMode.TargetList, label: 'Target List' },
-			{ id: SubscribeMode.All, label: 'All' },
-			{ id: SubscribeMode.Panelists, label: 'Panelists' },
-			{ id: SubscribeMode.OnlyGallery, label: 'Only Gallery' },
-		],
-		default: SubscribeMode.All,
-	},
-	isoEmbeddedAudioMode: {
-		type: 'dropdown',
-		label: 'Output Embedded Audio mode',
-		id: 'embeddedAudioMode',
-		choices: [
-			{ id: EmbeddedAudioMode.ISO, label: 'ISO' },
-			{ id: EmbeddedAudioMode.Mix, label: 'Mix' },
-			{ id: EmbeddedAudioMode.Off, label: 'Off' },
-		],
-		default: EmbeddedAudioMode.ISO,
-	},
 	mode: {
 		type: 'number',
 		label: 'Mode',
@@ -365,16 +309,6 @@ export const options: Options = {
 		id: 'zak',
 		default: '',
 	},
-	mute: {
-		type: 'dropdown',
-		label: 'Mute',
-		id: 'mute',
-		default: 0,
-		choices: [
-			{ id: 0, label: 'unmute' },
-			{ id: 1, label: 'mute' },
-		],
-	},
 	video: {
 		type: 'dropdown',
 		label: 'Camera on/of',
@@ -384,64 +318,6 @@ export const options: Options = {
 			{ id: 0, label: 'off' },
 			{ id: 1, label: 'on' },
 		],
-	},
-	handRaised: {
-		type: 'dropdown',
-		label: 'Handraise or lower',
-		id: 'handRaised',
-		default: 0,
-		choices: [
-			{ id: 0, label: 'raised' },
-			{ id: 1, label: 'lowered' },
-		],
-	},
-	foregroundColor: {
-		type: 'colorpicker',
-		label: 'Foreground color',
-		id: 'fg',
-		default: rgb(255, 255, 255),
-	},
-	foregroundColorBlack: {
-		type: 'colorpicker',
-		label: 'Foreground color',
-		id: 'fg',
-		default: rgb(0, 0, 0),
-	},
-	backgroundColorPreview: {
-		type: 'colorpicker',
-		label: 'Background color when in preview',
-		id: 'bg_pvw',
-		default: rgb(0, 255, 0),
-	},
-	backgroundcolorDarkGray: {
-		type: 'colorpicker',
-		label: 'Background color',
-		id: 'bg',
-		default: rgb(125, 125, 125),
-	},
-	backgroundColorGroup: {
-		type: 'colorpicker',
-		label: 'Background color',
-		id: 'bg',
-		default: rgb(125, 125, 125),
-	},
-	backgroundColorProgram: {
-		type: 'colorpicker',
-		label: 'Background color when in grogram',
-		id: 'bg',
-		default: rgb(255, 0, 0),
-	},
-	backgroundColorMicLive: {
-		type: 'colorpicker',
-		label: 'Background color when microphone is live',
-		id: 'bg',
-		default: rgb(255, 0, 0),
-	},
-	backgroundColorYellow: {
-		type: 'colorpicker',
-		label: 'Background color',
-		id: 'bg',
-		default: rgb(255, 255, 0),
 	},
 	allowChooseBreakout: {
 		type: 'dropdown',
@@ -589,7 +465,6 @@ export const padding = (num: number, size: number): string => {
 export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	[x: string]: any
 	ZoomVariableLink: ZoomVariableLinkInterface[]
-	// variables: any
 	ZoomClientDataObj: ZoomClientDataObjInterface
 	OSC: any
 	ZoomGroupData: ZoomGroupDataInterface[]
