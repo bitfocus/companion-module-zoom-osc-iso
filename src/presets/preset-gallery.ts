@@ -1,4 +1,3 @@
-import { ActionId } from '../actions'
 import { FeedbackId, feedbackType } from '../feedback'
 import { InstanceBaseExt, padding } from '../utils'
 import { ZoomConfig } from '../config'
@@ -9,6 +8,7 @@ import {
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils'
+import { ActionIdGallery } from '../actions/action-gallery'
 
 export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -52,7 +52,7 @@ export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): Co
 				{
 					down: [
 						{
-							actionId: ActionId.selectFromGalleryPosition,
+							actionId: ActionIdGallery.selectFromGalleryPosition,
 							options: {
 								position: index,
 								option: 'toggle',

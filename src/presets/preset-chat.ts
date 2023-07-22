@@ -1,6 +1,7 @@
-import { ActionId } from '../actions'
+import { ActionIdUserChat } from '../actions/action-user-chat'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobal } from '../actions/action-global'
 
 export function GetPresetsChat(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -21,7 +22,7 @@ export function GetPresetsChat(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.sendAChatToEveryone,
+						actionId: ActionIdGlobal.sendAChatToEveryone,
 						options: {},
 					},
 				],
@@ -45,7 +46,7 @@ export function GetPresetsChat(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.sendAChatViaDM,
+						actionId: ActionIdUserChat.sendAChatViaDM,
 						options: {},
 					},
 				],

@@ -1,4 +1,3 @@
-import { ActionId } from '../actions'
 import { FeedbackId, feedbackType } from '../feedback'
 import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils'
 import {
@@ -9,6 +8,7 @@ import {
 	getParticipantStyleDefault,
 } from './preset-utils'
 import { ZoomConfig } from '../config'
+import { ActionIdGroups } from '../actions/action-group'
 
 export function GetPresetsGroups(
 	instance: InstanceBaseExt<ZoomConfig>,
@@ -33,7 +33,7 @@ export function GetPresetsGroups(
 					{
 						down: [
 							{
-								actionId: ActionId.addToGroup,
+								actionId: ActionIdGroups.addToGroup,
 								options: {
 									group: index,
 									groupOption: 'replace',
@@ -59,7 +59,7 @@ export function GetPresetsGroups(
 					{
 						down: [
 							{
-								actionId: ActionId.addToGroup,
+								actionId: ActionIdGroups.addToGroup,
 								options: {
 									group: index,
 									groupOption: 'add',
@@ -85,7 +85,7 @@ export function GetPresetsGroups(
 					{
 						down: [
 							{
-								actionId: ActionId.clearGroup,
+								actionId: ActionIdGroups.clearGroup,
 								options: {
 									group: index,
 								},
@@ -110,7 +110,7 @@ export function GetPresetsGroups(
 					{
 						down: [
 							{
-								actionId: ActionId.removeFromGroup,
+								actionId: ActionIdGroups.removeFromGroup,
 								options: {
 									group: index,
 								},
@@ -136,7 +136,7 @@ export function GetPresetsGroups(
 				{
 					down: [
 						{
-							actionId: ActionId.renameGroup,
+							actionId: ActionIdGroups.renameGroup,
 							options: {
 								group: index,
 								name: ZoomGroupData[index].groupName,
@@ -162,7 +162,7 @@ export function GetPresetsGroups(
 				{
 					down: [
 						{
-							actionId: ActionId.selectGroup,
+							actionId: ActionIdGroups.selectGroup,
 							options: {
 								group: index,
 							},
@@ -216,7 +216,7 @@ export function GetPresetsGroups(
 					{
 						down: [
 							{
-								actionId: ActionId.selectUserFromGroupPosition,
+								actionId: ActionIdGroups.selectUserFromGroupPosition,
 								options: { group: index, position: position, option: 'toggle' },
 							},
 						],

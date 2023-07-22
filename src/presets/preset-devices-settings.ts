@@ -1,6 +1,7 @@
-import { ActionId } from '../actions'
+import { ActionIdUserScreenshare } from '../actions/action-user-screenshare'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdUserSettings } from '../actions/action-user-settings'
 
 export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +23,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setCameraDevice,
+						actionId: ActionIdUserSettings.setCameraDevice,
 						options: {},
 					},
 				],
@@ -46,7 +47,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setMicDevice,
+						actionId: ActionIdUserSettings.setMicDevice,
 						options: {},
 					},
 				],
@@ -70,7 +71,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setCameraDevice,
+						actionId: ActionIdUserSettings.setCameraDevice,
 						options: {},
 					},
 				],
@@ -94,7 +95,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setMicLevel,
+						actionId: ActionIdUserSettings.setMicLevel,
 						options: {},
 					},
 				],
@@ -118,7 +119,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setSpeakerVolume,
+						actionId: ActionIdUserSettings.setSpeakerVolume,
 						options: {},
 					},
 				],
@@ -142,7 +143,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableOriginalSound,
+						actionId: ActionIdUserSettings.enableOriginalSound,
 						options: {},
 					},
 				],
@@ -166,7 +167,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableOriginalSound,
+						actionId: ActionIdUserSettings.disableOriginalSound,
 						options: {},
 					},
 				],
@@ -190,7 +191,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableMirrorVideo,
+						actionId: ActionIdUserSettings.enableMirrorVideo,
 						options: {},
 					},
 				],
@@ -214,7 +215,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableMirrorVideo,
+						actionId: ActionIdUserSettings.disableMirrorVideo,
 						options: {},
 					},
 				],
@@ -238,7 +239,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableHDVideo,
+						actionId: ActionIdUserSettings.enableHDVideo,
 						options: {},
 					},
 				],
@@ -262,7 +263,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableHDVideo,
+						actionId: ActionIdUserSettings.disableHDVideo,
 						options: {},
 					},
 				],
@@ -286,7 +287,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.SetWindowPosition,
+						actionId: ActionIdUserScreenshare.SetWindowPosition,
 						options: {},
 					},
 				],
@@ -310,7 +311,7 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.SetWindowSize,
+						actionId: ActionIdUserScreenshare.SetWindowSize,
 						options: {},
 					},
 				],

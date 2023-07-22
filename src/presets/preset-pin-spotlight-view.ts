@@ -1,6 +1,10 @@
-import { ActionId } from '../actions'
+import { ActionIdUserSpotlight } from '../actions/action-user-spotlight'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdUserPin } from '../actions/action-user-pin'
+import { ActionIdUserView } from '../actions/action-user-view'
+import { ActionIdUserSettings } from '../actions/action-user-settings'
+import { ActionIdGlobal } from '../actions/action-global'
 
 export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +26,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.pin,
+						actionId: ActionIdUserPin.pin,
 						options: {},
 					},
 				],
@@ -46,7 +50,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.addPin,
+						actionId: ActionIdUserPin.addPin,
 						options: {},
 					},
 				],
@@ -70,7 +74,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.unpin,
+						actionId: ActionIdUserPin.unpin,
 						options: {},
 					},
 				],
@@ -94,7 +98,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.togglePin,
+						actionId: ActionIdUserPin.togglePin,
 						options: {},
 					},
 				],
@@ -118,7 +122,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.pinScreen2,
+						actionId: ActionIdUserPin.pinScreen2,
 						options: {},
 					},
 				],
@@ -142,7 +146,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.unPinScreen2,
+						actionId: ActionIdUserPin.unPinScreen2,
 						options: {},
 					},
 				],
@@ -166,7 +170,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.togglePinScreen2,
+						actionId: ActionIdUserPin.togglePinScreen2,
 						options: {},
 					},
 				],
@@ -190,7 +194,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.clearPins,
+						actionId: ActionIdUserPin.clearPins,
 						options: {},
 					},
 				],
@@ -214,7 +218,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.spotLight,
+						actionId: ActionIdUserSpotlight.spotLight,
 						options: {},
 					},
 				],
@@ -238,7 +242,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.addSpotlight,
+						actionId: ActionIdUserSpotlight.addSpotlight,
 						options: {},
 					},
 				],
@@ -262,7 +266,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.unSpotLight,
+						actionId: ActionIdUserSpotlight.unSpotLight,
 						options: {},
 					},
 				],
@@ -286,7 +290,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.toggleSpotlight,
+						actionId: ActionIdUserSpotlight.toggleSpotlight,
 						options: {},
 					},
 				],
@@ -310,7 +314,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.clearSpotlight,
+						actionId: ActionIdGlobal.clearSpotlight,
 						options: {},
 					},
 				],
@@ -334,7 +338,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.setGalleryView,
+						actionId: ActionIdUserView.setGalleryView,
 						options: {},
 					},
 				],
@@ -358,7 +362,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.setSpeakerView,
+						actionId: ActionIdUserView.setSpeakerView,
 						options: {},
 					},
 				],
@@ -382,7 +386,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.gotoNextGalleryPage,
+						actionId: ActionIdUserView.gotoNextGalleryPage,
 						options: {},
 					},
 				],
@@ -406,7 +410,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.gotoPreviousGalleryPage,
+						actionId: ActionIdUserView.gotoPreviousGalleryPage,
 						options: {},
 					},
 				],
@@ -430,7 +434,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.showNonVideoParticipants,
+						actionId: ActionIdUserSettings.showNonVideoParticipants,
 						options: {},
 					},
 				],
@@ -454,7 +458,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionId.hideNonVideoParticipants,
+						actionId: ActionIdUserSettings.hideNonVideoParticipants,
 						options: {},
 					},
 				],

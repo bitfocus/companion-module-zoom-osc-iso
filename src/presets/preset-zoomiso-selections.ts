@@ -1,7 +1,7 @@
 import { FeedbackId } from '../feedback'
-import { ActionId } from '../actions'
 import { ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
 
 export function GetPresetsZoomISOSelections(
 	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
@@ -25,7 +25,7 @@ export function GetPresetsZoomISOSelections(
 			{
 				down: [
 					{
-						actionId: ActionId.applyOutput,
+						actionId: ActionIdZoomISOActions.applyOutput,
 						options: {},
 					},
 				],
@@ -48,7 +48,7 @@ export function GetPresetsZoomISOSelections(
 			{
 				down: [
 					{
-						actionId: ActionId.applyOutputs,
+						actionId: ActionIdZoomISOActions.applyOutputs,
 						options: {},
 					},
 				],
@@ -71,7 +71,7 @@ export function GetPresetsZoomISOSelections(
 			{
 				down: [
 					{
-						actionId: ActionId.applyChannel,
+						actionId: ActionIdZoomISOActions.applyChannel,
 						options: {},
 					},
 				],
@@ -99,7 +99,7 @@ export function GetPresetsZoomISOSelections(
 				{
 					down: [
 						{
-							actionId: ActionId.selectOutput,
+							actionId: ActionIdZoomISOActions.selectOutput,
 							options: {
 								output: index,
 							},
@@ -137,7 +137,7 @@ export function GetPresetsZoomISOSelections(
 				{
 					down: [
 						{
-							actionId: ActionId.selectAudioChannel,
+							actionId: ActionIdZoomISOActions.selectAudioChannel,
 							options: { output: index },
 						},
 					],
@@ -172,7 +172,7 @@ export function GetPresetsZoomISOSelections(
 			{
 				down: [
 					{
-						actionId: ActionId.selectAudioChannel,
+						actionId: ActionIdZoomISOActions.selectAudioChannel,
 						options: {
 							output: 1,
 						},

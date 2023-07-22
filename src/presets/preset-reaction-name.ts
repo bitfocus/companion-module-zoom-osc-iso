@@ -1,6 +1,8 @@
-import { ActionId } from '../actions'
+import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised'
 import { ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
+import { ActionIdGlobal } from '../actions/action-global'
 
 export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +24,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 			{
 				down: [
 					{
-						actionId: ActionId.raiseHand,
+						actionId: ActionIdUserHandRaised.raiseHand,
 						options: {},
 					},
 				],
@@ -45,7 +47,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 			{
 				down: [
 					{
-						actionId: ActionId.lowerHand,
+						actionId: ActionIdUserHandRaised.lowerHand,
 						options: {},
 					},
 				],
@@ -69,7 +71,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 			{
 				down: [
 					{
-						actionId: ActionId.toggleHand,
+						actionId: ActionIdUserHandRaised.toggleHand,
 						options: {},
 					},
 				],
@@ -93,7 +95,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 			{
 				down: [
 					{
-						actionId: ActionId.lowerAllHands,
+						actionId: ActionIdGlobal.lowerAllHands,
 						options: {},
 					},
 				],
@@ -121,7 +123,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 					{
 						down: [
 							{
-								actionId: ActionId.rename,
+								actionId: ActionIdUserRolesAndAction.rename,
 								options: {
 									user: user.zoomId,
 									name: user.userName,

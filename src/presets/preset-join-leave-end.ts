@@ -1,4 +1,5 @@
-import { ActionId } from '../actions'
+import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak'
+import { ActionIdGlobal } from '../actions/action-global'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
 
@@ -22,7 +23,7 @@ export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.joinMeeting,
+						actionId: ActionIdGlobal.joinMeeting,
 						options: {},
 					},
 				],
@@ -46,7 +47,7 @@ export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.leaveMeeting,
+						actionId: ActionIdGlobal.leaveMeeting,
 						options: {},
 					},
 				],
@@ -70,7 +71,7 @@ export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.endMeeting,
+						actionId: ActionIdGlobal.endMeeting,
 						options: {},
 					},
 				],
@@ -94,7 +95,7 @@ export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.ZAKJoinMeeting,
+						actionId: ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting,
 						options: {},
 					},
 				],
@@ -118,7 +119,7 @@ export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.ZAKStartMeeting,
+						actionId: ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting,
 						options: {},
 					},
 				],

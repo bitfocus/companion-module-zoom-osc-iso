@@ -1,6 +1,10 @@
+import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request'
 import { ActionId } from '../actions'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobal } from '../actions/action-global'
+import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
+import { ActionIdGlobalMemoryManagement } from '../actions/action-global-memory-management'
 
 export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +26,7 @@ export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.pingZoomOSC,
+						actionId: ActionIdGlobal.pingZoomOSC,
 						options: {},
 					},
 				],
@@ -46,7 +50,7 @@ export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.listUsers,
+						actionId: ActionIdGlobalMemoryManagement.listUsers,
 						options: {},
 					},
 				],
@@ -70,7 +74,7 @@ export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.requestListOfBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms,
 						options: {},
 					},
 				],
@@ -94,7 +98,7 @@ export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.requestOrderOfGalleryView,
+						actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView,
 						options: {},
 					},
 				],
@@ -118,7 +122,7 @@ export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.requestGalleryCount,
+						actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount,
 						options: {},
 					},
 				],

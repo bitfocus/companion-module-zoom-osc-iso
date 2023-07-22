@@ -1,7 +1,7 @@
-import { ActionId } from '../actions'
 import { FeedbackId, feedbackType } from '../feedback'
 import { CompanionPresetDefinitionsExt, alignmentTopLeft } from './preset-utils'
 import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils'
+import { ActionIdUsers } from '../actions/action-user'
 
 export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -21,7 +21,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 		},
 		steps: [
 			{
-				down: [{ actionId: ActionId.restorePreviousSelection, options: {} }],
+				down: [{ actionId: ActionIdUsers.restorePreviousSelection, options: {} }],
 				up: [],
 			},
 		],
@@ -40,7 +40,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 		},
 		steps: [
 			{
-				down: [{ actionId: ActionId.clearParticipants, options: {} }],
+				down: [{ actionId: ActionIdUsers.clearParticipants, options: {} }],
 				up: [],
 			},
 		],
@@ -57,7 +57,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			color: colorBlack,
 			bgcolor: colorLightGray,
 		},
-		steps: [{ down: [{ actionId: ActionId.selectionMethod, options: { selectionMethod: 2 } }], up: [] }],
+		steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 2 } }], up: [] }],
 		feedbacks: [
 			{
 				feedbackId: FeedbackId.selectionMethod,
@@ -90,7 +90,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			color: colorBlack,
 			bgcolor: colorLightGray,
 		},
-		steps: [{ down: [{ actionId: ActionId.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
+		steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
 		feedbacks: [],
 	}
 	// Select by name
@@ -105,7 +105,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			bgcolor: colorBlack,
 			alignment: alignmentTopLeft,
 		},
-		steps: [{ down: [{ actionId: ActionId.selectUserByName, options: { option: 'toggle' } }], up: [] }],
+		steps: [{ down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle' } }], up: [] }],
 		feedbacks: [
 			{
 				feedbackId: FeedbackId.userNameBased,
@@ -146,7 +146,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.selectionMethod,
+						actionId: ActionIdUsers.selectionMethod,
 						options: {
 							selectionMethod: 0,
 						},
@@ -172,7 +172,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.nextParticipants,
+						actionId: ActionIdUsers.nextParticipants,
 						options: {
 							shift: 30,
 						},
@@ -198,7 +198,7 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.previousParticipants,
+						actionId: ActionIdUsers.previousParticipants,
 						options: {
 							shift: 30,
 						},

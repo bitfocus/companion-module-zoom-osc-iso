@@ -1,6 +1,8 @@
-import { ActionId } from '../actions'
+import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing'
 import { colorBlack, colorGreenOlive } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine'
+import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings'
 
 export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +24,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.outputISO,
+						actionId: ActionIdZoomISORouting.outputISO,
 						options: {},
 					},
 				],
@@ -46,7 +48,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.addOutput,
+						actionId: ActionIdZoomISOOutputSettings.addOutput,
 						options: {},
 					},
 				],
@@ -70,7 +72,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.deleteOutput,
+						actionId: ActionIdZoomISOOutputSettings.deleteOutput,
 						options: {},
 					},
 				],
@@ -94,7 +96,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableOutput,
+						actionId: ActionIdZoomISOOutputSettings.disableOutput,
 						options: {},
 					},
 				],
@@ -118,7 +120,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableOutput,
+						actionId: ActionIdZoomISOOutputSettings.enableOutput,
 						options: {},
 					},
 				],
@@ -142,7 +144,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputCount,
+						actionId: ActionIdZoomISOOutputSettings.setOutputCount,
 						options: {},
 					},
 				],
@@ -166,7 +168,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputEmbeddedAudio,
+						actionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
 						options: {},
 					},
 				],
@@ -190,7 +192,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputName,
+						actionId: ActionIdZoomISOOutputSettings.setOutputName,
 						options: {},
 					},
 				],
@@ -214,7 +216,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputSelection,
+						actionId: ActionIdZoomISOOutputSettings.setOutputSelection,
 						options: {},
 					},
 				],
@@ -238,7 +240,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputMode,
+						actionId: ActionIdZoomISOOutputSettings.setOutputMode,
 						options: {},
 					},
 				],
@@ -262,7 +264,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputType,
+						actionId: ActionIdZoomISOOutputSettings.setOutputType,
 						options: {},
 					},
 				],
@@ -286,7 +288,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.standbyISOEngine,
+						actionId: ActionIdZoomISOEngine.standbyISOEngine,
 						options: {},
 					},
 				],
@@ -310,7 +312,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startISOEngine,
+						actionId: ActionIdZoomISOEngine.startISOEngine,
 						options: {},
 					},
 				],
@@ -334,7 +336,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.stopISOEngine,
+						actionId: ActionIdZoomISOEngine.stopISOEngine,
 						options: {},
 					},
 				],
@@ -358,7 +360,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setVideoLossMode,
+						actionId: ActionIdZoomISOOutputSettings.setVideoLossMode,
 						options: {},
 					},
 				],
@@ -382,7 +384,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.audioISO,
+						actionId: ActionIdZoomISORouting.audioISO,
 						options: {},
 					},
 				],
@@ -406,7 +408,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setAudioGainReduction,
+						actionId: ActionIdZoomISOOutputSettings.setAudioGainReduction,
 						options: {},
 					},
 				],
@@ -430,7 +432,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setAudioSelection,
+						actionId: ActionIdZoomISOOutputSettings.setAudioSelection,
 						options: {},
 					},
 				],
@@ -454,7 +456,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setOutputEmbeddedAudio,
+						actionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
 						options: {},
 					},
 				],
@@ -478,7 +480,7 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.setAudioMode,
+						actionId: ActionIdZoomISOOutputSettings.setAudioMode,
 						options: {},
 					},
 				],

@@ -1,6 +1,7 @@
-import { ActionId } from '../actions'
+import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
 
 export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +23,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.sendParticipantToBreakoutRoom,
+						actionId: ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom,
 						options: {},
 					},
 				],
@@ -46,7 +47,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.createBreakoutRoom,
+						actionId: ActionIdGlobalBreakoutRooms.createBreakoutRoom,
 						options: {},
 					},
 				],
@@ -70,7 +71,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.configureBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.configureBreakoutRooms,
 						options: {},
 					},
 				],
@@ -94,7 +95,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.deleteBreakoutRoom,
+						actionId: ActionIdGlobalBreakoutRooms.deleteBreakoutRoom,
 						options: {},
 					},
 				],
@@ -118,7 +119,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.openBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.openBreakoutRooms,
 						options: {},
 					},
 				],
@@ -141,7 +142,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.closeBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.closeBreakoutRooms,
 						options: {},
 					},
 				],
@@ -165,7 +166,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.deleteAllBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.deleteAllBreakoutRooms,
 						options: {},
 					},
 				],
@@ -189,7 +190,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.returnSelfToMainMeeting,
+						actionId: ActionIdUserBreakoutRooms.returnSelfToMainMeeting,
 						options: {},
 					},
 				],
@@ -213,7 +214,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.broadcastMessageToBreakoutRooms,
+						actionId: ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms,
 						options: {},
 					},
 				],

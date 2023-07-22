@@ -1,6 +1,7 @@
-import { ActionId } from '../actions'
+import { ActionIdUserVideoMic } from '../actions/action-user-video-mic'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobal } from '../actions/action-global'
 
 export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +23,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.turnVideoOn,
+						actionId: ActionIdUserVideoMic.turnVideoOn,
 						options: {},
 					},
 				],
@@ -46,7 +47,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.turnVideoOff,
+						actionId: ActionIdUserVideoMic.turnVideoOff,
 						options: {},
 					},
 				],
@@ -70,7 +71,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.toggleVideoState,
+						actionId: ActionIdUserVideoMic.toggleVideoState,
 						options: {},
 					},
 				],
@@ -94,7 +95,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.mute,
+						actionId: ActionIdUserVideoMic.mute,
 						options: {},
 					},
 				],
@@ -118,7 +119,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.unmute,
+						actionId: ActionIdUserVideoMic.unmute,
 						options: {},
 					},
 				],
@@ -142,7 +143,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.muteAll,
+						actionId: ActionIdGlobal.muteAll,
 						options: {},
 					},
 				],
@@ -166,7 +167,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.unmuteAll,
+						actionId: ActionIdGlobal.unmuteAll,
 						options: {},
 					},
 				],
@@ -190,7 +191,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.muteAllExcept,
+						actionId: ActionIdGlobal.muteAllExcept,
 						options: {},
 					},
 				],
@@ -214,7 +215,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.muteAllExceptHost,
+						actionId: ActionIdGlobal.muteAllExceptHost,
 						options: {},
 					},
 				],
@@ -238,7 +239,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.toggleMuteState,
+						actionId: ActionIdUserVideoMic.toggleMuteState,
 						options: {},
 					},
 				],

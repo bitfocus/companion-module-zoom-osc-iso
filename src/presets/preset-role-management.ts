@@ -1,6 +1,10 @@
-import { ActionId } from '../actions'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdUserWebinar } from '../actions/action-user-webinars'
+import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room'
+import { ActionIdGlobal } from '../actions/action-global'
+import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak'
 
 export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +26,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.makeHost,
+						actionId: ActionIdUserRolesAndAction.makeHost,
 						options: {},
 					},
 				],
@@ -46,7 +50,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.makeCoHost,
+						actionId: ActionIdUserRolesAndAction.makeCoHost,
 						options: {},
 					},
 				],
@@ -70,7 +74,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.revokeCoHost,
+						actionId: ActionIdUserRolesAndAction.revokeCoHost,
 						options: {},
 					},
 				],
@@ -94,7 +98,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.reclaimHost,
+						actionId: ActionIdUserRolesAndAction.reclaimHost,
 						options: {},
 					},
 				],
@@ -118,7 +122,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.makePanelist,
+						actionId: ActionIdUserRolesAndAction.makePanelist,
 						options: {},
 					},
 				],
@@ -142,7 +146,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.makeAttendee,
+						actionId: ActionIdUserRolesAndAction.makeAttendee,
 						options: {},
 					},
 				],
@@ -166,7 +170,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.ejectParticipant,
+						actionId: ActionIdUserRolesAndAction.ejectParticipant,
 						options: {},
 					},
 				],
@@ -190,7 +194,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.ejectAll,
+						actionId: ActionIdGlobal.ejectAll,
 						options: {},
 					},
 				],
@@ -214,7 +218,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.admitSomeoneFromWaitingRoom,
+						actionId: ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom,
 						options: {},
 					},
 				],
@@ -238,7 +242,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.admitEveryoneFromWaitingRoom,
+						actionId: ActionIdGlobalWaitingRoomsAndZak.admitEveryoneFromWaitingRoom,
 						options: {},
 					},
 				],
@@ -262,7 +266,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.sendSomeoneToWaitingRoom,
+						actionId: ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom,
 						options: {},
 					},
 				],
@@ -286,7 +290,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableWaitingRoom,
+						actionId: ActionIdGlobalWaitingRoomsAndZak.enableWaitingRoom,
 						options: {},
 					},
 				],
@@ -310,7 +314,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableWaitingRoom,
+						actionId: ActionIdGlobalWaitingRoomsAndZak.disableWaitingRoom,
 						options: {},
 					},
 				],
@@ -334,7 +338,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.allowWebinarAttendeeToSpeak,
+						actionId: ActionIdUserWebinar.allowWebinarAttendeeToSpeak,
 						options: {},
 					},
 				],
@@ -358,7 +362,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disallowToSpeak,
+						actionId: ActionIdUserWebinar.disallowToSpeak,
 						options: {},
 					},
 				],
@@ -382,7 +386,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableUsersToUnmute,
+						actionId: ActionIdGlobal.enableUsersToUnmute,
 						options: {},
 					},
 				],
@@ -406,7 +410,7 @@ export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableUsersToUnmute,
+						actionId: ActionIdGlobal.disableUsersToUnmute,
 						options: {},
 					},
 				],

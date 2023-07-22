@@ -1,6 +1,7 @@
-import { ActionId } from '../actions'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobalRecording } from '../actions/action-global-recording'
 
 export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
@@ -22,7 +23,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startLocalRecording,
+						actionId: ActionIdGlobalRecording.startLocalRecording,
 						options: {},
 					},
 				],
@@ -46,7 +47,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.pauseLocalRecording,
+						actionId: ActionIdGlobalRecording.pauseLocalRecording,
 						options: {},
 					},
 				],
@@ -70,7 +71,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.resumeLocalRecording,
+						actionId: ActionIdGlobalRecording.resumeLocalRecording,
 						options: {},
 					},
 				],
@@ -94,7 +95,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.stopLocalRecording,
+						actionId: ActionIdGlobalRecording.stopLocalRecording,
 						options: {},
 					},
 				],
@@ -118,7 +119,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startCloudRecording,
+						actionId: ActionIdGlobalRecording.startCloudRecording,
 						options: {},
 					},
 				],
@@ -142,7 +143,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.pauseCloudRecording,
+						actionId: ActionIdGlobalRecording.pauseCloudRecording,
 						options: {},
 					},
 				],
@@ -166,7 +167,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.resumeCloudRecording,
+						actionId: ActionIdGlobalRecording.resumeCloudRecording,
 						options: {},
 					},
 				],
@@ -190,7 +191,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.stopCloudRecording,
+						actionId: ActionIdGlobalRecording.stopCloudRecording,
 						options: {},
 					},
 				],
@@ -214,7 +215,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.allowToRecord,
+						actionId: ActionIdUserRolesAndAction.allowToRecord,
 						options: {},
 					},
 				],
@@ -238,7 +239,7 @@ export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disallowToRecord,
+						actionId: ActionIdUserRolesAndAction.disallowToRecord,
 						options: {},
 					},
 				],

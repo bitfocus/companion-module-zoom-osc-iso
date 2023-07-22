@@ -1,4 +1,4 @@
-import { ActionId } from '../actions'
+import { ActionIdUserScreenshare } from '../actions/action-user-screenshare'
 import { colorBlack, colorLightGray } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
 
@@ -22,7 +22,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startScreenShare,
+						actionId: ActionIdUserScreenshare.startScreenShare,
 						options: {},
 					},
 				],
@@ -46,7 +46,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.stopSharing,
+						actionId: ActionIdUserScreenshare.stopSharing,
 						options: {},
 					},
 				],
@@ -70,7 +70,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startScreenShareWithPrimaryScreen,
+						actionId: ActionIdUserScreenshare.startScreenShareWithPrimaryScreen,
 						options: {},
 					},
 				],
@@ -94,7 +94,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startShareWithWindow,
+						actionId: ActionIdUserScreenshare.startShareWithWindow,
 						options: {},
 					},
 				],
@@ -118,7 +118,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startCameraShare,
+						actionId: ActionIdUserScreenshare.startCameraShare,
 						options: {},
 					},
 				],
@@ -142,7 +142,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.startAudioShare,
+						actionId: ActionIdUserScreenshare.startAudioShare,
 						options: {},
 					},
 				],
@@ -166,7 +166,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.cycleSharedCameraToNextAvailable,
+						actionId: ActionIdUserScreenshare.cycleSharedCameraToNextAvailable,
 						options: {},
 					},
 				],
@@ -190,7 +190,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.enableOptimizeVideoForSharing,
+						actionId: ActionIdUserScreenshare.enableOptimizeVideoForSharing,
 						options: {},
 					},
 				],
@@ -214,7 +214,7 @@ export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 			{
 				down: [
 					{
-						actionId: ActionId.disableOptimizeVideoForSharing,
+						actionId: ActionIdUserScreenshare.disableOptimizeVideoForSharing,
 						options: {},
 					},
 				],
