@@ -1,7 +1,13 @@
 import { FeedbackId, feedbackType } from '../feedback'
 import { InstanceBaseExt, padding } from '../utils'
 import { ZoomConfig } from '../config'
-import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
+import {
+	CompanionPresetDefinitionsExt,
+	PresetFeedbackDefinition,
+	getFeedbackStyleSelected,
+	getParticipantStyleActiveSpeaker,
+	getParticipantStyleDefault,
+} from './preset-utils'
 import { ActionIdUsers } from '../actions/action-user'
 
 export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
@@ -11,6 +17,35 @@ export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>
 	 * Select from Participants
 	 */
 	for (let index = 1; index < 1000; index++) {
+		const indexFeedbacks: PresetFeedbackDefinition = [
+			{
+				feedbackId: FeedbackId.indexBased,
+				options: {
+					position: index,
+					type: feedbackType.selected,
+				},
+				style: getFeedbackStyleSelected(),
+			},
+		]
+
+		if (instance.config.feedbackImagesWithIcons !== 4) {
+			indexFeedbacks.push({
+				feedbackId: FeedbackId.indexBased,
+				options: {
+					position: index,
+					type: feedbackType.activeSpeaker,
+				},
+				style: getParticipantStyleActiveSpeaker(`$(zoomosc:Participant${padding(index, 3)})`, index),
+			})
+		}
+
+		indexFeedbacks.push({
+			feedbackId: FeedbackId.indexBasedAdvanced,
+			options: {
+				position: index,
+			},
+		})
+
 		presets[`Caller_${index}`] = {
 			type: 'button',
 			category: 'Select from Participants',
@@ -30,22 +65,7 @@ export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>
 					up: [],
 				},
 			],
-			feedbacks: [
-				{
-					feedbackId: FeedbackId.indexBased,
-					options: {
-						position: index,
-						type: feedbackType.selected,
-					},
-					style: getFeedbackStyleSelected(),
-				},
-				{
-					feedbackId: FeedbackId.indexBasedAdvanced,
-					options: {
-						position: index,
-					},
-				},
-			],
+			feedbacks: indexFeedbacks,
 		}
 	}
 

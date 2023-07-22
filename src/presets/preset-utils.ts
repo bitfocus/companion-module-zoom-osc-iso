@@ -33,12 +33,14 @@ import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
 import { ActionIdUsers } from '../actions/action-user'
 
+export type PresetFeedbackDefinition = Array<
+	{
+		feedbackId: FeedbackId
+	} & CompanionButtonPresetDefinition['feedbacks'][0]
+>
+
 export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
-	feedbacks: Array<
-		{
-			feedbackId: FeedbackId
-		} & CompanionButtonPresetDefinition['feedbacks'][0]
-	>
+	feedbacks: PresetFeedbackDefinition
 	steps: Array<{
 		down: Array<
 			{
@@ -125,12 +127,22 @@ export const getParticipantStyleDefault = (
 	position: number
 ): CompanionButtonStyleProps => {
 	return {
-		text: `${position}. ${text})`,
+		text:
+			instance.config.feedbackImagesWithIcons === 4
+				? `${position}. ${text})`
+				: `\`${position}. \${substr(${text},0,${buttonTextDefaultLength})}\``,
 		size: '7',
 		color: colorWhite,
 		bgcolor: colorBlack,
 		alignment: alignmentTopCenter,
 		show_topbar: false,
 		textExpression: instance.config.feedbackImagesWithIcons === 4 ? false : true,
+	} as CompanionButtonStyleProps
+}
+
+export const getParticipantStyleActiveSpeaker = (text: string, position: number): CompanionButtonStyleProps => {
+	return {
+		text: `\`\\n${position}. \${substr(${text},0,${buttonTextActiveSpeakerLength})}\``,
+		alignment: alignmentTopLeft,
 	} as CompanionButtonStyleProps
 }
