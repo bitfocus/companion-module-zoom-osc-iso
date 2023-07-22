@@ -106,9 +106,6 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 export interface CompanionPresetDefinitionsExt {
 	[id: string]: CompanionPresetExt | undefined
 }
-
-export const buttonTextDefaultLength = 50
-export const buttonTextActiveSpeakerLength = 40
 export const alignmentTopLeft = 'left:top'
 export const alignmentTopCenter = 'center:top'
 export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult => {
@@ -120,7 +117,7 @@ export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult =
 
 export const getParticipantStyleDefault = (text: string, position: number): CompanionButtonStyleProps => {
 	return {
-		text: `${position}. ${text})`,
+		text: `\\n${position}. ${text})`,
 		size: '7',
 		color: colorWhite,
 		bgcolor: colorBlack,
