@@ -1,10 +1,9 @@
 import { FeedbackId, feedbackType } from '../feedback'
-import { InstanceBaseExt, padding } from '../utils'
-import { ZoomConfig } from '../config'
+import { padding } from '../utils'
 import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
 import { ActionIdUsers } from '../actions/action-user'
 
-export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
+export function GetPresetsListParticipants(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
 
 	/**
@@ -15,7 +14,7 @@ export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>
 			type: 'button',
 			category: 'Select from Participants',
 			name: `Caller${index}`,
-			style: getParticipantStyleDefault(instance, `$(zoomosc:Participant${padding(index, 3)})`, index),
+			style: getParticipantStyleDefault(`$(zoomosc:Participant${padding(index, 3)})`, index),
 			steps: [
 				{
 					down: [

@@ -1,13 +1,9 @@
 import { FeedbackId, feedbackType } from '../feedback'
-import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils'
+import { colorBlack, colorLightGray, ZoomGroupDataInterface } from '../utils'
 import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
-import { ZoomConfig } from '../config'
 import { ActionIdGroups } from '../actions/action-group'
 
-export function GetPresetsGroups(
-	instance: InstanceBaseExt<ZoomConfig>,
-	ZoomGroupData: ZoomGroupDataInterface[]
-): CompanionPresetDefinitionsExt {
+export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
 
 	// Group presets
@@ -173,7 +169,7 @@ export function GetPresetsGroups(
 				type: 'button',
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
 				name: 'Group selection',
-				style: getParticipantStyleDefault(instance, `$(zoomosc:Group${index}Position${position})`, position),
+				style: getParticipantStyleDefault(`$(zoomosc:Group${index}Position${position})`, position),
 				steps: [
 					{
 						down: [

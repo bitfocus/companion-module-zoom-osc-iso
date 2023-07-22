@@ -1,10 +1,9 @@
 import { FeedbackId, feedbackType } from '../feedback'
-import { InstanceBaseExt, padding } from '../utils'
-import { ZoomConfig } from '../config'
 import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
 import { ActionIdGallery } from '../actions/action-gallery'
+import { padding } from '../utils'
 
-export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
+export function GetPresetsListGallery(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
 
 	for (let index = 1; index < 50; index++) {
@@ -12,7 +11,7 @@ export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): Co
 			type: 'button',
 			category: 'Select from Gallery',
 			name: `$(zoomosc:Gallery position ${index})`,
-			style: getParticipantStyleDefault(instance, `$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
+			style: getParticipantStyleDefault(`$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
 			steps: [
 				{
 					down: [

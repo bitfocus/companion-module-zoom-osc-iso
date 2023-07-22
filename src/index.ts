@@ -155,7 +155,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 		this.setActionDefinitions(GetActions(this))
 		this.setFeedbackDefinitions(GetFeedbacks(this))
-		this.setPresetDefinitions(GetPresetList(this, this.ZoomGroupData, this.ZoomUserData, this.ZoomAudioRoutingData))
+		this.setPresetDefinitions(GetPresetList(this.ZoomGroupData, this.ZoomUserData, this.ZoomAudioRoutingData))
 	}
 }
 

@@ -1,7 +1,6 @@
 import { CompanionPresetDefinitions } from '@companion-module/base'
 
-import { InstanceBaseExt, ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
-import { ZoomConfig } from './config'
+import { ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
 import { CompanionPresetDefinitionsExt } from './presets/preset-utils'
 import { GetPresetsListParticipants } from './presets/preset-participants'
 import { GetPresetsListGallery } from './presets/preset-gallery'
@@ -22,15 +21,14 @@ import { GetPresetsRecording } from './presets/preset-recording'
 import { GetPresetsDataCustom } from './presets/preset-data-custom'
 
 export function GetPresetList(
-	instance: InstanceBaseExt<ZoomConfig>,
 	ZoomGroupData: ZoomGroupDataInterface[],
 	ZoomUserData: ZoomUserDataInterface,
 	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
 ): CompanionPresetDefinitions {
-	const presetsParticipants = GetPresetsListParticipants(instance)
-	const presetsGallery = GetPresetsListGallery(instance)
+	const presetsParticipants = GetPresetsListParticipants()
+	const presetsGallery = GetPresetsListGallery()
 	const presetsManageSelections = GetPresetsManageSelections()
-	const presetsGroups = GetPresetsGroups(instance, ZoomGroupData)
+	const presetsGroups = GetPresetsGroups(ZoomGroupData)
 	const presetsPinSpotlightViewActions = GetPresetsPinSpotlightViewActions()
 	const presetsVideoAudioActions = GetPresetsVideoAudioActions()
 	const presetsZoomISOSelections = GetPresetsZoomISOSelections(ZoomAudioRoutingData)

@@ -5,8 +5,7 @@ import {
 } from '@companion-module/base'
 import { ActionId } from '../actions'
 import { FeedbackId } from '../feedback'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, colorBlack, colorDarkGray, colorWhite } from '../utils'
+import { colorBlack, colorDarkGray, colorWhite } from '../utils'
 import { ActionIdGroups } from '../actions/action-group'
 import { ActionIdGallery } from '../actions/action-gallery'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
@@ -119,18 +118,12 @@ export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult =
 	}
 }
 
-export const getParticipantStyleDefault = (
-	instance: InstanceBaseExt<ZoomConfig>,
-	text: string,
-	position: number
-): CompanionButtonStyleProps => {
+export const getParticipantStyleDefault = (text: string, position: number): CompanionButtonStyleProps => {
 	return {
 		text: `${position}. ${text})`,
 		size: '7',
 		color: colorWhite,
 		bgcolor: colorBlack,
 		alignment: alignmentTopCenter,
-		show_topbar: false,
-		textExpression: instance.config.feedbackImagesWithIcons === 4 ? false : true,
-	} as CompanionButtonStyleProps
+	}
 }
