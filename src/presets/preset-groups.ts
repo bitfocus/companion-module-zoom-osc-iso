@@ -1,12 +1,6 @@
 import { FeedbackId, feedbackType } from '../feedback'
 import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils'
-import {
-	CompanionPresetDefinitionsExt,
-	PresetFeedbackDefinition,
-	getFeedbackStyleSelected,
-	getParticipantStyleActiveSpeaker,
-	getParticipantStyleDefault,
-} from './preset-utils'
+import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
 import { ZoomConfig } from '../config'
 import { ActionIdGroups } from '../actions/action-group'
 
@@ -175,38 +169,6 @@ export function GetPresetsGroups(
 		}
 
 		for (let position = 1; position < 50; position++) {
-			const groupFeedbacks: PresetFeedbackDefinition = [
-				{
-					feedbackId: FeedbackId.groupBased,
-					options: {
-						group: index,
-						position: position,
-						type: feedbackType.selected,
-					},
-					style: getFeedbackStyleSelected(),
-				},
-			]
-
-			if (instance.config.feedbackImagesWithIcons !== 4) {
-				groupFeedbacks.push({
-					feedbackId: FeedbackId.groupBased,
-					options: {
-						group: index,
-						position: position,
-						type: feedbackType.activeSpeaker,
-					},
-					style: getParticipantStyleActiveSpeaker(`$(zoomosc:Group${index}Position${position})`, position),
-				})
-			}
-
-			groupFeedbacks.push({
-				feedbackId: FeedbackId.groupBasedAdvanced,
-				options: {
-					group: index,
-					position: position,
-				},
-			})
-
 			presets[`Group${index}_Position${position}`] = {
 				type: 'button',
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
@@ -223,7 +185,24 @@ export function GetPresetsGroups(
 						up: [],
 					},
 				],
-				feedbacks: groupFeedbacks,
+				feedbacks: [
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
+							type: feedbackType.selected,
+						},
+						style: getFeedbackStyleSelected(),
+					},
+					{
+						feedbackId: FeedbackId.groupBasedAdvanced,
+						options: {
+							group: index,
+							position: position,
+						},
+					},
+				],
 			}
 		}
 	}
