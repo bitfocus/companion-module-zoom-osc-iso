@@ -1,4 +1,4 @@
-import { InstanceBaseExt, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
+import { InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
@@ -16,14 +16,6 @@ enum UserRole {
 	Host = 1,
 	CoHost = 2,
 	Participant = 3,
-}
-
-enum SubscribeMode {
-	None = 0,
-	TargetList = 1,
-	All = 2,
-	Panelists = 3,
-	OnlyGallery = 4,
 }
 
 export class OSC {

@@ -1,5 +1,30 @@
 import { ActionId } from './actions'
+import { ActionIdGroups } from './actions/action-group'
+import { ActionIdGallery } from './actions/action-gallery'
 import { FeedbackId, feedbackType } from './feedback'
+import { ActionIdUserSpotlight } from './actions/action-user-spotlight'
+import { ActionIdUserVideoMic } from './actions/action-user-video-mic'
+import { ActionIdUserPin } from './actions/action-user-pin'
+import { ActionIdUserHandRaised } from './actions/action-user-hand-raised'
+import { ActionIdUserView } from './actions/action-user-view'
+import { ActionIdGlobalGalleryTrackingAndDataRequest } from './actions/action-global-gallery-tracking-and-data-request'
+import { ActionIdUserRolesAndAction } from './actions/action-user-roles-action'
+import { ActionIdUserChat } from './actions/action-user-chat'
+import { ActionIdUserWebinar } from './actions/action-user-webinars'
+import { ActionIdUserBreakoutRooms } from './actions/action-user-breakout-rooms'
+import { ActionIdUserWaitingRoom } from './actions/action-user-waiting-room'
+import { ActionIdUserScreenshare } from './actions/action-user-screenshare'
+import { ActionIdUserSettings } from './actions/action-user-settings'
+import { ActionIdGlobal } from './actions/action-global'
+import { ActionIdGlobalBreakoutRooms } from './actions/action-global-breakout-rooms'
+import { ActionIdGlobalRecording } from './actions/action-global-recording'
+import { ActionIdGlobalWaitingRoomsAndZak } from './actions/action-global-waitingrooms-and-zak'
+import { ActionIdGlobalMemoryManagement } from './actions/action-global-memory-management'
+import { ActionIdZoomISORouting } from './actions/action-zoomiso-routing'
+import { ActionIdZoomISOEngine } from './actions/action-zoomiso-engine'
+import { ActionIdZoomISOOutputSettings } from './actions/action-zoomiso-output-settings'
+import { ActionIdZoomISOActions } from './actions/action-zoomiso-actions'
+import { ActionIdUsers } from './actions/action-user'
 
 interface v2Action {
 	[key: string]: {
@@ -28,567 +53,567 @@ interface v2FeedbackType {
 export const v2Actions: v2Action = {
 	Spotlight: {
 		oldActionId: 'Spotlight',
-		newActionId: ActionId.spotLight,
+		newActionId: ActionIdUserSpotlight.spotLight,
 		type: 'UserActions',
 	},
 	AddSpotlight: {
 		oldActionId: 'AddSpotlight',
-		newActionId: ActionId.addSpotlight,
+		newActionId: ActionIdUserSpotlight.addSpotlight,
 		type: 'UserActions',
 	},
 	Pin: {
 		oldActionId: 'Pin',
-		newActionId: ActionId.pin,
+		newActionId: ActionIdUserPin.pin,
 		type: 'UserActions',
 	},
 	AddPin: {
 		oldActionId: 'AddPin',
-		newActionId: ActionId.addPin,
+		newActionId: ActionIdUserPin.addPin,
 		type: 'UserActions',
 	},
 	Unpin: {
 		oldActionId: 'Unpin',
-		newActionId: ActionId.unpin,
+		newActionId: ActionIdUserPin.unpin,
 		type: 'UserActions',
 	},
 	PinScreen2: {
 		oldActionId: 'PinScreen2',
-		newActionId: ActionId.pinScreen2,
+		newActionId: ActionIdUserPin.pinScreen2,
 		type: 'UserActions',
 	},
 	UnpinScreen2: {
 		oldActionId: 'UnpinScreen2',
-		newActionId: ActionId.unPinScreen2,
+		newActionId: ActionIdUserPin.unPinScreen2,
 		type: 'UserActions',
 	},
 	TogglePinScreen2: {
 		oldActionId: 'TogglePinScreen2',
-		newActionId: ActionId.togglePinScreen2,
+		newActionId: ActionIdUserPin.togglePinScreen2,
 		type: 'UserActions',
 	},
 	UnSpotlight: {
 		oldActionId: 'UnSpotlight',
-		newActionId: ActionId.unSpotLight,
+		newActionId: ActionIdUserSpotlight.unSpotLight,
 		type: 'UserActions',
 	},
 	ToggleSpotlight: {
 		oldActionId: 'ToggleSpotlight',
-		newActionId: ActionId.toggleSpotlight,
+		newActionId: ActionIdUserSpotlight.toggleSpotlight,
 		type: 'UserActions',
 	},
 	TurnVideoOn: {
 		oldActionId: 'TurnVideoOn',
-		newActionId: ActionId.turnVideoOn,
+		newActionId: ActionIdUserVideoMic.turnVideoOn,
 		type: 'UserActions',
 	},
 	TurnVideoOff: {
 		oldActionId: 'TurnVideoOff',
-		newActionId: ActionId.turnVideoOff,
+		newActionId: ActionIdUserVideoMic.turnVideoOff,
 		type: 'UserActions',
 	},
 	ToggleVideoState: {
 		oldActionId: 'ToggleVideoState',
-		newActionId: ActionId.toggleVideoState,
+		newActionId: ActionIdUserVideoMic.toggleVideoState,
 		type: 'UserActions',
 	},
 	Mute: {
 		oldActionId: 'Mute',
-		newActionId: ActionId.mute,
+		newActionId: ActionIdUserVideoMic.mute,
 		type: 'UserActions',
 	},
 	Unmute: {
 		oldActionId: 'Unmute',
-		newActionId: ActionId.unmute,
+		newActionId: ActionIdUserVideoMic.unmute,
 		type: 'UserActions',
 	},
 	ToggleMuteState: {
 		oldActionId: 'ToggleMuteState',
-		newActionId: ActionId.toggleMuteState,
+		newActionId: ActionIdUserVideoMic.toggleMuteState,
 		type: 'UserActions',
 	},
 	RaiseHand: {
 		oldActionId: 'RaiseHand',
-		newActionId: ActionId.raiseHand,
+		newActionId: ActionIdUserHandRaised.raiseHand,
 		type: 'UserActions',
 	},
 	LowerHand: {
 		oldActionId: 'LowerHand',
-		newActionId: ActionId.lowerHand,
+		newActionId: ActionIdUserHandRaised.lowerHand,
 		type: 'UserActions',
 	},
 	ToggleHand: {
 		oldActionId: 'ToggleHand',
-		newActionId: ActionId.toggleHand,
+		newActionId: ActionIdUserHandRaised.toggleHand,
 		type: 'UserActions',
 	},
 	MakeHost: {
 		oldActionId: 'MakeHost',
-		newActionId: ActionId.makeHost,
+		newActionId: ActionIdUserRolesAndAction.makeHost,
 		type: 'UserActions',
 	},
 	MakeCoHost: {
 		oldActionId: 'MakeCoHost',
-		newActionId: ActionId.makeCoHost,
+		newActionId: ActionIdUserRolesAndAction.makeCoHost,
 		type: 'UserActions',
 	},
 	RevokeCoHost: {
 		oldActionId: 'RevokeCoHost',
-		newActionId: ActionId.revokeCoHost,
+		newActionId: ActionIdUserRolesAndAction.revokeCoHost,
 		type: 'UserActions',
 	},
 	ReclaimHost: {
 		oldActionId: 'ReclaimHost',
-		newActionId: ActionId.reclaimHost,
+		newActionId: ActionIdUserRolesAndAction.reclaimHost,
 		type: 'UserActions',
 	},
 	MakePanelist: {
 		oldActionId: 'MakePanelist',
-		newActionId: ActionId.makePanelist,
+		newActionId: ActionIdUserRolesAndAction.makePanelist,
 		type: 'UserActions',
 	},
 	MakeAttendee: {
 		oldActionId: 'MakeAttendee',
-		newActionId: ActionId.makeAttendee,
+		newActionId: ActionIdUserRolesAndAction.makeAttendee,
 		type: 'UserActions',
 	},
 	EjectParticipant: {
 		oldActionId: 'EjectParticipant',
-		newActionId: ActionId.ejectParticipant,
+		newActionId: ActionIdUserRolesAndAction.ejectParticipant,
 		type: 'UserActions',
 	},
 	ReturnSelfToMainMeeting: {
 		oldActionId: 'ReturnSelfToMainMeeting',
-		newActionId: ActionId.returnSelfToMainMeeting,
+		newActionId: ActionIdUserBreakoutRooms.returnSelfToMainMeeting,
 		type: 'UserActions',
 	},
 	AdmitSomeoneFromWaitingRoom: {
 		oldActionId: 'AdmitSomeoneFromWaitingRoom',
-		newActionId: ActionId.admitSomeoneFromWaitingRoom,
+		newActionId: ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom,
 		type: 'UserActions',
 	},
 	SendSomeoneToWaitingRoom: {
 		oldActionId: 'SendSomeoneToWaitingRoom',
-		newActionId: ActionId.sendSomeoneToWaitingRoom,
+		newActionId: ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom,
 		type: 'UserActions',
 	},
 	AllowWebinarAttendeeToSpeak: {
 		oldActionId: 'AllowWebinarAttendeeToSpeak',
-		newActionId: ActionId.allowWebinarAttendeeToSpeak,
+		newActionId: ActionIdUserWebinar.allowWebinarAttendeeToSpeak,
 		type: 'UserActions',
 	},
 	ShutUpWebinarAttendee: {
 		oldActionId: 'ShutUpWebinarAttendee',
-		newActionId: ActionId.disallowToSpeak,
+		newActionId: ActionIdUserWebinar.disallowToSpeak,
 		type: 'UserActions',
 	},
 	AllowToRecord: {
 		oldActionId: 'AllowToRecord',
-		newActionId: ActionId.allowToRecord,
+		newActionId: ActionIdUserRolesAndAction.allowToRecord,
 		type: 'UserActions',
 	},
 	DisallowToRecord: {
 		oldActionId: 'DisallowToRecord',
-		newActionId: ActionId.disallowToRecord,
+		newActionId: ActionIdUserRolesAndAction.disallowToRecord,
 		type: 'UserActions',
 	},
 	EnableOriginalSound: {
 		oldActionId: 'EnableOriginalSound',
-		newActionId: ActionId.enableOriginalSound,
+		newActionId: ActionIdUserSettings.enableOriginalSound,
 		type: 'UserActions',
 	},
 	DisableOriginalSound: {
 		oldActionId: 'DisableOriginalSound',
-		newActionId: ActionId.disableOriginalSound,
+		newActionId: ActionIdUserSettings.disableOriginalSound,
 		type: 'UserActions',
 	},
 	EnableMirrorVideo: {
 		oldActionId: 'EnableMirrorVideo',
-		newActionId: ActionId.enableMirrorVideo,
+		newActionId: ActionIdUserSettings.enableMirrorVideo,
 		type: 'UserActions',
 	},
 	DisableMirrorVideo: {
 		oldActionId: 'DisableMirrorVideo',
-		newActionId: ActionId.disableMirrorVideo,
+		newActionId: ActionIdUserSettings.disableMirrorVideo,
 		type: 'UserActions',
 	},
 	SendParticipantToBreakoutRoom: {
 		oldActionId: 'SendParticipantToBreakoutRoom',
-		newActionId: ActionId.sendParticipantToBreakoutRoom,
+		newActionId: ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom,
 		type: 'UserActions',
 	},
 	RemoveParticipantFromBreakoutRoom: {
 		oldActionId: 'RemoveParticipantFromBreakoutRoom',
-		newActionId: ActionId.removeParticipantFromBreakoutRoom,
+		newActionId: ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom,
 		type: 'UserActions',
 	},
 	AssignParticipantToBreakoutRoom: {
 		oldActionId: 'AssignParticipantToBreakoutRoom',
-		newActionId: ActionId.assignParticipantToBreakoutRoom,
+		newActionId: ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom,
 		type: 'UserActions',
 	},
 	UnassignParticipantFromBreakoutRoom: {
 		oldActionId: 'UnassignParticipantFromBreakoutRoom',
-		newActionId: ActionId.unassignParticipantFromBreakoutRoom,
+		newActionId: ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom,
 		type: 'UserActions',
 	},
 	Rename: {
 		oldActionId: 'Rename',
-		newActionId: ActionId.rename,
+		newActionId: ActionIdUserRolesAndAction.rename,
 		type: 'UserActions',
 	},
 	SetWindowPosition: {
 		oldActionId: 'SetWindowPosition',
-		newActionId: ActionId.SetWindowPosition,
+		newActionId: ActionIdUserScreenshare.SetWindowPosition,
 		type: 'UserActions',
 	},
 	SetWindowSize: {
 		oldActionId: 'SetWindowSize',
-		newActionId: ActionId.SetWindowSize,
+		newActionId: ActionIdUserScreenshare.SetWindowSize,
 		type: 'UserActions',
 	},
 	SetVirtualBackground: {
 		oldActionId: 'SetVirtualBackground',
-		newActionId: ActionId.setVirtualBackground,
+		newActionId: ActionIdUserSettings.setVirtualBackground,
 		type: 'UserActions',
 	},
 	SetVideoFilter: {
 		oldActionId: 'SetVideoFilter',
-		newActionId: ActionId.setVideoFilter,
+		newActionId: ActionIdUserSettings.setVideoFilter,
 		type: 'UserActions',
 	},
 	SetCameraDevice: {
 		oldActionId: 'SetCameraDevice',
-		newActionId: ActionId.setCameraDevice,
+		newActionId: ActionIdUserSettings.setCameraDevice,
 		type: 'UserActions',
 	},
 	SetSpeakerVolume: {
 		oldActionId: 'SetSpeakerVolume',
-		newActionId: ActionId.setSpeakerVolume,
+		newActionId: ActionIdUserSettings.setSpeakerVolume,
 		type: 'UserActions',
 	},
 	SetSpeakerDevice: {
 		oldActionId: 'SetSpeakerDevice',
-		newActionId: ActionId.setSpeakerDevice,
+		newActionId: ActionIdUserSettings.setSpeakerDevice,
 		type: 'UserActions',
 	},
 	SetMicDevice: {
 		oldActionId: 'SetMicDevice',
-		newActionId: ActionId.setMicDevice,
+		newActionId: ActionIdUserSettings.setMicDevice,
 		type: 'UserActions',
 	},
 	SetMicLevel: {
 		oldActionId: 'SetMicLevel',
-		newActionId: ActionId.setMicLevel,
+		newActionId: ActionIdUserSettings.setMicLevel,
 		type: 'UserActions',
 	},
 	SendAChatViaDM: {
 		oldActionId: 'SendAChatViaDM',
-		newActionId: ActionId.sendAChatViaDM,
+		newActionId: ActionIdUserChat.sendAChatViaDM,
 		type: 'UserActions',
 	},
 	ClearPins: {
 		oldActionId: 'ClearPins',
-		newActionId: ActionId.clearPins,
+		newActionId: ActionIdUserPin.clearPins,
 		type: 'GlobalActions',
 	},
 	TogglePin: {
 		oldActionId: 'TogglePin',
-		newActionId: ActionId.togglePin,
+		newActionId: ActionIdUserPin.togglePin,
 		type: 'GlobalActions',
 	},
 	ClearPinsScreen2: {
 		oldActionId: 'ClearPinsScreen2',
-		newActionId: ActionId.clearPinsScreen2,
+		newActionId: ActionIdUserPin.clearPinsScreen2,
 		type: 'GlobalActions',
 	},
 	StartScreenShareWithPrimaryScreen: {
 		oldActionId: 'StartScreenShareWithPrimaryScreen',
-		newActionId: ActionId.startScreenShareWithPrimaryScreen,
+		newActionId: ActionIdUserScreenshare.startScreenShareWithPrimaryScreen,
 		type: 'GlobalActions',
 	},
 	CycleSharedCameraToNextAvailable: {
 		oldActionId: 'CycleSharedCameraToNextAvailable',
-		newActionId: ActionId.cycleSharedCameraToNextAvailable,
+		newActionId: ActionIdUserScreenshare.cycleSharedCameraToNextAvailable,
 		type: 'GlobalActions',
 	},
 	StopSharing: {
 		oldActionId: 'StopSharing',
-		newActionId: ActionId.stopSharing,
+		newActionId: ActionIdUserScreenshare.stopSharing,
 		type: 'GlobalActions',
 	},
 	GotoNextGalleryPage: {
 		oldActionId: 'GotoNextGalleryPage',
-		newActionId: ActionId.gotoNextGalleryPage,
+		newActionId: ActionIdUserView.gotoNextGalleryPage,
 		type: 'GlobalActions',
 	},
 	GotoPreviousGalleryPage: {
 		oldActionId: 'GotoPreviousGalleryPage',
-		newActionId: ActionId.gotoPreviousGalleryPage,
+		newActionId: ActionIdUserView.gotoPreviousGalleryPage,
 		type: 'GlobalActions',
 	},
 	SetSpeakerView: {
 		oldActionId: 'SetSpeakerView',
-		newActionId: ActionId.setSpeakerView,
+		newActionId: ActionIdUserView.setSpeakerView,
 		type: 'GlobalActions',
 	},
 	ShowNonVideoParticipants: {
 		oldActionId: 'ShowNonVideoParticipants',
-		newActionId: ActionId.showNonVideoParticipants,
+		newActionId: ActionIdUserSettings.showNonVideoParticipants,
 		type: 'GlobalActions',
 	},
 	HideNonVideoParticipants: {
 		oldActionId: 'HideNonVideoParticipants',
-		newActionId: ActionId.hideNonVideoParticipants,
+		newActionId: ActionIdUserSettings.hideNonVideoParticipants,
 		type: 'GlobalActions',
 	},
 	ShowUserNamesOnVideo: {
 		oldActionId: 'ShowUserNamesOnVideo',
-		newActionId: ActionId.showUserNamesOnVideo,
+		newActionId: ActionIdUserSettings.showUserNamesOnVideo,
 		type: 'GlobalActions',
 	},
 	HideUserNamesOnVideo: {
 		oldActionId: 'HideUserNamesOnVideo',
-		newActionId: ActionId.hideUserNamesOnVideo,
+		newActionId: ActionIdUserSettings.hideUserNamesOnVideo,
 		type: 'GlobalActions',
 	},
 	EnableHDVideo: {
 		oldActionId: 'EnableHDVideo',
-		newActionId: ActionId.enableHDVideo,
+		newActionId: ActionIdUserSettings.enableHDVideo,
 		type: 'GlobalActions',
 	},
 	DisableHDVideo: {
 		oldActionId: 'DisableHDVideo',
-		newActionId: ActionId.disableHDVideo,
+		newActionId: ActionIdUserSettings.disableHDVideo,
 		type: 'GlobalActions',
 	},
 	EnableOptimizeVideoForSharing: {
 		oldActionId: 'EnableOptimizeVideoForSharing',
-		newActionId: ActionId.enableOptimizeVideoForSharing,
+		newActionId: ActionIdUserScreenshare.enableOptimizeVideoForSharing,
 		type: 'GlobalActions',
 	},
 	DisableOptimizeVideoForSharing: {
 		oldActionId: 'DisableOptimizeVideoForSharing',
-		newActionId: ActionId.disableOptimizeVideoForSharing,
+		newActionId: ActionIdUserScreenshare.disableOptimizeVideoForSharing,
 		type: 'GlobalActions',
 	},
 	EnableComputerSoundWhenSharing: {
 		oldActionId: 'EnableComputerSoundWhenSharing',
-		newActionId: ActionId.enableComputerSoundWhenSharing,
+		newActionId: ActionIdUserScreenshare.enableComputerSoundWhenSharing,
 		type: 'GlobalActions',
 	},
 	DisableComputerSoundWhenSharing: {
 		oldActionId: 'DisableComputerSoundWhenSharing',
-		newActionId: ActionId.disableComputerSoundWhenSharing,
+		newActionId: ActionIdUserScreenshare.disableComputerSoundWhenSharing,
 		type: 'GlobalActions',
 	},
 	SetGalleryView: {
 		oldActionId: 'SetGalleryView',
-		newActionId: ActionId.setGalleryView,
+		newActionId: ActionIdUserView.setGalleryView,
 		type: 'GlobalActions',
 	},
 	MuteAll: {
 		oldActionId: 'MuteAll',
-		newActionId: ActionId.muteAll,
+		newActionId: ActionIdGlobal.muteAll,
 		type: 'GlobalActions',
 	},
 	UnmuteAll: {
 		oldActionId: 'UnmuteAll',
-		newActionId: ActionId.unmuteAll,
+		newActionId: ActionIdGlobal.unmuteAll,
 		type: 'GlobalActions',
 	},
 	ClearSpotlight: {
 		oldActionId: 'ClearSpotlight',
-		newActionId: ActionId.clearSpotlight,
+		newActionId: ActionIdGlobal.clearSpotlight,
 		type: 'GlobalActions',
 	},
 	EnableUsersToUnmute: {
 		oldActionId: 'EnableUsersToUnmute',
-		newActionId: ActionId.enableUsersToUnmute,
+		newActionId: ActionIdGlobal.enableUsersToUnmute,
 		type: 'GlobalActions',
 	},
 	DisableUsersToUnmute: {
 		oldActionId: 'DisableUsersToUnmute',
-		newActionId: ActionId.disableUsersToUnmute,
+		newActionId: ActionIdGlobal.disableUsersToUnmute,
 		type: 'GlobalActions',
 	},
 	LowerAllHands: {
 		oldActionId: 'LowerAllHands',
-		newActionId: ActionId.lowerAllHands,
+		newActionId: ActionIdGlobal.lowerAllHands,
 		type: 'GlobalActions',
 	},
 	OpenBreakoutRooms: {
 		oldActionId: 'OpenBreakoutRooms',
-		newActionId: ActionId.openBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.openBreakoutRooms,
 		type: 'GlobalActions',
 	},
 	CloseBreakoutRooms: {
 		oldActionId: 'CloseBreakoutRooms',
-		newActionId: ActionId.closeBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.closeBreakoutRooms,
 		type: 'GlobalActions',
 	},
 	DeleteAllBreakoutRooms: {
 		oldActionId: 'DeleteAllBreakoutRooms',
-		newActionId: ActionId.deleteAllBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.deleteAllBreakoutRooms,
 		type: 'GlobalActions',
 	},
 	AdmitEveryoneFromWaitingRoom: {
 		oldActionId: 'AdmitEveryoneFromWaitingRoom',
-		newActionId: ActionId.admitEveryoneFromWaitingRoom,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.admitEveryoneFromWaitingRoom,
 		type: 'GlobalActions',
 	},
 	EjectAllWebinarAttendees: {
 		oldActionId: 'EjectAllWebinarAttendees',
-		newActionId: ActionId.ejectAll,
+		newActionId: ActionIdGlobal.ejectAll,
 		type: 'GlobalActions',
 	},
 	StartLocalRecording: {
 		oldActionId: 'StartLocalRecording',
-		newActionId: ActionId.startLocalRecording,
+		newActionId: ActionIdGlobalRecording.startLocalRecording,
 		type: 'GlobalActions',
 	},
 	PauseLocalRecording: {
 		oldActionId: 'PauseLocalRecording',
-		newActionId: ActionId.pauseLocalRecording,
+		newActionId: ActionIdGlobalRecording.pauseLocalRecording,
 		type: 'GlobalActions',
 	},
 	ResumeLocalRecording: {
 		oldActionId: 'ResumeLocalRecording',
-		newActionId: ActionId.resumeLocalRecording,
+		newActionId: ActionIdGlobalRecording.resumeLocalRecording,
 		type: 'GlobalActions',
 	},
 	StopLocalRecording: {
 		oldActionId: 'StopLocalRecording',
-		newActionId: ActionId.stopLocalRecording,
+		newActionId: ActionIdGlobalRecording.stopLocalRecording,
 		type: 'GlobalActions',
 	},
 	StartCloudRecording: {
 		oldActionId: 'StartCloudRecording',
-		newActionId: ActionId.startCloudRecording,
+		newActionId: ActionIdGlobalRecording.startCloudRecording,
 		type: 'GlobalActions',
 	},
 	PauseCloudRecording: {
 		oldActionId: 'PauseCloudRecording',
-		newActionId: ActionId.pauseCloudRecording,
+		newActionId: ActionIdGlobalRecording.pauseCloudRecording,
 		type: 'GlobalActions',
 	},
 	ResumeCloudRecording: {
 		oldActionId: 'ResumeCloudRecording',
-		newActionId: ActionId.resumeCloudRecording,
+		newActionId: ActionIdGlobalRecording.resumeCloudRecording,
 		type: 'GlobalActions',
 	},
 	StopCloudRecording: {
 		oldActionId: 'StopCloudRecording',
-		newActionId: ActionId.stopCloudRecording,
+		newActionId: ActionIdGlobalRecording.stopCloudRecording,
 		type: 'GlobalActions',
 	},
 	RequestGalleryCount: {
 		oldActionId: 'RequestGalleryCount',
-		newActionId: ActionId.requestGalleryCount,
+		newActionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount,
 		type: 'GlobalActions',
 	},
 	RequestListOfBreakoutRooms: {
 		oldActionId: 'RequestListOfBreakoutRooms',
-		newActionId: ActionId.requestListOfBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms,
 		type: 'GlobalActions',
 	},
 	LeaveMeeting: {
 		oldActionId: 'LeaveMeeting',
-		newActionId: ActionId.leaveMeeting,
+		newActionId: ActionIdGlobal.leaveMeeting,
 		type: 'GlobalActions',
 	},
 	EndMeeting: {
 		oldActionId: 'EndMeeting',
-		newActionId: ActionId.endMeeting,
+		newActionId: ActionIdGlobal.endMeeting,
 		type: 'GlobalActions',
 	},
 	EnableWaitingRoom: {
 		oldActionId: 'EnableWaitingRoom',
-		newActionId: ActionId.enableWaitingRoom,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.enableWaitingRoom,
 		type: 'GlobalActions',
 	},
 	DisableWaitingRoom: {
 		oldActionId: 'DisableWaitingRoom',
-		newActionId: ActionId.disableWaitingRoom,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.disableWaitingRoom,
 		type: 'GlobalActions',
 	},
 	StartCameraShare: {
 		oldActionId: 'StartCameraShare',
-		newActionId: ActionId.startCameraShare,
+		newActionId: ActionIdUserScreenshare.startCameraShare,
 		type: 'GlobalActions',
 	},
 	StartShareWithWindow: {
 		oldActionId: 'StartShareWithWindow',
-		newActionId: ActionId.startShareWithWindow,
+		newActionId: ActionIdUserScreenshare.startShareWithWindow,
 		type: 'GlobalActions',
 	},
 	StartAudioShare: {
 		oldActionId: 'StartAudioShare',
-		newActionId: ActionId.startAudioShare,
+		newActionId: ActionIdUserScreenshare.startAudioShare,
 		type: 'GlobalActions',
 	},
 	StartScreenShare: {
 		oldActionId: 'StartScreenShare',
-		newActionId: ActionId.startScreenShare,
+		newActionId: ActionIdUserScreenshare.startScreenShare,
 		type: 'GlobalActions',
 	},
 	SendAChatToEveryone: {
 		oldActionId: 'SendAChatToEveryone',
-		newActionId: ActionId.sendAChatToEveryone,
+		newActionId: ActionIdGlobal.sendAChatToEveryone,
 		type: 'GlobalActions',
 	},
 	CreateBreakoutRoom: {
 		oldActionId: 'CreateBreakoutRoom',
-		newActionId: ActionId.createBreakoutRoom,
+		newActionId: ActionIdGlobalBreakoutRooms.createBreakoutRoom,
 		type: 'GlobalActions',
 	},
 	DeleteBreakoutRoom: {
 		oldActionId: 'DeleteBreakoutRoom',
-		newActionId: ActionId.deleteBreakoutRoom,
+		newActionId: ActionIdGlobalBreakoutRooms.deleteBreakoutRoom,
 		type: 'GlobalActions',
 	},
 	BroadcastMessageToBreakoutRooms: {
 		oldActionId: 'BroadcastMessageToBreakoutRooms',
-		newActionId: ActionId.broadcastMessageToBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms,
 		type: 'GlobalActions',
 	},
 	SendMessageToWaitingRoom: {
 		oldActionId: 'SendMessageToWaitingRoom',
-		newActionId: ActionId.sendMessageToWaitingRoom,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.sendMessageToWaitingRoom,
 		type: 'GlobalActions',
 	},
 	PingZoomOSC: {
 		oldActionId: 'PingZoomOSC',
-		newActionId: ActionId.pingZoomOSC,
+		newActionId: ActionIdGlobal.pingZoomOSC,
 		type: 'SpecialActions',
 	},
 	RequestOrderOfGalleryView: {
 		oldActionId: 'RequestOrderOfGalleryView',
-		newActionId: ActionId.requestOrderOfGalleryView,
+		newActionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView,
 		type: 'SpecialActions',
 	},
 	ListUsers: {
 		oldActionId: 'ListUsers',
-		newActionId: ActionId.listUsers,
+		newActionId: ActionIdGlobalMemoryManagement.listUsers,
 		type: 'SpecialActions',
 	},
 	ConfigureBreakoutRooms: {
 		oldActionId: 'configureBreakoutRooms',
-		newActionId: ActionId.configureBreakoutRooms,
+		newActionId: ActionIdGlobalBreakoutRooms.configureBreakoutRooms,
 		type: 'SpecialActions',
 	},
 	JoinMeeting: {
 		oldActionId: 'JoinMeeting',
-		newActionId: ActionId.joinMeeting,
+		newActionId: ActionIdGlobal.joinMeeting,
 		type: 'SpecialActions',
 	},
 	ZAKJoinMeeting: {
 		oldActionId: 'ZAKJoinMeeting',
-		newActionId: ActionId.ZAKJoinMeeting,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting,
 		type: 'SpecialActions',
 	},
 	ZAKStartMeeting: {
 		oldActionId: 'ZAKStartMeeting',
-		newActionId: ActionId.ZAKStartMeeting,
+		newActionId: ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting,
 		type: 'SpecialActions',
 	},
 	CustomCommand: {
@@ -603,82 +628,82 @@ export const v2Actions: v2Action = {
 	},
 	setAudioGainReduction: {
 		oldActionId: 'setAudioGainReduction',
-		newActionId: ActionId.setAudioGainReduction,
+		newActionId: ActionIdZoomISOOutputSettings.setAudioGainReduction,
 		type: 'ISOActions',
 	},
 	setOutputSelection: {
 		oldActionId: 'setOutputSelection',
-		newActionId: ActionId.setOutputSelection,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputSelection,
 		type: 'ISOActions',
 	},
 	setAudioSelection: {
 		oldActionId: 'setAudioSelection',
-		newActionId: ActionId.setAudioSelection,
+		newActionId: ActionIdZoomISOOutputSettings.setAudioSelection,
 		type: 'ISOActions',
 	},
 	setOutputEmbeddedAudio: {
 		oldActionId: 'setOutputEmbeddedAudio',
-		newActionId: ActionId.setOutputEmbeddedAudio,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
 		type: 'ISOActions',
 	},
 	setVideoLossMode: {
 		oldActionId: 'setVideoLossMode',
-		newActionId: ActionId.setVideoLossMode,
+		newActionId: ActionIdZoomISOOutputSettings.setVideoLossMode,
 		type: 'ISOActions',
 	},
 	setOutputName: {
 		oldActionId: 'setOutputName',
-		newActionId: ActionId.setOutputName,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputName,
 		type: 'ISOActions',
 	},
 	deleteOutput: {
 		oldActionId: 'deleteOutput',
-		newActionId: ActionId.deleteOutput,
+		newActionId: ActionIdZoomISOOutputSettings.deleteOutput,
 		type: 'ISOActions',
 	},
 	outputISO: {
 		oldActionId: 'outputISO',
-		newActionId: ActionId.outputISO,
+		newActionId: ActionIdZoomISORouting.outputISO,
 		type: 'ISOActions',
 	},
 	audioISO: {
 		oldActionId: 'audioISO',
-		newActionId: ActionId.audioISO,
+		newActionId: ActionIdZoomISORouting.audioISO,
 		type: 'ISOActions',
 	},
 	startISOEngine: {
 		oldActionId: 'startISOEngine',
-		newActionId: ActionId.startISOEngine,
+		newActionId: ActionIdZoomISOEngine.startISOEngine,
 		type: 'ISOActions',
 	},
 	stopISOEngine: {
 		oldActionId: 'stopISOEngine',
-		newActionId: ActionId.stopISOEngine,
+		newActionId: ActionIdZoomISOEngine.stopISOEngine,
 		type: 'ISOActions',
 	},
 	standbyISOEngine: {
 		oldActionId: 'standbyISOEngine',
-		newActionId: ActionId.standbyISOEngine,
+		newActionId: ActionIdZoomISOEngine.standbyISOEngine,
 		type: 'ISOActions',
 	},
 	addOutput: {
 		oldActionId: 'addOutput',
-		newActionId: ActionId.addOutput,
+		newActionId: ActionIdZoomISOOutputSettings.addOutput,
 		type: 'ISOActions',
 	},
 	setOutputCount: {
 		oldActionId: 'setOutputCount',
-		newActionId: ActionId.setOutputCount,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputCount,
 		type: 'ISOActions',
 	},
 	enableOutput: {
 		oldActionId: 'enableOutput',
-		newActionId: ActionId.enableOutput,
+		newActionId: ActionIdZoomISOOutputSettings.enableOutput,
 		type: 'ISOActions',
 	},
 	disableOutput: {
 		oldActionId: 'disableOutput',
-		newActionId: ActionId.disableOutput,
+		newActionId: ActionIdZoomISOOutputSettings.disableOutput,
 		type: 'ISOActions',
 	},
 	loadISOConfig: {
@@ -703,17 +728,17 @@ export const v2Actions: v2Action = {
 	},
 	setOutputMode: {
 		oldActionId: 'setOutputMode',
-		newActionId: ActionId.setOutputMode,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputMode,
 		type: 'ISOActions',
 	},
 	setOutputType: {
 		oldActionId: 'setOutputType',
-		newActionId: ActionId.setOutputType,
+		newActionId: ActionIdZoomISOOutputSettings.setOutputType,
 		type: 'ISOActions',
 	},
 	setAudioMode: {
 		oldActionId: 'setAudioMode',
-		newActionId: ActionId.setAudioMode,
+		newActionId: ActionIdZoomISOOutputSettings.setAudioMode,
 		type: 'ISOActions',
 	},
 	acceptRecordingConsent: {
@@ -723,98 +748,98 @@ export const v2Actions: v2Action = {
 	},
 	selectionMethod: {
 		oldActionId: 'selectionMethod',
-		newActionId: ActionId.selectionMethod,
+		newActionId: ActionIdUsers.selectionMethod,
 		type: 'OtherActions',
 	},
 	SelectUser: {
 		oldActionId: 'SelectUser',
-		newActionId: ActionId.selectUser,
+		newActionId: ActionIdUsers.selectUser,
 		type: 'OtherActions',
 	},
 	SelectUserByName: {
 		oldActionId: 'SelectUserByName',
-		newActionId: ActionId.selectUserByName,
+		newActionId: ActionIdUsers.selectUserByName,
 		type: 'OtherActions',
 	},
 	SelectGroup: {
 		oldActionId: 'SelectGroup',
-		newActionId: ActionId.selectGroup,
+		newActionId: ActionIdGroups.selectGroup,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	selectUserFromGroupPosition: {
 		oldActionId: 'selectUserFromGroupPosition',
-		newActionId: ActionId.selectUserFromGroupPosition,
+		newActionId: ActionIdGroups.selectUserFromGroupPosition,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	SelectFromGalleryPosition: {
 		oldActionId: 'SelectFromGalleryPosition',
-		newActionId: ActionId.selectFromGalleryPosition,
+		newActionId: ActionIdGallery.selectFromGalleryPosition,
 		type: 'OtherActions',
 	},
 	SelectFromIndexPosition: {
 		oldActionId: 'SelectFromIndexPosition',
-		newActionId: ActionId.selectFromIndexPosition,
+		newActionId: ActionIdUsers.selectFromIndexPosition,
 		type: 'OtherActions',
 	},
 	clearParticipants: {
 		oldActionId: 'clearParticipants',
-		newActionId: ActionId.clearParticipants,
+		newActionId: ActionIdUsers.clearParticipants,
 		type: 'OtherActions',
 	},
 	addToGroup: {
 		oldActionId: 'addToGroup',
-		newActionId: ActionId.addToGroup,
+		newActionId: ActionIdGroups.addToGroup,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	clearGroup: {
 		oldActionId: 'clearGroup',
-		newActionId: ActionId.clearGroup,
+		newActionId: ActionIdGroups.clearGroup,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	removeFromGroup: {
 		oldActionId: 'removeFromGroup',
-		newActionId: ActionId.removeFromGroup,
+		newActionId: ActionIdGroups.removeFromGroup,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	rename: {
 		oldActionId: 'rename',
-		newActionId: ActionId.rename,
+		newActionId: ActionIdUserRolesAndAction.rename,
 		type: 'OtherActions',
 	},
 	renameGroup: {
 		oldActionId: 'renameGroup',
-		newActionId: ActionId.renameGroup,
+		newActionId: ActionIdGroups.renameGroup,
 		type: 'OtherActions',
 		isGroupBased: true,
 	},
 	nextParticipants: {
 		oldActionId: 'nextParticipants',
-		newActionId: ActionId.nextParticipants,
+		newActionId: ActionIdUsers.nextParticipants,
 		type: 'OtherActions',
 	},
 	previousParticipants: {
 		oldActionId: 'previousParticipants',
-		newActionId: ActionId.previousParticipants,
+		newActionId: ActionIdUsers.previousParticipants,
 		type: 'OtherActions',
 	},
 	selectOutput: {
 		oldActionId: 'selectOutput',
-		newActionId: ActionId.selectOutput,
+		newActionId: ActionIdZoomISOActions.selectOutput,
 		type: 'OtherActionsISO',
 	},
 	selectAudioOutput: {
 		oldActionId: 'selectAudioOutput',
-		newActionId: ActionId.selectAudioChannel,
+		newActionId: ActionIdZoomISOActions.selectAudioChannel,
 		type: 'OtherActionsISO',
 	},
 	takeSelectedOutputs: {
 		oldActionId: 'takeSelectedOutputs',
-		newActionId: ActionId.applyOutput,
+		newActionId: ActionIdZoomISOActions.applyOutput,
 		type: 'OtherActionsISO',
 	},
 }

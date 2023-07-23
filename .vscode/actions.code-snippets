@@ -1,0 +1,71 @@
+{
+	// Place your companion-module-zoom-osc-iso workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"Action File Init": {
+		"scope": "typescript",
+		"prefix": "action-file-init",
+		"body": [
+			"import { CompanionActionDefinition } from '@companion-module/base'",
+			"import { ZoomConfig } from '../config'",
+			"import { InstanceBaseExt } from '../utils'",
+			"",
+			"export enum ActionId${1:ActionType} {",
+			"\t$0",
+			"}",
+			"",
+			"export function GetActions${1:ActionType}(instance: InstanceBaseExt<ZoomConfig>): {",
+			"\t[id in ActionId${1:ActionType}]: CompanionActionDefinition | undefined",
+			"} {",
+			"\tconst actions: { [id in ActionId${1:ActionType}]: CompanionActionDefinition | undefined } = {",
+			"\t",
+			"\t}",
+			"",
+			"\treturn actions",
+			"}",
+			""
+		],
+		"description": "Init a new action file"
+	},
+	"New Action ID": {
+		"scope": "typescript",
+		"prefix": "actionId-new",
+		"body": "${1:actionId} = '${2:actionIdText}',$0"
+	},
+	"Create New Action": {
+		"scope": "typescript",
+		"prefix": "action-new",
+		"body": [
+			"[ActionId${1:actionIdType}.${2:actionId}]: {",
+			"\tname: '${3:description}',",
+			"\toptions: [",
+			"\t\t",
+			"\t],",
+			"\tcallback: (action) => {",
+			"\t\t$0",
+			"\t},",
+			"},"
+		],
+		"description": "Add a new Action with Callback"
+	},
+	"Add Action to Action Definition List": {
+		"scope": "typescript",
+		"prefix": "action-add-to-def",
+		"body": "const action${1:actionId}: { [id in ActionId${1:actionId}]: CompanionActionDefinition | undefined } = ${2:functionName}(instance)$0",
+		"description": "Add Action to the List of Actions"
+	}
+}
