@@ -117,7 +117,7 @@ export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult =
 
 export const getParticipantStyleDefault = (text: string, position: number): CompanionButtonStyleProps => {
 	return {
-		text: `\\n${position}. ${text})`,
+		text: `\\n${position}. ${text}`,
 		size: '7',
 		color: colorWhite,
 		bgcolor: colorBlack,

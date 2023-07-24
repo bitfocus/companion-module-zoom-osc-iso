@@ -1,7 +1,15 @@
 import { CompanionActionDefinition } from '@companion-module/base'
 import { ZoomConfig } from '../config'
-import { InstanceBaseExt, ZoomGroupDataInterface, options, userExist } from '../utils'
-import { sendActionCommand, createCommand, select, userOption } from './action-utils'
+import { InstanceBaseExt, ZoomGroupDataInterface, arrayAdd, arrayRemove, options, userExist } from '../utils'
+import {
+	sendActionCommand,
+	createCommand,
+	select,
+	PreviousSelectedCallersSave,
+	toggleSelectedUser,
+	selectionMethod,
+} from './action-utils'
+import { FeedbackId } from '../feedback'
 
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',
@@ -14,12 +22,90 @@ export enum ActionIdUserRolesAndAction {
 	rename = 'rename',
 	allowToRecord = 'allowToRecord',
 	disallowToRecord = 'disallowToRecord',
+	selectUser = 'select_User',
 }
 
 export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfig>): {
 	[id in ActionIdUserRolesAndAction]: CompanionActionDefinition | undefined
 } {
+	let CHOICES_USERS_DEFAULT = '0'
+	const CHOICES_USERS: {
+		id: string
+		label: string
+	}[] = [{ id: '0', label: 'no users' }]
+
+	if (instance.ZoomUserData) {
+		CHOICES_USERS.length = 0
+		for (const key in instance.ZoomUserData) {
+			if (userExist(Number(key), instance.ZoomUserData)) {
+				const user = instance.ZoomUserData[key]
+				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
+				CHOICES_USERS_DEFAULT = user.zoomId.toString()
+			}
+		}
+	}
+
+	const userOption: any = {
+		type: 'dropdown',
+		label: 'User',
+		id: 'user',
+		default: CHOICES_USERS_DEFAULT,
+		choices: CHOICES_USERS,
+	}
+
 	const actions: { [id in ActionIdUserRolesAndAction]: CompanionActionDefinition | undefined } = {
+		[ActionIdUserRolesAndAction.selectUser]: {
+			name: 'Preselect user',
+			options: [
+				userOption,
+				{
+					type: 'dropdown',
+					label: 'Option',
+					id: 'option',
+					default: '',
+					choices: [
+						{ label: 'Toggle', id: 'toggle' },
+						{ label: 'Select', id: 'select' },
+						{ label: 'Remove', id: 'remove' },
+					],
+				},
+			],
+			callback: (action) => {
+				PreviousSelectedCallersSave(instance)
+				switch (action.options.option) {
+					case 'toggle':
+						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+						toggleSelectedUser(instance, action.options.user as number)
+						break
+					case 'select':
+						if (instance.config.selectionMethod === selectionMethod.SingleSelection) {
+							instance.ZoomClientDataObj.selectedCallers.length = 0
+						}
+						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
+							instance.ZoomClientDataObj.selectedCallers,
+							action.options.user as number
+						)
+						break
+					case 'remove':
+						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+							instance.ZoomClientDataObj.selectedCallers,
+							action.options.user as number
+						)
+						break
+				}
+				instance.UpdateVariablesValues()
+				instance.checkFeedbacks(
+					FeedbackId.userNameBased,
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
+				)
+			},
+		},
 		// Rename Actions
 		[ActionIdUserRolesAndAction.rename]: {
 			name: 'Rename',

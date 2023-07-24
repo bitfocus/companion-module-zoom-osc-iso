@@ -1,6 +1,6 @@
 import { CompanionActionEvent, InputValue, SomeCompanionActionInputField } from '@companion-module/base'
 import { ZoomConfig } from '../config'
-import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove, userExist } from '../utils'
+import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove } from '../utils'
 
 export const select = { single: true, multi: false }
 
@@ -26,31 +26,6 @@ export const positionOrderOption: SomeCompanionActionInputField = {
 	choices: CHOICES_POSITION,
 }
 
-let CHOICES_USERS_DEFAULT = '0'
-const CHOICES_USERS: {
-	id: string
-	label: string
-}[] = [{ id: '0', label: 'no users' }]
-
-export const getChoiceUsers = (instance: InstanceBaseExt<ZoomConfig>): void => {
-	if (instance.ZoomUserData) {
-		CHOICES_USERS.length = 0
-		for (const key in instance.ZoomUserData) {
-			if (userExist(Number(key), instance.ZoomUserData)) {
-				const user = instance.ZoomUserData[key]
-				CHOICES_USERS.push({ id: user.zoomId.toString(), label: user.userName })
-				CHOICES_USERS_DEFAULT = user.zoomId.toString()
-			}
-		}
-	}
-}
-export const userOption: any = {
-	type: 'dropdown',
-	label: 'User',
-	id: 'user',
-	default: CHOICES_USERS_DEFAULT,
-	choices: CHOICES_USERS,
-}
 export enum selectionMethod {
 	SingleSelection = 1,
 	MultiSelection = 0,

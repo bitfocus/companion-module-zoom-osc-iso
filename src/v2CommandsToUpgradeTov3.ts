@@ -753,7 +753,7 @@ export const v2Actions: v2Action = {
 	},
 	SelectUser: {
 		oldActionId: 'SelectUser',
-		newActionId: ActionIdUsers.selectUser,
+		newActionId: ActionIdUserRolesAndAction.selectUser,
 		type: 'OtherActions',
 	},
 	SelectUserByName: {
