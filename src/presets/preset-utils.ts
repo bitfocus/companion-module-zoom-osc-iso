@@ -129,7 +129,7 @@ export const getParticipantStyleDefault = (
 	return {
 		text:
 			instance.config.feedbackImagesWithIcons === 4
-				? `${position}. ${text})`
+				? `${position}. ${text}`
 				: `\`${position}. \${substr(${text},0,${buttonTextDefaultLength})}\``,
 		size: '7',
 		color: colorWhite,

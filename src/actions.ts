@@ -39,6 +39,7 @@ import {
 } from './actions/action-zoomiso-output-settings'
 import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/action-zoomiso-routing'
 import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions'
+import { ActionIdUsers, GetActionsUsers } from './actions/action-user'
 
 export enum ActionId {
 	loadISOConfig = 'load_ISO_Config',
@@ -127,6 +128,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	const actionZoomISOActions: { [id in ActionIdZoomISOActions]: CompanionActionDefinition | undefined } =
 		GetActionsZoomISOActions(instance)
 
+	const actionUsers: { [id in ActionIdUsers]: CompanionActionDefinition | undefined } = GetActionsUsers(instance)
+
 	const actions: {
 		[id in
 			| ActionId
@@ -153,6 +156,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			| ActionIdZoomISOEngine
 			| ActionIdZoomISOOutputSettings
 			| ActionIdZoomISOActions
+			| ActionIdUsers
 			| ActionIdZoomISORouting]: CompanionActionDefinition | undefined
 	} = {
 		...actionsGroups,
@@ -179,7 +183,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		...actionZoomISOEngine,
 		...actionZoomISOOutputSettings,
 		...actionZoomISOActions,
-
+		...actionUsers,
 		[ActionId.loadISOConfig]: {
 			name: 'Load Config',
 			options: [options.path],
