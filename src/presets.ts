@@ -1,7 +1,6 @@
 import { CompanionPresetDefinitions } from '@companion-module/base'
 
 import { InstanceBaseExt, ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
-import { ZoomConfig } from './config'
 import { CompanionPresetDefinitionsExt } from './presets/preset-utils'
 import { GetPresetsListParticipants } from './presets/preset-participants'
 import { GetPresetsListGallery } from './presets/preset-gallery'
@@ -20,6 +19,7 @@ import { GetPresetsSharing } from './presets/preset-sharing'
 import { GetPresetsBreakout } from './presets/preset-breakout'
 import { GetPresetsRecording } from './presets/preset-recording'
 import { GetPresetsDataCustom } from './presets/preset-data-custom'
+import { ZoomConfig } from './config'
 
 export function GetPresetList(
 	instance: InstanceBaseExt<ZoomConfig>,

@@ -5,7 +5,6 @@ import {
 } from '@companion-module/base'
 import { ActionId } from '../actions'
 import { FeedbackId } from '../feedback'
-import { ZoomConfig } from '../config'
 import { InstanceBaseExt, colorBlack, colorDarkGray, colorWhite } from '../utils'
 import { ActionIdGroups } from '../actions/action-group'
 import { ActionIdGallery } from '../actions/action-gallery'
@@ -32,6 +31,7 @@ import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
 import { ActionIdUsers } from '../actions/action-user'
+import { ZoomConfig } from '../config'
 
 export type PresetFeedbackDefinition = Array<
 	{
