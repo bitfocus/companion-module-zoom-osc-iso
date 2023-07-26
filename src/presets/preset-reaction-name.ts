@@ -115,7 +115,7 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 				name: user.userName,
 				style: {
 					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-					size: '14',
+					size: '7',
 					color: colorBlack,
 					bgcolor: colorTeal,
 				},

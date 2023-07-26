@@ -4,7 +4,6 @@ import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../u
 import { FeedbackId } from '../feedback'
 import {
 	selectionMethod,
-	userOption,
 	PreviousSelectedCallersSave,
 	toggleSelectedUser,
 	PreviousSelectedCallersRestore,
@@ -12,7 +11,6 @@ import {
 
 export enum ActionIdUsers {
 	selectionMethod = 'selection_Method',
-	selectUser = 'select_User',
 	selectUserByName = 'select_User_By_Name',
 	selectFromIndexPosition = 'select_From_Index_Position',
 	clearParticipants = 'clear_Participants',
@@ -69,58 +67,6 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				}
 				instance.saveConfig(instance.config)
 				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
-			},
-		},
-		[ActionIdUsers.selectUser]: {
-			name: 'Preselect user',
-			options: [
-				userOption,
-				{
-					type: 'dropdown',
-					label: 'Option',
-					id: 'option',
-					default: '',
-					choices: [
-						{ label: 'Toggle', id: 'toggle' },
-						{ label: 'Select', id: 'select' },
-						{ label: 'Remove', id: 'remove' },
-					],
-				},
-			],
-			callback: (action) => {
-				PreviousSelectedCallersSave(instance)
-				switch (action.options.option) {
-					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-						toggleSelectedUser(instance, action.options.user as number)
-						break
-					case 'select':
-						if (instance.config.selectionMethod === selectionMethod.SingleSelection) {
-							instance.ZoomClientDataObj.selectedCallers.length = 0
-						}
-						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
-							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user as number
-						)
-						break
-					case 'remove':
-						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user as number
-						)
-						break
-				}
-				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
-				)
 			},
 		},
 		[ActionIdUsers.selectUserByName]: {
