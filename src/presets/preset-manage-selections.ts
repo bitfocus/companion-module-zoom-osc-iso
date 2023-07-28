@@ -209,5 +209,33 @@ export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 		],
 		feedbacks: [],
 	}
+
+	presets[`save_participants`] = {
+		type: 'button',
+		category: 'Manage Selections of Participants',
+		name: `Save Participant List`,
+		style: {
+			text: `Save Participants`,
+			size: '14',
+			color: colorBlack,
+			bgcolor: colorLightGray,
+		},
+		steps: [
+			{
+				down: [
+					{
+						actionId: ActionIdUsers.saveParticipants,
+						options: {
+							filepath: '',
+							includeVideoState: true,
+						},
+					},
+				],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
+
 	return presets
 }
