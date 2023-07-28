@@ -175,6 +175,7 @@ export class OSC {
 		const zoomPart3 = recvMsg[3]
 		let zoomId: number
 
+		this.instance.log('info', 'receiving:' + JSON.stringify(data))
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
 			this.instance.ZoomClientDataObj.last_response = Date.now()
@@ -197,6 +198,59 @@ export class OSC {
 					}
 
 					switch (zoomPart3) {
+						case 'spotlightOn':
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].spotlighted = true
+								const index = this.instance.ZoomGroupData[1].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
+
+								if (index === -1) {
+									this.instance.ZoomGroupData[1].users.push({
+										zoomID: zoomId,
+										userName: data.args[1].value,
+									})
+									this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
+									this.instance.UpdateVariablesValues()
+								}
+
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
+							}
+							break
+						case 'spotlightOff':
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.ZoomUserData[zoomId].spotlighted = false
+								const index = this.instance.ZoomGroupData[1].users.findIndex(
+									(id) => id !== null && id.zoomID === zoomId
+								)
+								if (index > -1) {
+									this.instance.ZoomGroupData[1].users.splice(index, 1)
+									this.instance.UpdateVariablesValues()
+								}
+
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.userNameBasedAdvanced,
+									FeedbackId.indexBased,
+									FeedbackId.indexBasedAdvanced,
+									FeedbackId.galleryBased,
+									FeedbackId.galleryBasedAdvanced,
+									FeedbackId.groupBased,
+									FeedbackId.groupBasedAdvanced
+								)
+							}
+							break
 						case 'list':
 							// this.instance.log('info', 'receiving list data' + JSON.stringify(data))
 							// {int targetIndex}, {str userName}, {int galleryIndex}, {int zoomID}
@@ -599,7 +653,7 @@ export class OSC {
 	 * @description Check OSC connection status and format command to send to Zoom
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
-		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
+		this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		this.udpPort.send(
 			{
 				address: path,

@@ -32,6 +32,8 @@ export enum feedbackType {
 	micOff = 5,
 	handLowered = 6,
 	cameraOff = 7,
+	spotlightOn = 8,
+	spotlightOff = 9,
 }
 
 export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
@@ -46,6 +48,18 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		}
 
 		switch (type) {
+			case feedbackType.spotlightOn:
+				if (userExist(zoomID, instance.ZoomUserData)) {
+					return instance.ZoomUserData[zoomID].spotlighted === true
+				}
+
+				return false
+			case feedbackType.spotlightOff:
+				if (userExist(zoomID, instance.ZoomUserData)) {
+					return instance.ZoomUserData[zoomID].spotlighted === false
+				}
+
+				return false
 			case feedbackType.micLive:
 				if (userExist(zoomID, instance.ZoomUserData)) {
 					return instance.ZoomUserData[zoomID].mute === false
@@ -165,6 +179,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						{ id: feedbackType.handLowered, label: 'Hand Lowered' },
 						{ id: feedbackType.cameraOff, label: 'Camera Off' },
 						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
+						{ id: feedbackType.spotlightOn, label: 'Spotlight On' },
+						{ id: feedbackType.spotlightOff, label: 'Spotlight Off' },
 					],
 				},
 			],
@@ -241,6 +257,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						{ id: feedbackType.handLowered, label: 'Hand Lowered' },
 						{ id: feedbackType.cameraOff, label: 'Camera Off' },
 						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
+						{ id: feedbackType.spotlightOn, label: 'Spotlight On' },
+						{ id: feedbackType.spotlightOff, label: 'Spotlight Off' },
 					],
 				},
 			],
@@ -305,6 +323,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						{ id: feedbackType.handLowered, label: 'Hand Lowered' },
 						{ id: feedbackType.cameraOff, label: 'Camera Off' },
 						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
+						{ id: feedbackType.spotlightOn, label: 'Spotlight On' },
+						{ id: feedbackType.spotlightOff, label: 'Spotlight Off' },
 					],
 				},
 			],
@@ -381,6 +401,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						{ id: feedbackType.handLowered, label: 'Hand Lowered' },
 						{ id: feedbackType.cameraOff, label: 'Camera Off' },
 						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
+						{ id: feedbackType.spotlightOn, label: 'Spotlight On' },
+						{ id: feedbackType.spotlightOff, label: 'Spotlight Off' },
 					],
 				},
 			],
