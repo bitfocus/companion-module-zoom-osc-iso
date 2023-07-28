@@ -111,6 +111,58 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 				],
 				feedbacks: [],
 			}
+			presets[`Save_${ZoomGroupData[index].groupName}_To_File`] = {
+				type: 'button',
+				category: 'Manage Selections of Groups',
+				name: ZoomGroupData[index].groupName,
+				style: {
+					text: `Save\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: colorBlack,
+					bgcolor: colorLightGray,
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionIdGroups.saveGroupToFile,
+								options: {
+									group: index,
+									filepath: '',
+								},
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [],
+			}
+			presets[`Load_${ZoomGroupData[index].groupName}_To_File`] = {
+				type: 'button',
+				category: 'Manage Selections of Groups',
+				name: ZoomGroupData[index].groupName,
+				style: {
+					text: `Load\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: colorBlack,
+					bgcolor: colorLightGray,
+				},
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionIdGroups.loadGroupFromFile,
+								options: {
+									group: index,
+									filepath: '',
+								},
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [],
+			}
 		}
 		presets[`Rename_${ZoomGroupData[index].groupName}`] = {
 			type: 'button',
@@ -138,6 +190,7 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 			],
 			feedbacks: [],
 		}
+
 		presets[`Select_${ZoomGroupData[index].groupName}`] = {
 			type: 'button',
 			category: `Manage Selections of Groups`,
