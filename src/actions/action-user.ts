@@ -2,6 +2,9 @@ import { CompanionActionDefinition, SomeCompanionActionInputField } from '@compa
 import { ZoomConfig } from '../config'
 import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils'
 import { FeedbackId } from '../feedback'
+import * as fs from 'fs'
+import * as os from 'os'
+
 import {
 	selectionMethod,
 	PreviousSelectedCallersSave,
@@ -18,6 +21,7 @@ export enum ActionIdUsers {
 	previousParticipants = 'previous_Participants',
 	resetParticipants = 'reset_Participants',
 	restorePreviousSelection = 'restorePreviousSelection',
+	saveParticipants = 'saveParticipants',
 }
 
 export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
@@ -308,6 +312,41 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.groupBased,
 					FeedbackId.groupBasedAdvanced
 				)
+			},
+		},
+		[ActionIdUsers.saveParticipants]: {
+			name: 'Save Participants',
+			options: [
+				{
+					type: 'textinput',
+					label: 'File to Save (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+				{
+					type: 'checkbox',
+					id: 'includeVideoState',
+					label: 'Include Video On/Off Status',
+					default: false,
+				},
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				let data = ''
+				for (const key in instance.ZoomUserData) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
+						if (data !== '') {
+							data += os.EOL
+						}
+						data += `${instance.ZoomUserData[key].userName}`
+						if (action.options.includeVideoState && instance.ZoomUserData[key].videoOn !== undefined) {
+							data += `,${instance.ZoomUserData[key].videoOn}`
+						}
+					}
+				}
+
+				fs.writeFileSync(filepath, data)
 			},
 		},
 	}
