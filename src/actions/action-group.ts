@@ -3,6 +3,8 @@ import { ZoomConfig } from '../config'
 import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils'
 import { FeedbackId } from '../feedback'
 import { PreviousSelectedCallersSave, positionOrderOption, selectionMethod, toggleSelectedUser } from './action-utils'
+import * as fs from 'fs'
+import * as os from 'os'
 
 export enum ActionIdGroups {
 	addToGroup = 'add_To_Group',
@@ -11,6 +13,8 @@ export enum ActionIdGroups {
 	renameGroup = 'rename_Group',
 	selectGroup = 'select_Group',
 	selectUserFromGroupPosition = 'select_User_From_Group_Position',
+	loadGroupFromFile = 'loadGroupFromFile',
+	saveGroupToFile = 'saveGroupToFile',
 }
 
 export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
@@ -42,6 +46,85 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 	}
 
 	const actions: { [id in ActionIdGroups]: CompanionActionDefinition | undefined } = {
+		[ActionIdGroups.saveGroupToFile]: {
+			name: 'Save Group to File',
+			options: [
+				groupOptionNoHost,
+				{
+					type: 'textinput',
+					label: 'File to Save (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const group = action.options.group as number
+				const users = instance.ZoomGroupData[group].users
+				let data = ''
+				for (const user of users) {
+					if (data !== '') {
+						data += os.EOL
+					}
+					data += user.userName
+				}
+
+				fs.writeFileSync(filepath, data)
+			},
+		},
+		[ActionIdGroups.loadGroupFromFile]: {
+			name: 'Load Group From File',
+			options: [
+				groupOptionNoHost,
+				{
+					type: 'textinput',
+					label: 'File to Load (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const group = action.options.group as number
+				try {
+					fs.readFile(filepath, 'utf8', (err, data) => {
+						if (err) {
+							instance.log('error', `error reading file: ${JSON.stringify(err)}`)
+						} else {
+							const selectedNames = data.split(os.EOL)
+
+							for (const selectedName of selectedNames) {
+								for (const key in instance.ZoomUserData) {
+									if (userExist(Number(key), instance.ZoomUserData)) {
+										const user = instance.ZoomUserData[key]
+										if (user.userName === selectedName) {
+											if (
+												!instance.ZoomGroupData[group].users.find(
+													(o: { zoomID: string | number }) => o !== null && o.zoomID === user.zoomId
+												)
+											) {
+												instance.ZoomGroupData[group].users.push({
+													zoomID: user.zoomId,
+													userName: user.userName,
+												})
+
+												instance.log('debug', `added user: ${user.userName} to group ${group}`)
+												instance.UpdateVariablesValues()
+												instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
+											}
+										}
+									}
+								}
+							}
+						}
+					})
+				} catch (error) {
+					instance.log('error', 'Error Reading File: ' + error)
+				}
+			},
+		},
 		// Group Actions
 		[ActionIdGroups.addToGroup]: {
 			name: 'Add selection to group',
