@@ -569,6 +569,7 @@ export class OSC {
 				case 'spotOrder':
 					this.instance.ZoomGroupData[1].users.length = 0
 					data.args.forEach((order: { type: string; value: number }) => {
+						this.instance.ZoomUserData[order.value].spotlighted = true
 						const findIndex = this.instance.ZoomVariableLink.findIndex(
 							(id: { zoomId: number }) => id.zoomId === order.value
 						)
