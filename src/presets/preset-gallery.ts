@@ -1,5 +1,10 @@
 import { FeedbackId, feedbackType } from '../feedback'
-import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
+import {
+	CompanionPresetDefinitionsExt,
+	getFeedbackStyleSelected,
+	getFeedbackStyleSpotlight,
+	getParticipantStyleDefault,
+} from './preset-utils'
 import { ActionIdGallery } from '../actions/action-gallery'
 import { padding } from '../utils'
 
@@ -27,6 +32,14 @@ export function GetPresetsListGallery(): CompanionPresetDefinitionsExt {
 				},
 			],
 			feedbacks: [
+				{
+					feedbackId: FeedbackId.galleryBased,
+					options: {
+						position: index,
+						type: feedbackType.spotlightOn,
+					},
+					style: getFeedbackStyleSpotlight(),
+				},
 				{
 					feedbackId: FeedbackId.galleryBased,
 					options: {

@@ -1,6 +1,11 @@
 import { FeedbackId, feedbackType } from '../feedback'
 import { colorBlack, colorLightGray, ZoomGroupDataInterface } from '../utils'
-import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
+import {
+	CompanionPresetDefinitionsExt,
+	getFeedbackStyleSelected,
+	getFeedbackStyleSpotlight,
+	getParticipantStyleDefault,
+} from './preset-utils'
 import { ActionIdGroups } from '../actions/action-group'
 
 export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): CompanionPresetDefinitionsExt {
@@ -8,7 +13,7 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
-		if (index !== 0) {
+		if (index !== 0 && index !== 1) {
 			presets[`Replace_group_${ZoomGroupData[index].groupName}`] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
@@ -163,32 +168,32 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 				],
 				feedbacks: [],
 			}
-		}
-		presets[`Rename_${ZoomGroupData[index].groupName}`] = {
-			type: 'button',
-			category: 'Manage Selections of Groups',
-			name: ZoomGroupData[index].groupName,
-			style: {
-				text: `Rename\\nGroup\\n$(zoomosc:Group${index})`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorLightGray,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdGroups.renameGroup,
-							options: {
-								group: index,
-								name: ZoomGroupData[index].groupName,
-							},
-						},
-					],
-					up: [],
+			presets[`Rename_${ZoomGroupData[index].groupName}`] = {
+				type: 'button',
+				category: 'Manage Selections of Groups',
+				name: ZoomGroupData[index].groupName,
+				style: {
+					text: `Rename\\nGroup\\n$(zoomosc:Group${index})`,
+					size: '14',
+					color: colorBlack,
+					bgcolor: colorLightGray,
 				},
-			],
-			feedbacks: [],
+				steps: [
+					{
+						down: [
+							{
+								actionId: ActionIdGroups.renameGroup,
+								options: {
+									group: index,
+									name: ZoomGroupData[index].groupName,
+								},
+							},
+						],
+						up: [],
+					},
+				],
+				feedbacks: [],
+			}
 		}
 
 		presets[`Select_${ZoomGroupData[index].groupName}`] = {
@@ -218,6 +223,9 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 		}
 
 		for (let position = 1; position < 50; position++) {
+			if (index == 1 && position > 9) {
+				break
+			}
 			presets[`Group${index}_Position${position}`] = {
 				type: 'button',
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
@@ -240,10 +248,20 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 						options: {
 							group: index,
 							position: position,
+							type: feedbackType.spotlightOn,
+						},
+						style: getFeedbackStyleSpotlight(),
+					},
+					{
+						feedbackId: FeedbackId.groupBased,
+						options: {
+							group: index,
+							position: position,
 							type: feedbackType.selected,
 						},
 						style: getFeedbackStyleSelected(),
 					},
+
 					{
 						feedbackId: FeedbackId.groupBasedAdvanced,
 						options: {

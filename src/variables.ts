@@ -39,7 +39,7 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 	} else {
 		const selectedCallers: string[] = []
 		instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: number) => {
-			if (zoomID < instance.ZoomClientDataObj.numberOfGroups + 1) {
+			if (zoomID < instance.ZoomClientDataObj.numberOfGroups + 2) {
 				if (userExist(zoomID, instance.ZoomUserData)) {
 					instance.ZoomUserData[zoomID].users.forEach((user: string | number) => {
 						selectedCallers.push(instance.ZoomUserData[user as number].userName)
@@ -134,7 +134,11 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		name: `Group${0} Position ${1}`,
 		variableId: `Group${0}Position${1}`,
 	})
-	for (let index = 1; index < instance.ZoomGroupData.length; index++) {
+	groupPositionVariables.push({
+		name: `Group${1} Position ${1}`,
+		variableId: `Group${1}Position${1}`,
+	})
+	for (let index = 2; index < instance.ZoomGroupData.length; index++) {
 		for (let position = 1; position < 2; position++) {
 			groupPositionVariables.push({
 				name: `Group${index} Position ${position}`,

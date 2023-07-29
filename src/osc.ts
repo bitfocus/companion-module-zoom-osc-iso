@@ -390,6 +390,12 @@ export class OSC {
 							if (hostGroupIndex > -1) {
 								this.instance.ZoomGroupData[0].users.splice(hostGroupIndex, 1)
 							}
+							const spotLightGroupIndex = this.instance.ZoomGroupData[1].users.findIndex(
+								(id) => id !== null && id.zoomID === zoomId
+							)
+							if (spotLightGroupIndex > -1) {
+								this.instance.ZoomGroupData[1].users.splice(spotLightGroupIndex, 1)
+							}
 							delete this.instance.ZoomUserData[zoomId]
 							const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
@@ -555,10 +561,33 @@ export class OSC {
 					// Subscribe to ZoomOSC
 					this.sendCommand('/zoom/subscribe', [{ type: 'i', value: SubscribeMode.All }])
 					this.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
+					this.sendCommand('/zoom/getSpotOrder', [])
 					// Start a loop to process incoming data in the backend
 					this.updateLoop = true
 					break
 				}
+				case 'spotOrder':
+					this.instance.ZoomGroupData[1].users.length = 0
+					data.args.forEach((order: { type: string; value: number }) => {
+						const findIndex = this.instance.ZoomVariableLink.findIndex(
+							(id: { zoomId: number }) => id.zoomId === order.value
+						)
+						this.instance.ZoomGroupData[1].users.push({
+							userName: this.instance.ZoomVariableLink[findIndex].userName,
+							zoomID: order.value,
+						})
+					})
+					this.instance.InitVariables()
+					this.instance.UpdateVariablesValues()
+					this.instance.checkFeedbacks(
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
+						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced
+					)
+					break
 				case 'meetingStatus':
 					this.instance.log('info', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
