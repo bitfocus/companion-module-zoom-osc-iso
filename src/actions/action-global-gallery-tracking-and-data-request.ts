@@ -6,6 +6,7 @@ import { createCommand, sendActionCommand } from './action-utils'
 export enum ActionIdGlobalGalleryTrackingAndDataRequest {
 	requestOrderOfGalleryView = 'requestOrderOfGalleryView',
 	requestGalleryCount = 'requestGalleryCount',
+	requestOrderOfSpotlights = 'requestOrderOfSpotlights',
 }
 
 export function GetActionsGlobalGalleryTrackingAndDataRequest(instance: InstanceBaseExt<ZoomConfig>): {
@@ -36,6 +37,22 @@ export function GetActionsGlobalGalleryTrackingAndDataRequest(instance: Instance
 				const command = createCommand(instance, '/galCount')
 				const sendToCommand = {
 					id: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights]: {
+			name: 'Request Order Of Spotlights',
+			options: [],
+			callback: (): void => {
+				// type: 'Special'
+				const command = createCommand(instance, '/getSpotOrder')
+				const sendToCommand = {
+					id: ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights,
 					options: {
 						command: command.oscPath,
 						args: command.args,

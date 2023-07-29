@@ -5,7 +5,7 @@ import {
 } from '@companion-module/base'
 import { ActionId } from '../actions'
 import { FeedbackId } from '../feedback'
-import { colorBlack, colorDarkGray, colorWhite } from '../utils'
+import { colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils'
 import { ActionIdGroups } from '../actions/action-group'
 import { ActionIdGallery } from '../actions/action-gallery'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
@@ -112,6 +112,13 @@ export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult =
 	return {
 		color: colorBlack,
 		bgcolor: colorDarkGray,
+	}
+}
+
+export const getFeedbackStyleSpotlight = (): CompanionFeedbackButtonStyleResult => {
+	return {
+		color: colorWhite,
+		bgcolor: colorDarkRed,
 	}
 }
 

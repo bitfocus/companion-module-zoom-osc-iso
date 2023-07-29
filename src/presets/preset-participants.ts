@@ -1,6 +1,11 @@
 import { FeedbackId, feedbackType } from '../feedback'
 import { padding } from '../utils'
-import { CompanionPresetDefinitionsExt, getFeedbackStyleSelected, getParticipantStyleDefault } from './preset-utils'
+import {
+	CompanionPresetDefinitionsExt,
+	getFeedbackStyleSelected,
+	getFeedbackStyleSpotlight,
+	getParticipantStyleDefault,
+} from './preset-utils'
 import { ActionIdUsers } from '../actions/action-user'
 
 export function GetPresetsListParticipants(): CompanionPresetDefinitionsExt {
@@ -30,6 +35,14 @@ export function GetPresetsListParticipants(): CompanionPresetDefinitionsExt {
 				},
 			],
 			feedbacks: [
+				{
+					feedbackId: FeedbackId.indexBased,
+					options: {
+						position: index,
+						type: feedbackType.spotlightOn,
+					},
+					style: getFeedbackStyleSpotlight(),
+				},
 				{
 					feedbackId: FeedbackId.indexBased,
 					options: {

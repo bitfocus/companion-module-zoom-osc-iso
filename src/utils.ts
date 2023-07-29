@@ -16,6 +16,7 @@ export const colorLightGray = combineRgb(230, 230, 230)
 export const colorBlack = combineRgb(0, 0, 0)
 export const colorWhite = combineRgb(255, 255, 255)
 export const colorRed = combineRgb(255, 0, 0)
+export const colorDarkRed = combineRgb(102, 25, 25)
 export const colorGreenOlive = combineRgb(141, 218, 77)
 export const colorTeal = combineRgb(111, 222, 222)
 
@@ -59,6 +60,7 @@ export interface ZoomUserDataInterface {
 		videoOn?: boolean
 		handRaised?: boolean
 		userRole?: number
+		spotlighted?: boolean
 		users: number[]
 	}
 }

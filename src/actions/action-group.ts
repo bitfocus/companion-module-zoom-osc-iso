@@ -26,7 +26,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 
 	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
 		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
-		if (index != 0) CHOICES_GROUPS_NO_HOST.push({ id: index.toString(), label: group.groupName })
+		if (index != 0 && index !== 1) CHOICES_GROUPS_NO_HOST.push({ id: index.toString(), label: group.groupName })
 	})
 
 	const groupOption: SomeCompanionActionInputField = {
