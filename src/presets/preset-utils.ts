@@ -5,7 +5,7 @@ import {
 } from '@companion-module/base'
 import { ActionId } from '../actions'
 import { FeedbackId } from '../feedback'
-import { colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils'
+import { InstanceBaseExt, colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils'
 import { ActionIdGroups } from '../actions/action-group'
 import { ActionIdGallery } from '../actions/action-gallery'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
@@ -31,13 +31,16 @@ import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
 import { ActionIdUsers } from '../actions/action-user'
+import { ZoomConfig } from '../config'
+
+export type PresetFeedbackDefinition = Array<
+	{
+		feedbackId: FeedbackId
+	} & CompanionButtonPresetDefinition['feedbacks'][0]
+>
 
 export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
-	feedbacks: Array<
-		{
-			feedbackId: FeedbackId
-		} & CompanionButtonPresetDefinition['feedbacks'][0]
-	>
+	feedbacks: PresetFeedbackDefinition
 	steps: Array<{
 		down: Array<
 			{
@@ -106,8 +109,12 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 export interface CompanionPresetDefinitionsExt {
 	[id: string]: CompanionPresetExt | undefined
 }
+
+export const buttonTextDefaultLength = 50
+export const buttonTextActiveSpeakerLength = 40
 export const alignmentTopLeft = 'left:top'
 export const alignmentTopCenter = 'center:top'
+
 export const getFeedbackStyleSelected = (): CompanionFeedbackButtonStyleResult => {
 	return {
 		color: colorBlack,
@@ -122,12 +129,28 @@ export const getFeedbackStyleSpotlight = (): CompanionFeedbackButtonStyleResult 
 	}
 }
 
-export const getParticipantStyleDefault = (text: string, position: number): CompanionButtonStyleProps => {
+export const getParticipantStyleDefault = (
+	instance: InstanceBaseExt<ZoomConfig>,
+	text: string,
+	position: number
+): CompanionButtonStyleProps => {
 	return {
-		text: `\\n${position}. ${text}`,
+		text:
+			instance.config.feedbackImagesWithIcons === 4
+				? `${position}. ${text}`
+				: `\`${position}. \${substr(${text},0,${buttonTextDefaultLength})}\``,
 		size: '7',
 		color: colorWhite,
 		bgcolor: colorBlack,
 		alignment: alignmentTopCenter,
-	}
+		show_topbar: false,
+		textExpression: instance.config.feedbackImagesWithIcons === 4 ? false : true,
+	} as CompanionButtonStyleProps
+}
+
+export const getParticipantStyleActiveSpeaker = (text: string, position: number): CompanionButtonStyleProps => {
+	return {
+		text: `\`\\n${position}. \${substr(${text},0,${buttonTextActiveSpeakerLength})}\``,
+		alignment: alignmentTopLeft,
+	} as CompanionButtonStyleProps
 }

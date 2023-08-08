@@ -1,15 +1,20 @@
 import { FeedbackId, feedbackType } from '../feedback'
-import { colorBlack, colorLightGray, ZoomGroupDataInterface } from '../utils'
+import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils'
 import {
 	CompanionPresetDefinitionsExt,
+	PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
+	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils'
 import { ActionIdGroups } from '../actions/action-group'
+import { ZoomConfig } from '../config'
 
-export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): CompanionPresetDefinitionsExt {
+export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
+
+	const ZoomGroupData: ZoomGroupDataInterface[] = instance.ZoomGroupData
 
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
@@ -226,11 +231,53 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 			if (index == 1 && position > 9) {
 				break
 			}
+
+			const groupFeedbacks: PresetFeedbackDefinition = [
+				{
+					feedbackId: FeedbackId.groupBased,
+					options: {
+						group: index,
+						position: position,
+						type: feedbackType.spotlightOn,
+					},
+					style: getFeedbackStyleSpotlight(),
+				},
+				{
+					feedbackId: FeedbackId.groupBased,
+					options: {
+						group: index,
+						position: position,
+						type: feedbackType.selected,
+					},
+					style: getFeedbackStyleSelected(),
+				},
+			]
+
+			if (instance.config.feedbackImagesWithIcons !== 4) {
+				groupFeedbacks.push({
+					feedbackId: FeedbackId.groupBased,
+					options: {
+						group: index,
+						position: position,
+						type: feedbackType.activeSpeaker,
+					},
+					style: getParticipantStyleActiveSpeaker(`$(zoomosc:Group${index}Position${position})`, position),
+				})
+			}
+
+			groupFeedbacks.push({
+				feedbackId: FeedbackId.groupBasedAdvanced,
+				options: {
+					group: index,
+					position: position,
+				},
+			})
+
 			presets[`Group${index}_Position${position}`] = {
 				type: 'button',
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
 				name: 'Group selection',
-				style: getParticipantStyleDefault(`$(zoomosc:Group${index}Position${position})`, position),
+				style: getParticipantStyleDefault(instance, `$(zoomosc:Group${index}Position${position})`, position),
 				steps: [
 					{
 						down: [
@@ -242,34 +289,7 @@ export function GetPresetsGroups(ZoomGroupData: ZoomGroupDataInterface[]): Compa
 						up: [],
 					},
 				],
-				feedbacks: [
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.spotlightOn,
-						},
-						style: getFeedbackStyleSpotlight(),
-					},
-					{
-						feedbackId: FeedbackId.groupBased,
-						options: {
-							group: index,
-							position: position,
-							type: feedbackType.selected,
-						},
-						style: getFeedbackStyleSelected(),
-					},
-
-					{
-						feedbackId: FeedbackId.groupBasedAdvanced,
-						options: {
-							group: index,
-							position: position,
-						},
-					},
-				],
+				feedbacks: groupFeedbacks,
 			}
 		}
 	}

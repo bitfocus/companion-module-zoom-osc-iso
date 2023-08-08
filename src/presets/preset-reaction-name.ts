@@ -1,12 +1,13 @@
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised'
-import { ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils'
+import { InstanceBaseExt, ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
 import { ActionIdGlobal } from '../actions/action-global'
+import { ZoomConfig } from '../config'
 
-export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): CompanionPresetDefinitionsExt {
+export function GetPresetsReactionName(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
-
+	const zoomUserData: ZoomUserDataInterface = instance.zoomUserData
 	/**
 	 * Reaction & Name Actions
 	 */
@@ -106,9 +107,9 @@ export function GetPresetsReactionName(ZoomUserData: ZoomUserDataInterface): Com
 	}
 
 	// User selection
-	for (const key in ZoomUserData) {
-		if (userExist(Number(key), ZoomUserData)) {
-			const user = ZoomUserData[key]
+	for (const key in zoomUserData) {
+		if (userExist(Number(key), zoomUserData)) {
+			const user = zoomUserData[key]
 			presets[`Rename_Participant_${user.zoomId}`] = {
 				type: 'button',
 				category: 'Reaction & Name Actions',

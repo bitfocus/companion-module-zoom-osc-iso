@@ -1,13 +1,12 @@
 import { FeedbackId } from '../feedback'
-import { ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils'
+import { InstanceBaseExt, ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils'
 import { CompanionPresetDefinitionsExt } from './preset-utils'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
+import { ZoomConfig } from '../config'
 
-export function GetPresetsZoomISOSelections(
-	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
-): CompanionPresetDefinitionsExt {
+export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
-
+	const zoomAudioRoutingData: ZoomAudioRoutingDataInterface = instance.ZoomAudioRoutingData
 	/**
 	 * ZoomISO Selections
 	 */
@@ -82,7 +81,7 @@ export function GetPresetsZoomISOSelections(
 	}
 	for (
 		let index = 1;
-		index < (Object.keys(ZoomAudioRoutingData).length === 0 ? 9 : Object.keys(ZoomAudioRoutingData).length + 1);
+		index < (Object.keys(zoomAudioRoutingData).length === 0 ? 9 : Object.keys(zoomAudioRoutingData).length + 1);
 		index++
 	) {
 		presets[`Select_Output_${index}`] = {
