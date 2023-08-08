@@ -1,6 +1,6 @@
 import { CompanionPresetDefinitions } from '@companion-module/base'
 
-import { ZoomAudioRoutingDataInterface, ZoomGroupDataInterface, ZoomUserDataInterface } from './utils'
+import { InstanceBaseExt } from './utils'
 import { CompanionPresetDefinitionsExt } from './presets/preset-utils'
 import { GetPresetsListParticipants } from './presets/preset-participants'
 import { GetPresetsListGallery } from './presets/preset-gallery'
@@ -19,21 +19,18 @@ import { GetPresetsSharing } from './presets/preset-sharing'
 import { GetPresetsBreakout } from './presets/preset-breakout'
 import { GetPresetsRecording } from './presets/preset-recording'
 import { GetPresetsDataCustom } from './presets/preset-data-custom'
+import { ZoomConfig } from './config'
 
-export function GetPresetList(
-	ZoomGroupData: ZoomGroupDataInterface[],
-	ZoomUserData: ZoomUserDataInterface,
-	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
-): CompanionPresetDefinitions {
-	const presetsParticipants = GetPresetsListParticipants()
-	const presetsGallery = GetPresetsListGallery()
+export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitions {
+	const presetsParticipants = GetPresetsListParticipants(instance)
+	const presetsGallery = GetPresetsListGallery(instance)
 	const presetsManageSelections = GetPresetsManageSelections()
-	const presetsGroups = GetPresetsGroups(ZoomGroupData)
+	const presetsGroups = GetPresetsGroups(instance)
 	const presetsPinSpotlightViewActions = GetPresetsPinSpotlightViewActions()
 	const presetsVideoAudioActions = GetPresetsVideoAudioActions()
-	const presetsZoomISOSelections = GetPresetsZoomISOSelections(ZoomAudioRoutingData)
+	const presetsZoomISOSelections = GetPresetsZoomISOSelections(instance)
 	const presetsZoomISOActions = GetPresetsZoomISOActions()
-	const presetsReactionNames = GetPresetsReactionName(ZoomUserData)
+	const presetsReactionNames = GetPresetsReactionName(instance)
 	const presetsRoleManagement = GetPresetsRoleManagement()
 	const presetsJoinLeaveEnd = GetPresetsJoinLeaveEnd()
 	const presetsDeviceSettings = GetPresetsDeviceSettings()

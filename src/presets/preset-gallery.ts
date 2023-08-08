@@ -1,22 +1,62 @@
 import { FeedbackId, feedbackType } from '../feedback'
 import {
 	CompanionPresetDefinitionsExt,
+	PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
+	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils'
 import { ActionIdGallery } from '../actions/action-gallery'
-import { padding } from '../utils'
+import { InstanceBaseExt, padding } from '../utils'
+import { ZoomConfig } from '../config'
 
-export function GetPresetsListGallery(): CompanionPresetDefinitionsExt {
+export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
 
 	for (let index = 1; index < 50; index++) {
+		const galleryFeedbacks: PresetFeedbackDefinition = [
+			{
+				feedbackId: FeedbackId.galleryBased,
+				options: {
+					position: index,
+					type: feedbackType.spotlightOn,
+				},
+				style: getFeedbackStyleSpotlight(),
+			},
+			{
+				feedbackId: FeedbackId.galleryBased,
+				options: {
+					position: index,
+					type: feedbackType.selected,
+				},
+				style: getFeedbackStyleSelected(),
+			},
+		]
+
+		if (instance.config.feedbackImagesWithIcons !== 4) {
+			galleryFeedbacks.push({
+				feedbackId: FeedbackId.galleryBased,
+				options: {
+					position: index,
+					type: feedbackType.activeSpeaker,
+				},
+				style: getParticipantStyleActiveSpeaker(`$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
+			})
+		}
+
+		galleryFeedbacks.push({
+			feedbackId: FeedbackId.galleryBasedAdvanced,
+			options: {
+				position: index,
+			},
+		})
+
 		presets[`Gallery_position_${index})`] = {
 			type: 'button',
 			category: 'Select from Gallery',
 			name: `$(zoomosc:Gallery position ${index})`,
-			style: getParticipantStyleDefault(`$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
+			style: getParticipantStyleDefault(instance, `$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
 			steps: [
 				{
 					down: [
@@ -31,30 +71,7 @@ export function GetPresetsListGallery(): CompanionPresetDefinitionsExt {
 					up: [],
 				},
 			],
-			feedbacks: [
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.spotlightOn,
-					},
-					style: getFeedbackStyleSpotlight(),
-				},
-				{
-					feedbackId: FeedbackId.galleryBased,
-					options: {
-						position: index,
-						type: feedbackType.selected,
-					},
-					style: getFeedbackStyleSelected(),
-				},
-				{
-					feedbackId: FeedbackId.galleryBasedAdvanced,
-					options: {
-						position: index,
-					},
-				},
-			],
+			feedbacks: galleryFeedbacks,
 		}
 	}
 

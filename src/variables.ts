@@ -138,6 +138,8 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		name: `Group${1} Position ${1}`,
 		variableId: `Group${1}Position${1}`,
 	})
+	userVariables.push({ name: `name`, variableId: `Group0` })
+	userVariables.push({ name: `name`, variableId: `Group1` })
 	for (let index = 2; index < instance.ZoomGroupData.length; index++) {
 		for (let position = 1; position < 2; position++) {
 			groupPositionVariables.push({
