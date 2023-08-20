@@ -332,7 +332,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
 				let data = ''
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {

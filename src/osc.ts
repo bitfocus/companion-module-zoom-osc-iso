@@ -1,7 +1,8 @@
-import { InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
+import { arrayRemove, InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config'
 import { FeedbackId } from './feedback'
+import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils'
 const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
@@ -384,20 +385,27 @@ export class OSC {
 							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 
-							const hostGroupIndex = this.instance.ZoomGroupData[0].users.findIndex(
-								(id) => id !== null && id.zoomID === zoomId
+							this.instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
+								const groupIndex = group.users.findIndex((id) => id !== null && id.zoomID === zoomId)
+								if (groupIndex > -1) {
+									group.users.splice(groupIndex, 1)
+								}
+							})
+
+							this.instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+								this.instance.ZoomClientDataObj.selectedCallers,
+								zoomId
 							)
-							if (hostGroupIndex > -1) {
-								this.instance.ZoomGroupData[0].users.splice(hostGroupIndex, 1)
-							}
-							const spotLightGroupIndex = this.instance.ZoomGroupData[1].users.findIndex(
-								(id) => id !== null && id.zoomID === zoomId
-							)
-							if (spotLightGroupIndex > -1) {
-								this.instance.ZoomGroupData[1].users.splice(spotLightGroupIndex, 1)
-							}
+
 							delete this.instance.ZoomUserData[zoomId]
 							const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+							this.instance.UpdateVariablesValues()
+							this.instance.checkFeedbacks(
+								FeedbackId.userNameBased,
+								FeedbackId.indexBased,
+								FeedbackId.galleryBased,
+								FeedbackId.groupBased
+							)
 							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
 							this.updateLoop = true
 							break
@@ -512,9 +520,13 @@ export class OSC {
 					// // {int number of users in call}
 					// // {int isPro (1=true, 0-false)}
 					const versionInfo = data.args[1].value as string
-					if (data.args[7].value === 1) this.instance.updateStatus(InstanceStatus.Ok)
-					else if (data.args[7].value === 0 || data.args[1].value.includes('lite'))
-						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
+					if (data.args[7].value === 1) {
+						this.instance.updateStatus(InstanceStatus.Ok)
+					} else if (data.args[7].value === 0 || data.args[1].value.includes('lite')) {
+						// this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
+
+						this.instance.updateStatus(InstanceStatus.Ok)
+					}
 					this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 					switch (versionInfo.substring(0, 4)) {
@@ -616,6 +628,7 @@ export class OSC {
 					break
 
 				case 'listCleared':
+					PreviousSelectedCallersSave(this.instance)
 					this.instance.ZoomClientDataObj.selectedCallers.length = 0
 					this.instance.ZoomVariableLink.length = 0
 					for (const key of Object.keys(this.instance.ZoomUserData)) {
@@ -625,6 +638,7 @@ export class OSC {
 					}
 					this.instance.InitVariables()
 					this.instance.UpdateVariablesValues()
+					PreviousSelectedCallersRestore(this.instance)
 					break
 
 				// ISO data

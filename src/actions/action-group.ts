@@ -59,7 +59,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
 				const group = action.options.group as number
 				const users = instance.ZoomGroupData[group].users
 				let data = ''
@@ -69,7 +69,6 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					}
 					data += user.userName
 				}
-
 				fs.writeFileSync(filepath, data)
 			},
 		},
@@ -86,7 +85,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString(action.options.filepath as string)
+				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
 				const group = action.options.group as number
 				try {
 					fs.readFile(filepath, 'utf8', (err, data) => {
@@ -94,7 +93,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 							instance.log('error', `error reading file: ${JSON.stringify(err)}`)
 						} else {
 							const selectedNames = data.split(os.EOL)
+							instance.log('debug', `load group from file: selectedNames - ${JSON.stringify(selectedNames)}`)
 
+							let addedUsers = false
 							for (const selectedName of selectedNames) {
 								for (const key in instance.ZoomUserData) {
 									if (userExist(Number(key), instance.ZoomUserData)) {
@@ -110,13 +111,17 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 													userName: user.userName,
 												})
 
+												addedUsers = true
 												instance.log('debug', `added user: ${user.userName} to group ${group}`)
-												instance.UpdateVariablesValues()
-												instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 											}
 										}
 									}
 								}
+							}
+
+							if (addedUsers) {
+								instance.UpdateVariablesValues()
+								instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 							}
 						}
 					})
