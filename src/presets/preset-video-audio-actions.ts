@@ -134,7 +134,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 		category: 'Video/Audio Actions',
 		name: 'Mute_All',
 		style: {
-			text: 'Mute all',
+			text: 'Mute all Except The Host',
 			size: '14',
 			color: colorBlack,
 			bgcolor: colorLightGray,
@@ -182,7 +182,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 		category: 'Video/Audio Actions',
 		name: 'mute_all_except',
 		style: {
-			text: 'Mute All Except',
+			text: 'Mute All Except Selected',
 			size: '14',
 			color: colorBlack,
 			bgcolor: colorLightGray,
@@ -206,7 +206,7 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 		category: 'Video/Audio Actions',
 		name: 'Mute all except Hosts',
 		style: {
-			text: 'Mute All Except Hosts',
+			text: 'Mute All Except All Hosts',
 			size: '14',
 			color: colorBlack,
 			bgcolor: colorLightGray,
@@ -216,6 +216,30 @@ export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 				down: [
 					{
 						actionId: ActionIdGlobal.muteAllExceptHost,
+						options: {},
+					},
+				],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
+
+	presets['mute_all_except_spotlight'] = {
+		type: 'button',
+		category: 'Video/Audio Actions',
+		name: 'Mute all except Spotlights',
+		style: {
+			text: 'Mute All Except Spotlight',
+			size: '14',
+			color: colorBlack,
+			bgcolor: colorLightGray,
+		},
+		steps: [
+			{
+				down: [
+					{
+						actionId: ActionIdGlobal.muteAllExceptSpot,
 						options: {},
 					},
 				],

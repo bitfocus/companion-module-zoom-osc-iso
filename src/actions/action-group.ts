@@ -49,7 +49,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGroups.saveGroupToFile]: {
 			name: 'Save Group to File',
 			options: [
-				groupOptionNoHost,
+				groupOption,
 				{
 					type: 'textinput',
 					label: 'File to Save (Path and File Name)',
