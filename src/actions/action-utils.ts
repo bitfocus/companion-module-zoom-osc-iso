@@ -84,7 +84,8 @@ export const createCommand = (
 	OSCAction: string,
 	name?: InputValue | string | undefined,
 	singleUser?: boolean | null,
-	allExcept?: boolean | null
+	allExcept?: boolean | null,
+	shouldSavePreviousSelectedCallers = true
 ): {
 	args: {
 		type: string
@@ -111,7 +112,9 @@ export const createCommand = (
 		command.oscPath = `/zoom${OSCAction}`
 	} else {
 		const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
-		PreviousSelectedCallersSave(instance)
+		if (shouldSavePreviousSelectedCallers) {
+			PreviousSelectedCallersSave(instance)
+		}
 		// Check if override has been filled
 		if (name != '' && name != undefined) {
 			instance.log('debug', 'Override:' + name)
@@ -147,12 +150,16 @@ export const createCommand = (
 			// Different path when more than one users are selected
 			if (allExcept) {
 				command.oscPath =
-					(command.args.length > 1 ? `/zoom/allExcept/users/zoomID` : `/zoom/allExcept/zoomID`) + OSCAction
+					(command.args.length > 1
+						? OSCAction === '/Mute'
+							? '/zoom/allExcept/ZoomID'
+							: `/zoom/allExcept/users/zoomID`
+						: `/zoom/allExcept/zoomID`) + OSCAction
 			} else {
 				command.oscPath = (command.args.length > 1 ? `/zoom/users/zoomID` : `/zoom/zoomID`) + OSCAction
 			}
 		}
-		if (command.isValidCommand) {
+		if (command.isValidCommand && shouldSavePreviousSelectedCallers) {
 			PreviousSelectedCallersSave(instance)
 		}
 	}

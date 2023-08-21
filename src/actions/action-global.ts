@@ -2,7 +2,13 @@ import { CompanionActionDefinition } from '@companion-module/base'
 import { ZoomConfig } from '../config'
 import { InstanceBaseExt, options, userExist } from '../utils'
 import { FeedbackId } from '../feedback'
-import { createCommand, sendActionCommand, select, PreviousSelectedCallersSave } from './action-utils'
+import {
+	createCommand,
+	sendActionCommand,
+	select,
+	PreviousSelectedCallersSave,
+	PreviousSelectedCallersRestore,
+} from './action-utils'
 
 export enum ActionIdGlobal {
 	enableUsersToUnmute = 'enableUsersToUnmute',
@@ -11,6 +17,7 @@ export enum ActionIdGlobal {
 	unmuteAll = 'unmuteAll',
 	muteAllExcept = 'muteAllExcept',
 	muteAllExceptHost = 'muteAllExceptHost',
+	muteAllExceptSpot = 'muteAllExceptSpotlight',
 	clearSpotlight = 'clearSpotlight',
 	lowerAllHands = 'lowerAllHands',
 	endMeeting = 'endMeeting',
@@ -26,7 +33,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 } {
 	const actions: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = {
 		[ActionIdGlobal.muteAll]: {
-			name: 'Mute All',
+			name: 'Mute All Except Host but Mute Co-Host',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -77,17 +84,18 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdGlobal.muteAllExceptHost]: {
-			name: 'Mute All Except Host',
+			name: 'Mute All Except Host Group',
 			description: 'This will mute all but the ones in Group Hosts',
 			options: [],
 			callback: async (): Promise<void> => {
 				PreviousSelectedCallersSave(instance)
-				// instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[0].users.forEach((ZoomID) => {
 					instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
 				})
 
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true)
+				const shouldSavePreviousCaller = false
+				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExceptHost,
@@ -98,6 +106,35 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 					}
 					sendActionCommand(instance, sendToCommand)
 				}
+
+				PreviousSelectedCallersRestore(instance)
+			},
+		},
+		[ActionIdGlobal.muteAllExceptSpot]: {
+			name: 'Mute All Except Spotlight Group',
+			description: 'This will mute all but the ones in Group Spotlights',
+			options: [],
+			callback: async (): Promise<void> => {
+				PreviousSelectedCallersSave(instance)
+				instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomGroupData[1].users.forEach((ZoomID) => {
+					instance.ZoomClientDataObj.selectedCallers.push(ZoomID.zoomID)
+				})
+
+				const shouldSavePreviousCaller = false
+				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionIdGlobal.muteAllExceptSpot,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(instance, sendToCommand)
+				}
+
+				PreviousSelectedCallersRestore(instance)
 			},
 		},
 		[ActionIdGlobal.clearSpotlight]: {
