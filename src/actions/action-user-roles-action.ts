@@ -188,16 +188,34 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			callback: async (action): Promise<void> => {
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const command = createCommand(instance, '/revokeCoHost', userName, select.multi)
-				if (command.isValidCommand) {
-					const sendToCommand = {
-						id: ActionIdUserRolesAndAction.revokeCoHost,
-						options: {
-							command: command.oscPath,
-							args: command.args,
-						},
+				if (userName === '' || userName === undefined) {
+					const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
+
+					selectedCallers.forEach((zoomID) => {
+						const command = createCommand(instance, '/zoomID/revokeCoHost')
+						if (command.isValidCommand) {
+							const sendToCommand = {
+								id: ActionIdUserRolesAndAction.revokeCoHost,
+								options: {
+									command: command.oscPath,
+									args: [{ type: 'i', value: zoomID }],
+								},
+							}
+							sendActionCommand(instance, sendToCommand)
+						}
+					})
+				} else {
+					const command = createCommand(instance, '/revokeCoHost', userName, select.single)
+					if (command.isValidCommand) {
+						const sendToCommand = {
+							id: ActionIdUserRolesAndAction.revokeCoHost,
+							options: {
+								command: command.oscPath,
+								args: command.args,
+							},
+						}
+						sendActionCommand(instance, sendToCommand)
 					}
-					sendActionCommand(instance, sendToCommand)
 				}
 			},
 		},
