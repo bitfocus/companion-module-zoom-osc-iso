@@ -321,5 +321,53 @@ export function GetPresetsDeviceSettings(): CompanionPresetDefinitionsExt {
 		feedbacks: [],
 	}
 
+	presets[`Hide_Self_View`] = {
+		type: 'button',
+		category: 'Devices & Settings Actions',
+		name: `Hide_Self_View`,
+		style: {
+			text: `Hide Self View`,
+			size: '14',
+			color: colorBlack,
+			bgcolor: colorLightGray,
+		},
+		steps: [
+			{
+				down: [
+					{
+						actionId: ActionIdUserSettings.hideSelfView,
+						options: {},
+					},
+				],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
+
+	presets[`Show_Self_View`] = {
+		type: 'button',
+		category: 'Devices & Settings Actions',
+		name: `Show_Self_View`,
+		style: {
+			text: `Show Self View`,
+			size: '14',
+			color: colorBlack,
+			bgcolor: colorLightGray,
+		},
+		steps: [
+			{
+				down: [
+					{
+						actionId: ActionIdUserSettings.showSelfView,
+						options: {},
+					},
+				],
+				up: [],
+			},
+		],
+		feedbacks: [],
+	}
+
 	return presets
 }
