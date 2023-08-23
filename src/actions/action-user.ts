@@ -339,7 +339,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 						if (data !== '') {
 							data += os.EOL
 						}
-						data += `${instance.ZoomUserData[key].userName}`
+						data += `"${instance.ZoomUserData[key].userName}"`
 						if (action.options.includeVideoState && instance.ZoomUserData[key].videoOn !== undefined) {
 							data += `,${instance.ZoomUserData[key].videoOn}`
 						}
