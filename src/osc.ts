@@ -100,7 +100,17 @@ export class OSC {
 					this.instance.updateInstance()
 					this.updateLoop = false
 					// Make sure initial status is reflected
-					this.instance.checkFeedbacks('indexBased', 'galleryBased', 'groupBased', 'selectionMethod', 'userNameBased')
+					this.instance.checkFeedbacks(
+						FeedbackId.userNameBased,
+						FeedbackId.userNameBasedAdvanced,
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
+						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced,
+						FeedbackId.selectionMethod
+					)
 				}
 			}, 2000)
 		})
@@ -523,9 +533,7 @@ export class OSC {
 					if (data.args[7].value === 1) {
 						this.instance.updateStatus(InstanceStatus.Ok)
 					} else if (data.args[7].value === 0 || data.args[1].value.includes('lite')) {
-						// this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
-
-						this.instance.updateStatus(InstanceStatus.Ok)
+						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
 					}
 					this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
