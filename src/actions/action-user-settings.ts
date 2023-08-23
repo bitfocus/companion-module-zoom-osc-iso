@@ -21,12 +21,46 @@ export enum ActionIdUserSettings {
 	setMicDevice = 'setMicDevice',
 	setSpeakerVolume = 'setSpeakerVolume',
 	setVirtualBackground = 'setVirtualBackground',
+	hideSelfView = 'hideSelfView',
+	showSelfView = 'showSelfView',
 }
 
 export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 	[id in ActionIdUserSettings]: CompanionActionDefinition | undefined
 } {
 	const actions: { [id in ActionIdUserSettings]: CompanionActionDefinition | undefined } = {
+		[ActionIdUserSettings.hideSelfView]: {
+			name: 'Hide Self View',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/me/hideSelfView')
+				const sendToCommand = {
+					id: ActionIdUserSettings.hideSelfView,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdUserSettings.showSelfView]: {
+			name: 'Show Self View',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/me/showSelfView')
+				const sendToCommand = {
+					id: ActionIdUserSettings.showSelfView,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
 		[ActionIdUserSettings.showNonVideoParticipants]: {
 			name: 'Show Non Video Participants',
 			options: [],
