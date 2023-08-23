@@ -188,7 +188,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			callback: async (action): Promise<void> => {
 				// type: 'User'
 				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				if (userName === '' || userName === undefined) {
+				if (userName === undefined || userName === '') {
 					const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 
 					selectedCallers.forEach((zoomID) => {
