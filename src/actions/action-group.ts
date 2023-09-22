@@ -93,7 +93,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 							instance.log('error', `error reading file: ${JSON.stringify(err)}`)
 						} else {
 							const selectedNames = data.split(os.EOL)
-							instance.log('debug', `load group from file: selectedNames - ${JSON.stringify(selectedNames)}`)
+							// instance.log('debug', `load group from file: selectedNames - ${JSON.stringify(selectedNames)}`)
 
 							let addedUsers = false
 							for (const selectedName of selectedNames) {
@@ -112,7 +112,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 												})
 
 												addedUsers = true
-												instance.log('debug', `added user: ${user.userName} to group ${group}`)
+												// instance.log('debug', `added user: ${user.userName} to group ${group}`)
 											}
 										}
 									}
@@ -200,7 +200,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					// When someone overides the selection by entering a name
 					if (userName !== undefined && userName !== '') {
 						if (userName.toLowerCase() === 'me' || userName.toLowerCase() === 'all')
-							instance.log('debug', 'dont use the me/all etc on the remove from group')
+							instance.log('warn', 'dont use the me/all etc on the remove from group')
 						// Get variable if needed
 						for (const key in instance.ZoomUserData) {
 							if (userExist(Number(key), instance.ZoomUserData)) {
@@ -225,7 +225,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 							for (let i = 0; i < instance.ZoomGroupData[group].users.length; i++) {
 								if (instance.ZoomGroupData[group].users[i].zoomID === ZoomID) {
 									instance.ZoomGroupData[group].users.splice(i, 1)
-									instance.log('debug', 'found and removed from group')
+									// instance.log('debug', 'found and removed from group')
 									break
 								}
 							}
@@ -237,7 +237,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					instance.UpdateVariablesValues()
 					instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 				} else {
-					instance.log('debug', 'No correct group selected')
+					instance.log('warn', 'No correct group selected')
 				}
 			},
 		},

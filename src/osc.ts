@@ -150,7 +150,7 @@ export class OSC {
 				// {int videoStatus}
 				// {int audioStatus}
 				// {int handRaised}
-				this.instance.log('debug', `${data.args[1].value}, user role ${data.args[6].value}`)
+				// this.instance.log('debug', `${data.args[1].value}, user role ${data.args[6].value}`)
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
 					targetIndex: data.args[0].value,
@@ -172,7 +172,7 @@ export class OSC {
 					}
 				}
 			} else {
-				this.instance.log('debug', 'wrong arguments in OSC feedback')
+				this.instance.log('warn', 'wrong arguments in OSC feedback')
 			}
 			this.instance.InitVariables()
 			this.instance.UpdateVariablesValues()
@@ -186,7 +186,7 @@ export class OSC {
 		const zoomPart3 = recvMsg[3]
 		let zoomId: number
 
-		this.instance.log('info', 'receiving:' + JSON.stringify(data))
+		// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 		// Do a switch block to go fast through the rest of the data
 		if (zoomPart1 == 'zoomosc') {
 			this.instance.ZoomClientDataObj.last_response = Date.now()
@@ -210,6 +210,7 @@ export class OSC {
 
 					switch (zoomPart3) {
 						case 'spotlightOn':
+							// this.instance.log('info', 'receiving spotlightOn:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].spotlighted = true
@@ -222,7 +223,7 @@ export class OSC {
 										zoomID: zoomId,
 										userName: data.args[1].value,
 									})
-									this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
+									// this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
 									this.instance.UpdateVariablesValues()
 								}
 
@@ -240,7 +241,7 @@ export class OSC {
 							break
 						case 'spotlightOff':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
-								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								// this.instance.log('info', 'receiving spotlightOff:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].spotlighted = false
 								const index = this.instance.ZoomGroupData[1].users.findIndex(
 									(id) => id !== null && id.zoomID === zoomId
@@ -308,7 +309,7 @@ export class OSC {
 							}
 							break
 						case 'videoOff':
-							this.instance.log('info', 'receiving:' + JSON.stringify(data))
+							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								this.instance.ZoomUserData[zoomId].videoOn = false
 								this.instance.checkFeedbacks(
@@ -392,32 +393,40 @@ export class OSC {
 							await this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'offline': {
-							// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-							this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
+							// this.instance.log('info', '*** offline *** receiving:' + JSON.stringify(data))
+							if (userExist(zoomId, this.instance.ZoomUserData)) {
+								this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 
-							this.instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
-								const groupIndex = group.users.findIndex((id) => id !== null && id.zoomID === zoomId)
-								if (groupIndex > -1) {
-									group.users.splice(groupIndex, 1)
+								this.instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
+									const groupIndex = group.users.findIndex((id) => id !== null && id.zoomID === zoomId)
+									if (groupIndex > -1) {
+										group.users.splice(groupIndex, 1)
+									}
+								})
+
+								this.instance.ZoomClientDataObj.selectedCallers = arrayRemove(
+									this.instance.ZoomClientDataObj.selectedCallers,
+									zoomId
+								)
+
+								delete this.instance.ZoomUserData[zoomId]
+								const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+								if (index > -1) {
+									this.instance.log(
+										'debug',
+										`Removed ${JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1))}`
+									)
 								}
-							})
+								this.instance.UpdateVariablesValues()
+								this.instance.checkFeedbacks(
+									FeedbackId.userNameBased,
+									FeedbackId.indexBased,
+									FeedbackId.galleryBased,
+									FeedbackId.groupBased
+								)
 
-							this.instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-								this.instance.ZoomClientDataObj.selectedCallers,
-								zoomId
-							)
-
-							delete this.instance.ZoomUserData[zoomId]
-							const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-							this.instance.UpdateVariablesValues()
-							this.instance.checkFeedbacks(
-								FeedbackId.userNameBased,
-								FeedbackId.indexBased,
-								FeedbackId.galleryBased,
-								FeedbackId.groupBased
-							)
-							this.instance.log('debug', 'Removed:' + JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1)))
-							this.updateLoop = true
+								this.updateLoop = true
+							}
 							break
 						}
 						case 'userNameChanged': {
@@ -535,6 +544,7 @@ export class OSC {
 					} else if (data.args[7].value === 0 || data.args[1].value.includes('lite')) {
 						this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
 					}
+
 					this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 					this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 					switch (versionInfo.substring(0, 4)) {
@@ -586,50 +596,69 @@ export class OSC {
 					this.updateLoop = true
 					break
 				}
-				case 'spotOrder':
+				case 'spotOrder': {
+					// this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
 					this.instance.ZoomGroupData[1].users.length = 0
+					let updatedData = false
 					data.args.forEach((order: { type: string; value: number }) => {
-						this.instance.ZoomUserData[order.value].spotlighted = true
-						const findIndex = this.instance.ZoomVariableLink.findIndex(
-							(id: { zoomId: number }) => id.zoomId === order.value
-						)
-						this.instance.ZoomGroupData[1].users.push({
-							userName: this.instance.ZoomVariableLink[findIndex].userName,
-							zoomID: order.value,
-						})
+						if (userExist(order.value, this.instance.ZoomUserData)) {
+							this.instance.ZoomUserData[order.value].spotlighted = true
+
+							const findIndex = this.instance.ZoomVariableLink.findIndex(
+								(id: { zoomId: number }) => id.zoomId === order.value
+							)
+							this.instance.ZoomGroupData[1].users.push({
+								userName: this.instance.ZoomVariableLink[findIndex].userName,
+								zoomID: order.value,
+							})
+
+							updatedData = true
+						}
 					})
-					this.instance.InitVariables()
-					this.instance.UpdateVariablesValues()
-					this.instance.checkFeedbacks(
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced
-					)
+
+					if (updatedData) {
+						this.instance.InitVariables()
+						this.instance.UpdateVariablesValues()
+						this.instance.checkFeedbacks(
+							FeedbackId.indexBased,
+							FeedbackId.indexBasedAdvanced,
+							FeedbackId.galleryBased,
+							FeedbackId.galleryBasedAdvanced,
+							FeedbackId.groupBased,
+							FeedbackId.groupBasedAdvanced
+						)
+					}
 					break
+				}
 				case 'meetingStatus':
-					this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 					// Meeting status ended
 					if (data.args[0].value === 0) {
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
-						this.instance.ZoomVariableLink.length = 0
+						// this.instance.ZoomVariableLink.length = 0
 						this.instance.ZoomGroupData = []
+						for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups + 2; index++) {
+							this.instance.ZoomGroupData[index] = {
+								groupName: index === 0 ? 'Hosts' : index === 1 ? 'Spotlights' : `Group ${index}`,
+								users: [],
+							}
+						}
 						this.instance.log(
 							'debug',
 							`meetingStatus Offline: numberOfGroups - ${this.instance.ZoomClientDataObj.numberOfGroups}`
 						)
-						for (const key of Object.keys(this.instance.ZoomUserData)) {
-							if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-								this.instance.log(
-									'debug',
-									`meetingStatus Offline: numberOfGroups - ${JSON.stringify(this.instance.ZoomUserData[parseInt(key)])}`
-								)
-								delete this.instance.ZoomUserData[parseInt(key)]
-							}
-						}
+
+						this.instance.ZoomUserData = {}
+						// for (const key of Object.keys(this.instance.ZoomUserData)) {
+						// 	// if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+						// 	this.instance.log(
+						// 		'debug',
+						// 		`meetingStatus Offline: userData - ${JSON.stringify(this.instance.ZoomUserData[parseInt(key)])}`
+						// 	)
+						// 	delete this.instance.ZoomUserData[parseInt(key)]
+						// 	// }
+						// }
 						this.instance.UpdateVariablesValues()
 					}
 					this.needToPingPong = true
@@ -705,7 +734,7 @@ export class OSC {
 	 * @description Check OSC connection status and format command to send to Zoom
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
-		this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
+		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		this.udpPort.send(
 			{
 				address: path,

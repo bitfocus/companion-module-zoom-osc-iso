@@ -117,7 +117,7 @@ export const createCommand = (
 		}
 		// Check if override has been filled
 		if (name != '' && name != undefined) {
-			instance.log('debug', 'Override:' + name)
+			// instance.log('debug', 'Override:' + name)
 			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
 				command.oscPath = `/zoom/${name.toLowerCase()}` + OSCAction
 			} else {
@@ -145,7 +145,7 @@ export const createCommand = (
 					})
 				}
 			} else {
-				instance.log('debug', 'Wrong selection, no array')
+				instance.log('warn', 'Wrong selection, no array')
 			}
 			// Different path when more than one users are selected
 			if (allExcept) {
@@ -179,6 +179,6 @@ export const sendActionCommand = (
 	// Construct command
 	const oscPath = action.options.command
 	const args = action.options.args
-	instance.log('debug', `Sending ${JSON.stringify(oscPath)}, with arguments ${JSON.stringify(args)}`)
+	// instance.log('debug', `Sending ${JSON.stringify(oscPath)}, with arguments ${JSON.stringify(args)}`)
 	if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 }
