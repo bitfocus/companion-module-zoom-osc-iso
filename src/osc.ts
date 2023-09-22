@@ -210,7 +210,7 @@ export class OSC {
 
 					switch (zoomPart3) {
 						case 'spotlightOn':
-							this.instance.log('info', 'receiving spotlightOn:' + JSON.stringify(data))
+							// this.instance.log('info', 'receiving spotlightOn:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].spotlighted = true
@@ -223,7 +223,7 @@ export class OSC {
 										zoomID: zoomId,
 										userName: data.args[1].value,
 									})
-									this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
+									// this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
 									this.instance.UpdateVariablesValues()
 								}
 
@@ -241,7 +241,7 @@ export class OSC {
 							break
 						case 'spotlightOff':
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
-								this.instance.log('info', 'receiving spotlightOff:' + JSON.stringify(data))
+								// this.instance.log('info', 'receiving spotlightOff:' + JSON.stringify(data))
 								this.instance.ZoomUserData[zoomId].spotlighted = false
 								const index = this.instance.ZoomGroupData[1].users.findIndex(
 									(id) => id !== null && id.zoomID === zoomId
@@ -393,7 +393,7 @@ export class OSC {
 							await this.createZoomUser(data).then(() => (this.updateLoop = true))
 							break
 						case 'offline': {
-							this.instance.log('info', '*** offline *** receiving:' + JSON.stringify(data))
+							// this.instance.log('info', '*** offline *** receiving:' + JSON.stringify(data))
 							if (userExist(zoomId, this.instance.ZoomUserData)) {
 								this.instance.ZoomUserOffline[zoomId] = this.instance.ZoomUserData[zoomId]
 
@@ -597,7 +597,7 @@ export class OSC {
 					break
 				}
 				case 'spotOrder': {
-					this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
+					// this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
 					this.instance.ZoomGroupData[1].users.length = 0
 					let updatedData = false
 					data.args.forEach((order: { type: string; value: number }) => {
