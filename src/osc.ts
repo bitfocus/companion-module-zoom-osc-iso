@@ -540,10 +540,8 @@ export class OSC {
 					// // {int isPro (1=true, 0-false)}
 					const versionInfo = data.args[1].value as string
 					if (data.args[7].value === 1) {
-						this.instance.config.licenseType = 'PRO'
 						this.instance.updateStatus(InstanceStatus.Ok)
 					} else if (data.args[7].value === 0 || data.args[1].value.includes('lite')) {
-						this.instance.config.licenseType = 'LITE'
 						this.instance.updateStatus(InstanceStatus.Ok)
 						// this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
 					}

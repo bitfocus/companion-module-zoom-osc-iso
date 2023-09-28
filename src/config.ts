@@ -10,7 +10,6 @@ export interface ZoomConfig {
 	numberOfGroups: number
 	pulling: number
 	feedbackImagesWithIcons: number
-	licenseType: string
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
