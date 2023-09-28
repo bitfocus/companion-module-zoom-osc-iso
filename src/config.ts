@@ -19,7 +19,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'static-text',
 			width: 12,
 			value:
-				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b><br><br>Note: If you are using the lite version, some core functionality like the gallery tracking will not work as it requires actions that only work with the PRO license.  As well, only the actions that are not listed as PRO in the <a href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API Guide</a> and the <a href="https://www.liminalet.com/zoomiso">ZoomISO Documentation</a> work with the lite version',
+				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
 			id: 'info on license',
 			label: 'Important note',
 		},
