@@ -52,7 +52,7 @@ export function GetActionsUserHandRaised(instance: InstanceBaseExt<ZoomConfig>):
 			},
 		},
 		[ActionIdUserHandRaised.toggleHand]: {
-			name: 'Toggle Hand',
+			name: 'Toggle Hand (Windows Only)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

@@ -12,7 +12,7 @@ export function GetActionsGlobalMemoryManagement(instance: InstanceBaseExt<ZoomC
 } {
 	const actions: { [id in ActionIdGlobalMemoryManagement]: CompanionActionDefinition | undefined } = {
 		[ActionIdGlobalMemoryManagement.listUsers]: {
-			name: 'Request list of Participants',
+			name: 'Request list of Participants (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Special'

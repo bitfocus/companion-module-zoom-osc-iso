@@ -13,7 +13,7 @@ export function GetActionsUserWebinar(instance: InstanceBaseExt<ZoomConfig>): {
 } {
 	const actions: { [id in ActionIdUserWebinar]: CompanionActionDefinition | undefined } = {
 		[ActionIdUserWebinar.allowWebinarAttendeeToSpeak]: {
-			name: 'Allow to Speak',
+			name: 'Allow to Speak (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -32,7 +32,7 @@ export function GetActionsUserWebinar(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserWebinar.disallowToSpeak]: {
-			name: 'Disallow to Speak',
+			name: 'Disallow to Speak (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

@@ -30,7 +30,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 } {
 	const actions: { [id in ActionIdUserSettings]: CompanionActionDefinition | undefined } = {
 		[ActionIdUserSettings.hideSelfView]: {
-			name: 'Hide Self View',
+			name: 'Hide Self View  (PRO and MAC Only)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -46,7 +46,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.showSelfView]: {
-			name: 'Show Self View',
+			name: 'Show Self View (PRO and MAC Only)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -164,7 +164,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.enableHDVideo]: {
-			name: 'Enable HD Video',
+			name: 'Enable HD Video (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -180,7 +180,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.disableHDVideo]: {
-			name: 'Disable HD Video',
+			name: 'Disable HD Video (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -196,7 +196,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.enableMirrorVideo]: {
-			name: 'Enable Mirror Video',
+			name: 'Enable Mirror Video (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -215,7 +215,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.disableMirrorVideo]: {
-			name: 'Disable Mirror Video',
+			name: 'Disable Mirror Video (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -234,7 +234,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setVirtualBackground]: {
-			name: 'Set Virtual Background',
+			name: 'Set Virtual Background (PRO and MAC Only)',
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -254,7 +254,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setVideoFilter]: {
-			name: 'Set Video Filter',
+			name: 'Set Video Filter (PRO and MAC Only)',
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -274,7 +274,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setCameraDevice]: {
-			name: 'Set Camera Device',
+			name: 'Set Camera Device (PRO)',
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -294,7 +294,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setSpeakerVolume]: {
-			name: 'Set Speaker Volume',
+			name: 'Set Speaker Volume (PRO)',
 			options: [options.userName, options.level],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -314,7 +314,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setSpeakerDevice]: {
-			name: 'Set Speaker Device',
+			name: 'Set Speaker Device (PRO)',
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -334,7 +334,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setMicDevice]: {
-			name: 'Set Mic Device',
+			name: 'Set Mic Device (PRO)',
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -354,7 +354,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserSettings.setMicLevel]: {
-			name: 'Set Mic Level',
+			name: 'Set Mic Level (PRO)',
 			options: [options.level],
 			callback: (action): void => {
 				// type: 'User'

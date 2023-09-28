@@ -16,7 +16,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 } {
 	const actions: { [id in ActionIdUserBreakoutRooms]: CompanionActionDefinition | undefined } = {
 		[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom]: {
-			name: 'Send Participant To BreakoutRoom',
+			name: 'Send Participant To BreakoutRoom (PRO)',
 			options: [options.userName, options.breakoutName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -36,7 +36,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			},
 		},
 		[ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom]: {
-			name: 'Remove Participant From BreakoutRoom',
+			name: 'Remove Participant From BreakoutRoom (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -55,7 +55,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			},
 		},
 		[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom]: {
-			name: 'Assign Participant To BreakoutRoom',
+			name: 'Assign Participant To BreakoutRoom (PRO)',
 			options: [options.userName, options.breakoutName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -76,7 +76,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			},
 		},
 		[ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom]: {
-			name: 'Unassign Participant From BreakoutRoom',
+			name: 'Unassign Participant From BreakoutRoom (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

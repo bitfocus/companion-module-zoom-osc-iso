@@ -138,7 +138,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdGlobal.clearSpotlight]: {
-			name: 'Clear Spotlight',
+			name: 'Clear Spotlight (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -233,7 +233,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdGlobal.leaveMeeting]: {
-			name: 'Leave Meeting',
+			name: 'Leave Meeting (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -249,7 +249,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdGlobal.endMeeting]: {
-			name: 'End Meeting',
+			name: 'End Meeting (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -300,7 +300,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdGlobal.joinMeeting]: {
-			name: 'Join Meeting',
+			name: 'Join Meeting (PRO)',
 			options: [options.meetingID, options.password, options.name],
 			callback: async (action): Promise<void> => {
 				// type: 'Special'

@@ -107,5 +107,13 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			default: 1,
 			width: 6,
 		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'If you are using the lite version of ZoomOSC or ZoomISO, some core functionality like the gallery tracking will not work as it requires commands that are only available in the PRO version and ZoomISO is limitged to a maximum of 4 outputs.  As well, only the actions that are not listed as PRO in the <a target="_blank" href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API/Command List</a> and the <a target="_blank" href="https://www.liminalet.com/zoomiso">ZoomISO Documentation (User Guide)</a> work with the lite version',
+			id: 'liteNote',
+			label: 'If You Are Using The Lite Version',
+		},
 	]
 }

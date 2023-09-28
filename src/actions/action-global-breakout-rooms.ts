@@ -19,7 +19,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 } {
 	const actions: { [id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined } = {
 		[ActionIdGlobalBreakoutRooms.openBreakoutRooms]: {
-			name: 'Open Breakout Rooms',
+			name: 'Open Breakout Rooms (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -35,7 +35,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.closeBreakoutRooms]: {
-			name: 'Close Breakout Rooms',
+			name: 'Close Breakout Rooms (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -51,7 +51,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.deleteAllBreakoutRooms]: {
-			name: 'Delete All Breakout Rooms',
+			name: 'Delete All Breakout Rooms (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -67,7 +67,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms]: {
-			name: 'Request list of breakout rooms',
+			name: 'Request list of breakout rooms (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -83,7 +83,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.configureBreakoutRooms]: {
-			name: 'Configure BreakoutRooms',
+			name: 'Configure BreakoutRooms (PRO)',
 			options: [
 				options.postCloseSeconds,
 				options.allowChooseBreakout,
@@ -114,7 +114,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.createBreakoutRoom]: {
-			name: 'Create Breakout Room',
+			name: 'Create Breakout Room (PRO)',
 			options: [options.name],
 			callback: async (action): Promise<void> => {
 				// type: 'Global'
@@ -132,7 +132,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.deleteBreakoutRoom]: {
-			name: 'Delete Breakout Room',
+			name: 'Delete Breakout Room (PRO)',
 			options: [options.name],
 			callback: async (action): Promise<void> => {
 				// type: 'Global'
@@ -150,7 +150,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms]: {
-			name: 'Broadcast Message To Breakout Rooms',
+			name: 'Broadcast Message To Breakout Rooms (PRO)',
 			options: [options.message],
 			callback: (action): void => {
 				// type: 'Global'
