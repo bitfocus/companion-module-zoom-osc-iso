@@ -10,6 +10,7 @@ export interface ZoomConfig {
 	numberOfGroups: number
 	pulling: number
 	feedbackImagesWithIcons: number
+	licenseType: string
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -18,7 +19,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'static-text',
 			width: 12,
 			value:
-				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
+				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b><br><br>Note: If you are using the lite version, some core functionality like the gallery tracking will not work as it requires actions that only work with the PRO license.  As well, only the actions that are not listed as PRO in the <a href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API Guide</a> and the <a href="https://www.liminalet.com/zoomiso">ZoomISO Documentation</a> work with the lite version',
 			id: 'info on license',
 			label: 'Important note',
 		},
@@ -106,6 +107,14 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			],
 			default: 1,
 			width: 6,
+		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'If you are using the lite version of ZoomOSC or ZoomISO, some core functionality like the gallery tracking will not work as it requires commands that are only available in the PRO version and ZoomISO is limitged to a maximum of 4 outputs.  As well, only the actions that are not listed as PRO in the <a target="_blank" href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API/Command List</a> and the <a target="_blank" href="https://www.liminalet.com/zoomiso">ZoomISO Documentation (User Guide)</a> work with the lite version',
+			id: 'liteNote',
+			label: 'If You Are Using The Lite Version',
 		},
 	]
 }

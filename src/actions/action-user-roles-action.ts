@@ -108,7 +108,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		},
 		// Rename Actions
 		[ActionIdUserRolesAndAction.rename]: {
-			name: 'Rename',
+			name: 'Rename (PRO)',
 			options: [userOption, options.name],
 			callback: async (action) => {
 				const newName = await instance.parseVariablesInString(action.options.name as string)
@@ -295,7 +295,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			},
 		},
 		[ActionIdUserRolesAndAction.allowToRecord]: {
-			name: 'Allow To Record',
+			name: 'Allow To Record (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -314,7 +314,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			},
 		},
 		[ActionIdUserRolesAndAction.disallowToRecord]: {
-			name: 'Disallow To Record',
+			name: 'Disallow To Record (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

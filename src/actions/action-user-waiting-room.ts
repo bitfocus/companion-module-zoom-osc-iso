@@ -13,7 +13,7 @@ export function GetActionsUserWaitingRoom(instance: InstanceBaseExt<ZoomConfig>)
 } {
 	const actions: { [id in ActionIdUserWaitingRoom]: CompanionActionDefinition | undefined } = {
 		[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom]: {
-			name: 'Admit Participant',
+			name: 'Admit Participant (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -32,7 +32,7 @@ export function GetActionsUserWaitingRoom(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom]: {
-			name: 'Send To Waiting Room',
+			name: 'Send To Waiting Room (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

@@ -39,7 +39,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserPin.addPin]: {
-			name: 'Add Pin',
+			name: 'Add Pin (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -77,7 +77,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserPin.clearPins]: {
-			name: 'Clear Pins',
+			name: 'Clear Pins (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -93,7 +93,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserPin.togglePin]: {
-			name: 'Toggle Pin',
+			name: 'Toggle Pin (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -166,7 +166,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			},
 		},
 		[ActionIdUserPin.togglePinScreen2]: {
-			name: 'Toggle PinScreen2',
+			name: 'Toggle PinScreen2 (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'

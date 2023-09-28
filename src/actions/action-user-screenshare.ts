@@ -24,7 +24,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 } {
 	const actions: { [id in ActionIdUserScreenshare]: CompanionActionDefinition | undefined } = {
 		[ActionIdUserScreenshare.startScreenShare]: {
-			name: 'Screen Share',
+			name: 'Screen Share (PRO)',
 			options: [options.id],
 			callback: (action): void => {
 				// type: 'Global'
@@ -41,7 +41,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.enableOptimizeVideoForSharing]: {
-			name: 'Enable Optimize Video For Sharing',
+			name: 'Enable Optimize Video For Sharing (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -57,7 +57,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.disableOptimizeVideoForSharing]: {
-			name: 'Disable Optimize Video For Sharing',
+			name: 'Disable Optimize Video For Sharing (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -73,7 +73,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.enableComputerSoundWhenSharing]: {
-			name: 'Enable Computer Sound When Sharing',
+			name: 'Enable Computer Sound When Sharing (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -89,7 +89,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.disableComputerSoundWhenSharing]: {
-			name: 'Disable Computer Sound When Sharing',
+			name: 'Disable Computer Sound When Sharing (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -121,7 +121,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.cycleSharedCameraToNextAvailable]: {
-			name: 'Cycle Shared Camera To Next Available',
+			name: 'Cycle Shared Camera To Next Available (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -153,7 +153,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.startCameraShare]: {
-			name: 'Start CameraShare',
+			name: 'Start CameraShare (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -169,7 +169,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.SetWindowPosition]: {
-			name: 'Set Window Position',
+			name: 'Set Window Position  (PRO and MAC Only)',
 			options: [options.userName, options.intX, options.intY],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -190,7 +190,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.SetWindowSize]: {
-			name: 'Set Window Size',
+			name: 'Set Window Size  (PRO and MAC Only)',
 			options: [options.userName, options.intX, options.intY],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -211,7 +211,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.startShareWithWindow]: {
-			name: 'Share Window',
+			name: 'Share Window  (PRO and MAC Only)',
 			options: [options.id],
 			callback: (action): void => {
 				// type: 'Global'
@@ -228,7 +228,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			},
 		},
 		[ActionIdUserScreenshare.startAudioShare]: {
-			name: 'Start AudioShare',
+			name: 'Start AudioShare (PRO and Windows)',
 			options: [options.id],
 			callback: (action): void => {
 				// type: 'Global'

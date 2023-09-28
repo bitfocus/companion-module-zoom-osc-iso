@@ -17,7 +17,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 } {
 	const actions: { [id in ActionIdGlobalWaitingRoomsAndZak]: CompanionActionDefinition | undefined } = {
 		[ActionIdGlobalWaitingRoomsAndZak.admitEveryoneFromWaitingRoom]: {
-			name: 'Admit All',
+			name: 'Admit All (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -33,7 +33,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 			},
 		},
 		[ActionIdGlobalWaitingRoomsAndZak.enableWaitingRoom]: {
-			name: 'Enable Waiting Room',
+			name: 'Enable Waiting Room (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -49,7 +49,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 			},
 		},
 		[ActionIdGlobalWaitingRoomsAndZak.disableWaitingRoom]: {
-			name: 'Disable Waiting Room',
+			name: 'Disable Waiting Room (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -65,7 +65,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 			},
 		},
 		[ActionIdGlobalWaitingRoomsAndZak.sendMessageToWaitingRoom]: {
-			name: 'Send Message To Waiting Room',
+			name: 'Send Message To Waiting Room (PRO)',
 			options: [options.message],
 			callback: (action): void => {
 				// type: 'Global'
@@ -82,7 +82,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 			},
 		},
 		[ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting]: {
-			name: 'ZAK Join Meeting',
+			name: 'ZAK Join Meeting (PRO)',
 			options: [options.zak, options.meetingID, options.name],
 			callback: async (action): Promise<void> => {
 				// type: 'Special'
@@ -102,7 +102,7 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 			},
 		},
 		[ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting]: {
-			name: 'ZAK Start Meeting',
+			name: 'ZAK Start Meeting (PRO)',
 			options: [options.zak, options.meetingID, options.name],
 			callback: async (action): Promise<void> => {
 				// type: 'Special'

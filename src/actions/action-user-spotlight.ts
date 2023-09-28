@@ -34,7 +34,7 @@ export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): 
 			},
 		},
 		[ActionIdUserSpotlight.addSpotlight]: {
-			name: 'Add Spotlight',
+			name: 'Add Spotlight (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
@@ -72,7 +72,7 @@ export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): 
 			},
 		},
 		[ActionIdUserSpotlight.toggleSpotlight]: {
-			name: 'Toggle Spotlight',
+			name: 'Toggle Spotlight (PRO)',
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
