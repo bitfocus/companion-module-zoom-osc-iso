@@ -287,8 +287,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				// type: 'Global'
 				const command = createCommand(instance, '/chatAll')
 				const message = await instance.parseVariablesInString(action.options.message as string)
-
-				command.args.push({ type: 's', value: message })
+				command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
 				const sendToCommand = {
 					id: ActionIdGlobal.sendAChatToEveryone,
 					options: {

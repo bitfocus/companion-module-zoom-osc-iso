@@ -20,7 +20,7 @@ export function GetActionsUserChat(instance: InstanceBaseExt<ZoomConfig>): {
 				const message = await instance.parseVariablesInString(action.options.message as string)
 				const command = createCommand(instance, '/chat', userName, select.multi)
 				if (command.isValidCommand) {
-					command.args.push({ type: 's', value: message })
+					command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
 					const sendToCommand = {
 						id: ActionIdUserChat.sendAChatViaDM,
 						options: {
