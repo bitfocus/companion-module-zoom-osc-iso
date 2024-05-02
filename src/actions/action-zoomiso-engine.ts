@@ -1,12 +1,13 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt } from '../utils'
-import { createCommand, sendActionCommand } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt } from '../utils.js'
+import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdZoomISOEngine {
 	stopISOEngine = 'stop_ISO_Engine',
 	startISOEngine = 'start_ISO_Engine',
 	standbyISOEngine = 'standby_ISO_Engine',
+	requestCapturePermission = 'request_capture_permission',
 }
 
 export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): {
@@ -56,6 +57,23 @@ export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): 
 
 				const sendToCommand = {
 					id: ActionIdZoomISOEngine.standbyISOEngine,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdZoomISOEngine.requestCapturePermission]: {
+			name: 'Request Capture Permission',
+			options: [],
+			callback: (): void => {
+				// type: 'ISO'
+				const command = createCommand(instance, '/requestCapturePermission')
+				instance.log('warn', `requestCapturePermission ************************ ${command.oscPath}`)
+				const sendToCommand = {
+					id: ActionIdZoomISOEngine.requestCapturePermission,
 					options: {
 						command: command.oscPath,
 						args: command.args,

@@ -1,10 +1,10 @@
-import { ActionIdUserSpotlight } from '../actions/action-user-spotlight'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdUserPin } from '../actions/action-user-pin'
-import { ActionIdUserView } from '../actions/action-user-view'
-import { ActionIdUserSettings } from '../actions/action-user-settings'
-import { ActionIdGlobal } from '../actions/action-global'
+import { ActionIdUserSpotlight } from '../actions/action-user-spotlight.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdUserPin } from '../actions/action-user-pin.js'
+import { ActionIdUserView } from '../actions/action-user-view.js'
+import { ActionIdUserSettings } from '../actions/action-user-settings.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
 
 export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

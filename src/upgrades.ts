@@ -6,8 +6,8 @@ import type {
 	CompanionUpgradeContext,
 } from '@companion-module/base'
 
-import { ZoomConfig } from './config'
-import { v2Actions, v2FeedbackTypes, v2Feedbacks } from './v2CommandsToUpgradeTov3'
+import { ZoomConfig } from './config.js'
+import { v2Actions, v2FeedbackTypes, v2Feedbacks } from './v2CommandsToUpgradeTov3.js'
 
 export function UpgradeV2toV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,

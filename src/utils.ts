@@ -48,6 +48,7 @@ export interface ZoomClientDataObjInterface {
 	galleryOrder: number[]
 	numberOfGroups: number
 	engineState: number
+	capturePermissionGranted: boolean
 }
 
 export interface ZoomUserDataInterface {

@@ -1,7 +1,7 @@
-import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdGlobalRecording } from '../actions/action-global-recording'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdGlobalRecording } from '../actions/action-global-recording.js'
 
 export function GetPresetsRecording(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

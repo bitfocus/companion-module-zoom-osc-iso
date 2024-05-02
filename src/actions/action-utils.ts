@@ -1,6 +1,6 @@
 import { CompanionActionEvent, InputValue, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove } from '../utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove } from '../utils.js'
 
 export const select = { single: true, multi: false }
 

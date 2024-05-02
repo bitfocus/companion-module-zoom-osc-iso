@@ -1,45 +1,45 @@
 import { CompanionActionDefinition, CompanionActionDefinitions } from '@companion-module/base'
-import { ZoomConfig } from './config'
-import { InstanceBaseExt, options } from './utils'
+import { ZoomConfig } from './config.js'
+import { InstanceBaseExt, options } from './utils.js'
 
-import { createCommand, sendActionCommand } from './actions/action-utils'
-import { ActionIdGroups, GetActionsGroups } from './actions/action-group'
-import { ActionIdGallery, GetActionsGallery } from './actions/action-gallery'
-import { ActionIdGlobalBreakoutRooms, GetActionsGlobalBreakoutRooms } from './actions/action-global-breakout-rooms'
+import { createCommand, sendActionCommand } from './actions/action-utils.js'
+import { ActionIdGroups, GetActionsGroups } from './actions/action-group.js'
+import { ActionIdGallery, GetActionsGallery } from './actions/action-gallery.js'
+import { ActionIdGlobalBreakoutRooms, GetActionsGlobalBreakoutRooms } from './actions/action-global-breakout-rooms.js'
 import {
 	ActionIdGlobalMemoryManagement,
 	GetActionsGlobalMemoryManagement,
-} from './actions/action-global-memory-management'
+} from './actions/action-global-memory-management.js'
 import {
 	ActionIdGlobalGalleryTrackingAndDataRequest,
 	GetActionsGlobalGalleryTrackingAndDataRequest,
-} from './actions/action-global-gallery-tracking-and-data-request'
-import { ActionIdGlobalRecording, GetActionsGlobalRecording } from './actions/action-global-recording'
+} from './actions/action-global-gallery-tracking-and-data-request.js'
+import { ActionIdGlobalRecording, GetActionsGlobalRecording } from './actions/action-global-recording.js'
 import {
 	ActionIdGlobalWaitingRoomsAndZak,
 	GetActionsGlobalWaitingRoomsAndZak,
-} from './actions/action-global-waitingrooms-and-zak'
-import { ActionIdGlobal, GetActionsGlobal } from './actions/action-global'
-import { ActionIdUserBreakoutRooms, GetActionsUserBreakoutRooms } from './actions/action-user-breakout-rooms'
-import { ActionIdUserChat, GetActionsUserChat } from './actions/action-user-chat'
-import { ActionIdUserHandRaised, GetActionsUserHandRaised } from './actions/action-user-hand-raised'
-import { ActionIdUserPin, GetActionsUserPin } from './actions/action-user-pin'
-import { ActionIdUserRolesAndAction, GetActionsUserRolesAndAction } from './actions/action-user-roles-action'
-import { ActionIdUserScreenshare, GetActionsUserScreenshare } from './actions/action-user-screenshare'
-import { ActionIdUserSettings, GetActionsUserSettings } from './actions/action-user-settings'
-import { ActionIdUserSpotlight, GetActionsUserSpotlight } from './actions/action-user-spotlight'
-import { ActionIdUserVideoMic, GetActionsUserVideoMic } from './actions/action-user-video-mic'
-import { ActionIdUserView, GetActionsUserView } from './actions/action-user-view'
-import { ActionIdUserWaitingRoom, GetActionsUserWaitingRoom } from './actions/action-user-waiting-room'
-import { ActionIdUserWebinar, GetActionsUserWebinar } from './actions/action-user-webinars'
-import { ActionIdZoomISOEngine, GetActionsZoomISOEngine } from './actions/action-zoomiso-engine'
+} from './actions/action-global-waitingrooms-and-zak.js'
+import { ActionIdGlobal, GetActionsGlobal } from './actions/action-global.js'
+import { ActionIdUserBreakoutRooms, GetActionsUserBreakoutRooms } from './actions/action-user-breakout-rooms.js'
+import { ActionIdUserChat, GetActionsUserChat } from './actions/action-user-chat.js'
+import { ActionIdUserHandRaised, GetActionsUserHandRaised } from './actions/action-user-hand-raised.js'
+import { ActionIdUserPin, GetActionsUserPin } from './actions/action-user-pin.js'
+import { ActionIdUserRolesAndAction, GetActionsUserRolesAndAction } from './actions/action-user-roles-action.js'
+import { ActionIdUserScreenshare, GetActionsUserScreenshare } from './actions/action-user-screenshare.js'
+import { ActionIdUserSettings, GetActionsUserSettings } from './actions/action-user-settings.js'
+import { ActionIdUserSpotlight, GetActionsUserSpotlight } from './actions/action-user-spotlight.js'
+import { ActionIdUserVideoMic, GetActionsUserVideoMic } from './actions/action-user-video-mic.js'
+import { ActionIdUserView, GetActionsUserView } from './actions/action-user-view.js'
+import { ActionIdUserWaitingRoom, GetActionsUserWaitingRoom } from './actions/action-user-waiting-room.js'
+import { ActionIdUserWebinar, GetActionsUserWebinar } from './actions/action-user-webinars.js'
+import { ActionIdZoomISOEngine, GetActionsZoomISOEngine } from './actions/action-zoomiso-engine.js'
 import {
 	ActionIdZoomISOOutputSettings,
 	GetActionsZoomISOOutputSettings,
-} from './actions/action-zoomiso-output-settings'
-import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/action-zoomiso-routing'
-import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions'
-import { ActionIdUsers, GetActionsUsers } from './actions/action-user'
+} from './actions/action-zoomiso-output-settings.js'
+import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/action-zoomiso-routing.js'
+import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions.js'
+import { ActionIdUsers, GetActionsUsers } from './actions/action-user.js'
 
 export enum ActionId {
 	loadISOConfig = 'load_ISO_Config',

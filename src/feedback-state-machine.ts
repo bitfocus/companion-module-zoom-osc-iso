@@ -1,6 +1,6 @@
 import { CompanionAdvancedFeedbackResult } from '@companion-module/base'
-import { ZoomConfig } from './config'
-import { InstanceBaseExt, userExist } from './utils'
+import { ZoomConfig } from './config.js'
+import { InstanceBaseExt, userExist } from './utils.js'
 const { images } = require('./images') // eslint-disable-line
 
 type FeedbackMultiState = [boolean, boolean, boolean, boolean]

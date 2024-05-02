@@ -1,9 +1,9 @@
-import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised'
-import { InstanceBaseExt, ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
-import { ActionIdGlobal } from '../actions/action-global'
-import { ZoomConfig } from '../config'
+import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
+import { InstanceBaseExt, ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
+import { ZoomConfig } from '../config.js'
 
 export function GetPresetsReactionName(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

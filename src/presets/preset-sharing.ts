@@ -1,6 +1,6 @@
-import { ActionIdUserScreenshare } from '../actions/action-user-screenshare'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
 
 export function GetPresetsSharing(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

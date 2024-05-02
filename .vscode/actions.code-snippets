@@ -21,8 +21,8 @@
 		"prefix": "action-file-init",
 		"body": [
 			"import { CompanionActionDefinition } from '@companion-module/base'",
-			"import { ZoomConfig } from '../config'",
-			"import { InstanceBaseExt } from '../utils'",
+			"import { ZoomConfig } from '../config.js'",
+			"import { InstanceBaseExt } from '../utils.js'",
 			"",
 			"export enum ActionId${1:ActionType} {",
 			"\t$0",

@@ -1,7 +1,7 @@
-import { ActionIdUserVideoMic } from '../actions/action-user-video-mic'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdGlobal } from '../actions/action-global'
+import { ActionIdUserVideoMic } from '../actions/action-user-video-mic.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
 
 export function GetPresetsVideoAudioActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

@@ -1,10 +1,10 @@
-import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdUserWebinar } from '../actions/action-user-webinars'
-import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room'
-import { ActionIdGlobal } from '../actions/action-global'
-import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak'
+import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdUserWebinar } from '../actions/action-user-webinars.js'
+import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
+import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak.js'
 
 export function GetPresetsRoleManagement(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

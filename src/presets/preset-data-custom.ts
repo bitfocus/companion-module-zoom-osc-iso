@@ -1,10 +1,10 @@
-import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request'
-import { ActionId } from '../actions'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdGlobal } from '../actions/action-global'
-import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
-import { ActionIdGlobalMemoryManagement } from '../actions/action-global-memory-management'
+import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request.js'
+import { ActionId } from '../actions.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
+import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
+import { ActionIdGlobalMemoryManagement } from '../actions/action-global-memory-management.js'
 
 export function GetPresetsDataCustom(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

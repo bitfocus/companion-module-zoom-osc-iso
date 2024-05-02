@@ -1,8 +1,8 @@
-import { FeedbackId } from '../feedback'
-import { InstanceBaseExt, ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions'
-import { ZoomConfig } from '../config'
+import { FeedbackId } from '../feedback.js'
+import { InstanceBaseExt, ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
+import { ZoomConfig } from '../config.js'
 
 export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

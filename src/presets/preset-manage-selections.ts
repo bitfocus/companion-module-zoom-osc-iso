@@ -1,7 +1,7 @@
-import { FeedbackId, feedbackType } from '../feedback'
-import { CompanionPresetDefinitionsExt, alignmentTopLeft } from './preset-utils'
-import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils'
-import { ActionIdUsers } from '../actions/action-user'
+import { FeedbackId, feedbackType } from '../feedback.js'
+import { CompanionPresetDefinitionsExt, alignmentTopLeft } from './preset-utils.js'
+import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils.js'
+import { ActionIdUsers } from '../actions/action-user.js'
 
 export function GetPresetsManageSelections(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
