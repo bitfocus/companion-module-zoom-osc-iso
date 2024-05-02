@@ -1,7 +1,7 @@
 import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils'
-import { FeedbackId } from '../feedback'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
 import * as fs from 'fs'
 import * as os from 'os'
 
@@ -10,7 +10,7 @@ import {
 	PreviousSelectedCallersSave,
 	toggleSelectedUser,
 	PreviousSelectedCallersRestore,
-} from './action-utils'
+} from './action-utils.js'
 
 export enum ActionIdUsers {
 	selectionMethod = 'selection_Method',

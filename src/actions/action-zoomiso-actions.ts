@@ -1,8 +1,8 @@
 import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt } from '../utils'
-import { FeedbackId } from '../feedback'
-import { sendActionCommand, PreviousSelectedCallersSave } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
+import { sendActionCommand, PreviousSelectedCallersSave } from './action-utils.js'
 
 export enum ActionIdZoomISOActions {
 	selectOutput = 'select_Output',

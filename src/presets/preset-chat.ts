@@ -1,7 +1,7 @@
-import { ActionIdUserChat } from '../actions/action-user-chat'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdGlobal } from '../actions/action-global'
+import { ActionIdUserChat } from '../actions/action-user-chat.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
 
 export function GetPresetsChat(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

@@ -1,10 +1,10 @@
 import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
-import { GetConfigFields, ZoomConfig } from './config'
-import { GetActions } from './actions'
-import { GetFeedbacks } from './feedback'
-import { GetPresetList } from './presets'
-import { initVariables, updateVariables } from './variables'
-import { OSC } from './osc'
+import { GetConfigFields, ZoomConfig } from './config.js'
+import { GetActions } from './actions.js'
+import { GetFeedbacks } from './feedback.js'
+import { GetPresetList } from './presets.js'
+import { initVariables, updateVariables } from './variables.js'
+import { OSC } from './osc.js'
 import {
 	ZoomAudioLevelDataInterface,
 	ZoomAudioRoutingDataInterface,
@@ -14,9 +14,9 @@ import {
 	ZoomUserDataInterface,
 	ZoomUserOfflineInterface,
 	ZoomVariableLinkInterface,
-} from './utils'
+} from './utils.js'
 
-import { UpgradeV2ToV3 } from './upgrades'
+import { UpgradeV2ToV3 } from './upgrades.js'
 
 /**
  * @description Companion instance class for Zoom
@@ -50,6 +50,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		galleryOrder: [],
 		numberOfGroups: 5,
 		engineState: -1,
+		capturePermissionGranted: false,
 	}
 	// Array with all callers
 	public ZoomUserData: ZoomUserDataInterface = {}

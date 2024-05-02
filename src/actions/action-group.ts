@@ -1,8 +1,13 @@
 import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils'
-import { FeedbackId } from '../feedback'
-import { PreviousSelectedCallersSave, positionOrderOption, selectionMethod, toggleSelectedUser } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
+import {
+	PreviousSelectedCallersSave,
+	positionOrderOption,
+	selectionMethod,
+	toggleSelectedUser,
+} from './action-utils.js'
 import * as fs from 'fs'
 import * as os from 'os'
 

@@ -1,6 +1,6 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, ZoomGroupDataInterface, arrayAdd, arrayRemove, options, userExist } from '../utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, ZoomGroupDataInterface, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
 import {
 	sendActionCommand,
 	createCommand,
@@ -8,8 +8,8 @@ import {
 	PreviousSelectedCallersSave,
 	toggleSelectedUser,
 	selectionMethod,
-} from './action-utils'
-import { FeedbackId } from '../feedback'
+} from './action-utils.js'
+import { FeedbackId } from '../feedback.js'
 
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',

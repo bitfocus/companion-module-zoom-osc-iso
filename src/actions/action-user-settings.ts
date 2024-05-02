@@ -1,7 +1,7 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, options } from '../utils'
-import { createCommand, sendActionCommand, select } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, options } from '../utils.js'
+import { createCommand, sendActionCommand, select } from './action-utils.js'
 
 export enum ActionIdUserSettings {
 	hideUserNamesOnVideo = 'hideUserNamesOnVideo',

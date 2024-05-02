@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "3.12.0",
+	"version": "3.13.0",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
@@ -8,36 +8,36 @@
 	},
 	"scripts": {
 		"prepare": "husky install",
+		"postinstall": "husky",
+		"format": "prettier -w .",
+		"package": "yarn build && companion-module-build",
 		"dev": "yarn build:watch",
 		"build": "rimraf dist && yarn build:main",
 		"build:main": "tsc -p tsconfig.build.json",
 		"build:watch": "tsc -p tsconfig.build.json --watch",
-		"lint": "eslint ./src/** --ext .ts",
-		"postinstall": "yarn build"
+		"lint:raw": "eslint --ext .ts --ext .js --ignore-pattern dist --ignore-pattern pkg",
+		"lint": "yarn lint:raw ."		
 	},
 	"license": "MIT",
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"dependencies": {
-		"@companion-module/base": "~1.4",
+		"@companion-module/base": "~1.7.0",
 		"osc": "^2.4.3"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "1.2.1",
-		"@types/node": "^18.0.0",
-		"husky": "^8.0.3",
-		"lint-staged": "^13.2.3",
-		"rimraf": "^5.0.1",
-		"typescript": "^4.5.5"
+		"@companion-module/tools": "^1.4.2",
+		"husky": "^9.0.10",
+		"lint-staged": "^15.2.2",
+		"typescript": "^5.3.3",
+		"@types/node": "^20.0.0",
+		"rimraf": "^5.0.1"		
 	},
 	"lint-staged": {
-		"*.{js,json,md,ts}": [
+		"*.{css,json,md,scss}": [
 			"prettier --write"
 		],
-		"*.ts": [
-			"yarn lint --fix"
+		"*.{ts,tsx,js,jsx}": [
+			"yarn lint:raw --fix"
 		]
-	},
-	"engines": {
-		"node": ">=18.0.0"
 	}
 }

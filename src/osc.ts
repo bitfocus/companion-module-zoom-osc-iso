@@ -1,8 +1,8 @@
-import { arrayRemove, InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils'
+import { arrayRemove, InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils.js'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
-import { ZoomConfig } from './config'
-import { FeedbackId } from './feedback'
-import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils'
+import { ZoomConfig } from './config.js'
+import { FeedbackId } from './feedback.js'
+import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils.js'
 const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
@@ -27,10 +27,10 @@ export class OSC {
 	private udpPort: any
 	private updateLoop = true
 	private needToPingPong = true
-	private pingInterval: NodeJS.Timer | undefined
+	private pingInterval: NodeJS.Timeout | undefined
 	private pingIntervalTime = 2000
-	private updatePresetsLoop: NodeJS.Timer | undefined
-	private zoomISOPuller: NodeJS.Timer | undefined
+	private updatePresetsLoop: NodeJS.Timeout | undefined
+	private zoomISOPuller: NodeJS.Timeout | undefined
 
 	constructor(instance: InstanceBaseExt<ZoomConfig>) {
 		this.instance = instance
@@ -645,10 +645,10 @@ export class OSC {
 								users: [],
 							}
 						}
-						this.instance.log(
-							'debug',
-							`meetingStatus Offline: numberOfGroups - ${this.instance.ZoomClientDataObj.numberOfGroups}`
-						)
+						// this.instance.log(
+						// 	'debug',
+						// 	`meetingStatus Offline: numberOfGroups - ${this.instance.ZoomClientDataObj.numberOfGroups}`
+						// )
 
 						this.instance.ZoomUserData = {}
 						// for (const key of Object.keys(this.instance.ZoomUserData)) {
@@ -681,6 +681,7 @@ export class OSC {
 
 				// ISO data
 				case 'engineState':
+					this.instance.log('info', 'receiving:' + JSON.stringify(data))
 					this.instance.ZoomClientDataObj.engineState = data.args[0].value
 					this.instance.UpdateVariablesValues()
 					this.instance.checkFeedbacks('engineState')

@@ -1,8 +1,8 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt } from '../utils'
-import { createCommand, sendActionCommand } from './action-utils'
-import { ActionIdGlobalGalleryTrackingAndDataRequest } from './action-global-gallery-tracking-and-data-request'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt } from '../utils.js'
+import { createCommand, sendActionCommand } from './action-utils.js'
+import { ActionIdGlobalGalleryTrackingAndDataRequest } from './action-global-gallery-tracking-and-data-request.js'
 
 export enum ActionIdUserView {
 	setGalleryView = 'setGalleryView',

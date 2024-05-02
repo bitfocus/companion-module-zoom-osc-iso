@@ -1,14 +1,14 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, options, userExist } from '../utils'
-import { FeedbackId } from '../feedback'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, options, userExist } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
 import {
 	createCommand,
 	sendActionCommand,
 	select,
 	PreviousSelectedCallersSave,
 	PreviousSelectedCallersRestore,
-} from './action-utils'
+} from './action-utils.js'
 
 export enum ActionIdGlobal {
 	enableUsersToUnmute = 'enableUsersToUnmute',

@@ -1,8 +1,8 @@
-import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing'
-import { colorBlack, colorGreenOlive } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine'
-import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings'
+import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
+import { colorBlack, colorGreenOlive } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
+import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
 
 export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

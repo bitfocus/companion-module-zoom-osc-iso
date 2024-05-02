@@ -1,7 +1,7 @@
-import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
-import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms'
+import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
 
 export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

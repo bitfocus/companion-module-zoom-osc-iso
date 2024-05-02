@@ -1,6 +1,6 @@
 import { CompanionVariableDefinition, CompanionVariableValues } from '@companion-module/base'
-import { ZoomConfig } from './config'
-import { InstanceBaseExt, padding, userExist } from './utils'
+import { ZoomConfig } from './config.js'
+import { InstanceBaseExt, padding, userExist } from './utils.js'
 
 enum engineState {
 	disabled = 'disabled',

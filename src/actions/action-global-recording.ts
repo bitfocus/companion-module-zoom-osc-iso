@@ -1,7 +1,7 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt } from '../utils'
-import { createCommand, sendActionCommand } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt } from '../utils.js'
+import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalRecording {
 	startLocalRecording = 'startLocalRecording',

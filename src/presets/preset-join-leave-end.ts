@@ -1,7 +1,7 @@
-import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak'
-import { ActionIdGlobal } from '../actions/action-global'
-import { colorBlack, colorLightGray } from '../utils'
-import { CompanionPresetDefinitionsExt } from './preset-utils'
+import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak.js'
+import { ActionIdGlobal } from '../actions/action-global.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { CompanionPresetDefinitionsExt } from './preset-utils.js'
 
 export function GetPresetsJoinLeaveEnd(): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

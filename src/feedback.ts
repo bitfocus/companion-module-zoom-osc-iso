@@ -1,7 +1,7 @@
 import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import { ZoomConfig } from './config'
-import { feedbackResultsMultiState } from './feedback-state-machine'
-import { InstanceBaseExt, userExist, colorRed } from './utils'
+import { ZoomConfig } from './config.js'
+import { feedbackResultsMultiState } from './feedback-state-machine.js'
+import { InstanceBaseExt, userExist, colorRed } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -16,6 +16,7 @@ export enum FeedbackId {
 	output = 'output',
 	audioOutput = 'audio_Output',
 	engineState = 'engine_State',
+	capturePermissionGranted = 'capture_permission_granted',
 }
 enum engineState {
 	disabled = 0,
@@ -465,6 +466,34 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			],
 			callback: (feedback) => {
 				if (instance.ZoomClientDataObj.engineState === feedback.options.state) {
+					return true
+				} else {
+					return false
+				}
+			},
+		},
+		[FeedbackId.capturePermissionGranted]: {
+			type: 'boolean',
+			name: 'Status of Capture Permission Granted',
+			description: 'Show feedback of the Capture Permission Granted',
+			defaultStyle: {
+				bgcolor: colorRed,
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Granted Capture Permission',
+					id: 'state',
+					default: engineState.enabled,
+					choices: [
+						{ id: engineState.disabled, label: 'Disabled' },
+						{ id: engineState.enabled, label: 'Enabled' },
+						{ id: engineState.standby, label: 'Standby' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				if (instance.ZoomClientDataObj.capturePermissionGranted === feedback.options.state) {
 					return true
 				} else {
 					return false

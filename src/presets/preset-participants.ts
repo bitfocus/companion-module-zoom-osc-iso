@@ -1,5 +1,5 @@
-import { FeedbackId, feedbackType } from '../feedback'
-import { InstanceBaseExt, padding } from '../utils'
+import { FeedbackId, feedbackType } from '../feedback.js'
+import { InstanceBaseExt, padding } from '../utils.js'
 import {
 	CompanionPresetDefinitionsExt,
 	PresetFeedbackDefinition,
@@ -7,9 +7,9 @@ import {
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
-} from './preset-utils'
-import { ActionIdUsers } from '../actions/action-user'
-import { ZoomConfig } from '../config'
+} from './preset-utils.js'
+import { ActionIdUsers } from '../actions/action-user.js'
+import { ZoomConfig } from '../config.js'
 
 export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}

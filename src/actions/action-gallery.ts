@@ -1,8 +1,13 @@
 import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config'
-import { InstanceBaseExt, arrayAdd, arrayRemove } from '../utils'
-import { FeedbackId } from '../feedback'
-import { PreviousSelectedCallersSave, positionOrderOption, selectionMethod, toggleSelectedUser } from './action-utils'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, arrayAdd, arrayRemove } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
+import {
+	PreviousSelectedCallersSave,
+	positionOrderOption,
+	selectionMethod,
+	toggleSelectedUser,
+} from './action-utils.js'
 
 export enum ActionIdGallery {
 	selectFromGalleryPosition = 'select_From_Gallery_Position',
