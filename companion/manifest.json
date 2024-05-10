@@ -3,7 +3,7 @@
 	"name": "zoom-osc-iso",
 	"shortname": "OSC / ISO module",
 	"description": "ZoomOSC plugin for companion ",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-zoom-osc-iso.git",
 	"bugs": "https://github.com/bitfocus/companion-module-zoom-osc-iso/issues",
