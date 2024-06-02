@@ -22,7 +22,6 @@
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"dependencies": {
 		"@companion-module/base": "~1.8.0",
-		"@types/got": "^9.6.12",
 		"got-cjs": "^12.5.4",
 		"osc": "^2.4.3"
 	},
@@ -32,7 +31,8 @@
 		"husky": "^9.0.10",
 		"lint-staged": "^15.2.2",
 		"rimraf": "^5.0.1",
-		"typescript": "^5.3.3"
+		"typescript": "^5.3.3",
+		"@types/got": "^9.6.12"
 	},
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
