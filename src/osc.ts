@@ -3,6 +3,7 @@ import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils.js'
+import { socialStreamApi } from './socialstream.js'
 const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
@@ -454,6 +455,9 @@ export class OSC {
 							}
 							case 'chat':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								if (data.args.length >= 5) {
+									await socialStreamApi.postMessage(data.args[1].value, data.args[4].value, this.instance)
+								}
 								break
 							case 'audioStatus':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
