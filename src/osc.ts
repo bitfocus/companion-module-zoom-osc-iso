@@ -455,7 +455,11 @@ export class OSC {
 							}
 							case 'chat':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
-								if (data.args.length >= 5) {
+								if (
+									this.instance.config.enableSocialStream &&
+									this.instance.config.socialStreamId.length > 0 &&
+									data.args.length >= 5
+								) {
 									await socialStreamApi.postMessage(data.args[1].value, data.args[4].value, this.instance)
 								}
 								break

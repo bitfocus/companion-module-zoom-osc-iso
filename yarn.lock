@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@companion-module/base@~1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@companion-module/base/-/base-1.8.0.tgz#1c74204b29451bd7740b2428db372fdfaf51d84d"
-  integrity sha512-97qmnaPAJZbisYR6EBQ/fZxY8dPLV3my6qIHJzifFl/vkwi+a3ucoXQWLwd5tijM9pqbZOS/3b2V1m6sbdAWlQ==
+"@companion-module/base@~1.7.0":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@companion-module/base/-/base-1.7.1.tgz#3f054a78a6f48382bd17522c0633691dc96deb93"
+  integrity sha512-DDgSzqNr9xW/d85yoSOy85Iutw1UaqwmOMw1gLdX7/BsPYE/pHl8JzrUuio0MazPRvYbGGTchqxt5Mq3r67izg==
   dependencies:
-    "@sentry/node" "^7.109.0"
-    "@sentry/tracing" "^7.109.0"
+    "@sentry/node" "^7.82.0"
+    "@sentry/tracing" "^7.82.0"
     ajv "^8.12.0"
     colord "^2.9.3"
     ejson "^2.2.3"
@@ -19,7 +19,7 @@
     p-timeout "^4.1.0"
     tslib "^2.6.2"
 
-"@companion-module/tools@^1.5.0":
+"@companion-module/tools@^1.4.2":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@companion-module/tools/-/tools-1.5.0.tgz#ce3cc1fc8aa71ebcbb8fcc65ccaad22099bb3c9e"
   integrity sha512-J9sY2DE6i7bWYZ1uoPE8Drux53StYVqpVe+xHF0mERvV9QXOvPQ5AqxM12ts/Jd0vzd94jqLEUzm1I/y/KEWtw==
@@ -216,7 +216,7 @@
     "@sentry/utils" "7.116.0"
     localforage "^1.8.1"
 
-"@sentry/node@^7.109.0":
+"@sentry/node@^7.82.0":
   version "7.116.0"
   resolved "https://registry.yarnpkg.com/@sentry/node/-/node-7.116.0.tgz#199c304e203f35ca0e814fb7fc8a9b3f30b2c612"
   integrity sha512-HB/4TrJWbnu6swNzkid+MlwzLwY/D/klGt3R0aatgrgWPo2jJm6bSl4LUT39Cr2eg5I1gsREQtXE2mAlC6gm8w==
@@ -227,7 +227,7 @@
     "@sentry/types" "7.116.0"
     "@sentry/utils" "7.116.0"
 
-"@sentry/tracing@^7.109.0":
+"@sentry/tracing@^7.82.0":
   version "7.114.0"
   resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-7.114.0.tgz#32a3438b0f2d02fb7b7359fe7712c5a349a2a329"
   integrity sha512-eldEYGADReZ4jWdN5u35yxLUSTOvjsiZAYd4KBEpf+Ii65n7g/kYOKAjNl7tHbrEG1EsMW4nDPWStUMk1w+tfg==

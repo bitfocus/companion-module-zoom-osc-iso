@@ -23,23 +23,6 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 					const message = await instance.parseVariablesInString(action.options.message as string)
 					const name = await instance.parseVariablesInString(action.options.name as string)
 					await socialStreamApi.postMessage(name, message, instance)
-					// const socialStreamId = instance.config.socialStreamId
-					// const url = `https://io.socialstream.ninja/${socialStreamId}`
-					// const body = {
-					// 	chatname: name,
-					// 	chatmessage: message,
-					// 	textonly: false,
-					// 	chatimg: null,
-					// 	type: 'zoom',
-					// }
-					// instance.log('debug', url)
-					// const options = {
-					// 	json: body,
-					// 	headers: {
-					// 		'Content-Type': 'application/json',
-					// 	},
-					// }
-					// await got.post(url, options)
 				} else {
 					instance.log('debug', 'Social Stream is not enabled in config')
 				}

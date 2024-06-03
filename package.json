@@ -21,12 +21,12 @@
 	"license": "MIT",
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"dependencies": {
-		"@companion-module/base": "~1.8.0",
+		"@companion-module/base": "~1.7.0",
 		"got-cjs": "^12.5.4",
 		"osc": "^2.4.3"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^1.5.0",
+		"@companion-module/tools": "^1.4.2",
 		"@types/node": "^20.0.0",
 		"husky": "^9.0.10",
 		"lint-staged": "^15.2.2",
