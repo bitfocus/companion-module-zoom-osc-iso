@@ -109,6 +109,8 @@ export function updateVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 			: '-'
 	}
 
+	variables['videoOnCount'] = Object.values(instance.ZoomUserData).filter((user) => user.videoOn).length
+
 	instance.setVariableValues(variables)
 }
 
@@ -124,6 +126,7 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		{ name: 'Number of users in call', variableId: 'numberOfUsers' },
 		{ name: 'Is speaking', variableId: 'isSpeaking' },
 		{ name: 'Active speaking', variableId: 'activeSpeaker' },
+		{ name: 'Video On Number', variableId: 'videoOnCount' },
 	])
 	// Groups
 	const groupPositionVariables = []
@@ -139,7 +142,16 @@ export function initVariables(instance: InstanceBaseExt<ZoomConfig>): void {
 		variableId: `Group${1}Position${1}`,
 	})
 	userVariables.push({ name: `name`, variableId: `Group0` })
+	userVariables.push({
+		name: 'Callers In Host Group',
+		variableId: 'CallersInGroup0',
+	})
+
 	userVariables.push({ name: `name`, variableId: `Group1` })
+	userVariables.push({
+		name: 'Callers In Spotlight Group',
+		variableId: 'CallersInGroup1',
+	})
 	for (let index = 2; index < instance.ZoomGroupData.length; index++) {
 		for (let position = 1; position < 2; position++) {
 			groupPositionVariables.push({
