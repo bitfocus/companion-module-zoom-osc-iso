@@ -215,6 +215,7 @@ export const options: Options = {
 	},
 	meetingID: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'Meeting ID',
 		id: 'meetingID',
 		default: '',
@@ -308,6 +309,7 @@ export const options: Options = {
 	},
 	zak: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'Zak',
 		id: 'zak',
 		default: '',
