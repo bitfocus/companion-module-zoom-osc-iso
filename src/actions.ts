@@ -20,6 +20,7 @@ import {
 	GetActionsGlobalWaitingRoomsAndZak,
 } from './actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobal, GetActionsGlobal } from './actions/action-global.js'
+import { ActionIdGlobalChat, GetActionsGlobalChat } from './actions/action-global-chat.js'
 import { ActionIdUserBreakoutRooms, GetActionsUserBreakoutRooms } from './actions/action-user-breakout-rooms.js'
 import { ActionIdUserChat, GetActionsUserChat } from './actions/action-user-chat.js'
 import { ActionIdUserHandRaised, GetActionsUserHandRaised } from './actions/action-user-hand-raised.js'
@@ -37,15 +38,13 @@ import {
 	ActionIdZoomISOOutputSettings,
 	GetActionsZoomISOOutputSettings,
 } from './actions/action-zoomiso-output-settings.js'
+import { ActionIdZoomISOConfig, GetActionsZoomISOConfig } from './actions/action-zoomiso-config.js'
 import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions.js'
 import { ActionIdUsers, GetActionsUsers } from './actions/action-user.js'
+import { ActionIdSocialStream, GetActionsSocalSteam } from './actions/action-social-stream.js'
 
 export enum ActionId {
-	loadISOConfig = 'load_ISO_Config',
-	saveISOConfig = 'save_ISO_Config',
-	mergeISOConfig = 'merge_ISO_Config',
-	getConfigPath = 'get_Config_Path',
 	acceptRecordingConsent = 'accept_Recording_Consent',
 	customCommandWithArguments = 'customCommandWithArguments',
 	customCommand = 'customCommand',
@@ -102,6 +101,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 	const actionGlobal: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = GetActionsGlobal(instance)
 
+	const actionGlobalChat: { [id in ActionIdGlobalChat]: CompanionActionDefinition | undefined } =
+		GetActionsGlobalChat(instance)
+
 	const actionGlobalBreakoutRooms: { [id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined } =
 		GetActionsGlobalBreakoutRooms(instance)
 
@@ -119,6 +121,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	const actionZoomISORouting: { [id in ActionIdZoomISORouting]: CompanionActionDefinition | undefined } =
 		GetActionsZoomISORouting(instance)
 
+	const actionZoomISOConfig: { [id in ActionIdZoomISOConfig]: CompanionActionDefinition | undefined } =
+		GetActionsZoomISOConfig(instance)
+
 	const actionZoomISOEngine: { [id in ActionIdZoomISOEngine]: CompanionActionDefinition | undefined } =
 		GetActionsZoomISOEngine(instance)
 
@@ -129,6 +134,9 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		GetActionsZoomISOActions(instance)
 
 	const actionUsers: { [id in ActionIdUsers]: CompanionActionDefinition | undefined } = GetActionsUsers(instance)
+
+	const actionSocialStream: { [id in ActionIdSocialStream]: CompanionActionDefinition | undefined } =
+		GetActionsSocalSteam(instance)
 
 	const actions: {
 		[id in
@@ -141,6 +149,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			| ActionIdGlobalRecording
 			| ActionIdGlobalWaitingRoomsAndZak
 			| ActionIdGlobal
+			| ActionIdGlobalChat
 			| ActionIdUserBreakoutRooms
 			| ActionIdUserChat
 			| ActionIdUserHandRaised
@@ -154,9 +163,11 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			| ActionIdUserWaitingRoom
 			| ActionIdUserWebinar
 			| ActionIdZoomISOEngine
+			| ActionIdZoomISOConfig
 			| ActionIdZoomISOOutputSettings
 			| ActionIdZoomISOActions
 			| ActionIdUsers
+			| ActionIdSocialStream
 			| ActionIdZoomISORouting]: CompanionActionDefinition | undefined
 	} = {
 		...actionsGroups,
@@ -175,82 +186,18 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		...actionUserSharescreen,
 		...actionUserSettings,
 		...actionGlobal,
+		...actionGlobalChat,
 		...actionGlobalBreakoutRooms,
 		...actionGlobalRecording,
 		...actionGlobalWaitingRoomsAndZak,
 		...actionGlobalMemoryManagement,
 		...actionZoomISORouting,
 		...actionZoomISOEngine,
+		...actionZoomISOConfig,
 		...actionZoomISOOutputSettings,
 		...actionZoomISOActions,
 		...actionUsers,
-		[ActionId.loadISOConfig]: {
-			name: 'Load Config',
-			options: [options.path],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/loadConfig')
-				command.args.push({ type: 'i', value: action.options.path })
-				const sendToCommand = {
-					id: ActionId.loadISOConfig,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionId.saveISOConfig]: {
-			name: 'Save Config',
-			options: [options.path],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/saveConfig')
-				command.args.push({ type: 'i', value: action.options.path })
-				const sendToCommand = {
-					id: ActionId.saveISOConfig,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionId.mergeISOConfig]: {
-			name: 'Merge Config',
-			options: [options.path],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/mergeConfig')
-				command.args.push({ type: 'i', value: action.options.path })
-				const sendToCommand = {
-					id: ActionId.mergeISOConfig,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionId.getConfigPath]: {
-			name: 'getConfig path',
-			options: [],
-			callback: (): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/getConfigPath')
-				const sendToCommand = {
-					id: ActionId.getConfigPath,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
+		...actionSocialStream,
 		[ActionId.acceptRecordingConsent]: {
 			name: 'Accept Recording Consent',
 			options: [],

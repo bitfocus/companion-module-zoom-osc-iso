@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "3.14.0",
+	"version": "3.15.0",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
@@ -16,21 +16,23 @@
 		"build:main": "tsc -p tsconfig.build.json",
 		"build:watch": "tsc -p tsconfig.build.json --watch",
 		"lint:raw": "eslint --ext .ts --ext .js --ignore-pattern dist --ignore-pattern pkg",
-		"lint": "yarn lint:raw ."		
+		"lint": "yarn lint:raw ."
 	},
 	"license": "MIT",
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"dependencies": {
 		"@companion-module/base": "~1.7.0",
+		"got-cjs": "^12.5.4",
 		"osc": "^2.4.3"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^1.4.2",
+		"@types/node": "^20.0.0",
 		"husky": "^9.0.10",
 		"lint-staged": "^15.2.2",
+		"rimraf": "^5.0.1",
 		"typescript": "^5.3.3",
-		"@types/node": "^20.0.0",
-		"rimraf": "^5.0.1"		
+		"@types/got": "^9.6.12"
 	},
 	"lint-staged": {
 		"*.{css,json,md,scss}": [

@@ -24,7 +24,6 @@ export enum ActionIdGlobal {
 	joinMeeting = 'joinMeeting',
 	leaveMeeting = 'leaveMeeting',
 	pingZoomOSC = 'pingZoomOSC',
-	sendAChatToEveryone = 'sendAChatToEveryone',
 	ejectAll = 'ejectAll',
 }
 
@@ -272,24 +271,6 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				const command = createCommand(instance, '/ping')
 				const sendToCommand = {
 					id: ActionIdGlobal.pingZoomOSC,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.sendAChatToEveryone]: {
-			name: 'Send A Chat To Everyone',
-			options: [options.message],
-			callback: async (action): Promise<void> => {
-				// type: 'Global'
-				const command = createCommand(instance, '/chatAll')
-				const message = await instance.parseVariablesInString(action.options.message as string)
-				command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
-				const sendToCommand = {
-					id: ActionIdGlobal.sendAChatToEveryone,
 					options: {
 						command: command.oscPath,
 						args: command.args,
