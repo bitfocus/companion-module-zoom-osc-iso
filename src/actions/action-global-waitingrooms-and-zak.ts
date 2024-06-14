@@ -88,8 +88,10 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 				// type: 'Special'
 				const command = createCommand(instance, '/zakJoin')
 				const newName = await instance.parseVariablesInString(action.options.name as string)
-				command.args.push({ type: 's', value: action.options.zak })
-				command.args.push({ type: 's', value: action.options.meetingID })
+				const zak = await instance.parseVariablesInString(action.options.zak as string)
+				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				command.args.push({ type: 's', value: zak })
+				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting,
@@ -108,8 +110,10 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 				// type: 'Special'
 				const command = createCommand(instance, '/zakStart')
 				const newName = await instance.parseVariablesInString(action.options.name as string)
-				command.args.push({ type: 's', value: action.options.zak })
-				command.args.push({ type: 's', value: action.options.meetingID })
+				const zak = await instance.parseVariablesInString(action.options.zak as string)
+				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				command.args.push({ type: 's', value: zak })
+				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting,
