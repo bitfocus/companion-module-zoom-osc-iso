@@ -14,6 +14,7 @@ import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-g
 import { ActionIdGlobalRecording } from '../actions/action-global-recording.js'
 import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
+import { ActionIdGlobalChat } from '../actions/action-global-chat.js'
 import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms.js'
 import { ActionIdUserChat } from '../actions/action-user-chat.js'
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
@@ -27,6 +28,7 @@ import { ActionIdUserView } from '../actions/action-user-view.js'
 import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room.js'
 import { ActionIdUserWebinar } from '../actions/action-user-webinars.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
+import { ActionIdZoomISOConfig } from '../actions/action-zoomiso-config.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
@@ -54,6 +56,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdGlobalRecording
 					| ActionIdGlobalWaitingRoomsAndZak
 					| ActionIdGlobal
+					| ActionIdGlobalChat
 					| ActionIdUserBreakoutRooms
 					| ActionIdUserChat
 					| ActionIdUserHandRaised
@@ -67,6 +70,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdUserWaitingRoom
 					| ActionIdUserWebinar
 					| ActionIdZoomISOEngine
+					| ActionIdZoomISOConfig
 					| ActionIdZoomISOOutputSettings
 					| ActionIdZoomISORouting
 					| ActionIdZoomISOActions
@@ -85,6 +89,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdGlobalRecording
 					| ActionIdGlobalWaitingRoomsAndZak
 					| ActionIdGlobal
+					| ActionIdGlobalChat
 					| ActionIdUserBreakoutRooms
 					| ActionIdUserChat
 					| ActionIdUserHandRaised
@@ -98,6 +103,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdUserWaitingRoom
 					| ActionIdUserWebinar
 					| ActionIdZoomISOEngine
+					| ActionIdZoomISOConfig
 					| ActionIdZoomISOOutputSettings
 					| ActionIdZoomISORouting
 					| ActionIdZoomISOActions

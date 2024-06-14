@@ -10,6 +10,8 @@ export interface ZoomConfig {
 	numberOfGroups: number
 	pulling: number
 	feedbackImagesWithIcons: number
+	enableSocialStream: boolean
+	socialStreamId: string
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -61,17 +63,6 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			default: 1,
 			width: 6,
 		},
-		// {
-		// 	type: 'dropdown',
-		// 	id: 'version',
-		// 	label: 'Using ZoomOSC or ZoomISO',
-		// 	choices: [
-		// 		{ id: ZoomVersion.ZoomISO, label: 'ZoomISO' },
-		// 		{ id: ZoomVersion.ZoomOSC, label: 'ZoomOSC' },
-		// 	],
-		// 	default: ZoomVersion.ZoomOSC,
-		// 	width: 6,
-		// },
 		{
 			type: 'dropdown',
 			id: 'pulling',
@@ -98,6 +89,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'dropdown',
 			id: 'feedbackImagesWithIcons',
 			label: 'Participant Multi-State Feedback Design',
+			tooltip: 'Adds icons to button for camera, mic, and hand raised state',
 			choices: [
 				{ id: 0, label: 'Bottom (On and Off For Mic/Camera, Only on for Hand Raise)' },
 				{ id: 2, label: 'Bottom (Only Active States)' },
@@ -114,6 +106,22 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 				'If you are using the lite version of ZoomOSC or ZoomISO, some core functionality like the gallery tracking will not work as it requires commands that are only available in the PRO version and ZoomISO is limitged to a maximum of 4 outputs.  As well, only the actions that are not listed as PRO in the <a target="_blank" href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API/Command List</a> and the <a target="_blank" href="https://www.liminalet.com/zoomiso">ZoomISO Documentation (User Guide)</a> work with the lite version',
 			id: 'liteNote',
 			label: 'If You Are Using The Lite Version',
+		},
+		{
+			type: 'checkbox',
+			id: 'enableSocialStream',
+			width: 12,
+			default: false,
+			label: 'Enable Social Stream for Chat',
+			tooltip: 'Sent all Chat Message to Social Stream Ninja',
+		},
+		{
+			type: 'textinput',
+			id: 'socialStreamId',
+			label: 'Session Id for Social Stream',
+			width: 12,
+			default: '',
+			isVisible: (options) => options['enableSocialStream'] === true,
 		},
 	]
 }
