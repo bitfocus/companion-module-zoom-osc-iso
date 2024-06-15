@@ -219,7 +219,7 @@ export class OSC {
 							case 'spotlightOn':
 								// this.instance.log('info', 'receiving spotlightOn:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
-									this.instance.log('info', 'receiving:' + JSON.stringify(data))
+									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].spotlighted = true
 									const index = this.instance.ZoomGroupData[1].users.findIndex(
 										(id) => id !== null && id.zoomID === zoomId
@@ -308,7 +308,7 @@ export class OSC {
 								break
 							case 'videoOn':
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
-									this.instance.log('info', 'receiving:' + JSON.stringify(data))
+									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].videoOn = true
 									// for performance updating values just videoOn instead of all variables
 									this.instance.setVariableValues({
@@ -327,7 +327,7 @@ export class OSC {
 								}
 								break
 							case 'videoOff':
-								this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].videoOn = false
 									// this.instance.UpdateVariablesValues()
@@ -482,7 +482,7 @@ export class OSC {
 								break
 							}
 							case 'chat':
-								this.instance.log('info', 'chat receiving:' + JSON.stringify(data))
+								// this.instance.log('info', 'chat receiving:' + JSON.stringify(data))
 								if (
 									this.instance.config.enableSocialStream &&
 									this.instance.config.socialStreamId.length > 0 &&
@@ -634,7 +634,7 @@ export class OSC {
 						break
 					}
 					case 'spotOrder': {
-						this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
+						// this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
 						this.instance.ZoomGroupData[1].users.length = 0
 						let updatedData = false
 						data.args.forEach((order: { type: string; value: number }) => {
