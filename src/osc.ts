@@ -4,6 +4,12 @@ import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils.js'
 import { socialStreamApi } from './socialstream.js'
+import {
+	getActiveSpeaker,
+	getHandRaisedCount,
+	getSpotlightVariables,
+	getVideoOnCount,
+} from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
@@ -213,7 +219,7 @@ export class OSC {
 							case 'spotlightOn':
 								// this.instance.log('info', 'receiving spotlightOn:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
-									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+									this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].spotlighted = true
 									const index = this.instance.ZoomGroupData[1].users.findIndex(
 										(id) => id !== null && id.zoomID === zoomId
@@ -225,7 +231,9 @@ export class OSC {
 											userName: data.args[1].value,
 										})
 										// this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
-										this.instance.UpdateVariablesValues()
+										// this.instance.UpdateVariablesValues()
+										// for performance updating values just for spotlight instead of all variables
+										this.instance.setVariableValues(getSpotlightVariables(this.instance))
 									}
 
 									this.instance.checkFeedbacks(
@@ -249,7 +257,9 @@ export class OSC {
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[1].users.splice(index, 1)
-										this.instance.UpdateVariablesValues()
+										// this.instance.UpdateVariablesValues()
+										// for performance updating values just for spotlight instead of all variables
+										this.instance.setVariableValues(getSpotlightVariables(this.instance))
 									}
 
 									this.instance.checkFeedbacks(
@@ -280,7 +290,10 @@ export class OSC {
 								if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
-									this.instance.UpdateVariablesValues()
+									this.instance.setVariableValues({
+										activeSpeaker: getActiveSpeaker(this.instance),
+									})
+									// this.instance.UpdateVariablesValues()
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -295,8 +308,12 @@ export class OSC {
 								break
 							case 'videoOn':
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
-									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+									this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].videoOn = true
+									// for performance updating values just videoOn instead of all variables
+									this.instance.setVariableValues({
+										videoOnCount: getVideoOnCount(this.instance),
+									})
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -310,9 +327,14 @@ export class OSC {
 								}
 								break
 							case 'videoOff':
-								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].videoOn = false
+									// this.instance.UpdateVariablesValues()
+									// for performance updating values just videoOn instead of all variables
+									this.instance.setVariableValues({
+										videoOnCount: getVideoOnCount(this.instance),
+									})
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -361,6 +383,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = true
+									this.instance.setVariableValues({
+										handRaisedCount: getHandRaisedCount(this.instance),
+									})
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -377,6 +402,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = false
+									this.instance.setVariableValues({
+										handRaisedCount: getHandRaisedCount(this.instance),
+									})
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -454,7 +482,7 @@ export class OSC {
 								break
 							}
 							case 'chat':
-								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								this.instance.log('info', 'chat receiving:' + JSON.stringify(data))
 								if (
 									this.instance.config.enableSocialStream &&
 									this.instance.config.socialStreamId.length > 0 &&
@@ -581,10 +609,8 @@ export class OSC {
 								this.instance.log('info', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
 								break
 						}
-						// this.instance.saveConfig(this.instance.config)
 						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-						// if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
 						// 	this.instance.log('info', `User data doesnt match with list info`)
 
 						this.needToPingPong = false
@@ -608,7 +634,7 @@ export class OSC {
 						break
 					}
 					case 'spotOrder': {
-						// this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
+						this.instance.log('info', 'receiving spotOrder:' + JSON.stringify(data))
 						this.instance.ZoomGroupData[1].users.length = 0
 						let updatedData = false
 						data.args.forEach((order: { type: string; value: number }) => {
@@ -647,7 +673,6 @@ export class OSC {
 						// Meeting status ended
 						if (data.args[0].value === 0) {
 							this.instance.ZoomClientDataObj.selectedCallers.length = 0
-							// this.instance.ZoomVariableLink.length = 0
 							this.instance.ZoomGroupData = []
 							for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups + 2; index++) {
 								this.instance.ZoomGroupData[index] = {
@@ -661,15 +686,6 @@ export class OSC {
 							// )
 
 							this.instance.ZoomUserData = {}
-							// for (const key of Object.keys(this.instance.ZoomUserData)) {
-							// 	// if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-							// 	this.instance.log(
-							// 		'debug',
-							// 		`meetingStatus Offline: userData - ${JSON.stringify(this.instance.ZoomUserData[parseInt(key)])}`
-							// 	)
-							// 	delete this.instance.ZoomUserData[parseInt(key)]
-							// 	// }
-							// }
 							this.instance.UpdateVariablesValues()
 						}
 						this.needToPingPong = true
@@ -774,22 +790,4 @@ export class OSC {
 		this.sendCommand('/zoom/getAudioRouting', [])
 		return
 	}
-
-	// /**
-	//  * @description Check for config changes and start new connections/polling if needed
-	//  */
-	// public readonly update = (): void => {
-	// 	const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
-	// 	// if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
-	// 	// 	this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
-	// 	// 	// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
-	// 	// }
-	// 	if (hostCheck) {
-	// 		this.oscHost = this.instance.config.host
-	// 		this.oscRXPort = this.instance.config.rx_port
-	// 		this.oscTXPort = this.instance.config.tx_port
-	// 		this.instance.config = this.instance.config
-	// 		this.Connect()
-	// 	}
-	// }
 }
