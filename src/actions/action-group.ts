@@ -1,4 +1,8 @@
-import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
+import {
+	CompanionActionDefinition,
+	CompanionVariableValues,
+	SomeCompanionActionInputField,
+} from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
@@ -252,7 +256,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action) => {
 				const newName = await instance.parseVariablesInString(action.options.name as string)
 				instance.ZoomGroupData[action.options.group as number].groupName = newName
-				instance.UpdateVariablesValues()
+
+				const variables: CompanionVariableValues = {}
+				variables[`Group${action.options.group as number}`] = newName
+				instance.setVariableValues(variables)
 			},
 		},
 		[ActionIdGroups.selectGroup]: {
