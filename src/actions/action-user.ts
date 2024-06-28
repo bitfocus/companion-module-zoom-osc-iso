@@ -1,4 +1,8 @@
-import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
+import {
+	CompanionActionDefinition,
+	CompanionVariableValues,
+	SomeCompanionActionInputField,
+} from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
@@ -11,6 +15,7 @@ import {
 	toggleSelectedUser,
 	PreviousSelectedCallersRestore,
 } from './action-utils.js'
+import { updateSelectedCallersVariables } from '../variables/variable-values.js'
 
 export enum ActionIdUsers {
 	selectionMethod = 'selection_Method',
@@ -116,7 +121,10 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 									)
 									break
 							}
-							instance.UpdateVariablesValues()
+							// instance.UpdateVariablesValues()
+							const variables: CompanionVariableValues = {}
+							updateSelectedCallersVariables(instance, variables)
+							instance.setVariableValues(variables)
 							instance.checkFeedbacks(
 								FeedbackId.userNameBased,
 								FeedbackId.userNameBasedAdvanced,
@@ -172,7 +180,10 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 						)
 						break
 				}
-				instance.UpdateVariablesValues()
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -191,7 +202,10 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: () => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
+				// instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -209,7 +223,10 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [],
 			callback: () => {
 				PreviousSelectedCallersRestore(instance)
-				instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
+				// instance.UpdateVariablesValues()
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,

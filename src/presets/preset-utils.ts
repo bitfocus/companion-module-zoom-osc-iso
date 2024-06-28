@@ -139,19 +139,19 @@ export const getParticipantStyleDefault = (
 	instance: InstanceBaseExt<ZoomConfig>,
 	text: string,
 	position: number
-): CompanionButtonStyleProps => {
+): any => {
 	return {
 		text:
 			instance.config.feedbackImagesWithIcons === 4
 				? `${position}. ${text}`
 				: `\`${position}. \${substr(${text},0,${buttonTextDefaultLength})}\``,
-		size: '7',
+		size: '10',
 		color: colorWhite,
 		bgcolor: colorBlack,
 		alignment: alignmentTopCenter,
 		show_topbar: false,
 		textExpression: instance.config.feedbackImagesWithIcons === 4 ? false : true,
-	} as CompanionButtonStyleProps
+	} //as CompanionButtonStyleProps
 }
 
 export const getParticipantStyleActiveSpeaker = (text: string, position: number): CompanionButtonStyleProps => {

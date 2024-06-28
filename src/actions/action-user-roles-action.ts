@@ -1,4 +1,4 @@
-import { CompanionActionDefinition } from '@companion-module/base'
+import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, ZoomGroupDataInterface, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
 import {
@@ -10,6 +10,7 @@ import {
 	selectionMethod,
 } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
+import { updateSelectedCallersVariables } from '../variables/variable-values.js'
 
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',
@@ -93,7 +94,10 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 						)
 						break
 				}
-				instance.UpdateVariablesValues()
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,

@@ -1,4 +1,4 @@
-import { CompanionActionDefinition } from '@companion-module/base'
+import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, arrayAdd, arrayRemove } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
@@ -8,6 +8,7 @@ import {
 	selectionMethod,
 	toggleSelectedUser,
 } from './action-utils.js'
+import { updateSelectedCallersVariables } from '../variables/variable-values.js'
 
 export enum ActionIdGallery {
 	selectFromGalleryPosition = 'select_From_Gallery_Position',
@@ -56,7 +57,10 @@ export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
 						)
 						break
 				}
-				instance.UpdateVariablesValues()
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,

@@ -474,6 +474,10 @@ export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	OSC: any
 	ZoomGroupData: ZoomGroupDataInterface[]
 	ZoomUserData: ZoomUserDataInterface
+	ZoomOutputData: ZoomOutputDataInterface
+	ZoomAudioLevelData: ZoomAudioLevelDataInterface
+	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
+	ZoomUserOffline: ZoomUserOfflineInterface
 	config: TConfig
 	UpdateVariablesValues(): void
 	InitVariables(): void

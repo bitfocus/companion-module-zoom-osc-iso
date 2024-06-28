@@ -10,6 +10,7 @@ export interface ZoomConfig {
 	numberOfGroups: number
 	pulling: number
 	feedbackImagesWithIcons: number
+	enableVariablesForEachUser: boolean
 	enableSocialStream: boolean
 	socialStreamId: string
 }
@@ -23,6 +24,14 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 				'Please make sure you have the following settings corectly in your OSC/ISO client;</br>"Subscribe to:" <b>All</b></br>"Gallery Tracking Mode:" <b>ZoomID</b>',
 			id: 'info on license',
 			label: 'Important note',
+		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'If you are using the lite version of ZoomOSC or ZoomISO, some core functionality like the gallery tracking will not work as it requires commands that are only available in the PRO version and ZoomISO is limitged to a maximum of 4 outputs.  As well, only the actions that are not listed as PRO in the <a target="_blank" href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API/Command List</a> and the <a target="_blank" href="https://www.liminalet.com/zoomiso">ZoomISO Documentation (User Guide)</a> work with the lite version',
+			id: 'liteNote',
+			label: 'If You Are Using The Lite Version',
 		},
 		{
 			type: 'textinput',
@@ -100,12 +109,14 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			width: 6,
 		},
 		{
-			type: 'static-text',
+			type: 'checkbox',
+			id: 'enableVariablesForEachUser',
 			width: 12,
-			value:
-				'If you are using the lite version of ZoomOSC or ZoomISO, some core functionality like the gallery tracking will not work as it requires commands that are only available in the PRO version and ZoomISO is limitged to a maximum of 4 outputs.  As well, only the actions that are not listed as PRO in the <a target="_blank" href="https://www.liminalet.com/zoomosc-resources">ZoomOSC API/Command List</a> and the <a target="_blank" href="https://www.liminalet.com/zoomiso">ZoomISO Documentation (User Guide)</a> work with the lite version',
-			id: 'liteNote',
-			label: 'If You Are Using The Lite Version',
+			default: true,
+			label:
+				'Enable Variable For Each User (variables that are the ZoomId for each participant).  Set to true keep the behavior of previous versions.',
+			tooltip:
+				'For larger meetings this could impact performance tracking of us to 1,000 users.  This only impacts using variables on your buttons to get a participant by their ZoomId which does change each time they join the meeting.',
 		},
 		{
 			type: 'checkbox',

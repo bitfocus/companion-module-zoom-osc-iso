@@ -58,13 +58,17 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 			variableId: `CallersInGroup${index}`,
 		})
 	}
-	for (const key in instance.ZoomUserData) {
-		if (userExist(Number(key), instance.ZoomUserData)) {
-			const user = instance.ZoomUserData[key]
-			if (user.zoomId > instance.ZoomClientDataObj.numberOfGroups)
-				userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
+
+	if (instance.config.enableVariablesForEachUser) {
+		for (const key in instance.ZoomUserData) {
+			if (userExist(Number(key), instance.ZoomUserData)) {
+				const user = instance.ZoomUserData[key]
+				if (user.zoomId > instance.ZoomClientDataObj.numberOfGroups)
+					userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
+			}
 		}
 	}
+
 	for (const key in instance.ZoomOutputData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomOutputData, key)) {
 			const output = instance.ZoomOutputData[key]
@@ -91,12 +95,12 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioRoutingData, key)) {
 			const audioOutput = instance.ZoomAudioRoutingData[key]
 			outputVariables.push({
-				name: `Output ${audioOutput.channel} name`,
-				variableId: `Output${audioOutput.channel}name`,
+				name: `Output Audio Channel ${audioOutput.channel} name`,
+				variableId: `OutputAudio${audioOutput.channel}name`,
 			})
 			outputVariables.push({
-				name: `Output ${audioOutput.channel} mode`,
-				variableId: `Output${audioOutput.channel}mode`,
+				name: `Output Audio Channel ${audioOutput.channel} mode`,
+				variableId: `OutputAudio${audioOutput.channel}mode`,
 			})
 		}
 	}
@@ -121,6 +125,7 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		name: `Participant ${1}`,
 		variableId: `Participant${padding(1, 3)}`,
 	})
+
 	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
 	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)
 	const outputVariablesDef: Set<CompanionVariableDefinition> = new Set(outputVariables)

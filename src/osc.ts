@@ -1,14 +1,20 @@
 import { arrayRemove, InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils.js'
-import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
+import { CompanionVariableValues, InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils.js'
 import { socialStreamApi } from './socialstream.js'
 import {
-	getActiveSpeaker,
-	getHandRaisedCount,
-	getSpotlightVariables,
-	getVideoOnCount,
+	updateActiveSpeakerVariable,
+	updateHandRaisedCountVariable,
+	updateSpotlightGroupVariables,
+	updateHostGroupVariables,
+	updateVideoOnCountVariable,
+	updateZoomIsoEngineVariables,
+	updateZoomIsoAudioLevelVariables,
+	updateZoomIsoAudioRoutingVariables,
+	updateZoomIsoOutputVariables,
+	updateGalleryVariables,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -233,7 +239,9 @@ export class OSC {
 										// this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
 										// this.instance.UpdateVariablesValues()
 										// for performance updating values just for spotlight instead of all variables
-										this.instance.setVariableValues(getSpotlightVariables(this.instance))
+										const variables: CompanionVariableValues = {}
+										updateSpotlightGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 									}
 
 									this.instance.checkFeedbacks(
@@ -259,7 +267,9 @@ export class OSC {
 										this.instance.ZoomGroupData[1].users.splice(index, 1)
 										// this.instance.UpdateVariablesValues()
 										// for performance updating values just for spotlight instead of all variables
-										this.instance.setVariableValues(getSpotlightVariables(this.instance))
+										const variables: CompanionVariableValues = {}
+										updateSpotlightGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 									}
 
 									this.instance.checkFeedbacks(
@@ -287,12 +297,12 @@ export class OSC {
 								await this.createZoomUser(data).then(() => (this.updateLoop = true))
 								break
 							case 'activeSpeaker':
+								// this.instance.log('info', 'active speaker receiving:' + JSON.stringify(data))
 								if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
-									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
-									this.instance.setVariableValues({
-										activeSpeaker: getActiveSpeaker(this.instance),
-									})
+									const variables: CompanionVariableValues = {}
+									updateActiveSpeakerVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									// this.instance.UpdateVariablesValues()
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
@@ -311,9 +321,9 @@ export class OSC {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].videoOn = true
 									// for performance updating values just videoOn instead of all variables
-									this.instance.setVariableValues({
-										videoOnCount: getVideoOnCount(this.instance),
-									})
+									const variables: CompanionVariableValues = {}
+									updateVideoOnCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -332,9 +342,9 @@ export class OSC {
 									this.instance.ZoomUserData[zoomId].videoOn = false
 									// this.instance.UpdateVariablesValues()
 									// for performance updating values just videoOn instead of all variables
-									this.instance.setVariableValues({
-										videoOnCount: getVideoOnCount(this.instance),
-									})
+									const variables: CompanionVariableValues = {}
+									updateVideoOnCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -383,9 +393,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = true
-									this.instance.setVariableValues({
-										handRaisedCount: getHandRaisedCount(this.instance),
-									})
+									const variables: CompanionVariableValues = {}
+									updateHandRaisedCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -402,9 +412,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = false
-									this.instance.setVariableValues({
-										handRaisedCount: getHandRaisedCount(this.instance),
-									})
+									const variables: CompanionVariableValues = {}
+									updateHandRaisedCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -494,7 +504,7 @@ export class OSC {
 							case 'audioStatus':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								break
-							case 'roleChanged':
+							case 'roleChanged': {
 								// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
@@ -525,8 +535,13 @@ export class OSC {
 									}
 									this.updateLoop = true
 								}
-								this.instance.UpdateVariablesValues()
+
+								const variables: CompanionVariableValues = {}
+								updateHostGroupVariables(this.instance, variables)
+								this.instance.setVariableValues(variables)
+								// this.instance.UpdateVariablesValues()
 								break
+							}
 							case 'stoppedSpeaking':
 								// this.instance.log('info','receiving:' + data)
 								// create feedback for this?
@@ -545,14 +560,19 @@ export class OSC {
 						// {int rows} {int cols} only for mac, skip this
 						break
 
-					case 'galleryOrder':
+					case 'galleryOrder': {
 						// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.galleryOrder.length = 0
 						data.args.forEach((order: { type: string; value: number }) => {
 							this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
 						})
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+
+						const variables: CompanionVariableValues = {}
+						updateGalleryVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+
+						// this.instance.UpdateVariablesValues()
 						this.instance.checkFeedbacks(
 							FeedbackId.indexBased,
 							FeedbackId.indexBasedAdvanced,
@@ -562,7 +582,7 @@ export class OSC {
 							FeedbackId.groupBasedAdvanced
 						)
 						break
-
+					}
 					case 'galleryCount':
 						this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
 						this.instance.UpdateVariablesValues()
@@ -587,11 +607,16 @@ export class OSC {
 						this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 						this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 						switch (versionInfo.substring(0, 4)) {
-							case 'ZISO':
+							case 'ZISO': {
+								this.sendCommand('/zoom/getEngineState', [])
 								this.zoomISOPuller = setInterval(
 									() => {
 										if (this.instance.config.pulling !== 0) {
-											this.sendISOPullingCommands()
+											if (this.instance.ZoomClientDataObj.engineState === 2) {
+												this.sendISOPullingCommands()
+											} else if (this.instance.ZoomClientDataObj.engineState === -1) {
+												this.sendCommand('/zoom/getEngineState', [])
+											}
 										}
 									},
 									this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling
@@ -599,6 +624,7 @@ export class OSC {
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.instance.saveConfig(this.instance.config)
 								break
+							}
 							case 'ZOSC':
 								if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
 								this.instance.config.version = ZoomVersion.ZoomOSC
@@ -655,7 +681,10 @@ export class OSC {
 
 						if (updatedData) {
 							this.instance.InitVariables()
-							this.instance.UpdateVariablesValues()
+							const variables: CompanionVariableValues = {}
+							updateSpotlightGroupVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
+							// this.instance.UpdateVariablesValues()
 							this.instance.checkFeedbacks(
 								FeedbackId.indexBased,
 								FeedbackId.indexBasedAdvanced,
@@ -706,22 +735,30 @@ export class OSC {
 						break
 
 					// ISO data
-					case 'engineState':
-						this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					case 'engineState': {
+						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.engineState = data.args[0].value
-						this.instance.UpdateVariablesValues()
+						// this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoEngineVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
 						this.instance.checkFeedbacks('engineState')
 						break
-					case 'audioLevels':
+					}
+					case 'audioLevels': {
 						// this.instance.log('info', 'audioLevels' + data.address + JSON.stringify(data.args))
 						this.instance.ZoomAudioLevelData[parseInt(data.args[0].value)] = {
 							channel: parseInt(data.args[0].value),
 							level: parseInt(data.args[1].value),
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoAudioLevelVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
-					case 'audioRouting':
+					}
+					case 'audioRouting': {
 						this.instance.ZoomAudioRoutingData[parseInt(data.args[2].value)] = {
 							audio_device: data.args[0].value,
 							num_channels: parseInt(data.args[1].value),
@@ -731,9 +768,14 @@ export class OSC {
 							selection: data.args[5].value,
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoAudioRoutingVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
+					}
 					case 'outputRouting': {
+						this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
 						const outputNumber = parseInt(data.args[1].value)
 						this.instance.ZoomOutputData[outputNumber] = {
 							numberOfOutputs: data.args[0].value,
@@ -747,7 +789,10 @@ export class OSC {
 							status: data.args[8].value,
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoOutputVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
 					}
 					default:
