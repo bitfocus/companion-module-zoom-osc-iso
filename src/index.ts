@@ -141,20 +141,22 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	/**
 	 * @description update variables values
 	 */
-	public UpdateVariablesValues(): void {
-		initVariableDefinitions(this)
-	}
+	// public UpdateVariablesValues(): void {
+	// 	this.log('debug', 'UpdateVariableValues()')
+	// 	updateVariableValues(this)
+	// }
 
 	/**
 	 * @description init variables
 	 */
 	public InitVariables(): void {
-		updateVariableValues(this)
+		// initVariableDefinitions(this)
 	}
 	/**
 	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
+		this.log('debug', `updateInstance ${new Date()}`)
 		initVariableDefinitions(this)
 		updateVariableValues(this)
 

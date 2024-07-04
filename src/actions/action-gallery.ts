@@ -1,13 +1,8 @@
 import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, arrayAdd, arrayRemove } from '../utils.js'
+import { InstanceBaseExt } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
-import {
-	PreviousSelectedCallersSave,
-	positionOrderOption,
-	selectionMethod,
-	toggleSelectedUser,
-} from './action-utils.js'
+import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import { updateSelectedCallersVariables } from '../variables/variable-values.js'
 
 export enum ActionIdGallery {
@@ -36,27 +31,9 @@ export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
 			],
 			callback: (action) => {
 				PreviousSelectedCallersSave(instance)
-				const position = (action.options.position as number) - 1
-				switch (action.options.option) {
-					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-						toggleSelectedUser(instance, instance.ZoomClientDataObj.galleryOrder[position])
-						break
-					case 'select':
-						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
-							instance.ZoomClientDataObj.selectedCallers.length = 0
-						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
-						)
-						break
-					case 'remove':
-						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
-						)
-						break
-				}
+				const zoomId = instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
+
+				selectUser(instance, zoomId, action.options.option as string)
 				// instance.UpdateVariablesValues()
 				const variables: CompanionVariableValues = {}
 				updateSelectedCallersVariables(instance, variables)

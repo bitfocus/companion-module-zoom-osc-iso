@@ -3,6 +3,7 @@ import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, padding, userExist } from '../utils.js'
 
 export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): void {
+	instance.log('debug', `initVariableDefinitions ${new Date()}`)
 	const globalSettings: Set<CompanionVariableDefinition> = new Set([
 		// Status
 		{ name: 'Zoom version', variableId: 'zoomVersion' },

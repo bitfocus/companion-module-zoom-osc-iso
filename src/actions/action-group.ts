@@ -4,14 +4,9 @@ import {
 	SomeCompanionActionInputField,
 } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
+import { InstanceBaseExt, options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
-import {
-	PreviousSelectedCallersSave,
-	positionOrderOption,
-	selectionMethod,
-	toggleSelectedUser,
-} from './action-utils.js'
+import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import * as fs from 'fs'
 import * as os from 'os'
 import { updateGroupVariables, updateSelectedCallersVariables } from '../variables/variable-values.js'
@@ -315,28 +310,11 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				const position = (action.options.position as number) - 1
-				PreviousSelectedCallersSave(instance)
-				switch (action.options.option) {
-					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-						toggleSelectedUser(instance, instance.ZoomGroupData[action.options.group as number].users[position].zoomID)
-						break
-					case 'select':
-						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
-							instance.ZoomClientDataObj.selectedCallers.length = 0
-						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
-						)
-						break
-					case 'remove':
-						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
-						)
-						break
-				}
+				const zoomId =
+					instance.ZoomGroupData[action.options.group as number].users[(action.options.position as number) - 1].zoomID
+
+				selectUser(instance, zoomId, action.options.option as string)
+
 				// instance.UpdateVariablesValues()
 				const variables: CompanionVariableValues = {}
 				updateSelectedCallersVariables(instance, variables)

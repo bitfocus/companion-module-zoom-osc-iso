@@ -29,6 +29,13 @@ export function updateActiveSpeakerVariable(
 	variables['activeSpeaker'] = instance.ZoomClientDataObj.activeSpeaker
 }
 
+export function updateIsSpeakingVariable(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
+	variables['isSpeaking'] = instance.ZoomClientDataObj.isSpeaking
+}
+
 export function updateHostGroupVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues
@@ -151,11 +158,16 @@ export function updateGroupVariables(
 	variables[`InsideGroup${index}`] = allUsers
 }
 
-export function updateGalleryVariables(
+export function updateGalleryCountVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues
 ): void {
 	variables['galleryCount'] = instance.ZoomClientDataObj.galleryCount
+}
+export function updateGalleryVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
 		variables[`GalleryPosition${padding(index, 2)}`] = userExist(Number(zoomID), instance.ZoomUserData)
@@ -164,30 +176,31 @@ export function updateGalleryVariables(
 	}
 }
 
-export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): void {
-	const variables: CompanionVariableValues = {
-		zoomVersion: instance.ZoomClientDataObj.zoomOSCVersion,
-		callStatus: instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline',
-		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,
-		numberOfUsers: Object.keys(instance.ZoomUserData).length,
-		isSpeaking: instance.ZoomClientDataObj.isSpeaking,
-	}
-
-	updateZoomIsoEngineVariables(instance, variables)
-	updateZoomIsoAudioLevelVariables(instance, variables)
-	updateZoomIsoAudioRoutingVariables(instance, variables)
-	updateZoomIsoOutputVariables(instance, variables)
-	updateActiveSpeakerVariable(instance, variables)
-	updateHandRaisedCountVariable(instance, variables)
-	updateVideoOnCountVariable(instance, variables)
-	updateSelectedCallersVariables(instance, variables)
-	updateGalleryVariables(instance, variables)
-
+export function updateAllGroupVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
 	// This covers all groups including host (group 0) and spotlight (group 1)
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		updateGroupVariables(instance, variables, index)
 	}
+}
+export function updateZoomParticipantVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
+	// Use the participant selection
+	for (let index = 1; index < 1000; index++) {
+		variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
+			? instance.ZoomVariableLink[index - 1].userName
+			: '-'
+	}
+}
 
+export function updateZoomUserVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
 	if (instance.config.enableVariablesForEachUser) {
 		// "normal" users
 		for (const key in instance.ZoomUserData) {
@@ -197,13 +210,50 @@ export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): voi
 			}
 		}
 	}
+}
 
-	// Use the participant selection
-	for (let index = 1; index < 1000; index++) {
-		variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
-			? instance.ZoomVariableLink[index - 1].userName
-			: '-'
+export function updateAllUserBasedVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
+	updateAllGroupVariables(instance, variables)
+	updateZoomParticipantVariables(instance, variables)
+	updateSelectedCallersVariables(instance, variables)
+	updateGalleryVariables(instance, variables)
+	updateZoomUserVariables(instance, variables)
+}
+
+export function updateCallStatusVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues
+): void {
+	variables['callStatus'] = instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
+}
+
+export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): void {
+	instance.log('debug', `updateVariableValues ${new Date()}`)
+	const variables: CompanionVariableValues = {
+		zoomVersion: instance.ZoomClientDataObj.zoomOSCVersion,
+		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,
+		numberOfUsers: Object.keys(instance.ZoomUserData).length,
 	}
+
+	updateCallStatusVariables(instance, variables)
+	updateIsSpeakingVariable(instance, variables)
+	updateZoomIsoEngineVariables(instance, variables)
+	updateZoomIsoAudioLevelVariables(instance, variables)
+	updateZoomIsoAudioRoutingVariables(instance, variables)
+	updateZoomIsoOutputVariables(instance, variables)
+	updateActiveSpeakerVariable(instance, variables)
+	updateHandRaisedCountVariable(instance, variables)
+	updateVideoOnCountVariable(instance, variables)
+	updateSelectedCallersVariables(instance, variables)
+	updateGalleryCountVariables(instance, variables)
+	updateGalleryVariables(instance, variables)
+	updateAllGroupVariables(instance, variables)
+	updateZoomUserVariables(instance, variables)
+
+	updateZoomParticipantVariables(instance, variables)
 
 	instance.setVariableValues(variables)
 }

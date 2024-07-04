@@ -15,6 +15,14 @@ import {
 	updateZoomIsoAudioRoutingVariables,
 	updateZoomIsoOutputVariables,
 	updateGalleryVariables,
+	updateAllGroupVariables,
+	updateZoomParticipantVariables,
+	updateSelectedCallersVariables,
+	updateZoomUserVariables,
+	updateAllUserBasedVariables,
+	updateIsSpeakingVariable,
+	updateGalleryCountVariables,
+	updateCallStatusVariables,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -102,6 +110,7 @@ export class OSC {
 			// See if ZoomOSC is active
 			this.pingInterval = setInterval(() => {
 				if (this.needToPingPong) {
+					this.instance.log('debug', `**************** needToPingPong ${new Date()}`)
 					// Shall we leave this?
 					this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
 					this.sendCommand('/zoom/ping')
@@ -110,6 +119,7 @@ export class OSC {
 			// start looping for presets
 			this.updatePresetsLoop = setInterval(() => {
 				if (this.updateLoop) {
+					this.instance.log('debug', `**************** updateLoop ${new Date()}`)
 					this.instance.updateInstance()
 					this.updateLoop = false
 					// Make sure initial status is reflected
@@ -142,7 +152,9 @@ export class OSC {
 		// Only when a user is not in offline array
 		if (!this.instance.ZoomUserOffline[zoomId]) {
 			const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+			if (index === -1) {
+				this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+			}
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
@@ -188,12 +200,15 @@ export class OSC {
 				this.instance.log('warn', 'wrong arguments in OSC feedback')
 			}
 			this.instance.InitVariables()
-			this.instance.UpdateVariablesValues()
+			const variables: CompanionVariableValues = {}
+			updateAllUserBasedVariables(this.instance, variables)
+			this.instance.setVariableValues(variables)
+			// this.instance.UpdateVariablesValues()
 		}
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
-		// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+		this.instance.log('info', 'receiving:' + JSON.stringify(data))
 		// Do a switch block to go fast through the rest of the data
 		try {
 			const recvMsg = data.address.toString().split('/')
@@ -458,12 +473,19 @@ export class OSC {
 											`Removed ${JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1))}`
 										)
 									}
-									this.instance.UpdateVariablesValues()
+									// this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateAllUserBasedVariables(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
+										FeedbackId.userNameBasedAdvanced,
 										FeedbackId.indexBased,
+										FeedbackId.indexBasedAdvanced,
 										FeedbackId.galleryBased,
-										FeedbackId.groupBased
+										FeedbackId.galleryBasedAdvanced,
+										FeedbackId.groupBased,
+										FeedbackId.groupBasedAdvanced
 									)
 
 									this.updateLoop = true
@@ -487,7 +509,14 @@ export class OSC {
 										})
 									})
 
-									this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateAllGroupVariables(this.instance, variables)
+									updateZoomParticipantVariables(this.instance, variables)
+									updateSelectedCallersVariables(this.instance, variables)
+									updateGalleryVariables(this.instance, variables)
+									updateZoomUserVariables(this.instance, variables)
+									this.instance.setVariableValues(variables)
+									// this.instance.UpdateVariablesValues()
 								}
 								break
 							}
@@ -539,17 +568,20 @@ export class OSC {
 								const variables: CompanionVariableValues = {}
 								updateHostGroupVariables(this.instance, variables)
 								this.instance.setVariableValues(variables)
-								// this.instance.UpdateVariablesValues()
 								break
 							}
 							case 'stoppedSpeaking':
 								// this.instance.log('info','receiving:' + data)
 								// create feedback for this?
 								break
-							case 'isSpeaking':
+							case 'isSpeaking': {
 								this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
-								this.instance.UpdateVariablesValues()
+								const variables: CompanionVariableValues = {}
+								updateIsSpeakingVariable(this.instance, variables)
+								this.instance.setVariableValues(variables)
+								// this.instance.UpdateVariablesValues()
 								break
+							}
 							default:
 								this.instance.log('info', 'No Case provided for:' + data.address)
 								this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
@@ -574,20 +606,23 @@ export class OSC {
 
 						// this.instance.UpdateVariablesValues()
 						this.instance.checkFeedbacks(
-							FeedbackId.indexBased,
-							FeedbackId.indexBasedAdvanced,
+							// FeedbackId.indexBased,
+							// FeedbackId.indexBasedAdvanced,
 							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced,
-							FeedbackId.groupBased,
-							FeedbackId.groupBasedAdvanced
+							FeedbackId.galleryBasedAdvanced
+							// FeedbackId.groupBased,
+							// FeedbackId.groupBasedAdvanced
 						)
 						break
 					}
-					case 'galleryCount':
+					case 'galleryCount': {
 						this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateGalleryCountVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
-
+					}
 					case 'pong': {
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
@@ -696,8 +731,8 @@ export class OSC {
 						}
 						break
 					}
-					case 'meetingStatus':
-						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					case 'meetingStatus': {
+						this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 						// Meeting status ended
 						if (data.args[0].value === 0) {
@@ -715,12 +750,16 @@ export class OSC {
 							// )
 
 							this.instance.ZoomUserData = {}
-							this.instance.UpdateVariablesValues()
+							const variables: CompanionVariableValues = {}
+							updateCallStatusVariables(this.instance, variables)
+							updateAllUserBasedVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
+							// this.instance.UpdateVariablesValues()
 						}
 						this.needToPingPong = true
 						break
-
-					case 'listCleared':
+					}
+					case 'listCleared': {
 						PreviousSelectedCallersSave(this.instance)
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
@@ -729,11 +768,15 @@ export class OSC {
 								delete this.instance.ZoomUserData[parseInt(key)]
 							}
 						}
+						this.instance.log('debug', 'listCleared')
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateAllUserBasedVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						PreviousSelectedCallersRestore(this.instance)
 						break
-
+					}
 					// ISO data
 					case 'engineState': {
 						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
@@ -793,6 +836,17 @@ export class OSC {
 						updateZoomIsoOutputVariables(this.instance, variables)
 						this.instance.setVariableValues(variables)
 						// this.instance.UpdateVariablesValues()
+						this.instance.checkFeedbacks(
+							FeedbackId.userNameBased,
+							FeedbackId.userNameBasedAdvanced,
+							FeedbackId.indexBased,
+							FeedbackId.indexBasedAdvanced,
+							FeedbackId.galleryBased,
+							FeedbackId.galleryBasedAdvanced,
+							FeedbackId.groupBased,
+							FeedbackId.groupBasedAdvanced,
+							FeedbackId.output
+						)
 						break
 					}
 					default:

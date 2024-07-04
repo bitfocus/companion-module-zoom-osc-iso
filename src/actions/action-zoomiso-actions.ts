@@ -100,18 +100,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					PreviousSelectedCallersSave(instance)
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.UpdateVariablesValues()
-					instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.output
-					)
+
+					// nothing changed until after the OSC command for outputRouting is received
+					// so no need to update variable values and feedback here
+					// instance.UpdateVariablesValues()
+					// instance.checkFeedbacks(
+					// 	FeedbackId.userNameBased,
+					// 	FeedbackId.userNameBasedAdvanced,
+					// 	FeedbackId.indexBased,
+					// 	FeedbackId.indexBasedAdvanced,
+					// 	FeedbackId.galleryBased,
+					// 	FeedbackId.galleryBasedAdvanced,
+					// 	FeedbackId.groupBased,
+					// 	FeedbackId.groupBasedAdvanced,
+					// 	FeedbackId.output
+					// )
 				}
 			},
 		},
@@ -135,18 +138,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					PreviousSelectedCallersSave(instance)
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.UpdateVariablesValues()
-					instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.output
-					)
+
+					// nothing changed until after the OSC command for audioRouting is received
+					// so no need to update variable values and feedback here
+					// instance.UpdateVariablesValues()
+					// instance.checkFeedbacks(
+					// 	FeedbackId.userNameBased,
+					// 	FeedbackId.userNameBasedAdvanced,
+					// 	FeedbackId.indexBased,
+					// 	FeedbackId.indexBasedAdvanced,
+					// 	FeedbackId.galleryBased,
+					// 	FeedbackId.galleryBasedAdvanced,
+					// 	FeedbackId.groupBased,
+					// 	FeedbackId.groupBasedAdvanced,
+					// 	FeedbackId.output
+					// )
 				}
 			},
 		},
@@ -177,18 +183,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 				PreviousSelectedCallersSave(instance)
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				// instance.ZoomClientDataObj.selectedOutputs.length = 0
-				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced,
-					FeedbackId.output
-				)
+
+				// nothing changed until after the OSC command for outputRouting is received
+				// so no need to update variable values and feedback here
+				// instance.UpdateVariablesValues()
+				// instance.checkFeedbacks(
+				// 	FeedbackId.userNameBased,
+				// 	FeedbackId.userNameBasedAdvanced,
+				// 	FeedbackId.indexBased,
+				// 	FeedbackId.indexBasedAdvanced,
+				// 	FeedbackId.galleryBased,
+				// 	FeedbackId.galleryBasedAdvanced,
+				// 	FeedbackId.groupBased,
+				// 	FeedbackId.groupBasedAdvanced,
+				// 	FeedbackId.output
+				// )
 			},
 		},
 	}
