@@ -775,7 +775,7 @@ export class OSC {
 						break
 					}
 					case 'outputRouting': {
-						this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
+						//this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
 						const outputNumber = parseInt(data.args[1].value)
 						this.instance.ZoomOutputData[outputNumber] = {
 							numberOfOutputs: data.args[0].value,
