@@ -176,6 +176,6 @@ export const sendActionCommand = (
 	// Construct command
 	const oscPath = action.options.command
 	const args = action.options.args
-	instance.log('debug', `Sending ${JSON.stringify(oscPath)}, with arguments ${JSON.stringify(args)}`)
+	// instance.log('debug', `Sending ${JSON.stringify(oscPath)}, with arguments ${JSON.stringify(args)}`)
 	if (instance.OSC) instance.OSC.sendCommand(oscPath, args)
 }
