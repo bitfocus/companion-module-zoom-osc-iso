@@ -4,19 +4,21 @@ import { InstanceBaseExt, options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserScreenshare {
+	// List Screens
+	// List Windows
 	startScreenShare = 'startScreenShare',
-	startScreenShareWithPrimaryScreen = 'startScreenShareWithPrimaryScreen',
+	startShareWithWindow = 'startShareWithWindow',
 	stopSharing = 'stopSharing',
+	startScreenShareWithPrimaryScreen = 'startScreenShareWithPrimaryScreen',
+	startAudioShare = 'startAudioShare',
+	enableComputerSoundWhenSharing = 'enableComputerSoundWhenSharing',
+	disableComputerSoundWhenSharing = 'disableComputerSoundWhenSharing',
 	startCameraShare = 'startCameraShare',
+	cycleSharedCameraToNextAvailable = 'cycleSharedCameraToNextAvailable',
 	enableOptimizeVideoForSharing = 'enableOptimizeVideoForSharing',
 	disableOptimizeVideoForSharing = 'disableOptimizeVideoForSharing',
-	disableComputerSoundWhenSharing = 'disableComputerSoundWhenSharing',
-	SetWindowPosition = 'SetWindowPosition',
 	SetWindowSize = 'SetWindowSize',
-	startAudioShare = 'startAudioShare',
-	startShareWithWindow = 'startShareWithWindow',
-	cycleSharedCameraToNextAvailable = 'cycleSharedCameraToNextAvailable',
-	enableComputerSoundWhenSharing = 'enableComputerSoundWhenSharing',
+	SetWindowPosition = 'SetWindowPosition',
 }
 
 export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>): {

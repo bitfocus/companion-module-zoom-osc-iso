@@ -4,6 +4,8 @@ import { InstanceBaseExt } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalGalleryTrackingAndDataRequest {
+	// gallery track mode
+	// subscription level
 	requestOrderOfGalleryView = 'requestOrderOfGalleryView',
 	requestGalleryCount = 'requestGalleryCount',
 	requestOrderOfSpotlights = 'requestOrderOfSpotlights',

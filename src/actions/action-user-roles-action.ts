@@ -14,8 +14,8 @@ import {
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',
 	makeCoHost = 'makeCoHost',
-	revokeCoHost = 'revokeCoHost',
 	reclaimHost = 'reclaimHost',
+	revokeCoHost = 'revokeCoHost',
 	makePanelist = 'makePanelist',
 	makeAttendee = 'makeAttendee',
 	ejectParticipant = 'ejectParticipant',

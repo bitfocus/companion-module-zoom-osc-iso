@@ -15,45 +15,56 @@ export enum ActionIdGlobal {
 	disableUsersToUnmute = 'disableUsersToUnmute',
 	muteAll = 'muteAll',
 	unmuteAll = 'unmuteAll',
+	lowerAllHands = 'lowerAllHands',
+	clearSpotlight = 'clearSpotlight',
+	pingZoomOSC = 'pingZoomOSC',
+	joinMeeting = 'joinMeeting',
+	leaveMeeting = 'leaveMeeting',
+	endMeeting = 'endMeeting',
+	sendAChatToEveryone = 'sendAChatToEveryone',
+	ejectAll = 'ejectAll',
+	// get webinar reaction count
+	// reset webinar reaction counters
+	updateActionFeedbackPresets = 'updateActionFeedbackPresets',
 	muteAllExcept = 'muteAllExcept',
 	muteAllExceptHost = 'muteAllExceptHost',
 	muteAllExceptSpot = 'muteAllExceptSpotlight',
-	clearSpotlight = 'clearSpotlight',
-	lowerAllHands = 'lowerAllHands',
-	endMeeting = 'endMeeting',
-	joinMeeting = 'joinMeeting',
-	leaveMeeting = 'leaveMeeting',
-	pingZoomOSC = 'pingZoomOSC',
-	ejectAll = 'ejectAll',
-	'updateActionFeedbackPresets' = 'updateActionFeedbackPresets',
 }
 
 export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 	[id in ActionIdGlobal]: CompanionActionDefinition | undefined
 } {
 	const actions: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = {
-		[ActionIdGlobal.updateActionFeedbackPresets]: {
-			name: 'Update Actions/Feedbacks/Presets with current Zoom Data',
+		[ActionIdGlobal.enableUsersToUnmute]: {
+			name: 'Enable Users To Unmute',
 			options: [],
 			callback: (): void => {
-				// instance.log('debug', `before outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
-				instance.updateInstance()
-				// instance.updateDefinitionsForActionsFeedbacksAndPresets()
-				// Make sure initial status is reflected
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced,
-					FeedbackId.selectionMethod,
-					FeedbackId.audioOutput,
-					FeedbackId.output
-				)
-				// instance.log('debug', `after outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
+				// type: 'Global'
+				const command = createCommand(instance, '/enableUsersUnmute')
+				const sendToCommand = {
+					id: ActionIdGlobal.enableUsersToUnmute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.disableUsersToUnmute]: {
+			name: 'Disable Users ToUnmute',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/disableUsersUnmute')
+				const sendToCommand = {
+					id: ActionIdGlobal.disableUsersToUnmute,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
 			},
 		},
 		[ActionIdGlobal.muteAll]: {
@@ -80,6 +91,157 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				const command = createCommand(instance, '/all/unMute')
 				const sendToCommand = {
 					id: ActionIdGlobal.unmuteAll,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.lowerAllHands]: {
+			name: 'Lower AllHands',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/lowerAllHands')
+				const sendToCommand = {
+					id: ActionIdGlobal.lowerAllHands,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+				for (const key in instance.ZoomUserData) {
+					if (userExist(Number(key), instance.ZoomUserData)) {
+						instance.ZoomUserData[key].handRaised = false
+					}
+				}
+				instance.checkFeedbacks(
+					FeedbackId.userNameBased,
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced
+				)
+			},
+		},
+		[ActionIdGlobal.clearSpotlight]: {
+			name: 'Clear Spotlight (PRO)',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/clearSpot')
+				const sendToCommand = {
+					id: ActionIdGlobal.clearSpotlight,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.pingZoomOSC]: {
+			name: 'Ping Zoom OSC',
+			options: [],
+			callback: (): void => {
+				// type: 'Special'
+				const command = createCommand(instance, '/ping')
+				const sendToCommand = {
+					id: ActionIdGlobal.pingZoomOSC,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.joinMeeting]: {
+			name: 'Join Meeting (PRO)',
+			options: [options.meetingID, options.password, options.name],
+			callback: async (action): Promise<void> => {
+				// type: 'Special'
+				const command = createCommand(instance, '/joinMeeting')
+				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newNMeetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				const newNPassword = await instance.parseVariablesInString(action.options.password as string)
+				command.args.push({ type: 's', value: newNMeetingId })
+				command.args.push({ type: 's', value: newNPassword })
+				command.args.push({ type: 's', value: newName })
+				const sendToCommand = {
+					id: ActionIdGlobal.joinMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.leaveMeeting]: {
+			name: 'Leave Meeting (PRO)',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/leaveMeeting')
+				const sendToCommand = {
+					id: ActionIdGlobal.leaveMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.endMeeting]: {
+			name: 'End Meeting (PRO)',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/endMeeting')
+				const sendToCommand = {
+					id: ActionIdGlobal.endMeeting,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.sendAChatToEveryone]: {
+			name: 'Send A Chat To Everyone',
+			options: [options.message],
+			callback: async (action): Promise<void> => {
+				// type: 'Global'
+				const command = createCommand(instance, '/chatAll')
+				const message = await instance.parseVariablesInString(action.options.message as string)
+				command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
+				const sendToCommand = {
+					id: ActionIdGlobal.sendAChatToEveryone,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.ejectAll]: {
+			name: 'Eject All Webinar Attendees',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/ejectAttendees')
+				const sendToCommand = {
+					id: ActionIdGlobal.ejectAll,
 					options: {
 						command: command.oscPath,
 						args: command.args,
@@ -161,73 +323,14 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				PreviousSelectedCallersRestore(instance)
 			},
 		},
-		[ActionIdGlobal.clearSpotlight]: {
-			name: 'Clear Spotlight (PRO)',
+		[ActionIdGlobal.updateActionFeedbackPresets]: {
+			name: 'Update Actions/Feedbacks/Presets with current Zoom Data',
 			options: [],
 			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/clearSpot')
-				const sendToCommand = {
-					id: ActionIdGlobal.clearSpotlight,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.enableUsersToUnmute]: {
-			name: 'Enable Users To Unmute',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/enableUsersUnmute')
-				const sendToCommand = {
-					id: ActionIdGlobal.enableUsersToUnmute,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.disableUsersToUnmute]: {
-			name: 'Disable Users ToUnmute',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/disableUsersUnmute')
-				const sendToCommand = {
-					id: ActionIdGlobal.disableUsersToUnmute,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.lowerAllHands]: {
-			name: 'Lower AllHands',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/lowerAllHands')
-				const sendToCommand = {
-					id: ActionIdGlobal.lowerAllHands,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-				for (const key in instance.ZoomUserData) {
-					if (userExist(Number(key), instance.ZoomUserData)) {
-						instance.ZoomUserData[key].handRaised = false
-					}
-				}
+				// instance.log('debug', `before outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
+				instance.updateInstance()
+				// instance.updateDefinitionsForActionsFeedbacksAndPresets()
+				// Make sure initial status is reflected
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -236,94 +339,12 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
+					FeedbackId.selectionMethod,
+					FeedbackId.audioOutput,
+					FeedbackId.output
 				)
-			},
-		},
-		[ActionIdGlobal.ejectAll]: {
-			name: 'Eject All Webinar Attendees',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/ejectAttendees')
-				const sendToCommand = {
-					id: ActionIdGlobal.ejectAll,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.leaveMeeting]: {
-			name: 'Leave Meeting (PRO)',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/leaveMeeting')
-				const sendToCommand = {
-					id: ActionIdGlobal.leaveMeeting,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.endMeeting]: {
-			name: 'End Meeting (PRO)',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/endMeeting')
-				const sendToCommand = {
-					id: ActionIdGlobal.endMeeting,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.pingZoomOSC]: {
-			name: 'Ping Zoom OSC',
-			options: [],
-			callback: (): void => {
-				// type: 'Special'
-				const command = createCommand(instance, '/ping')
-				const sendToCommand = {
-					id: ActionIdGlobal.pingZoomOSC,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdGlobal.joinMeeting]: {
-			name: 'Join Meeting (PRO)',
-			options: [options.meetingID, options.password, options.name],
-			callback: async (action): Promise<void> => {
-				// type: 'Special'
-				const command = createCommand(instance, '/joinMeeting')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				const newNMeetingId = await instance.parseVariablesInString(action.options.meetingID as string)
-				const newNPassword = await instance.parseVariablesInString(action.options.password as string)
-				command.args.push({ type: 's', value: newNMeetingId })
-				command.args.push({ type: 's', value: newNPassword })
-				command.args.push({ type: 's', value: newName })
-				const sendToCommand = {
-					id: ActionIdGlobal.joinMeeting,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
+				// instance.log('debug', `after outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
 			},
 		},
 	}

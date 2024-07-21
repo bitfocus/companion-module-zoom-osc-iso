@@ -20,7 +20,6 @@ import {
 	GetActionsGlobalWaitingRoomsAndZak,
 } from './actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobal, GetActionsGlobal } from './actions/action-global.js'
-import { ActionIdGlobalChat, GetActionsGlobalChat } from './actions/action-global-chat.js'
 import { ActionIdUserBreakoutRooms, GetActionsUserBreakoutRooms } from './actions/action-user-breakout-rooms.js'
 import { ActionIdUserChat, GetActionsUserChat } from './actions/action-user-chat.js'
 import { ActionIdUserHandRaised, GetActionsUserHandRaised } from './actions/action-user-hand-raised.js'
@@ -38,7 +37,6 @@ import {
 	ActionIdZoomISOOutputSettings,
 	GetActionsZoomISOOutputSettings,
 } from './actions/action-zoomiso-output-settings.js'
-import { ActionIdZoomISOConfig, GetActionsZoomISOConfig } from './actions/action-zoomiso-config.js'
 import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions.js'
 import { ActionIdUsers, GetActionsUsers } from './actions/action-user.js'
@@ -101,9 +99,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 	const actionGlobal: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = GetActionsGlobal(instance)
 
-	const actionGlobalChat: { [id in ActionIdGlobalChat]: CompanionActionDefinition | undefined } =
-		GetActionsGlobalChat(instance)
-
 	const actionGlobalBreakoutRooms: { [id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined } =
 		GetActionsGlobalBreakoutRooms(instance)
 
@@ -120,9 +115,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 
 	const actionZoomISORouting: { [id in ActionIdZoomISORouting]: CompanionActionDefinition | undefined } =
 		GetActionsZoomISORouting(instance)
-
-	const actionZoomISOConfig: { [id in ActionIdZoomISOConfig]: CompanionActionDefinition | undefined } =
-		GetActionsZoomISOConfig(instance)
 
 	const actionZoomISOEngine: { [id in ActionIdZoomISOEngine]: CompanionActionDefinition | undefined } =
 		GetActionsZoomISOEngine(instance)
@@ -149,7 +141,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			| ActionIdGlobalRecording
 			| ActionIdGlobalWaitingRoomsAndZak
 			| ActionIdGlobal
-			| ActionIdGlobalChat
 			| ActionIdUserBreakoutRooms
 			| ActionIdUserChat
 			| ActionIdUserHandRaised
@@ -163,7 +154,6 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 			| ActionIdUserWaitingRoom
 			| ActionIdUserWebinar
 			| ActionIdZoomISOEngine
-			| ActionIdZoomISOConfig
 			| ActionIdZoomISOOutputSettings
 			| ActionIdZoomISOActions
 			| ActionIdUsers
@@ -186,14 +176,12 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		...actionUserSharescreen,
 		...actionUserSettings,
 		...actionGlobal,
-		...actionGlobalChat,
 		...actionGlobalBreakoutRooms,
 		...actionGlobalRecording,
 		...actionGlobalWaitingRoomsAndZak,
 		...actionGlobalMemoryManagement,
 		...actionZoomISORouting,
 		...actionZoomISOEngine,
-		...actionZoomISOConfig,
 		...actionZoomISOOutputSettings,
 		...actionZoomISOActions,
 		...actionUsers,

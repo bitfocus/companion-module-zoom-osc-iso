@@ -4,6 +4,12 @@ import { InstanceBaseExt } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalMemoryManagement {
+	// update target ids
+	// include
+	// load from target list
+	// load via OSC
+	// Save to target list
+	// Reset
 	listUsers = 'listUsers',
 }
 

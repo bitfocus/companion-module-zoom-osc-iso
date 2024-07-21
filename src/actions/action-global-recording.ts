@@ -9,9 +9,9 @@ export enum ActionIdGlobalRecording {
 	resumeLocalRecording = 'resumeLocalRecording',
 	stopLocalRecording = 'stopLocalRecording',
 	startCloudRecording = 'startCloudRecording',
+	pauseCloudRecording = 'pauseCloudRecording',
 	resumeCloudRecording = 'resumeCloudRecording',
 	stopCloudRecording = 'stopCloudRecording',
-	pauseCloudRecording = 'pauseCloudRecording',
 }
 
 export function GetActionsGlobalRecording(instance: InstanceBaseExt<ZoomConfig>): {

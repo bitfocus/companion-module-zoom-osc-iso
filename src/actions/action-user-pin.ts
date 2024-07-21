@@ -7,12 +7,12 @@ export enum ActionIdUserPin {
 	pin = 'pin',
 	addPin = 'add_Pin',
 	unpin = 'unpin',
-	clearPins = 'clear_Pins',
-	togglePin = 'toggle_Pin',
 	pinScreen2 = 'pin_Screen2',
 	unPinScreen2 = 'unPinScreen2',
 	clearPinsScreen2 = 'clearPinsScreen2',
+	togglePin = 'toggle_Pin',
 	togglePinScreen2 = 'togglePinScreen2',
+	clearPins = 'clear_Pins',
 }
 
 export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
@@ -76,41 +76,6 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 				}
 			},
 		},
-		[ActionIdUserPin.clearPins]: {
-			name: 'Clear Pins (PRO)',
-			options: [],
-			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/me/clearPin')
-				const sendToCommand = {
-					id: ActionIdUserPin.clearPins,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdUserPin.togglePin]: {
-			name: 'Toggle Pin (PRO)',
-			options: [options.userName],
-			callback: async (action): Promise<void> => {
-				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const command = createCommand(instance, '/togglePin', userName, select.multi)
-				if (command.isValidCommand) {
-					const sendToCommand = {
-						id: ActionIdUserPin.togglePin,
-						options: {
-							command: command.oscPath,
-							args: command.args,
-						},
-					}
-					sendActionCommand(instance, sendToCommand)
-				}
-			},
-		},
 		[ActionIdUserPin.pinScreen2]: {
 			name: 'Pin Screen2',
 			options: [options.userName],
@@ -165,6 +130,25 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 				sendActionCommand(instance, sendToCommand)
 			},
 		},
+		[ActionIdUserPin.togglePin]: {
+			name: 'Toggle Pin (PRO)',
+			options: [options.userName],
+			callback: async (action): Promise<void> => {
+				// type: 'User'
+				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const command = createCommand(instance, '/togglePin', userName, select.multi)
+				if (command.isValidCommand) {
+					const sendToCommand = {
+						id: ActionIdUserPin.togglePin,
+						options: {
+							command: command.oscPath,
+							args: command.args,
+						},
+					}
+					sendActionCommand(instance, sendToCommand)
+				}
+			},
+		},
 		[ActionIdUserPin.togglePinScreen2]: {
 			name: 'Toggle PinScreen2 (PRO)',
 			options: [options.userName],
@@ -182,6 +166,22 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 					}
 					sendActionCommand(instance, sendToCommand)
 				}
+			},
+		},
+		[ActionIdUserPin.clearPins]: {
+			name: 'Clear Pins (PRO)',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/me/clearPin')
+				const sendToCommand = {
+					id: ActionIdUserPin.clearPins,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
 			},
 		},
 	}
