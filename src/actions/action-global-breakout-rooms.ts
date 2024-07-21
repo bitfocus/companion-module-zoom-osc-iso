@@ -5,12 +5,12 @@ import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalBreakoutRooms {
 	requestListOfBreakoutRooms = 'requestListOfBreakoutRooms',
-	openBreakoutRooms = 'open_Breakout_Rooms',
-	configureBreakoutRooms = 'configureBreakoutRooms',
-	closeBreakoutRooms = 'closeBreakoutRooms',
-	deleteAllBreakoutRooms = 'deleteAllBreakoutRooms',
 	createBreakoutRoom = 'createBreakoutRoom',
 	deleteBreakoutRoom = 'deleteBreakoutRoom',
+	deleteAllBreakoutRooms = 'deleteAllBreakoutRooms',
+	openBreakoutRooms = 'open_Breakout_Rooms',
+	closeBreakoutRooms = 'closeBreakoutRooms',
+	configureBreakoutRooms = 'configureBreakoutRooms',
 	broadcastMessageToBreakoutRooms = 'broadcastMessageToBreakoutRooms',
 }
 

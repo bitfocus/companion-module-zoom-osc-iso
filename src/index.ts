@@ -3,7 +3,6 @@ import { GetConfigFields, ZoomConfig } from './config.js'
 import { GetActions } from './actions.js'
 import { GetFeedbacks } from './feedback.js'
 import { GetPresetList } from './presets.js'
-import { initVariables, updateVariables } from './variables.js'
 import { OSC } from './osc.js'
 import {
 	ZoomAudioLevelDataInterface,
@@ -17,6 +16,8 @@ import {
 } from './utils.js'
 
 import { UpgradeV2ToV3 } from './upgrades.js'
+import { updateVariableValues } from './variables/variable-values.js'
+import { initVariableDefinitions } from './variables/variable-definitions.js'
 
 /**
  * @description Companion instance class for Zoom
@@ -33,6 +34,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		pulling: 0,
 		feedbackImagesWithIcons: 1,
 		enableSocialStream: false,
+		enableVariablesForEachUser: true,
+		enableVariablesForParticipants: true,
+		enableActionPresetAndFeedbackSync: true,
 		socialStreamId: '',
 	}
 
@@ -139,23 +143,31 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	/**
 	 * @description update variables values
 	 */
-	public UpdateVariablesValues(): void {
-		updateVariables(this)
-	}
+	// public UpdateVariablesValues(): void {
+	// 	this.log('debug', 'UpdateVariableValues()')
+	// 	updateVariableValues(this)
+	// }
 
 	/**
 	 * @description init variables
 	 */
 	public InitVariables(): void {
-		initVariables(this)
+		// initVariableDefinitions(this)
 	}
 	/**
 	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
-		initVariables(this)
-		updateVariables(this)
+		this.log('debug', `updateInstance ${new Date()}`)
+		initVariableDefinitions(this)
+		updateVariableValues(this)
 
+		this.setActionDefinitions(GetActions(this))
+		this.setFeedbackDefinitions(GetFeedbacks(this))
+		this.setPresetDefinitions(GetPresetList(this))
+	}
+
+	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
 		this.setActionDefinitions(GetActions(this))
 		this.setFeedbackDefinitions(GetFeedbacks(this))
 		this.setPresetDefinitions(GetPresetList(this))

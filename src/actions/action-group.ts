@@ -1,15 +1,15 @@
-import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
-import { FeedbackId } from '../feedback.js'
 import {
-	PreviousSelectedCallersSave,
-	positionOrderOption,
-	selectionMethod,
-	toggleSelectedUser,
-} from './action-utils.js'
+	CompanionActionDefinition,
+	CompanionVariableValues,
+	SomeCompanionActionInputField,
+} from '@companion-module/base'
+import { ZoomConfig } from '../config.js'
+import { InstanceBaseExt, options, userExist } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
+import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import * as fs from 'fs'
 import * as os from 'os'
+import { updateGroupVariables, updateSelectedCallersVariables } from '../variables/variable-values.js'
 
 export enum ActionIdGroups {
 	addToGroup = 'add_To_Group',
@@ -125,7 +125,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 							}
 
 							if (addedUsers) {
-								instance.UpdateVariablesValues()
+								const variables: CompanionVariableValues = {}
+								updateGroupVariables(instance, variables, group)
+								instance.setVariableValues(variables)
+								// instance.UpdateVariablesValues()
 								instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 							}
 						}
@@ -152,18 +155,15 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
+				const group = action.options.group as number
 				if (action.options.groupOption === 'replace') {
-					instance.ZoomGroupData[action.options.group as number].users.length = 0
+					instance.ZoomGroupData[group].users.length = 0
 				}
 
 				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {
 					if (userExist(Number(zoomID), instance.ZoomUserData)) {
-						if (
-							!instance.ZoomGroupData[action.options.group as number].users.find(
-								(o: { zoomID: string | number }) => o.zoomID === zoomID
-							)
-						) {
-							instance.ZoomGroupData[action.options.group as number].users.push({
+						if (!instance.ZoomGroupData[group].users.find((o: { zoomID: string | number }) => o.zoomID === zoomID)) {
+							instance.ZoomGroupData[group].users.push({
 								zoomID: zoomID as number,
 								userName: instance.ZoomUserData[zoomID as number].userName,
 							})
@@ -173,7 +173,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 
 				PreviousSelectedCallersSave(instance)
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.UpdateVariablesValues()
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateGroupVariables(instance, variables, group)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -191,7 +194,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [groupOptionNoHost],
 			callback: (action) => {
 				instance.ZoomGroupData[action.options.group as number].users.length = 0
-				instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateGroupVariables(instance, variables, action.options.group as number)
+				instance.setVariableValues(variables)
+				// instance.UpdateVariablesValues()
 				instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 			},
 		},
@@ -239,7 +245,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 
 					PreviousSelectedCallersSave(instance)
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
-					instance.UpdateVariablesValues()
+					// instance.UpdateVariablesValues()
+					const variables: CompanionVariableValues = {}
+					updateGroupVariables(instance, variables, group)
+					instance.setVariableValues(variables)
 					instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 				} else {
 					instance.log('warn', 'No correct group selected')
@@ -252,7 +261,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action) => {
 				const newName = await instance.parseVariablesInString(action.options.name as string)
 				instance.ZoomGroupData[action.options.group as number].groupName = newName
-				instance.UpdateVariablesValues()
+
+				const variables: CompanionVariableValues = {}
+				variables[`Group${action.options.group as number}`] = newName
+				instance.setVariableValues(variables)
 			},
 		},
 		[ActionIdGroups.selectGroup]: {
@@ -264,7 +276,10 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				instance.ZoomGroupData[action.options.group as number].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
-				instance.UpdateVariablesValues()
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -295,29 +310,15 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				const position = (action.options.position as number) - 1
-				PreviousSelectedCallersSave(instance)
-				switch (action.options.option) {
-					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-						toggleSelectedUser(instance, instance.ZoomGroupData[action.options.group as number].users[position].zoomID)
-						break
-					case 'select':
-						if (instance.config.selectionMethod === selectionMethod.SingleSelection)
-							instance.ZoomClientDataObj.selectedCallers.length = 0
-						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
-						)
-						break
-					case 'remove':
-						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-							instance.ZoomClientDataObj.selectedCallers,
-							instance.ZoomGroupData[action.options.group as number].users[position].zoomID
-						)
-						break
-				}
-				instance.UpdateVariablesValues()
+				const zoomId =
+					instance.ZoomGroupData[action.options.group as number].users[(action.options.position as number) - 1].zoomID
+
+				selectUser(instance, zoomId, action.options.option as string)
+
+				// instance.UpdateVariablesValues()
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,

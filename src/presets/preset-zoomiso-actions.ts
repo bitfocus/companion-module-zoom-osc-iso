@@ -1,37 +1,45 @@
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
-import { colorBlack, colorGreenOlive } from '../utils.js'
+import { colorBlack, colorGreenOlive, InstanceBaseExt } from '../utils.js'
 import { CompanionPresetDefinitionsExt } from './preset-utils.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
+import { ZoomConfig } from '../config.js'
 
-export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
+export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
 
 	/**
 	 * ZoomISO Actions
 	 */
-	presets[`set_user_to_output`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_user_to_output`,
-		style: {
-			text: `Set User to Output`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISORouting.outputISO,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
+	const outputDataLength = Object.keys(instance.ZoomOutputData).length
+	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
+		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : index
+		presets[`set_user_to_output_${index}`] = {
+			type: 'button',
+			category: 'ZoomISO Actions',
+			name: `set_user_to_output_${index}`,
+			style: {
+				text: `SetUser to\n${outputName}`,
+				size: '10',
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
+			} as any,
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdZoomISORouting.outputISO,
+							options: {
+								userName: '',
+								output: index,
+							},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
+		}
 	}
 
 	presets[`add_Output`] = {
@@ -154,30 +162,6 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 		feedbacks: [],
 	}
 
-	presets[`set_output_embedded_audio`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_output_embedded_audio`,
-		style: {
-			text: `Set Output Embedded Audio`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
 	presets[`set_output_name`] = {
 		type: 'button',
 		category: 'ZoomISO Actions',
@@ -202,30 +186,6 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 		feedbacks: [],
 	}
 
-	presets[`set_output_selection`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_output_selection`,
-		style: {
-			text: `Set Output Selection`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setOutputSelection,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
 	presets[`set_output_mode`] = {
 		type: 'button',
 		category: 'ZoomISO Actions',
@@ -241,30 +201,6 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 				down: [
 					{
 						actionId: ActionIdZoomISOOutputSettings.setOutputMode,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
-	presets[`set_output_type`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_output_type`,
-		style: {
-			text: `Set Output Type`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setOutputType,
 						options: {},
 					},
 				],
@@ -385,78 +321,6 @@ export function GetPresetsZoomISOActions(): CompanionPresetDefinitionsExt {
 				down: [
 					{
 						actionId: ActionIdZoomISORouting.audioISO,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
-	presets[`set_audio_gain_reduction`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_audio_gain_reduction`,
-		style: {
-			text: `Set Audio Gain Reduction`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setAudioGainReduction,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
-	presets[`set_audio_selection`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_audio_selection`,
-		style: {
-			text: `Set Audio Selection`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setAudioSelection,
-						options: {},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
-	}
-
-	presets[`set_output_embedded_audio`] = {
-		type: 'button',
-		category: 'ZoomISO Actions',
-		name: `set_output_embedded_audio`,
-		style: {
-			text: `Set Output Embedded Audio`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
 						options: {},
 					},
 				],

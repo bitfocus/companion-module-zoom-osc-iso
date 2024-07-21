@@ -1,21 +1,21 @@
-import { CompanionActionDefinition } from '@companion-module/base'
+import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, ZoomGroupDataInterface, arrayAdd, arrayRemove, options, userExist } from '../utils.js'
-import {
-	sendActionCommand,
-	createCommand,
-	select,
-	PreviousSelectedCallersSave,
-	toggleSelectedUser,
-	selectionMethod,
-} from './action-utils.js'
+import { InstanceBaseExt, ZoomGroupDataInterface, options, userExist } from '../utils.js'
+import { sendActionCommand, createCommand, select, selectUser } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
+import {
+	updateAllGroupVariables,
+	updateGalleryVariables,
+	updateSelectedCallersVariables,
+	updateZoomParticipantVariables,
+	updateZoomUserVariables,
+} from '../variables/variable-values.js'
 
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',
 	makeCoHost = 'makeCoHost',
-	revokeCoHost = 'revokeCoHost',
 	reclaimHost = 'reclaimHost',
+	revokeCoHost = 'revokeCoHost',
 	makePanelist = 'makePanelist',
 	makeAttendee = 'makeAttendee',
 	ejectParticipant = 'ejectParticipant',
@@ -71,29 +71,13 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 				},
 			],
 			callback: (action) => {
-				PreviousSelectedCallersSave(instance)
-				switch (action.options.option) {
-					case 'toggle':
-						instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
-						toggleSelectedUser(instance, action.options.user as number)
-						break
-					case 'select':
-						if (instance.config.selectionMethod === selectionMethod.SingleSelection) {
-							instance.ZoomClientDataObj.selectedCallers.length = 0
-						}
-						instance.ZoomClientDataObj.selectedCallers = arrayAdd(
-							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user as number
-						)
-						break
-					case 'remove':
-						instance.ZoomClientDataObj.selectedCallers = arrayRemove(
-							instance.ZoomClientDataObj.selectedCallers,
-							action.options.user as number
-						)
-						break
-				}
-				instance.UpdateVariablesValues()
+				const zoomId = action.options.user as number
+
+				selectUser(instance, zoomId, action.options.option as string)
+
+				const variables: CompanionVariableValues = {}
+				updateSelectedCallersVariables(instance, variables)
+				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
 					FeedbackId.userNameBased,
 					FeedbackId.userNameBasedAdvanced,
@@ -141,7 +125,15 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 						}
 					})
 				})
-				instance.UpdateVariablesValues()
+
+				const variables: CompanionVariableValues = {}
+				updateAllGroupVariables(instance, variables)
+				updateZoomParticipantVariables(instance, variables)
+				updateSelectedCallersVariables(instance, variables)
+				updateGalleryVariables(instance, variables)
+				updateZoomUserVariables(instance, variables)
+				instance.setVariableValues(variables)
+				// instance.UpdateVariablesValues()
 			},
 		},
 		[ActionIdUserRolesAndAction.makeHost]: {

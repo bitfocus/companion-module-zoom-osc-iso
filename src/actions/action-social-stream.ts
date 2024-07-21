@@ -24,7 +24,7 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 					const name = await instance.parseVariablesInString(action.options.name as string)
 					await socialStreamApi.postMessage(name, message, instance)
 				} else {
-					instance.log('debug', 'Social Stream is not enabled in config')
+					instance.log('warn', 'Social Stream is not enabled in config')
 				}
 			},
 		},

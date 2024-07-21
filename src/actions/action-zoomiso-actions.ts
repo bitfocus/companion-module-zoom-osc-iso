@@ -15,18 +15,30 @@ export enum ActionIdZoomISOActions {
 export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): {
 	[id in ActionIdZoomISOActions]: CompanionActionDefinition | undefined
 } {
-	const CHOICES_OUTPUTS = []
-	// Change this to actual created output, get that with pulling
+	const CHOICES_OUTPUTS_AUDIO = []
+	const outputAudioDataLength = Object.keys(instance.ZoomAudioRoutingData).length
 
-	for (
-		let index = 1;
-		index <
-		(Object.keys(instance.ZoomAudioRoutingData).length === 0
-			? 9
-			: Object.keys(instance.ZoomAudioRoutingData).length + 1);
-		index++
-	) {
-		CHOICES_OUTPUTS.push({ id: index, label: `Output ${index}` })
+	for (let index = 1; index < (outputAudioDataLength === 0 ? 9 : outputAudioDataLength + 1); index++) {
+		const outputAudioName = instance.ZoomAudioRoutingData[index]
+			? `${instance.ZoomAudioRoutingData[index].channel}. ${instance.ZoomAudioRoutingData[index].audio_device} - ${instance.ZoomAudioRoutingData[index].mode}`
+			: `Audio Channel ${index}`
+		CHOICES_OUTPUTS_AUDIO.push({ id: index, label: outputAudioName })
+	}
+
+	const outputAudioOption: SomeCompanionActionInputField = {
+		type: 'dropdown',
+		label: 'Audio Output',
+		id: 'output',
+		default: 1,
+		choices: CHOICES_OUTPUTS_AUDIO,
+	}
+
+	const CHOICES_OUTPUTS = []
+	const outputDataLength = Object.keys(instance.ZoomOutputData).length
+
+	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
+		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : `Output ${index}`
+		CHOICES_OUTPUTS.push({ id: index, label: outputName })
 	}
 
 	const outputOption: SomeCompanionActionInputField = {
@@ -57,7 +69,7 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		},
 		[ActionIdZoomISOActions.selectAudioChannel]: {
 			name: 'Select audio channel',
-			options: [outputOption],
+			options: [outputAudioOption],
 			callback: (action) => {
 				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output as number)
 				if (index > -1) {
@@ -88,18 +100,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					PreviousSelectedCallersSave(instance)
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.UpdateVariablesValues()
-					instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.output
-					)
+
+					// nothing changed until after the OSC command for outputRouting is received
+					// so no need to update variable values and feedback here
+					// instance.UpdateVariablesValues()
+					// instance.checkFeedbacks(
+					// 	FeedbackId.userNameBased,
+					// 	FeedbackId.userNameBasedAdvanced,
+					// 	FeedbackId.indexBased,
+					// 	FeedbackId.indexBasedAdvanced,
+					// 	FeedbackId.galleryBased,
+					// 	FeedbackId.galleryBasedAdvanced,
+					// 	FeedbackId.groupBased,
+					// 	FeedbackId.groupBasedAdvanced,
+					// 	FeedbackId.output
+					// )
 				}
 			},
 		},
@@ -123,18 +138,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					PreviousSelectedCallersSave(instance)
 					// instance.ZoomClientDataObj.selectedCallers.length = 0
 					// instance.ZoomClientDataObj.selectedOutputs.length = 0
-					instance.UpdateVariablesValues()
-					instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.output
-					)
+
+					// nothing changed until after the OSC command for audioRouting is received
+					// so no need to update variable values and feedback here
+					// instance.UpdateVariablesValues()
+					// instance.checkFeedbacks(
+					// 	FeedbackId.userNameBased,
+					// 	FeedbackId.userNameBasedAdvanced,
+					// 	FeedbackId.indexBased,
+					// 	FeedbackId.indexBasedAdvanced,
+					// 	FeedbackId.galleryBased,
+					// 	FeedbackId.galleryBasedAdvanced,
+					// 	FeedbackId.groupBased,
+					// 	FeedbackId.groupBasedAdvanced,
+					// 	FeedbackId.output
+					// )
 				}
 			},
 		},
@@ -165,18 +183,21 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 				PreviousSelectedCallersSave(instance)
 				// instance.ZoomClientDataObj.selectedCallers.length = 0
 				// instance.ZoomClientDataObj.selectedOutputs.length = 0
-				instance.UpdateVariablesValues()
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced,
-					FeedbackId.output
-				)
+
+				// nothing changed until after the OSC command for outputRouting is received
+				// so no need to update variable values and feedback here
+				// instance.UpdateVariablesValues()
+				// instance.checkFeedbacks(
+				// 	FeedbackId.userNameBased,
+				// 	FeedbackId.userNameBasedAdvanced,
+				// 	FeedbackId.indexBased,
+				// 	FeedbackId.indexBasedAdvanced,
+				// 	FeedbackId.galleryBased,
+				// 	FeedbackId.galleryBasedAdvanced,
+				// 	FeedbackId.groupBased,
+				// 	FeedbackId.groupBasedAdvanced,
+				// 	FeedbackId.output
+				// )
 			},
 		},
 	}

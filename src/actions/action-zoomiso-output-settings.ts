@@ -6,18 +6,13 @@ import { createCommand, sendActionCommand } from './action-utils.js'
 export enum ActionIdZoomISOOutputSettings {
 	setOutputCount = 'set_Output_Count',
 	enableOutput = 'enable_Output',
+	disableOutput = 'disable_Output',
+	setOutputMode = 'set_Output_Mode',
+	setOutputName = 'set_Output_Name',
 	setVideoLossMode = 'set_VideoLoss_Mode',
+	addOutput = 'add_Output',
 	deleteOutput = 'delete_Output',
 	setAudioMode = 'set_Audio_Mode',
-	addOutput = 'add_Output',
-	disableOutput = 'disable_Output',
-	setAudioGainReduction = 'set_AudioGain_Reduction',
-	setOutputSelection = 'set_Output_Selection',
-	setAudioSelection = 'set_Audio_Selection',
-	setOutputEmbeddedAudio = 'set_Output_Embedded_Audio',
-	setOutputName = 'set_Output_Name',
-	setOutputMode = 'set_Output_Mode',
-	setOutputType = 'set_Output_Type',
 }
 
 export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomConfig>): {
@@ -96,11 +91,12 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		},
 		[ActionIdZoomISOOutputSettings.setAudioMode]: {
 			name: 'setAudioMode',
-			options: [options.channel],
+			options: [options.channel, options.audioChannelMode],
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setAudioMode')
-				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 'i', value: action.options.number })
+				command.args.push({ type: 's', value: action.options.audioChannelMode })
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setAudioMode,
 					options: {
@@ -146,82 +142,6 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 				sendActionCommand(instance, sendToCommand)
 			},
 		},
-		[ActionIdZoomISOOutputSettings.setAudioGainReduction]: {
-			name: 'set Audio Gain Reduction',
-			options: [options.channel, options.reductionAmount],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/setAudioGainReduction')
-				command.args.push({ type: 'i', value: action.options.channel })
-				command.args.push({ type: 'i', value: action.options.reductionAmount })
-
-				const sendToCommand = {
-					id: ActionIdZoomISOOutputSettings.setAudioGainReduction,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdZoomISOOutputSettings.setOutputSelection]: {
-			name: 'set Output Selection',
-			options: [options.output, options.reductionAmount],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/setOutputSelection')
-				command.args.push({ type: 'i', value: action.options.output })
-				command.args.push({ type: 'i', value: action.options.reductionAmount })
-
-				const sendToCommand = {
-					id: ActionIdZoomISOOutputSettings.setOutputSelection,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdZoomISOOutputSettings.setAudioSelection]: {
-			name: 'set Audio Selection',
-			options: [options.output, options.reductionAmount],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/setAudioSelection')
-				command.args.push({ type: 'i', value: action.options.channel })
-				command.args.push({ type: 'i', value: action.options.reductionAmount })
-
-				const sendToCommand = {
-					id: ActionIdZoomISOOutputSettings.setAudioSelection,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio]: {
-			name: 'set Output Embedded Audio',
-			options: [options.output, options.mode],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/setOutputEmbeddedAudio')
-				command.args.push({ type: 'i', value: action.options.output })
-				command.args.push({ type: 'i', value: action.options.mode })
-
-				const sendToCommand = {
-					id: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
 		[ActionIdZoomISOOutputSettings.setOutputName]: {
 			name: 'set Output Name',
 			options: [options.output, options.name],
@@ -242,33 +162,35 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 				sendActionCommand(instance, sendToCommand)
 			},
 		},
-
 		[ActionIdZoomISOOutputSettings.setOutputMode]: {
 			name: 'setOutputMode',
-			options: [options.output],
+			options: [
+				options.output,
+				{
+					type: 'dropdown',
+					label: 'Output Mode',
+					id: 'outputMode',
+					default: 'Spotlight',
+					choices: [
+						{ id: 'Participant', label: 'Participant' },
+						{ id: 'Participant Share', label: 'Participant Share' },
+						{ id: 'Active Speaker', label: 'Active Speaker' },
+						{ id: 'Spotlight', label: 'Spotlight' },
+						{ id: 'Active Screenshare', label: 'Active Screenshare' },
+						{ id: 'Gallery Position', label: 'Gallery Position' },
+						{ id: 'Unique Speaker', label: 'Unique Speaker' },
+					],
+				},
+			],
 			callback: (action): void => {
 				// type: 'ISO'
+				// instance.log('debug', `setOutputMode: ${JSON.stringify(action.options.outputMode)}`)
 				const command = createCommand(instance, '/setOutputMode')
 				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 's', value: action.options.outputMode })
+				// instance.log('debug', `setOutputMode: ${JSON.stringify(command)}`)
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setOutputMode,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionIdZoomISOOutputSettings.setOutputType]: {
-			name: 'setOutputType',
-			options: [options.output],
-			callback: (action): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/setOutputType')
-				command.args.push({ type: 'i', value: action.options.output })
-				const sendToCommand = {
-					id: ActionIdZoomISOOutputSettings.setOutputType,
 					options: {
 						command: command.oscPath,
 						args: command.args,

@@ -40,36 +40,33 @@ export const PreviousSelectedCallersRestore = (instance: InstanceBaseExt<ZoomCon
 	instance.ZoomClientDataObj.selectedCallers = [...instance.ZoomClientDataObj.PreviousSelectedCallers]
 }
 
-export const toggleSelectedUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number): void => {
-	instance.ZoomClientDataObj.PreviousSelectedCallers = instance.ZoomClientDataObj.selectedCallers
+export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number, option: string): void => {
+	const { ZoomClientDataObj, config } = instance
 
-	// multiple selection made before.  clear selections and add single selection
-	if (
-		instance.config.selectionMethod === selectionMethod.SingleSelection &&
-		instance.ZoomClientDataObj.selectedCallers.length > 1
-	) {
-		instance.ZoomClientDataObj.selectedCallers.length = 0
-		instance.ZoomClientDataObj.selectedCallers = arrayAdd(instance.ZoomClientDataObj.selectedCallers, zoomId)
-	}
-	// single selection already made
-	else if (
-		instance.config.selectionMethod === selectionMethod.SingleSelection &&
-		instance.ZoomClientDataObj.selectedCallers.length === 1
-	) {
-		const index = instance.ZoomClientDataObj.selectedCallers.find((t) => t === zoomId)
+	PreviousSelectedCallersSave(instance)
 
-		// if user is already selected, remove them from selection
-		// else add clear selected callers and add new selection
-		if (index !== undefined && index > -1) {
-			instance.ZoomClientDataObj.selectedCallers = arrayRemove(instance.ZoomClientDataObj.selectedCallers, zoomId)
-		} else {
-			instance.ZoomClientDataObj.selectedCallers.length = 0
-			instance.ZoomClientDataObj.selectedCallers = arrayAdd(instance.ZoomClientDataObj.selectedCallers, zoomId)
-		}
-	}
-	// multiple selection
-	else {
-		instance.ZoomClientDataObj.selectedCallers = arrayAddRemove(instance.ZoomClientDataObj.selectedCallers, zoomId)
+	switch (option) {
+		case 'toggle':
+			if (config.selectionMethod === selectionMethod.SingleSelection) {
+				if (ZoomClientDataObj.selectedCallers.length !== 1 || !ZoomClientDataObj.selectedCallers.includes(zoomId)) {
+					ZoomClientDataObj.selectedCallers = [zoomId]
+				} else {
+					ZoomClientDataObj.selectedCallers = []
+				}
+			} else {
+				ZoomClientDataObj.selectedCallers = arrayAddRemove(ZoomClientDataObj.selectedCallers, zoomId)
+			}
+			break
+		case 'select':
+			if (config.selectionMethod == selectionMethod.SingleSelection) {
+				ZoomClientDataObj.selectedCallers = [zoomId]
+			} else {
+				ZoomClientDataObj.selectedCallers = arrayAdd(ZoomClientDataObj.selectedCallers, zoomId)
+			}
+			break
+		case 'remove':
+			ZoomClientDataObj.selectedCallers = arrayRemove(ZoomClientDataObj.selectedCallers, zoomId)
+			break
 	}
 }
 

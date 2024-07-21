@@ -10,7 +10,7 @@ export class socialStreamApi {
 			message.length > 0 &&
 			name.length > 0
 		) {
-			instance.log('debug', `chat -- ${name} - ${message}`)
+			//instance.log('debug', `chat -- ${name} - ${message}`)
 			const socialStreamId = instance.config.socialStreamId
 			const url = `https://io.socialstream.ninja/${socialStreamId}`
 			const body = {

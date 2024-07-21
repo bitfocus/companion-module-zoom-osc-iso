@@ -1,12 +1,11 @@
 import { FeedbackId } from '../feedback.js'
-import { InstanceBaseExt, ZoomAudioRoutingDataInterface, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
+import { InstanceBaseExt, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
 import { CompanionPresetDefinitionsExt } from './preset-utils.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ZoomConfig } from '../config.js'
 
 export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
 	const presets: CompanionPresetDefinitionsExt = {}
-	const zoomAudioRoutingData: ZoomAudioRoutingDataInterface = instance.ZoomAudioRoutingData
 	/**
 	 * ZoomISO Selections
 	 */
@@ -79,21 +78,22 @@ export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig
 		],
 		feedbacks: [],
 	}
-	for (
-		let index = 1;
-		index < (Object.keys(zoomAudioRoutingData).length === 0 ? 9 : Object.keys(zoomAudioRoutingData).length + 1);
-		index++
-	) {
+
+	const outputDataLength = Object.keys(instance.ZoomOutputData).length
+	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
+		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : `Output ${index}`
+
 		presets[`Select_Output_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Selections',
-			name: `Select Output ${index}`,
+			name: `select_output_${index}`,
 			style: {
-				text: `Select Output ${index}`,
-				size: '14',
+				text: `\`Select\n\${substr('${outputName}',0,45)}\``,
+				size: '10',
 				color: colorBlack,
 				bgcolor: colorGreenOlive,
-			},
+				textExpression: true,
+			} as any,
 			steps: [
 				{
 					down: [
@@ -121,17 +121,23 @@ export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig
 			],
 		}
 	}
-	for (let index = 1; index < 9; index++) {
-		presets[`Select_Audio_Channel ${index}`] = {
+	const outputAudioDataLength = Object.keys(instance.ZoomAudioRoutingData).length
+	// instance.log('info', `outputAudioData:  ${JSON.stringify(instance.ZoomAudioRoutingData)}`)
+	for (let index = 1; index < (outputAudioDataLength === 0 ? 9 : outputAudioDataLength + 1); index++) {
+		const outputAudioName = instance.ZoomAudioRoutingData[index]
+			? `${instance.ZoomAudioRoutingData[index].channel}. ${instance.ZoomAudioRoutingData[index].audio_device} - ${instance.ZoomAudioRoutingData[index].mode}`
+			: `Audio Channel ${index}`
+		presets[`Select_Audio_Channel_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Selections',
-			name: `Audio\nChannel ${index}`,
+			name: `Audio\nChannel${index}`,
 			style: {
-				text: `Audio\nChannel ${index}`,
-				size: '14',
+				text: `\`Select\n\${substr('${outputAudioName}',0,45)}\``,
+				size: '10',
 				color: colorBlack,
 				bgcolor: colorGreenOlive,
-			},
+				textExpression: true,
+			} as any,
 			steps: [
 				{
 					down: [
@@ -157,6 +163,7 @@ export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig
 			],
 		}
 	}
+
 	presets[`Select_Channel`] = {
 		type: 'button',
 		category: 'ZoomISO Selections',

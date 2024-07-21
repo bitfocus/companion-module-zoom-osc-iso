@@ -4,8 +4,8 @@ import { InstanceBaseExt, options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserSpotlight {
-	addSpotlight = 'addSpotlight',
 	spotLight = 'spotLight',
+	addSpotlight = 'addSpotlight',
 	unSpotLight = 'unSpotLight',
 	toggleSpotlight = 'toggleSpotlight',
 }

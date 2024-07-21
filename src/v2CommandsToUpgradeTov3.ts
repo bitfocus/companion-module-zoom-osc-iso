@@ -16,13 +16,11 @@ import { ActionIdUserWaitingRoom } from './actions/action-user-waiting-room.js'
 import { ActionIdUserScreenshare } from './actions/action-user-screenshare.js'
 import { ActionIdUserSettings } from './actions/action-user-settings.js'
 import { ActionIdGlobal } from './actions/action-global.js'
-import { ActionIdGlobalChat } from './actions/action-global-chat.js'
 import { ActionIdGlobalBreakoutRooms } from './actions/action-global-breakout-rooms.js'
 import { ActionIdGlobalRecording } from './actions/action-global-recording.js'
 import { ActionIdGlobalWaitingRoomsAndZak } from './actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobalMemoryManagement } from './actions/action-global-memory-management.js'
 import { ActionIdZoomISORouting } from './actions/action-zoomiso-routing.js'
-import { ActionIdZoomISOConfig } from './actions/action-zoomiso-config.js'
 import { ActionIdZoomISOEngine } from './actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from './actions/action-zoomiso-output-settings.js'
 import { ActionIdZoomISOActions } from './actions/action-zoomiso-actions.js'
@@ -560,7 +558,7 @@ export const v2Actions: v2Action = {
 	},
 	SendAChatToEveryone: {
 		oldActionId: 'SendAChatToEveryone',
-		newActionId: ActionIdGlobalChat.sendAChatToEveryone,
+		newActionId: ActionIdGlobal.sendAChatToEveryone,
 		type: 'GlobalActions',
 	},
 	CreateBreakoutRoom: {
@@ -628,26 +626,6 @@ export const v2Actions: v2Action = {
 		newActionId: ActionId.customCommandWithArguments,
 		type: 'SpecialActions',
 	},
-	setAudioGainReduction: {
-		oldActionId: 'setAudioGainReduction',
-		newActionId: ActionIdZoomISOOutputSettings.setAudioGainReduction,
-		type: 'ISOActions',
-	},
-	setOutputSelection: {
-		oldActionId: 'setOutputSelection',
-		newActionId: ActionIdZoomISOOutputSettings.setOutputSelection,
-		type: 'ISOActions',
-	},
-	setAudioSelection: {
-		oldActionId: 'setAudioSelection',
-		newActionId: ActionIdZoomISOOutputSettings.setAudioSelection,
-		type: 'ISOActions',
-	},
-	setOutputEmbeddedAudio: {
-		oldActionId: 'setOutputEmbeddedAudio',
-		newActionId: ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio,
-		type: 'ISOActions',
-	},
 	setVideoLossMode: {
 		oldActionId: 'setVideoLossMode',
 		newActionId: ActionIdZoomISOOutputSettings.setVideoLossMode,
@@ -708,36 +686,17 @@ export const v2Actions: v2Action = {
 		newActionId: ActionIdZoomISOOutputSettings.disableOutput,
 		type: 'ISOActions',
 	},
-	loadISOConfig: {
-		oldActionId: 'loadISOConfig',
-		newActionId: ActionIdZoomISOConfig.loadISOConfig,
-		type: 'ISOActions',
-	},
-	saveISOConfig: {
-		oldActionId: 'saveISOConfig',
-		newActionId: ActionIdZoomISOConfig.saveISOConfig,
-		type: 'ISOActions',
-	},
-	mergeISOConfig: {
-		oldActionId: 'mergeISOConfig',
-		newActionId: ActionIdZoomISOConfig.mergeISOConfig,
-		type: 'ISOActions',
-	},
-	getConfigPath: {
-		oldActionId: 'getConfigPath',
-		newActionId: ActionIdZoomISOConfig.getConfigPath,
-		type: 'ISOActions',
-	},
+
 	setOutputMode: {
 		oldActionId: 'setOutputMode',
 		newActionId: ActionIdZoomISOOutputSettings.setOutputMode,
 		type: 'ISOActions',
 	},
-	setOutputType: {
-		oldActionId: 'setOutputType',
-		newActionId: ActionIdZoomISOOutputSettings.setOutputType,
-		type: 'ISOActions',
-	},
+	// setOutputType: {
+	// 	oldActionId: 'setOutputType',
+	// 	newActionId: ActionIdZoomISOOutputSettings.setOutputType,
+	// 	type: 'ISOActions',
+	// },
 	setAudioMode: {
 		oldActionId: 'setAudioMode',
 		newActionId: ActionIdZoomISOOutputSettings.setAudioMode,

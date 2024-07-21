@@ -4,8 +4,8 @@ import { InstanceBaseExt, options } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalWaitingRoomsAndZak {
-	disableWaitingRoom = 'disableWaitingRoom',
 	enableWaitingRoom = 'enableWaitingRoom',
+	disableWaitingRoom = 'disableWaitingRoom',
 	sendMessageToWaitingRoom = 'sendMessageToWaitingRoom',
 	admitEveryoneFromWaitingRoom = 'admitEveryoneFromWaitingRoom',
 	ZAKStartMeeting = 'ZAKStartMeeting',

@@ -1,9 +1,29 @@
 import { arrayRemove, InstanceBaseExt, SubscribeMode, userExist, ZoomGroupDataInterface, ZoomVersion } from './utils.js'
-import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
+import { CompanionVariableValues, InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from './actions/action-utils.js'
 import { socialStreamApi } from './socialstream.js'
+import {
+	updateActiveSpeakerVariable,
+	updateHandRaisedCountVariable,
+	updateSpotlightGroupVariables,
+	updateHostGroupVariables,
+	updateVideoOnCountVariable,
+	updateZoomIsoEngineVariables,
+	updateZoomIsoAudioLevelVariables,
+	updateZoomIsoAudioRoutingVariables,
+	updateZoomIsoOutputVariables,
+	updateGalleryVariables,
+	updateAllGroupVariables,
+	updateZoomParticipantVariables,
+	updateSelectedCallersVariables,
+	updateZoomUserVariables,
+	updateAllUserBasedVariables,
+	updateIsSpeakingVariable,
+	updateGalleryCountVariables,
+	updateCallStatusVariables,
+} from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
 interface ZoomOSCResponse {
@@ -27,6 +47,7 @@ export class OSC {
 	private oscRXPort = 1234
 	private udpPort: any
 	private updateLoop = true
+	private firstLoop = true
 	private needToPingPong = true
 	private pingInterval: NodeJS.Timeout | undefined
 	private pingIntervalTime = 2000
@@ -44,6 +65,8 @@ export class OSC {
 	 */
 	public readonly destroy = (): void => {
 		this.needToPingPong = false
+		this.updateLoop = false
+		this.firstLoop = false
 		if (this.udpPort) this.udpPort.close()
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
@@ -90,6 +113,7 @@ export class OSC {
 			// See if ZoomOSC is active
 			this.pingInterval = setInterval(() => {
 				if (this.needToPingPong) {
+					// this.instance.log('debug', `**************** needToPingPong ${new Date()}`)
 					// Shall we leave this?
 					this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
 					this.sendCommand('/zoom/ping')
@@ -98,20 +122,27 @@ export class OSC {
 			// start looping for presets
 			this.updatePresetsLoop = setInterval(() => {
 				if (this.updateLoop) {
-					this.instance.updateInstance()
+					if (this.instance.config.enableActionPresetAndFeedbackSync || this.firstLoop) {
+						// this.instance.log('debug', `**************** updateLoop ${new Date()}`)
+						this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
+						// Make sure initial status is reflected
+						this.instance.checkFeedbacks(
+							FeedbackId.userNameBased,
+							FeedbackId.userNameBasedAdvanced,
+							FeedbackId.indexBased,
+							FeedbackId.indexBasedAdvanced,
+							FeedbackId.galleryBased,
+							FeedbackId.galleryBasedAdvanced,
+							FeedbackId.groupBased,
+							FeedbackId.groupBasedAdvanced,
+							FeedbackId.selectionMethod,
+							FeedbackId.audioOutput,
+							FeedbackId.output
+						)
+
+						this.firstLoop == false
+					}
 					this.updateLoop = false
-					// Make sure initial status is reflected
-					this.instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.selectionMethod
-					)
 				}
 			}, 2000)
 		})
@@ -130,7 +161,9 @@ export class OSC {
 		// Only when a user is not in offline array
 		if (!this.instance.ZoomUserOffline[zoomId]) {
 			const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-			if (index === -1) this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+			if (index === -1) {
+				this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
+			}
 			if (data.args.length == 4) {
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
@@ -176,12 +209,15 @@ export class OSC {
 				this.instance.log('warn', 'wrong arguments in OSC feedback')
 			}
 			this.instance.InitVariables()
-			this.instance.UpdateVariablesValues()
+			const variables: CompanionVariableValues = {}
+			updateAllUserBasedVariables(this.instance, variables)
+			this.instance.setVariableValues(variables)
+			// this.instance.UpdateVariablesValues()
 		}
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
-		// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+		// this.instance.log('debug', '+++++++++++receiving:' + JSON.stringify(data))
 		// Do a switch block to go fast through the rest of the data
 		try {
 			const recvMsg = data.address.toString().split('/')
@@ -225,7 +261,11 @@ export class OSC {
 											userName: data.args[1].value,
 										})
 										// this.instance.log('debug', `added spotlight: ${data.args[1].value}`)
-										this.instance.UpdateVariablesValues()
+										// this.instance.UpdateVariablesValues()
+										// for performance updating values just for spotlight instead of all variables
+										const variables: CompanionVariableValues = {}
+										updateSpotlightGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 									}
 
 									this.instance.checkFeedbacks(
@@ -249,7 +289,11 @@ export class OSC {
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[1].users.splice(index, 1)
-										this.instance.UpdateVariablesValues()
+										// this.instance.UpdateVariablesValues()
+										// for performance updating values just for spotlight instead of all variables
+										const variables: CompanionVariableValues = {}
+										updateSpotlightGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 									}
 
 									this.instance.checkFeedbacks(
@@ -277,10 +321,13 @@ export class OSC {
 								await this.createZoomUser(data).then(() => (this.updateLoop = true))
 								break
 							case 'activeSpeaker':
+								// this.instance.log('info', 'active speaker receiving:' + JSON.stringify(data))
 								if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
-									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
-									this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateActiveSpeakerVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
+									// this.instance.UpdateVariablesValues()
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -297,6 +344,10 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].videoOn = true
+									// for performance updating values just videoOn instead of all variables
+									const variables: CompanionVariableValues = {}
+									updateVideoOnCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -313,6 +364,11 @@ export class OSC {
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].videoOn = false
+									// this.instance.UpdateVariablesValues()
+									// for performance updating values just videoOn instead of all variables
+									const variables: CompanionVariableValues = {}
+									updateVideoOnCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -361,6 +417,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = true
+									const variables: CompanionVariableValues = {}
+									updateHandRaisedCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -377,6 +436,9 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].handRaised = false
+									const variables: CompanionVariableValues = {}
+									updateHandRaisedCountVariable(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
 										FeedbackId.userNameBasedAdvanced,
@@ -420,12 +482,19 @@ export class OSC {
 											`Removed ${JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1))}`
 										)
 									}
-									this.instance.UpdateVariablesValues()
+									// this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateAllUserBasedVariables(this.instance, variables)
+									this.instance.setVariableValues(variables)
 									this.instance.checkFeedbacks(
 										FeedbackId.userNameBased,
+										FeedbackId.userNameBasedAdvanced,
 										FeedbackId.indexBased,
+										FeedbackId.indexBasedAdvanced,
 										FeedbackId.galleryBased,
-										FeedbackId.groupBased
+										FeedbackId.galleryBasedAdvanced,
+										FeedbackId.groupBased,
+										FeedbackId.groupBasedAdvanced
 									)
 
 									this.updateLoop = true
@@ -449,12 +518,19 @@ export class OSC {
 										})
 									})
 
-									this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateAllGroupVariables(this.instance, variables)
+									updateZoomParticipantVariables(this.instance, variables)
+									updateSelectedCallersVariables(this.instance, variables)
+									updateGalleryVariables(this.instance, variables)
+									updateZoomUserVariables(this.instance, variables)
+									this.instance.setVariableValues(variables)
+									// this.instance.UpdateVariablesValues()
 								}
 								break
 							}
 							case 'chat':
-								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								// this.instance.log('info', 'chat receiving:' + JSON.stringify(data))
 								if (
 									this.instance.config.enableSocialStream &&
 									this.instance.config.socialStreamId.length > 0 &&
@@ -466,7 +542,7 @@ export class OSC {
 							case 'audioStatus':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								break
-							case 'roleChanged':
+							case 'roleChanged': {
 								// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].userRole = data.args[4].value
@@ -480,6 +556,9 @@ export class OSC {
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[0].users.splice(index, 1)
+										const variables: CompanionVariableValues = {}
+										updateHostGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 										this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 										this.updateLoop = true
 									}
@@ -493,23 +572,45 @@ export class OSC {
 											userName: data.args[1].value,
 										})
 										this.instance.log('debug', `added host: ${data.args[1].value}`)
+										const variables: CompanionVariableValues = {}
+										updateHostGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 										this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
+										this.updateLoop = true
 									}
-									this.updateLoop = true
 								}
-								this.instance.UpdateVariablesValues()
 								break
+							}
 							case 'stoppedSpeaking':
 								// this.instance.log('info','receiving:' + data)
 								// create feedback for this?
 								break
-							case 'isSpeaking':
+							case 'isSpeaking': {
 								this.instance.ZoomClientDataObj.isSpeaking = data.args[1].value
-								this.instance.UpdateVariablesValues()
+								const variables: CompanionVariableValues = {}
+								updateIsSpeakingVariable(this.instance, variables)
+								this.instance.setVariableValues(variables)
+								// this.instance.UpdateVariablesValues()
 								break
+							}
+							case 'shareStatus': {
+								const shareType = data.args[4].value
+								const variables: CompanionVariableValues = {}
+								if (shareType === 'videoShareStarted') {
+									variables['videoShareStatus'] = 'On'
+								} else {
+									// for now we only care about the share screen and not the audio only share
+									// else if (shareType === 'videoShareStopped') {
+									variables['videoShareStatus'] = 'Off'
+								}
+								this.instance.setVariableValues(variables)
+								break
+							}
 							default:
-								this.instance.log('info', 'No Case provided for:' + data.address)
-								this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
+								this.instance.log(
+									'debug',
+									`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`
+								)
 						}
 						break
 
@@ -517,29 +618,37 @@ export class OSC {
 						// {int rows} {int cols} only for mac, skip this
 						break
 
-					case 'galleryOrder':
+					case 'galleryOrder': {
 						// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.galleryOrder.length = 0
 						data.args.forEach((order: { type: string; value: number }) => {
 							this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
 						})
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+
+						const variables: CompanionVariableValues = {}
+						updateGalleryVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+
+						// this.instance.UpdateVariablesValues()
 						this.instance.checkFeedbacks(
-							FeedbackId.indexBased,
-							FeedbackId.indexBasedAdvanced,
+							// FeedbackId.indexBased,
+							// FeedbackId.indexBasedAdvanced,
 							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced,
-							FeedbackId.groupBased,
-							FeedbackId.groupBasedAdvanced
+							FeedbackId.galleryBasedAdvanced
+							// FeedbackId.groupBased,
+							// FeedbackId.groupBasedAdvanced
 						)
 						break
-
-					case 'galleryCount':
+					}
+					case 'galleryCount': {
 						this.instance.ZoomClientDataObj.galleryCount = data.args[0].value
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateGalleryCountVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
-
+					}
 					case 'pong': {
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
@@ -559,11 +668,16 @@ export class OSC {
 						this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 						this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 						switch (versionInfo.substring(0, 4)) {
-							case 'ZISO':
+							case 'ZISO': {
+								this.sendCommand('/zoom/getEngineState', [])
 								this.zoomISOPuller = setInterval(
 									() => {
 										if (this.instance.config.pulling !== 0) {
-											this.sendISOPullingCommands()
+											if (this.instance.ZoomClientDataObj.engineState === 2) {
+												this.sendISOPullingCommands()
+											} else if (this.instance.ZoomClientDataObj.engineState === -1) {
+												this.sendCommand('/zoom/getEngineState', [])
+											}
 										}
 									},
 									this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling
@@ -571,6 +685,7 @@ export class OSC {
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.instance.saveConfig(this.instance.config)
 								break
+							}
 							case 'ZOSC':
 								if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
 								this.instance.config.version = ZoomVersion.ZoomOSC
@@ -581,10 +696,8 @@ export class OSC {
 								this.instance.log('info', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
 								break
 						}
-						// this.instance.saveConfig(this.instance.config)
 						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
-						// if (Object.keys(this.instance.ZoomUserData).length !== data.args[6].value)
 						// 	this.instance.log('info', `User data doesnt match with list info`)
 
 						this.needToPingPong = false
@@ -629,7 +742,10 @@ export class OSC {
 
 						if (updatedData) {
 							this.instance.InitVariables()
-							this.instance.UpdateVariablesValues()
+							const variables: CompanionVariableValues = {}
+							updateSpotlightGroupVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
+							// this.instance.UpdateVariablesValues()
 							this.instance.checkFeedbacks(
 								FeedbackId.indexBased,
 								FeedbackId.indexBasedAdvanced,
@@ -638,16 +754,17 @@ export class OSC {
 								FeedbackId.groupBased,
 								FeedbackId.groupBasedAdvanced
 							)
+
+							this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
 						}
 						break
 					}
-					case 'meetingStatus':
-						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					case 'meetingStatus': {
+						this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 						// Meeting status ended
 						if (data.args[0].value === 0) {
 							this.instance.ZoomClientDataObj.selectedCallers.length = 0
-							// this.instance.ZoomVariableLink.length = 0
 							this.instance.ZoomGroupData = []
 							for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups + 2; index++) {
 								this.instance.ZoomGroupData[index] = {
@@ -661,21 +778,16 @@ export class OSC {
 							// )
 
 							this.instance.ZoomUserData = {}
-							// for (const key of Object.keys(this.instance.ZoomUserData)) {
-							// 	// if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-							// 	this.instance.log(
-							// 		'debug',
-							// 		`meetingStatus Offline: userData - ${JSON.stringify(this.instance.ZoomUserData[parseInt(key)])}`
-							// 	)
-							// 	delete this.instance.ZoomUserData[parseInt(key)]
-							// 	// }
-							// }
-							this.instance.UpdateVariablesValues()
+							const variables: CompanionVariableValues = {}
+							updateCallStatusVariables(this.instance, variables)
+							updateAllUserBasedVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
+							// this.instance.UpdateVariablesValues()
 						}
 						this.needToPingPong = true
 						break
-
-					case 'listCleared':
+					}
+					case 'listCleared': {
 						PreviousSelectedCallersSave(this.instance)
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
@@ -684,28 +796,41 @@ export class OSC {
 								delete this.instance.ZoomUserData[parseInt(key)]
 							}
 						}
+						this.instance.log('debug', 'listCleared')
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateAllUserBasedVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						PreviousSelectedCallersRestore(this.instance)
 						break
-
+					}
 					// ISO data
-					case 'engineState':
-						this.instance.log('info', 'receiving:' + JSON.stringify(data))
+					case 'engineState': {
+						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.engineState = data.args[0].value
-						this.instance.UpdateVariablesValues()
+						// this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoEngineVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
 						this.instance.checkFeedbacks('engineState')
 						break
-					case 'audioLevels':
+					}
+					case 'audioLevels': {
 						// this.instance.log('info', 'audioLevels' + data.address + JSON.stringify(data.args))
 						this.instance.ZoomAudioLevelData[parseInt(data.args[0].value)] = {
 							channel: parseInt(data.args[0].value),
 							level: parseInt(data.args[1].value),
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoAudioLevelVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
-					case 'audioRouting':
+					}
+					case 'audioRouting': {
+						// this.instance.log('info', `AudioRouting: ${JSON.stringify(data.args)}`)
 						this.instance.ZoomAudioRoutingData[parseInt(data.args[2].value)] = {
 							audio_device: data.args[0].value,
 							num_channels: parseInt(data.args[1].value),
@@ -715,9 +840,14 @@ export class OSC {
 							selection: data.args[5].value,
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoAudioRoutingVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
 						break
+					}
 					case 'outputRouting': {
+						//this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
 						const outputNumber = parseInt(data.args[1].value)
 						this.instance.ZoomOutputData[outputNumber] = {
 							numberOfOutputs: data.args[0].value,
@@ -731,7 +861,21 @@ export class OSC {
 							status: data.args[8].value,
 						}
 						this.instance.InitVariables()
-						this.instance.UpdateVariablesValues()
+						const variables: CompanionVariableValues = {}
+						updateZoomIsoOutputVariables(this.instance, variables)
+						this.instance.setVariableValues(variables)
+						// this.instance.UpdateVariablesValues()
+						this.instance.checkFeedbacks(
+							FeedbackId.userNameBased,
+							FeedbackId.userNameBasedAdvanced,
+							FeedbackId.indexBased,
+							FeedbackId.indexBasedAdvanced,
+							FeedbackId.galleryBased,
+							FeedbackId.galleryBasedAdvanced,
+							FeedbackId.groupBased,
+							FeedbackId.groupBasedAdvanced,
+							FeedbackId.output
+						)
 						break
 					}
 					default:
@@ -774,22 +918,4 @@ export class OSC {
 		this.sendCommand('/zoom/getAudioRouting', [])
 		return
 	}
-
-	// /**
-	//  * @description Check for config changes and start new connections/polling if needed
-	//  */
-	// public readonly update = (): void => {
-	// 	const hostCheck = this.instance.config.host !== this.oscHost || this.instance.config.tx_port !== this.oscTXPort
-	// 	// if (this.instance.ZoomClientDataObj.subscribeMode !== this.instance.config.subscribeMode) {
-	// 	// 	this.instance.ZoomClientDataObj.subscribeMode = this.instance.config.subscribeMode
-	// 	// 	// this.sendCommand('/zoom/subscribe', { type: 'i', value: this.instance.ZoomClientDataObj.subscribeMode })
-	// 	// }
-	// 	if (hostCheck) {
-	// 		this.oscHost = this.instance.config.host
-	// 		this.oscRXPort = this.instance.config.rx_port
-	// 		this.oscTXPort = this.instance.config.tx_port
-	// 		this.instance.config = this.instance.config
-	// 		this.Connect()
-	// 	}
-	// }
 }

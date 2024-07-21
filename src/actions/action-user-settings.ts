@@ -4,25 +4,34 @@ import { InstanceBaseExt, options } from '../utils.js'
 import { createCommand, sendActionCommand, select } from './action-utils.js'
 
 export enum ActionIdUserSettings {
-	hideUserNamesOnVideo = 'hideUserNamesOnVideo',
 	showUserNamesOnVideo = 'showUserNamesOnVideo',
+	hideUserNamesOnVideo = 'hideUserNamesOnVideo',
 	hideNonVideoParticipants = 'hideNonVideoParticipants',
 	showNonVideoParticipants = 'showNonVideoParticipants',
 	enableOriginalSound = 'enableOriginalSound',
 	disableOriginalSound = 'disableOriginalSound',
-	setCameraDevice = 'setCameraDevice',
-	setSpeakerDevice = 'setSpeakerDevice',
-	enableHDVideo = 'enableHDVideo',
-	disableHDVideo = 'disableHDVideo',
-	enableMirrorVideo = 'enableMirrorVideo',
-	disableMirrorVideo = 'disableMirrorVideo',
-	setVideoFilter = 'setVideoFilter',
-	setMicLevel = 'setMicLevel',
-	setMicDevice = 'setMicDevice',
-	setSpeakerVolume = 'setSpeakerVolume',
-	setVirtualBackground = 'setVirtualBackground',
 	hideSelfView = 'hideSelfView',
 	showSelfView = 'showSelfView',
+	// list all camera devices
+	// list all mic devices
+	setCameraDevice = 'setCameraDevice',
+	setMicDevice = 'setMicDevice',
+	setSpeakerDevice = 'setSpeakerDevice',
+	// get current camera device
+	// get current mic device
+	// get current speaker device
+	// list virtual backgrounds
+	setVirtualBackground = 'setVirtualBackground',
+	// get current virtual background
+	// get mic level
+	setMicLevel = 'setMicLevel',
+	// get speaker volume
+	setSpeakerVolume = 'setSpeakerVolume',
+	enableMirrorVideo = 'enableMirrorVideo',
+	disableMirrorVideo = 'disableMirrorVideo',
+	enableHDVideo = 'enableHDVideo',
+	disableHDVideo = 'disableHDVideo',
+	setVideoFilter = 'setVideoFilter',
 }
 
 export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
