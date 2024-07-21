@@ -432,9 +432,6 @@ export const options: Options = {
  * @returns
  */
 export const arrayRemove = (arr: Array<number>, value: number): Array<number> => {
-	// return arr.filter((element) => {
-	// 	return element != value
-	// })
 	return arr.filter((element: number) => element !== value)
 }
 
@@ -445,16 +442,6 @@ export const arrayRemove = (arr: Array<number>, value: number): Array<number> =>
  * @returns
  */
 export const arrayAdd = (arr: Array<number>, value: number): Array<number> => {
-	// const item = arr.find((element) => element === value)
-	// // Create a temp array
-	// const tempArr = arr
-	// if (item === undefined) {
-	// 	tempArr.push(value)
-	// 	return tempArr
-	// } else {
-	// 	return tempArr
-	// }
-
 	return arr.includes(value) ? arr : [...arr, value]
 }
 
@@ -465,17 +452,6 @@ export const arrayAdd = (arr: Array<number>, value: number): Array<number> => {
  * @returns
  */
 export const arrayAddRemove = (arr: Array<number>, value: number): Array<number> => {
-	// // Find a index of the value (use this so we can use it for remove)
-	// const index = arr.findIndex((element) => element === value)
-	// // Create a temp array
-	// const tempArr = arr
-	// if (index === -1) {
-	// 	tempArr.push(value)
-	// 	return tempArr
-	// } else {
-	// 	tempArr.splice(index, 1)
-	// 	return tempArr
-	// }
 	const index = arr.indexOf(value)
 	if (index === -1) {
 		return [...arr, value]

@@ -184,11 +184,11 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 			],
 			callback: (action): void => {
 				// type: 'ISO'
-				instance.log('debug', `setOutputMode: ${JSON.stringify(action.options.outputMode)}`)
+				// instance.log('debug', `setOutputMode: ${JSON.stringify(action.options.outputMode)}`)
 				const command = createCommand(instance, '/setOutputMode')
 				command.args.push({ type: 'i', value: action.options.output })
 				command.args.push({ type: 's', value: action.options.outputMode })
-				instance.log('debug', `setOutputMode: ${JSON.stringify(command)}`)
+				// instance.log('debug', `setOutputMode: ${JSON.stringify(command)}`)
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setOutputMode,
 					options: {

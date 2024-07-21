@@ -71,7 +71,7 @@ export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): 
 			callback: (): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/requestCapturePermission')
-				instance.log('warn', `requestCapturePermission ************************ ${command.oscPath}`)
+				// instance.log('warn', `requestCapturePermission ************************ ${command.oscPath}`)
 				const sendToCommand = {
 					id: ActionIdZoomISOEngine.requestCapturePermission,
 					options: {
