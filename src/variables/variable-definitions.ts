@@ -3,7 +3,7 @@ import { ZoomConfig } from '../config.js'
 import { InstanceBaseExt, padding, userExist } from '../utils.js'
 
 export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): void {
-	instance.log('debug', `initVariableDefinitions ${new Date()}`)
+	// instance.log('debug', `initVariableDefinitions ${new Date()}`)
 	const globalSettings: Set<CompanionVariableDefinition> = new Set([
 		// Status
 		{ name: 'Zoom version', variableId: 'zoomVersion' },
@@ -17,6 +17,7 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		{ name: 'Active speaking', variableId: 'activeSpeaker' },
 		{ name: 'Video On Count', variableId: 'videoOnCount' },
 		{ name: 'Hands Raised Count', variableId: 'handRaisedCount' },
+		{ name: 'Share Screen On/Off', variableId: 'videoShareStatus' },
 	])
 	// Groups
 	const groupPositionVariables = []
@@ -122,10 +123,12 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 	})
 	const selectUsersVariables = []
 
-	selectUsersVariables.push({
-		name: `Participant ${1}`,
-		variableId: `Participant${padding(1, 3)}`,
-	})
+	if (instance.config.enableVariablesForParticipants) {
+		selectUsersVariables.push({
+			name: `Participant ${1}`,
+			variableId: `Participant${padding(1, 3)}`,
+		})
+	}
 
 	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
 	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)

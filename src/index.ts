@@ -35,6 +35,8 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		feedbackImagesWithIcons: 1,
 		enableSocialStream: false,
 		enableVariablesForEachUser: true,
+		enableVariablesForParticipants: true,
+		enableActionPresetAndFeedbackSync: true,
 		socialStreamId: '',
 	}
 
@@ -160,6 +162,12 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		initVariableDefinitions(this)
 		updateVariableValues(this)
 
+		this.setActionDefinitions(GetActions(this))
+		this.setFeedbackDefinitions(GetFeedbacks(this))
+		this.setPresetDefinitions(GetPresetList(this))
+	}
+
+	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
 		this.setActionDefinitions(GetActions(this))
 		this.setFeedbackDefinitions(GetFeedbacks(this))
 		this.setPresetDefinitions(GetPresetList(this))

@@ -47,6 +47,7 @@ export class OSC {
 	private oscRXPort = 1234
 	private udpPort: any
 	private updateLoop = true
+	private firstLoop = true
 	private needToPingPong = true
 	private pingInterval: NodeJS.Timeout | undefined
 	private pingIntervalTime = 2000
@@ -64,6 +65,8 @@ export class OSC {
 	 */
 	public readonly destroy = (): void => {
 		this.needToPingPong = false
+		this.updateLoop = false
+		this.firstLoop = false
 		if (this.udpPort) this.udpPort.close()
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
@@ -110,7 +113,7 @@ export class OSC {
 			// See if ZoomOSC is active
 			this.pingInterval = setInterval(() => {
 				if (this.needToPingPong) {
-					this.instance.log('debug', `**************** needToPingPong ${new Date()}`)
+					// this.instance.log('debug', `**************** needToPingPong ${new Date()}`)
 					// Shall we leave this?
 					this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
 					this.sendCommand('/zoom/ping')
@@ -119,21 +122,27 @@ export class OSC {
 			// start looping for presets
 			this.updatePresetsLoop = setInterval(() => {
 				if (this.updateLoop) {
-					this.instance.log('debug', `**************** updateLoop ${new Date()}`)
-					this.instance.updateInstance()
+					if (this.instance.config.enableActionPresetAndFeedbackSync || this.firstLoop) {
+						// this.instance.log('debug', `**************** updateLoop ${new Date()}`)
+						this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
+						// Make sure initial status is reflected
+						this.instance.checkFeedbacks(
+							FeedbackId.userNameBased,
+							FeedbackId.userNameBasedAdvanced,
+							FeedbackId.indexBased,
+							FeedbackId.indexBasedAdvanced,
+							FeedbackId.galleryBased,
+							FeedbackId.galleryBasedAdvanced,
+							FeedbackId.groupBased,
+							FeedbackId.groupBasedAdvanced,
+							FeedbackId.selectionMethod,
+							FeedbackId.audioOutput,
+							FeedbackId.output
+						)
+
+						this.firstLoop == false
+					}
 					this.updateLoop = false
-					// Make sure initial status is reflected
-					this.instance.checkFeedbacks(
-						FeedbackId.userNameBased,
-						FeedbackId.userNameBasedAdvanced,
-						FeedbackId.indexBased,
-						FeedbackId.indexBasedAdvanced,
-						FeedbackId.galleryBased,
-						FeedbackId.galleryBasedAdvanced,
-						FeedbackId.groupBased,
-						FeedbackId.groupBasedAdvanced,
-						FeedbackId.selectionMethod
-					)
 				}
 			}, 2000)
 		})
@@ -208,7 +217,7 @@ export class OSC {
 	}
 
 	private processData = async (data: ZoomOSCResponse) => {
-		this.instance.log('info', 'receiving:' + JSON.stringify(data))
+		// this.instance.log('debug', '+++++++++++receiving:' + JSON.stringify(data))
 		// Do a switch block to go fast through the rest of the data
 		try {
 			const recvMsg = data.address.toString().split('/')
@@ -547,6 +556,9 @@ export class OSC {
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[0].users.splice(index, 1)
+										const variables: CompanionVariableValues = {}
+										updateHostGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 										this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
 										this.updateLoop = true
 									}
@@ -560,14 +572,13 @@ export class OSC {
 											userName: data.args[1].value,
 										})
 										this.instance.log('debug', `added host: ${data.args[1].value}`)
+										const variables: CompanionVariableValues = {}
+										updateHostGroupVariables(this.instance, variables)
+										this.instance.setVariableValues(variables)
 										this.instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
+										this.updateLoop = true
 									}
-									this.updateLoop = true
 								}
-
-								const variables: CompanionVariableValues = {}
-								updateHostGroupVariables(this.instance, variables)
-								this.instance.setVariableValues(variables)
 								break
 							}
 							case 'stoppedSpeaking':
@@ -582,9 +593,24 @@ export class OSC {
 								// this.instance.UpdateVariablesValues()
 								break
 							}
+							case 'shareStatus': {
+								const shareType = data.args[4].value
+								const variables: CompanionVariableValues = {}
+								if (shareType === 'videoShareStarted') {
+									variables['videoShareStatus'] = 'On'
+								} else {
+									// for now we only care about the share screen and not the audio only share
+									// else if (shareType === 'videoShareStopped') {
+									variables['videoShareStatus'] = 'Off'
+								}
+								this.instance.setVariableValues(variables)
+								break
+							}
 							default:
-								this.instance.log('info', 'No Case provided for:' + data.address)
-								this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
+								this.instance.log(
+									'debug',
+									`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`
+								)
 						}
 						break
 
@@ -728,6 +754,8 @@ export class OSC {
 								FeedbackId.groupBased,
 								FeedbackId.groupBasedAdvanced
 							)
+
+							this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
 						}
 						break
 					}
@@ -802,6 +830,7 @@ export class OSC {
 						break
 					}
 					case 'audioRouting': {
+						// this.instance.log('info', `AudioRouting: ${JSON.stringify(data.args)}`)
 						this.instance.ZoomAudioRoutingData[parseInt(data.args[2].value)] = {
 							audio_device: data.args[0].value,
 							num_channels: parseInt(data.args[1].value),

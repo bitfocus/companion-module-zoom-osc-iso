@@ -25,12 +25,37 @@ export enum ActionIdGlobal {
 	leaveMeeting = 'leaveMeeting',
 	pingZoomOSC = 'pingZoomOSC',
 	ejectAll = 'ejectAll',
+	'updateActionFeedbackPresets' = 'updateActionFeedbackPresets',
 }
 
 export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 	[id in ActionIdGlobal]: CompanionActionDefinition | undefined
 } {
 	const actions: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = {
+		[ActionIdGlobal.updateActionFeedbackPresets]: {
+			name: 'Update Actions/Feedbacks/Presets with current Zoom Data',
+			options: [],
+			callback: (): void => {
+				// instance.log('debug', `before outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
+				instance.updateInstance()
+				// instance.updateDefinitionsForActionsFeedbacksAndPresets()
+				// Make sure initial status is reflected
+				instance.checkFeedbacks(
+					FeedbackId.userNameBased,
+					FeedbackId.userNameBasedAdvanced,
+					FeedbackId.indexBased,
+					FeedbackId.indexBasedAdvanced,
+					FeedbackId.galleryBased,
+					FeedbackId.galleryBasedAdvanced,
+					FeedbackId.groupBased,
+					FeedbackId.groupBasedAdvanced,
+					FeedbackId.selectionMethod,
+					FeedbackId.audioOutput,
+					FeedbackId.output
+				)
+				// instance.log('debug', `after outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
+			},
+		},
 		[ActionIdGlobal.muteAll]: {
 			name: 'Mute All Except Host but Mute Co-Host',
 			options: [],

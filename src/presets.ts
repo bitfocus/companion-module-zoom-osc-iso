@@ -29,7 +29,7 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 	const presetsPinSpotlightViewActions = GetPresetsPinSpotlightViewActions()
 	const presetsVideoAudioActions = GetPresetsVideoAudioActions()
 	const presetsZoomISOSelections = GetPresetsZoomISOSelections(instance)
-	const presetsZoomISOActions = GetPresetsZoomISOActions()
+	const presetsZoomISOActions = GetPresetsZoomISOActions(instance)
 	const presetsReactionNames = GetPresetsReactionName(instance)
 	const presetsRoleManagement = GetPresetsRoleManagement()
 	const presetsJoinLeaveEnd = GetPresetsJoinLeaveEnd()

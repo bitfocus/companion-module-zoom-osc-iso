@@ -19,8 +19,9 @@ export function GetActionsZoomISOConfig(instance: InstanceBaseExt<ZoomConfig>): 
 			options: [options.path],
 			callback: (action): void => {
 				// type: 'ISO'
+				instance.log('debug', `loadISOConfig ${JSON.stringify(action.options)}`)
 				const command = createCommand(instance, '/loadConfig')
-				command.args.push({ type: 'i', value: action.options.path })
+				command.args.push({ type: 's', value: action.options.path })
 				const sendToCommand = {
 					id: ActionIdZoomISOConfig.loadISOConfig,
 					options: {
@@ -37,7 +38,7 @@ export function GetActionsZoomISOConfig(instance: InstanceBaseExt<ZoomConfig>): 
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/saveConfig')
-				command.args.push({ type: 'i', value: action.options.path })
+				command.args.push({ type: 's', value: action.options.path })
 				const sendToCommand = {
 					id: ActionIdZoomISOConfig.saveISOConfig,
 					options: {

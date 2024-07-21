@@ -124,9 +124,11 @@ export interface ZoomVariableLinkInterface {
 export interface Options {
 	message: EnforceDefault<CompanionInputFieldTextInput, string>
 	name: EnforceDefault<CompanionInputFieldTextInput, string>
+	audioChannelMode: EnforceDefault<CompanionInputFieldDropdown, string>
 	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
 	channel: EnforceDefault<CompanionInputFieldNumber, number>
-	reductionAmount: EnforceDefault<CompanionInputFieldNumber, number>
+	outputSelectionIndex: EnforceDefault<CompanionInputFieldNumber, number>
+	reductionAmount: EnforceDefault<CompanionInputFieldDropdown, string>
 	userName: EnforceDefault<CompanionInputFieldTextInput, string>
 	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
 	path: EnforceDefault<CompanionInputFieldTextInput, string>
@@ -183,6 +185,22 @@ export const options: Options = {
 		id: 'name',
 		default: '',
 	},
+	audioChannelMode: {
+		type: 'dropdown',
+		label: 'Audio Channel Mode',
+		id: 'audioChannelMode',
+		default: 'Off',
+		choices: [
+			{ id: 'Off', label: 'Off' },
+			{ id: 'Mix', label: 'Mix' },
+			{ id: 'Output', label: 'Output' },
+			{ id: 'Participant', label: 'Participant' },
+			{ id: 'Mix of all outputs', label: 'Mix of all outputs' },
+			{ id: 'Mix of all unassigned participants', label: 'Mix of all unassigned participants' },
+			{ id: 'Active Share', label: 'Active Share' },
+			{ id: 'Unique Speaker', label: 'Unique Speaker' },
+		],
+	},
 	breakoutName: {
 		type: 'textinput',
 		useVariables: true,
@@ -192,19 +210,34 @@ export const options: Options = {
 	},
 	channel: {
 		type: 'number',
-		label: 'number',
+		label: 'Audio Channel Number',
 		id: 'number',
 		default: 1,
 		min: 1,
 		max: 256,
 	},
-	reductionAmount: {
+	outputSelectionIndex: {
 		type: 'number',
+		label: 'Selection Number for Output Selection (start at 1)',
+		id: 'outputSelectionIndex',
+		default: 1,
+		min: 0,
+		max: 49,
+	},
+	reductionAmount: {
+		type: 'dropdown',
 		label: 'Reduction Amount',
 		id: 'reductionAmount',
-		default: 1,
-		min: 1,
-		max: 256,
+		default: '0',
+		choices: [
+			{ id: '0', label: '0' },
+			{ id: '1', label: '-3' },
+			{ id: '2', label: '-6' },
+			{ id: '3', label: '-9' },
+			{ id: '4', label: '-12' },
+			{ id: '5', label: '-24' },
+			{ id: '6', label: '-48' },
+		],
 	},
 	userName: {
 		type: 'textinput',

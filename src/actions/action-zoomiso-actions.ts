@@ -20,9 +20,9 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 
 	for (let index = 1; index < (outputAudioDataLength === 0 ? 9 : outputAudioDataLength + 1); index++) {
 		const outputAudioName = instance.ZoomAudioRoutingData[index]
-			? ` - ${instance.ZoomAudioRoutingData[index].audio_device}`
-			: ''
-		CHOICES_OUTPUTS_AUDIO.push({ id: index, label: `Output ${index} ${outputAudioName}` })
+			? `${instance.ZoomAudioRoutingData[index].channel}. ${instance.ZoomAudioRoutingData[index].audio_device} - ${instance.ZoomAudioRoutingData[index].mode}`
+			: `Audio Channel ${index}`
+		CHOICES_OUTPUTS_AUDIO.push({ id: index, label: outputAudioName })
 	}
 
 	const outputAudioOption: SomeCompanionActionInputField = {
@@ -37,8 +37,8 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 	const outputDataLength = Object.keys(instance.ZoomOutputData).length
 
 	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
-		const outputName = instance.ZoomOutputData[index] ? ` - ${instance.ZoomOutputData[index].outputName}` : ''
-		CHOICES_OUTPUTS.push({ id: index, label: `Output ${index} ${outputName}` })
+		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : `Output ${index}`
+		CHOICES_OUTPUTS.push({ id: index, label: outputName })
 	}
 
 	const outputOption: SomeCompanionActionInputField = {

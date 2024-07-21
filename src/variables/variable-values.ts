@@ -189,11 +189,13 @@ export function updateZoomParticipantVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues
 ): void {
-	// Use the participant selection
-	for (let index = 1; index < 1000; index++) {
-		variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
-			? instance.ZoomVariableLink[index - 1].userName
-			: '-'
+	if (instance.config.enableVariablesForParticipants) {
+		// Use the participant selection
+		for (let index = 1; index < 1000; index++) {
+			variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
+				? instance.ZoomVariableLink[index - 1].userName
+				: '-'
+		}
 	}
 }
 
@@ -231,7 +233,7 @@ export function updateCallStatusVariables(
 }
 
 export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): void {
-	instance.log('debug', `updateVariableValues ${new Date()}`)
+	// instance.log('debug', `updateVariableValues ${new Date()}`)
 	const variables: CompanionVariableValues = {
 		zoomVersion: instance.ZoomClientDataObj.zoomOSCVersion,
 		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,

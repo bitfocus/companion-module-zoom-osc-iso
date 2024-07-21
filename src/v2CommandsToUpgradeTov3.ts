@@ -733,11 +733,11 @@ export const v2Actions: v2Action = {
 		newActionId: ActionIdZoomISOOutputSettings.setOutputMode,
 		type: 'ISOActions',
 	},
-	setOutputType: {
-		oldActionId: 'setOutputType',
-		newActionId: ActionIdZoomISOOutputSettings.setOutputType,
-		type: 'ISOActions',
-	},
+	// setOutputType: {
+	// 	oldActionId: 'setOutputType',
+	// 	newActionId: ActionIdZoomISOOutputSettings.setOutputType,
+	// 	type: 'ISOActions',
+	// },
 	setAudioMode: {
 		oldActionId: 'setAudioMode',
 		newActionId: ActionIdZoomISOOutputSettings.setAudioMode,

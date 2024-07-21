@@ -96,11 +96,14 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		},
 		[ActionIdZoomISOOutputSettings.setAudioMode]: {
 			name: 'setAudioMode',
-			options: [options.channel],
+			options: [options.channel, options.audioChannelMode],
 			callback: (action): void => {
 				// type: 'ISO'
+				// instance.log('debug', `setAudioMode: ${JSON.stringify(action.options)}`)
 				const command = createCommand(instance, '/setAudioMode')
-				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 'i', value: action.options.number })
+				command.args.push({ type: 's', value: action.options.audioChannelMode })
+				// instance.log('debug', `setAudioMode: ${JSON.stringify(command)}`)
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setAudioMode,
 					options: {
@@ -152,7 +155,7 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setAudioGainReduction')
-				command.args.push({ type: 'i', value: action.options.channel })
+				command.args.push({ type: 'i', value: action.options.number })
 				command.args.push({ type: 'i', value: action.options.reductionAmount })
 
 				const sendToCommand = {
@@ -167,12 +170,13 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		},
 		[ActionIdZoomISOOutputSettings.setOutputSelection]: {
 			name: 'set Output Selection',
-			options: [options.output, options.reductionAmount],
+			description: 'For Spotlight (1-9), Gallery (1-49), and Active Screen Share (1-2)',
+			options: [options.output, options.outputSelectionIndex],
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setOutputSelection')
 				command.args.push({ type: 'i', value: action.options.output })
-				command.args.push({ type: 'i', value: action.options.reductionAmount })
+				command.args.push({ type: 'i', value: action.options.outputSelectionIndex })
 
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setOutputSelection,
@@ -186,7 +190,8 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		},
 		[ActionIdZoomISOOutputSettings.setAudioSelection]: {
 			name: 'set Audio Selection',
-			options: [options.output, options.reductionAmount],
+			description: 'This command does not work in ZoomISO',
+			options: [options.channel, options.reductionAmount],
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setAudioSelection')
@@ -205,6 +210,7 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		},
 		[ActionIdZoomISOOutputSettings.setOutputEmbeddedAudio]: {
 			name: 'set Output Embedded Audio',
+			description: 'Embedded Audio on the outputs.  Starts at 0',
 			options: [options.output, options.mode],
 			callback: (action): void => {
 				// type: 'ISO'
@@ -245,11 +251,31 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 
 		[ActionIdZoomISOOutputSettings.setOutputMode]: {
 			name: 'setOutputMode',
-			options: [options.output],
+			options: [
+				options.output,
+				{
+					type: 'dropdown',
+					label: 'Output Mode',
+					id: 'outputMode',
+					default: 'Spotlight',
+					choices: [
+						{ id: 'Participant', label: 'Participant' },
+						{ id: 'Participant Share', label: 'Participant Share' },
+						{ id: 'Active Speaker', label: 'Active Speaker' },
+						{ id: 'Spotlight', label: 'Spotlight' },
+						{ id: 'Active Screenshare', label: 'Active Screenshare' },
+						{ id: 'Gallery Position', label: 'Gallery Position' },
+						{ id: 'Unique Speaker', label: 'Unique Speaker' },
+					],
+				},
+			],
 			callback: (action): void => {
 				// type: 'ISO'
+				instance.log('debug', `setOutputMode: ${JSON.stringify(action.options.outputMode)}`)
 				const command = createCommand(instance, '/setOutputMode')
 				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 's', value: action.options.outputMode })
+				instance.log('debug', `setOutputMode: ${JSON.stringify(command)}`)
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setOutputMode,
 					options: {
@@ -260,13 +286,16 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 				sendActionCommand(instance, sendToCommand)
 			},
 		},
+		// Undocumented command that is not finished
 		[ActionIdZoomISOOutputSettings.setOutputType]: {
 			name: 'setOutputType',
-			options: [options.output],
+			description: 'This comment is not finished in ZoomISO',
+			options: [options.output, options.name],
 			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setOutputType')
 				command.args.push({ type: 'i', value: action.options.output })
+				command.args.push({ type: 's', value: action.options.name })
 				const sendToCommand = {
 					id: ActionIdZoomISOOutputSettings.setOutputType,
 					options: {
