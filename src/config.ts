@@ -15,6 +15,7 @@ export interface ZoomConfig {
 	enableActionPresetAndFeedbackSync: boolean
 	enableSocialStream: boolean
 	socialStreamId: string
+	socialStreamQuestionPrefix: string
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -107,7 +108,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 				{ id: 3, label: 'Bottom (On and Off States)' },
 				{ id: 4, label: 'Disable' },
 			],
-			default: 1,
+			default: 0,
 			width: 6,
 		},
 		{
@@ -136,30 +137,31 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'textinput',
 			id: 'socialStreamId',
 			label: 'Session Id for Social Stream',
-			width: 10,
+			width: 5,
+			default: '',
+			isVisible: (options) => options['enableSocialStream'] === true,
+		},
+		{
+			type: 'textinput',
+			id: 'socialStreamQuestionPrefix',
+			label: 'Prefix for Zoom Q&A Questions',
+			width: 5,
 			default: '',
 			isVisible: (options) => options['enableSocialStream'] === true,
 		},
 		{
 			type: 'static-text',
 			width: 12,
-			value: '<hr>',
-			id: 'hr2',
+			value:
+				'<hr />Advanced - Optional Performance Tweaks<br /><b>IMPORTANT NOTE: The section below is for power users that would like to tweak the module performance. </b><br /><br />Depending on your usage of ZoomOSC and ZoomISO, there may be things going on behind the scenes that you may not be using and can disable to try to get even better performance from this module.',
+			id: 'socialStreamNote',
 			label: '',
 		},
 		{
 			type: 'static-text',
 			width: 12,
 			value:
-				'<br /><b>Important Note: The section below is for power users that would like to tweak the module performance. </b><br /><br />Depending on your usage of ZoomOSC and ZoomISO, there may be things going on behind the scenes that you may not be using and can disable to try to get even better performance from this module.',
-			id: 'socialStreamNote',
-			label: 'Advanced - Optional Performance Tweaks',
-		},
-		{
-			type: 'static-text',
-			width: 12,
-			value:
-				'<b>Enable Variable For Each User (variables that are the ZoomId for each participant).</b><br />For larger meetings this could impact performance tracking of us to 1,000 users.  This only impacts using variables on your buttons to get a participant by their ZoomId which does change each time they join the meeting.<br /><b>Note:</b> Set to true keep the behavior of previous versions.',
+				'<hr /><b>Enable Variable For Each User (variables that are the ZoomId for each participant).</b><p>For larger meetings this could impact performance tracking of us to 1,000 users.  This only impacts using variables on your buttons to get a participant by their ZoomId which does change each time they join the meeting.</p><p><b>Note:</b> Set to true keep the behavior of previous versions.</p>',
 			id: 'enableVariablesForEachUserNote',
 			label: '',
 		},
@@ -174,9 +176,9 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'static-text',
 			width: 12,
 			value:
-				'Enable Variable For Participants.  This impacts the participant presets, participant buttons, and participant variables. For many shows, these buttons are not used as it is the list of all participants in the order that they joined and for large meetings, it is typically quicker to find a person using the Zoom participant list and manually taking action on them.<br /><b>Note:</b> Set to true keep the behavior of previous versions.',
+				'<hr /><b>Enable Variable For Participants (e.g. Participant001 to Participant999)</b><p>Enable Variable For Participants.  This impacts the participant presets, participant buttons, and participant variables. For many shows, these buttons are not used as it is the list of all participants in the order that they joined and for large meetings, it is typically quicker to find a person using the Zoom participant list and manually taking action on them.</p><p><b>Note:</b> Set to true keep the behavior of previous versions.</p>',
 			id: 'actionPresetAndFeedbackSyncNote',
-			label: 'Sync Action/Presets/Feedbacks',
+			label: '',
 		},
 		{
 			type: 'checkbox',
@@ -189,16 +191,16 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'static-text',
 			width: 12,
 			value:
-				'As participants, groups, and zISO are updated behind the scenes, it is <ol><li>Keeping the option dropdown for the actions updated with the participant names, group names, zISO output/ audio names, zISO audio levels </li><li>Keeping the presets updated for the number of participant names, group names, zISO output / audio names</li><li>Keeping the feedbacks option dropdowns updated with the participant and group names.</li></ol>Keeping all these in sync is important and needed when setting up your button layout but typically when you are running the show you are not pulling in new presets, adding / removing groups, or picking a different options from the option dropdowns.<br /><br /><b>Note:</b> Set to true keep the behavior of previous versions.<br /><br />Note: If you do need to sync the values manually, there is a new action called "Update Actions/Feedbacks/Presets with current Zoom Data"',
+				'<hr /><b>Sync Action/Presets/Feedbacks</b><p>As participants, groups, and zISO are updated behind the scenes, it is <ol><li>Keeping the option dropdown for the actions updated with the participant names, group names, zISO output/ audio names, zISO audio levels </li><li>Keeping the presets updated for the number of participant names, group names, zISO output / audio names</li><li>Keeping the feedbacks option dropdowns updated with the participant and group names.</li></ol>Keeping all these in sync is important and needed when setting up your button layout but typically when you are running the show you are not pulling in new presets, adding / removing groups, or picking a different options from the option dropdowns.</p><p><b>Note 1:</b> Set to true keep the behavior of previous versions.</p><p><b>Note 2:</b> If you do need to sync the values manually, there is a new action called "Update Actions/Feedbacks/Presets with current Zoom Data"</p>',
 			id: 'actionPresetAndFeedbackSyncNote',
-			label: 'Sync Action/Presets/Feedbacks',
+			label: '',
 		},
 		{
 			type: 'checkbox',
 			id: 'enableActionPresetAndFeedbackSync',
 			width: 12,
 			default: true,
-			label: 'Enable',
+			label: 'Enable Sync Action/Presets/Feedbacks',
 		},
 	]
 }
