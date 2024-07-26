@@ -15,7 +15,7 @@ import {
 	ZoomVariableLinkInterface,
 } from './utils.js'
 
-import { UpgradeV2ToV3 } from './upgrades.js'
+import { AddNewConfigFieldsForSocialStreamAndPerformanceTweaks, UpgradeV2ToV3 } from './upgrades.js'
 import { updateVariableValues } from './variables/variable-values.js'
 import { initVariableDefinitions } from './variables/variable-definitions.js'
 
@@ -38,6 +38,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		enableVariablesForParticipants: true,
 		enableActionPresetAndFeedbackSync: true,
 		socialStreamId: '',
+		socialStreamQuestionPrefix: '',
 	}
 
 	// Global call settings
@@ -158,7 +159,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 * @description sets actions, variables, presets and feedbacks available for this instance
 	 */
 	public updateInstance(): void {
-		this.log('debug', `updateInstance ${new Date()}`)
+		// this.log('debug', `updateInstance ${new Date()}`)
 		initVariableDefinitions(this)
 		updateVariableValues(this)
 
@@ -174,4 +175,4 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 }
 
-runEntrypoint(ZoomInstance, [UpgradeV2ToV3, UpgradeV2ToV3])
+runEntrypoint(ZoomInstance, [UpgradeV2ToV3, UpgradeV2ToV3, AddNewConfigFieldsForSocialStreamAndPerformanceTweaks])

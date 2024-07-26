@@ -206,7 +206,7 @@ export class OSC {
 					}
 				}
 			} else {
-				this.instance.log('warn', 'wrong arguments in OSC feedback')
+				this.instance.log('warn', 'create ZoomUser wrong arguments in OSC feedback')
 			}
 			this.instance.InitVariables()
 			const variables: CompanionVariableValues = {}
@@ -539,6 +539,20 @@ export class OSC {
 									await socialStreamApi.postMessage(data.args[1].value, data.args[4].value, this.instance)
 								}
 								break
+							case 'askedQuestion': {
+								if (
+									this.instance.config.enableSocialStream &&
+									this.instance.config.socialStreamId.length > 0 &&
+									data.args.length >= 5
+								) {
+									await socialStreamApi.postMessage(
+										data.args[1].value,
+										`${this.instance.config.socialStreamQuestionPrefix}${data.args[4].value}`,
+										this.instance
+									)
+								}
+								break
+							}
 							case 'audioStatus':
 								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 								break
@@ -607,10 +621,11 @@ export class OSC {
 								break
 							}
 							default:
-								this.instance.log(
-									'debug',
-									`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`
-								)
+								// this.instance.log(
+								// 	'debug',
+								// 	`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`
+								// )
+								break
 						}
 						break
 
@@ -760,7 +775,7 @@ export class OSC {
 						break
 					}
 					case 'meetingStatus': {
-						this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
+						// this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 						// Meeting status ended
 						if (data.args[0].value === 0) {
@@ -879,8 +894,9 @@ export class OSC {
 						break
 					}
 					default:
-						this.instance.log('info', 'No Case provided for:' + data.address)
-						this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
+						// this.instance.log('info', 'No Case provided for:' + data.address)
+						// this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
+						break
 				}
 			}
 		} catch (error) {
