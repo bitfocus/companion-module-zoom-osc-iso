@@ -46,7 +46,7 @@ export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},

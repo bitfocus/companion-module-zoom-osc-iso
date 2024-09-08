@@ -108,7 +108,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 										if (user.userName === selectedName) {
 											if (
 												!instance.ZoomGroupData[group].users.find(
-													(o: { zoomID: string | number }) => o !== null && o.zoomID === user.zoomId
+													(o: { zoomID: string | number }) => o !== null && o.zoomID === user.zoomId,
 												)
 											) {
 												instance.ZoomGroupData[group].users.push({
@@ -185,7 +185,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -288,7 +288,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -327,7 +327,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},

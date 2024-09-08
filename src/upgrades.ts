@@ -11,7 +11,7 @@ import { v2Actions, v2FeedbackTypes, v2Feedbacks } from './v2CommandsToUpgradeTo
 
 export function AddNewConfigFieldsForSocialStreamAndPerformanceTweaks(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	_props: CompanionStaticUpgradeProps<ZoomConfig>
+	_props: CompanionStaticUpgradeProps<ZoomConfig>,
 ): CompanionStaticUpgradeResult<ZoomConfig> {
 	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
 		updatedActions: [],
@@ -32,7 +32,7 @@ export function AddNewConfigFieldsForSocialStreamAndPerformanceTweaks(
 
 export function UpgradeV2toV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	_props: CompanionStaticUpgradeProps<ZoomConfig>
+	_props: CompanionStaticUpgradeProps<ZoomConfig>,
 ): CompanionStaticUpgradeResult<ZoomConfig> {
 	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
 		updatedActions: [],
@@ -45,7 +45,7 @@ export function UpgradeV2toV3(
 
 export function UpgradeV2ToV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	props: CompanionStaticUpgradeProps<ZoomConfig>
+	props: CompanionStaticUpgradeProps<ZoomConfig>,
 ): CompanionStaticUpgradeResult<ZoomConfig> {
 	// let config: ZoomConfig = props.config;
 	const actions: CompanionMigrationAction[] = props.actions
