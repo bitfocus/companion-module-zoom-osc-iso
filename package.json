@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "4.1.0",
+	"version": "4.1.1",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
@@ -15,7 +15,7 @@
 		"build": "rimraf dist && yarn build:main",
 		"build:main": "tsc -p tsconfig.build.json",
 		"build:watch": "tsc -p tsconfig.build.json --watch",
-		"lint:raw": "eslint --ignore-pattern dist --ignore-pattern pkg",
+		"lint:raw": "eslint",
 		"lint": "yarn lint:raw ."
 	},
 	"license": "MIT",
@@ -29,12 +29,7 @@
 		"@companion-module/tools": "^2.0.2",
 		"@types/got": "^9.6.12",
 		"@types/node": "^20.0.0",
-		"@typescript-eslint/eslint-plugin": "^8.4.0",
-		"@typescript-eslint/parser": "^8.4.0",
 		"eslint": "^9.10.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-n": "^17.10.2",
-		"eslint-plugin-prettier": "^5.2.1",
 		"husky": "^9.1.5",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
