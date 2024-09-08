@@ -68,9 +68,10 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			],
 			callback: (action) => {
 				if (action.options.selectionMethod === selectionMethod.ToggleSelection) {
-					instance.config.selectionMethod === selectionMethod.SingleSelection
-						? (instance.config.selectionMethod = selectionMethod.MultiSelection)
-						: (instance.config.selectionMethod = selectionMethod.SingleSelection)
+					instance.config.selectionMethod =
+						instance.config.selectionMethod === (selectionMethod.SingleSelection as number)
+							? (selectionMethod.MultiSelection as number)
+							: (selectionMethod.SingleSelection as number)
 				} else {
 					instance.config.selectionMethod = action.options.selectionMethod as number
 				}
@@ -114,7 +115,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 								FeedbackId.galleryBased,
 								FeedbackId.galleryBasedAdvanced,
 								FeedbackId.groupBased,
-								FeedbackId.groupBasedAdvanced
+								FeedbackId.groupBasedAdvanced,
 							)
 
 							break
@@ -155,7 +156,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -177,7 +178,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -198,7 +199,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -233,7 +234,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -270,7 +271,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -299,7 +300,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},

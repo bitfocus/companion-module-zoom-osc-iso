@@ -195,7 +195,7 @@ function getParticipantState(instance: InstanceBaseExt<ZoomConfig>, zoomID: numb
 export function feedbackResultsMultiState(
 	instance: InstanceBaseExt<ZoomConfig>,
 	zoomID: number,
-	imageSize: number
+	imageSize: number,
 ): CompanionAdvancedFeedbackResult {
 	if (instance.config.feedbackImagesWithIcons !== undefined && instance.config.feedbackImagesWithIcons === 4) {
 		return {}
@@ -207,7 +207,7 @@ export function feedbackResultsMultiState(
 		const image = getImageForState(
 			stateMachine.states[stateIndex],
 			instance.config.feedbackImagesWithIcons !== undefined ? instance.config.feedbackImagesWithIcons : 3,
-			imageSize
+			imageSize,
 		)
 		return {
 			png64: image,

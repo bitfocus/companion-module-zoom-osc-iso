@@ -86,7 +86,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},

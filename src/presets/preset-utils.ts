@@ -132,7 +132,7 @@ export const getFeedbackStyleSpotlight = (): CompanionFeedbackButtonStyleResult 
 export const getParticipantStyleDefault = (
 	instance: InstanceBaseExt<ZoomConfig>,
 	text: string,
-	position: number
+	position: number,
 ): any => {
 	return {
 		text:

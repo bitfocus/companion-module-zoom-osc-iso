@@ -126,7 +126,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.galleryBased,
 					FeedbackId.galleryBasedAdvanced,
 					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced
+					FeedbackId.groupBasedAdvanced,
 				)
 			},
 		},
@@ -342,7 +342,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 					FeedbackId.groupBasedAdvanced,
 					FeedbackId.selectionMethod,
 					FeedbackId.audioOutput,
-					FeedbackId.output
+					FeedbackId.output,
 				)
 				// instance.log('debug', `after outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
 			},

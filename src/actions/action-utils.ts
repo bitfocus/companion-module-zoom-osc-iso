@@ -47,7 +47,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 
 	switch (option) {
 		case 'toggle':
-			if (config.selectionMethod === selectionMethod.SingleSelection) {
+			if (config.selectionMethod === (selectionMethod.SingleSelection as number)) {
 				if (ZoomClientDataObj.selectedCallers.length !== 1 || !ZoomClientDataObj.selectedCallers.includes(zoomId)) {
 					ZoomClientDataObj.selectedCallers = [zoomId]
 				} else {
@@ -58,7 +58,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 			}
 			break
 		case 'select':
-			if (config.selectionMethod == selectionMethod.SingleSelection) {
+			if (config.selectionMethod == (selectionMethod.SingleSelection as number)) {
 				ZoomClientDataObj.selectedCallers = [zoomId]
 			} else {
 				ZoomClientDataObj.selectedCallers = arrayAdd(ZoomClientDataObj.selectedCallers, zoomId)
@@ -82,7 +82,7 @@ export const createCommand = (
 	name?: InputValue | string | undefined,
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
-	shouldSavePreviousSelectedCallers = true
+	shouldSavePreviousSelectedCallers = true,
 ): {
 	args: {
 		type: string
@@ -171,7 +171,7 @@ export const createCommand = (
 export const sendActionCommand = (
 	instance: InstanceBaseExt<ZoomConfig>,
 	action: { options: { command: any; args: any } },
-	_info?: CompanionActionEvent | null
+	_info?: CompanionActionEvent | null,
 ): void => {
 	// Construct command
 	const oscPath = action.options.command

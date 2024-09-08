@@ -222,7 +222,7 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 						}
 						sendActionCommand(instance, sendToCommand)
 					} catch (error) {
-						instance.log('error', `Not a JSON value, ${customPath}`)
+						instance.log('error', `$Not a JSON value, ${customPath}. Error: ${error}`)
 					}
 				} else {
 					const command = createCommand(instance, customPath)

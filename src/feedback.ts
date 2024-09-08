@@ -364,7 +364,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						return feedbackResultsMultiState(
 							instance,
 							zoomID,
-							feedback.image === undefined ? 72 : feedback.image.height
+							feedback.image === undefined ? 72 : feedback.image.height,
 						)
 					}
 				}
