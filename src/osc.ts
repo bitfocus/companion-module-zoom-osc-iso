@@ -23,6 +23,7 @@ import {
 	updateIsSpeakingVariable,
 	updateGalleryCountVariables,
 	updateCallStatusVariables,
+	updateSpotlightGroupInitalizedVariable,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -48,6 +49,7 @@ export class OSC {
 	private udpPort: any
 	private updateLoop = true
 	private firstLoop = true
+	private spotlightGroupTrackingInitalized = false
 	private needToPingPong = true
 	private pingInterval: NodeJS.Timeout | undefined
 	private pingIntervalTime = 2000
@@ -137,10 +139,10 @@ export class OSC {
 							FeedbackId.groupBasedAdvanced,
 							FeedbackId.selectionMethod,
 							FeedbackId.audioOutput,
-							FeedbackId.output
+							FeedbackId.output,
 						)
 
-						this.firstLoop == false
+						this.firstLoop = false
 					}
 					this.updateLoop = false
 				}
@@ -252,7 +254,7 @@ export class OSC {
 									// this.instance.log('info', 'receiving:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].spotlighted = true
 									const index = this.instance.ZoomGroupData[1].users.findIndex(
-										(id) => id !== null && id.zoomID === zoomId
+										(id) => id !== null && id.zoomID === zoomId,
 									)
 
 									if (index === -1) {
@@ -276,7 +278,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -285,7 +287,7 @@ export class OSC {
 									// this.instance.log('info', 'receiving spotlightOff:' + JSON.stringify(data))
 									this.instance.ZoomUserData[zoomId].spotlighted = false
 									const index = this.instance.ZoomGroupData[1].users.findIndex(
-										(id) => id !== null && id.zoomID === zoomId
+										(id) => id !== null && id.zoomID === zoomId,
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[1].users.splice(index, 1)
@@ -304,7 +306,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -336,7 +338,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -356,7 +358,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -377,7 +379,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -393,7 +395,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -409,7 +411,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -428,7 +430,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -447,7 +449,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 								}
 								break
@@ -469,17 +471,17 @@ export class OSC {
 
 									this.instance.ZoomClientDataObj.selectedCallers = arrayRemove(
 										this.instance.ZoomClientDataObj.selectedCallers,
-										zoomId
+										zoomId,
 									)
 
 									delete this.instance.ZoomUserData[zoomId]
 									const index = this.instance.ZoomVariableLink.findIndex(
-										(id: { zoomId: number }) => id.zoomId === zoomId
+										(id: { zoomId: number }) => id.zoomId === zoomId,
 									)
 									if (index > -1) {
 										this.instance.log(
 											'debug',
-											`Removed ${JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1))}`
+											`Removed ${JSON.stringify(this.instance.ZoomVariableLink.splice(index, 1))}`,
 										)
 									}
 									// this.instance.UpdateVariablesValues()
@@ -494,7 +496,7 @@ export class OSC {
 										FeedbackId.galleryBased,
 										FeedbackId.galleryBasedAdvanced,
 										FeedbackId.groupBased,
-										FeedbackId.groupBasedAdvanced
+										FeedbackId.groupBasedAdvanced,
 									)
 
 									this.updateLoop = true
@@ -506,7 +508,7 @@ export class OSC {
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].userName = data.args[1].value
 									const findIndex = this.instance.ZoomVariableLink.findIndex(
-										(id: { zoomId: number }) => id.zoomId === zoomId
+										(id: { zoomId: number }) => id.zoomId === zoomId,
 									)
 									this.instance.ZoomVariableLink[findIndex].userName = data.args[1].value
 									this.instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
@@ -548,7 +550,7 @@ export class OSC {
 									await socialStreamApi.postMessage(
 										data.args[1].value,
 										`${this.instance.config.socialStreamQuestionPrefix}${data.args[4].value}`,
-										this.instance
+										this.instance,
 									)
 								}
 								break
@@ -566,7 +568,7 @@ export class OSC {
 
 								if (data.args[4].value === UserRole.Participant) {
 									const index = this.instance.ZoomGroupData[0].users.findIndex(
-										(id) => id !== null && id.zoomID === zoomId
+										(id) => id !== null && id.zoomID === zoomId,
 									)
 									if (index > -1) {
 										this.instance.ZoomGroupData[0].users.splice(index, 1)
@@ -578,7 +580,7 @@ export class OSC {
 									}
 								} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
 									const index = this.instance.ZoomGroupData[0].users.findIndex(
-										(id) => id !== null && id.zoomID === zoomId
+										(id) => id !== null && id.zoomID === zoomId,
 									)
 									if (index === -1) {
 										this.instance.ZoomGroupData[0].users.push({
@@ -650,7 +652,7 @@ export class OSC {
 							// FeedbackId.indexBased,
 							// FeedbackId.indexBasedAdvanced,
 							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced
+							FeedbackId.galleryBasedAdvanced,
 							// FeedbackId.groupBased,
 							// FeedbackId.groupBasedAdvanced
 						)
@@ -695,7 +697,7 @@ export class OSC {
 											}
 										}
 									},
-									this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling
+									this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
 								)
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.instance.saveConfig(this.instance.config)
@@ -744,7 +746,7 @@ export class OSC {
 								this.instance.ZoomUserData[order.value].spotlighted = true
 
 								const findIndex = this.instance.ZoomVariableLink.findIndex(
-									(id: { zoomId: number }) => id.zoomId === order.value
+									(id: { zoomId: number }) => id.zoomId === order.value,
 								)
 								this.instance.ZoomGroupData[1].users.push({
 									userName: this.instance.ZoomVariableLink[findIndex].userName,
@@ -755,9 +757,11 @@ export class OSC {
 							}
 						})
 
-						if (updatedData) {
+						if (updatedData || !this.spotlightGroupTrackingInitalized) {
+							this.spotlightGroupTrackingInitalized = true
 							this.instance.InitVariables()
 							const variables: CompanionVariableValues = {}
+							updateSpotlightGroupInitalizedVariable(variables)
 							updateSpotlightGroupVariables(this.instance, variables)
 							this.instance.setVariableValues(variables)
 							// this.instance.UpdateVariablesValues()
@@ -767,7 +771,7 @@ export class OSC {
 								FeedbackId.galleryBased,
 								FeedbackId.galleryBasedAdvanced,
 								FeedbackId.groupBased,
-								FeedbackId.groupBasedAdvanced
+								FeedbackId.groupBasedAdvanced,
 							)
 
 							this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
@@ -889,7 +893,7 @@ export class OSC {
 							FeedbackId.galleryBasedAdvanced,
 							FeedbackId.groupBased,
 							FeedbackId.groupBasedAdvanced,
-							FeedbackId.output
+							FeedbackId.output,
 						)
 						break
 					}
@@ -917,12 +921,12 @@ export class OSC {
 					args: args ? args : [],
 				},
 				this.oscHost,
-				this.oscTXPort
+				this.oscTXPort,
 			)
 		} catch (error) {
 			this.instance.log(
 				'error',
-				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${JSON.stringify(error)}`
+				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${JSON.stringify(error)}`,
 			)
 		}
 	}
