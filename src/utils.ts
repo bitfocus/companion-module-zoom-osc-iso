@@ -338,6 +338,7 @@ export const options: Options = {
 		type: 'textinput',
 		label: 'Password(optional)',
 		id: 'password',
+		useVariables: true,
 		default: '',
 	},
 	zak: {
