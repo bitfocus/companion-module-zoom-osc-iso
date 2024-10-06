@@ -122,7 +122,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionIdUserPin.pinScreen2,
+						actionId: ActionIdUserPin.pin2,
 						options: {},
 					},
 				],
@@ -146,7 +146,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionIdUserPin.unPinScreen2,
+						actionId: ActionIdUserPin.unPin2,
 						options: {},
 					},
 				],
@@ -170,7 +170,7 @@ export function GetPresetsPinSpotlightViewActions(): CompanionPresetDefinitionsE
 			{
 				down: [
 					{
-						actionId: ActionIdUserPin.togglePinScreen2,
+						actionId: ActionIdUserPin.togglePin2,
 						options: {},
 					},
 				],
