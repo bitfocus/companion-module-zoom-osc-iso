@@ -788,6 +788,7 @@ export class OSC {
 					case 'meetingStatus': {
 						this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
+						const variables: CompanionVariableValues = {}
 						// Meeting status ended
 						if (data.args[0].value === 0 || data.args[0].value === 7) {
 							for (const key of Object.keys(this.instance.ZoomUserData)) {
@@ -812,12 +813,14 @@ export class OSC {
 
 							this.instance.ZoomUserData = {}
 							this.instance.InitVariables()
-							const variables: CompanionVariableValues = {}
 							updateCallStatusVariables(this.instance, variables)
 							updateAllUserBasedVariables(this.instance, variables)
 							this.instance.setVariableValues(variables)
 							// this.instance.UpdateVariablesValues()
 							this.instance.checkFeedbacks()
+						} else {
+							updateCallStatusVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
 						}
 						this.needToPingPong = true
 						break
