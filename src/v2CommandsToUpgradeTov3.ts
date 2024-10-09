@@ -78,17 +78,17 @@ export const v2Actions: v2Action = {
 	},
 	PinScreen2: {
 		oldActionId: 'PinScreen2',
-		newActionId: ActionIdUserPin.pinScreen2,
+		newActionId: ActionIdUserPin.pin2,
 		type: 'UserActions',
 	},
 	UnpinScreen2: {
 		oldActionId: 'UnpinScreen2',
-		newActionId: ActionIdUserPin.unPinScreen2,
+		newActionId: ActionIdUserPin.unPin2,
 		type: 'UserActions',
 	},
 	TogglePinScreen2: {
 		oldActionId: 'TogglePinScreen2',
-		newActionId: ActionIdUserPin.togglePinScreen2,
+		newActionId: ActionIdUserPin.togglePin2,
 		type: 'UserActions',
 	},
 	UnSpotlight: {
@@ -319,11 +319,6 @@ export const v2Actions: v2Action = {
 	TogglePin: {
 		oldActionId: 'TogglePin',
 		newActionId: ActionIdUserPin.togglePin,
-		type: 'GlobalActions',
-	},
-	ClearPinsScreen2: {
-		oldActionId: 'ClearPinsScreen2',
-		newActionId: ActionIdUserPin.clearPinsScreen2,
 		type: 'GlobalActions',
 	},
 	StartScreenShareWithPrimaryScreen: {

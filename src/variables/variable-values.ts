@@ -236,7 +236,10 @@ export function updateCallStatusVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,
 ): void {
-	variables['callStatus'] = instance.ZoomClientDataObj.callStatus == 1 ? 'In meeting' : 'offline'
+	variables['callStatus'] =
+		instance.ZoomClientDataObj.callStatus === 0 || instance.ZoomClientDataObj.callStatus === 7
+			? 'offline'
+			: 'In meeting'
 }
 
 export function updateNumberOfUsers(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {

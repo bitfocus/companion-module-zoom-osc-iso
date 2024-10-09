@@ -637,6 +637,11 @@ export class OSC {
 
 					case 'galleryOrder': {
 						// this.instance.log('debug', 'receiving:' + JSON.stringify(data))
+						// got empty gallery order array. Skip this
+						if (data.args.length === 0) {
+							return
+						}
+
 						this.instance.ZoomClientDataObj.galleryOrder.length = 0
 						data.args.forEach((order: { type: string; value: number }) => {
 							this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
@@ -667,6 +672,7 @@ export class OSC {
 						break
 					}
 					case 'pong': {
+						// this.instance.log('debug', 'receiving pong')
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
 						// // {int galTrackMode}
@@ -778,12 +784,21 @@ export class OSC {
 						}
 						break
 					}
+					case 'meetingStatusChanged':
 					case 'meetingStatus': {
 						// this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
+						const variables: CompanionVariableValues = {}
 						// Meeting status ended
-						if (data.args[0].value === 0) {
+						if (data.args[0].value === 0 || data.args[0].value === 7) {
+							for (const key of Object.keys(this.instance.ZoomUserData)) {
+								if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
+									delete this.instance.ZoomUserData[parseInt(key)]
+								}
+							}
+
 							this.instance.ZoomClientDataObj.selectedCallers.length = 0
+							this.instance.ZoomVariableLink.length = 0
 							this.instance.ZoomGroupData = []
 							for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups + 2; index++) {
 								this.instance.ZoomGroupData[index] = {
@@ -797,11 +812,15 @@ export class OSC {
 							// )
 
 							this.instance.ZoomUserData = {}
-							const variables: CompanionVariableValues = {}
+							this.instance.InitVariables()
 							updateCallStatusVariables(this.instance, variables)
 							updateAllUserBasedVariables(this.instance, variables)
 							this.instance.setVariableValues(variables)
 							// this.instance.UpdateVariablesValues()
+							this.instance.checkFeedbacks()
+						} else {
+							updateCallStatusVariables(this.instance, variables)
+							this.instance.setVariableValues(variables)
 						}
 						this.needToPingPong = true
 						break
