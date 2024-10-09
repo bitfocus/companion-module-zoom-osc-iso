@@ -672,7 +672,7 @@ export class OSC {
 						break
 					}
 					case 'pong': {
-						this.instance.log('debug', 'receiving pong')
+						// this.instance.log('debug', 'receiving pong')
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
 						// // {int galTrackMode}
@@ -786,7 +786,7 @@ export class OSC {
 					}
 					case 'meetingStatusChanged':
 					case 'meetingStatus': {
-						this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
+						// this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 						const variables: CompanionVariableValues = {}
 						// Meeting status ended
