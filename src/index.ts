@@ -15,9 +15,11 @@ import {
 	ZoomVariableLinkInterface,
 } from './utils.js'
 
-import { AddNewConfigFieldsForSocialStreamAndPerformanceTweaks, UpgradeV2ToV3 } from './upgrades.js'
 import { updateVariableValues } from './variables/variable-values.js'
 import { initVariableDefinitions } from './variables/variable-definitions.js'
+import { AddNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/AddNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
+import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
+import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
 
 /**
  * @description Companion instance class for Zoom
@@ -175,4 +177,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	}
 }
 
-runEntrypoint(ZoomInstance, [UpgradeV2ToV3, UpgradeV2ToV3, AddNewConfigFieldsForSocialStreamAndPerformanceTweaks])
+runEntrypoint(ZoomInstance, [
+	UpgradeV2ToV3,
+	UpgradeV2ToV3,
+	AddNewConfigFieldsForSocialStreamAndPerformanceTweaks,
+	fixWrongPinCommands,
+])
