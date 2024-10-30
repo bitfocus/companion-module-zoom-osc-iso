@@ -17,7 +17,7 @@ import {
 
 import { updateVariableValues } from './variables/variable-values.js'
 import { initVariableDefinitions } from './variables/variable-definitions.js'
-import { AddNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/AddNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
+import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
 import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
 
@@ -180,6 +180,6 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 runEntrypoint(ZoomInstance, [
 	UpgradeV2ToV3,
 	UpgradeV2ToV3,
-	AddNewConfigFieldsForSocialStreamAndPerformanceTweaks,
+	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
 	fixWrongPinCommands,
 ])

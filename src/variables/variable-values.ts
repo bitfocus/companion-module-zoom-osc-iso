@@ -236,10 +236,15 @@ export function updateCallStatusVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,
 ): void {
+	variables['callStatusNumber'] = instance.ZoomClientDataObj.callStatus
 	variables['callStatus'] =
 		instance.ZoomClientDataObj.callStatus === 0 || instance.ZoomClientDataObj.callStatus === 7
 			? 'offline'
 			: 'In meeting'
+}
+
+export function updateZoomOscVersion(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
+	variables['zoomVersion'] = instance.ZoomClientDataObj.zoomOSCVersion
 }
 
 export function updateNumberOfUsers(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
@@ -249,12 +254,12 @@ export function updateNumberOfUsers(instance: InstanceBaseExt<ZoomConfig>, varia
 export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): void {
 	// instance.log('debug', `updateVariableValues ${new Date()}`)
 	const variables: CompanionVariableValues = {
-		zoomVersion: instance.ZoomClientDataObj.zoomOSCVersion,
 		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,
 		videoShareStatus: 'Off',
 		spotlightGroupTrackingInitalized: false,
 	}
 
+	updateZoomOscVersion(instance, variables)
 	updateNumberOfUsers(instance, variables)
 	updateCallStatusVariables(instance, variables)
 	updateIsSpeakingVariable(instance, variables)

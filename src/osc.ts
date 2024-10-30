@@ -24,6 +24,7 @@ import {
 	updateGalleryCountVariables,
 	updateCallStatusVariables,
 	updateSpotlightGroupInitalizedVariable,
+	updateZoomOscVersion,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -66,16 +67,81 @@ export class OSC {
 	 * @description Close connection on instance disable/removal
 	 */
 	public readonly destroy = (): void => {
-		this.needToPingPong = false
-		this.updateLoop = false
-		this.firstLoop = false
 		if (this.udpPort) this.udpPort.close()
-		if (this.pingInterval) clearInterval(this.pingInterval)
-		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
-		if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+		this.destroyTimers()
 		return
 	}
 
+	public readonly destroyTimers = (): void => {
+		this.instance.log('debug', 'destroyTimers')
+		this.updateLoop = false
+		this.firstLoop = false
+		this.needToPingPong = false
+		if (this.pingInterval) clearInterval(this.pingInterval)
+		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
+		if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+	}
+
+	public readonly createZoomIsoPullerTimer = (): void => {
+		if (this.instance.config.version === (ZoomVersion.ZoomISO as number)) {
+			this.zoomISOPuller = setInterval(
+				() => {
+					if (this.instance.config.pulling !== 0) {
+						if (this.instance.ZoomClientDataObj.engineState === 2) {
+							this.sendISOPullingCommands()
+						} else if (this.instance.ZoomClientDataObj.engineState === -1) {
+							this.sendCommand('/zoom/getEngineState', [])
+						}
+					}
+				},
+				this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
+			)
+		} else {
+			if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+		}
+	}
+
+	public readonly createPingTimer = (): void => {
+		if (this.pingInterval) clearInterval(this.pingInterval)
+		this.pingInterval = setInterval(() => {
+			if (this.needToPingPong) {
+				// this.instance.log('debug', `**************** needToPingPong ${new Date()}.  Interval: ${this.pingIntervalTime}`)
+				// Shall we leave this?
+				this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
+				this.sendCommand('/zoom/ping')
+			}
+		}, this.pingIntervalTime)
+	}
+
+	public readonly createUpdatePresetsTimer = (): void => {
+		// start looping for presets
+		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
+		this.updatePresetsLoop = setInterval(() => {
+			if (this.updateLoop) {
+				if (this.instance.config.enableActionPresetAndFeedbackSync || this.firstLoop) {
+					// this.instance.log('debug', `**************** updateLoop ${new Date()}`)
+					this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
+					// Make sure initial status is reflected
+					this.instance.checkFeedbacks(
+						FeedbackId.userNameBased,
+						FeedbackId.userNameBasedAdvanced,
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
+						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced,
+						FeedbackId.selectionMethod,
+						FeedbackId.audioOutput,
+						FeedbackId.output,
+					)
+
+					this.firstLoop = false
+				}
+				this.updateLoop = false
+			}
+		}, 2000)
+	}
 	/**
 	 * @description Create a OSC connection to Zoom
 	 */
@@ -113,40 +179,9 @@ export class OSC {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			// See if ZoomOSC is active
-			this.pingInterval = setInterval(() => {
-				if (this.needToPingPong) {
-					// this.instance.log('debug', `**************** needToPingPong ${new Date()}`)
-					// Shall we leave this?
-					this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
-					this.sendCommand('/zoom/ping')
-				}
-			}, this.pingIntervalTime)
-			// start looping for presets
-			this.updatePresetsLoop = setInterval(() => {
-				if (this.updateLoop) {
-					if (this.instance.config.enableActionPresetAndFeedbackSync || this.firstLoop) {
-						// this.instance.log('debug', `**************** updateLoop ${new Date()}`)
-						this.instance.updateDefinitionsForActionsFeedbacksAndPresets()
-						// Make sure initial status is reflected
-						this.instance.checkFeedbacks(
-							FeedbackId.userNameBased,
-							FeedbackId.userNameBasedAdvanced,
-							FeedbackId.indexBased,
-							FeedbackId.indexBasedAdvanced,
-							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced,
-							FeedbackId.groupBased,
-							FeedbackId.groupBasedAdvanced,
-							FeedbackId.selectionMethod,
-							FeedbackId.audioOutput,
-							FeedbackId.output,
-						)
-
-						this.firstLoop = false
-					}
-					this.updateLoop = false
-				}
-			}, 2000)
+			this.needToPingPong = true
+			this.createPingTimer()
+			this.createUpdatePresetsTimer()
 		})
 
 		return
@@ -672,7 +707,8 @@ export class OSC {
 						break
 					}
 					case 'pong': {
-						// this.instance.log('debug', 'receiving pong')
+						this.instance.log('debug', 'receiving pong')
+						// this.instance.log('debug', `receiving pong ${JSON.stringify(data)}`)
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
 						// // {int galTrackMode}
@@ -680,6 +716,7 @@ export class OSC {
 						// // {int number of targets}
 						// // {int number of users in call}
 						// // {int isPro (1=true, 0-false)}
+						const variables: CompanionVariableValues = {}
 						const versionInfo = data.args[1].value as string
 						if (data.args[7].value === 1) {
 							this.instance.updateStatus(InstanceStatus.Ok)
@@ -690,27 +727,21 @@ export class OSC {
 
 						this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
 						this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
+						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
+						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
+						updateCallStatusVariables(this.instance, variables)
+						updateZoomOscVersion(this.instance, variables)
+						this.instance.setVariableValues(variables)
+
 						switch (versionInfo.substring(0, 4)) {
 							case 'ZISO': {
 								this.sendCommand('/zoom/getEngineState', [])
-								this.zoomISOPuller = setInterval(
-									() => {
-										if (this.instance.config.pulling !== 0) {
-											if (this.instance.ZoomClientDataObj.engineState === 2) {
-												this.sendISOPullingCommands()
-											} else if (this.instance.ZoomClientDataObj.engineState === -1) {
-												this.sendCommand('/zoom/getEngineState', [])
-											}
-										}
-									},
-									this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
-								)
 								this.instance.config.version = ZoomVersion.ZoomISO
 								this.instance.saveConfig(this.instance.config)
 								break
 							}
 							case 'ZOSC':
-								if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+								// if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
 								this.instance.config.version = ZoomVersion.ZoomOSC
 								this.instance.saveConfig(this.instance.config)
 								break
@@ -719,20 +750,22 @@ export class OSC {
 								this.instance.log('info', `Wrong version status:${this.instance.ZoomClientDataObj.zoomOSCVersion}`)
 								break
 						}
-						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
-						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
 						// 	this.instance.log('info', `User data doesnt match with list info`)
 
 						this.needToPingPong = false
 						if (this.pingInterval) {
 							clearInterval(this.pingInterval)
 							this.pingIntervalTime = 60000
-							this.pingInterval = setInterval(() => {
-								// When 60 seconds no response start pinging again
-								if (Date.now() - this.instance.ZoomClientDataObj.last_response > 60000) {
-									this.sendCommand('/zoom/ping')
-								}
-							}, this.pingIntervalTime)
+							if (data.args[4].value === 1) {
+								this.pingInterval = setInterval(() => {
+									// When 60 seconds no response start pinging again
+									if (Date.now() - this.instance.ZoomClientDataObj.last_response > 60000) {
+										this.sendCommand('/zoom/ping')
+									}
+								}, this.pingIntervalTime)
+							} else {
+								this.destroyTimers()
+							}
 						}
 
 						// Subscribe to ZoomOSC
@@ -786,11 +819,15 @@ export class OSC {
 					}
 					case 'meetingStatusChanged':
 					case 'meetingStatus': {
-						// this.instance.log('info', 'meetingStatus receiving:' + JSON.stringify(data))
+						this.instance.log('info', `meetingStatus receiving: ${JSON.stringify(data.args[0].value)}`)
 						this.instance.ZoomClientDataObj.callStatus = data.args[0].value
 						const variables: CompanionVariableValues = {}
+
 						// Meeting status ended
+						// 0 = Meeting Status Idle
+						// 7 = Meeting Status Ended
 						if (data.args[0].value === 0 || data.args[0].value === 7) {
+							this.destroyTimers()
 							for (const key of Object.keys(this.instance.ZoomUserData)) {
 								if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
 									delete this.instance.ZoomUserData[parseInt(key)]
@@ -806,10 +843,6 @@ export class OSC {
 									users: [],
 								}
 							}
-							// this.instance.log(
-							// 	'debug',
-							// 	`meetingStatus Offline: numberOfGroups - ${this.instance.ZoomClientDataObj.numberOfGroups}`
-							// )
 
 							this.instance.ZoomUserData = {}
 							this.instance.InitVariables()
@@ -819,10 +852,16 @@ export class OSC {
 							// this.instance.UpdateVariablesValues()
 							this.instance.checkFeedbacks()
 						} else {
+							// 3 = In Meeting
+							if (this.instance.ZoomClientDataObj.callStatus === 3) {
+								this.needToPingPong = true
+								this.createPingTimer()
+								this.createUpdatePresetsTimer()
+								this.createZoomIsoPullerTimer()
+							}
 							updateCallStatusVariables(this.instance, variables)
 							this.instance.setVariableValues(variables)
 						}
-						this.needToPingPong = true
 						break
 					}
 					case 'listCleared': {
