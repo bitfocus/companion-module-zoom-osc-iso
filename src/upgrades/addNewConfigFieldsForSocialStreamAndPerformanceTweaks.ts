@@ -5,7 +5,7 @@ import {
 } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
 
-export function AddNewConfigFieldsForSocialStreamAndPerformanceTweaks(
+export function addNewConfigFieldsForSocialStreamAndPerformanceTweaks(
 	_context: CompanionUpgradeContext<ZoomConfig>,
 	_props: CompanionStaticUpgradeProps<ZoomConfig>,
 ): CompanionStaticUpgradeResult<ZoomConfig> {

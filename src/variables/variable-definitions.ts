@@ -8,6 +8,10 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		// Status
 		{ name: 'Zoom version', variableId: 'zoomVersion' },
 		{ name: 'Call Status', variableId: 'callStatus' },
+		{
+			name: 'Call Status Number (only accurate when joining or leaving meeting.  See module help for details)',
+			variableId: 'callStatusNumber',
+		},
 		{ name: 'Engine Status', variableId: 'engineState' },
 		{ name: 'Selected callers/groups', variableId: 'selectedCallers' },
 		{ name: 'Selected number of callers/groups', variableId: 'selectedNumberOfCallers' },
