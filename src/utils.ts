@@ -51,6 +51,11 @@ export interface ZoomClientDataObjInterface {
 	capturePermissionGranted: boolean
 }
 
+export interface ZoomMeDataInterface {
+	zoomId: number
+	userName: string
+}
+
 export interface ZoomUserDataInterface {
 	[key: number]: {
 		zoomId: number
@@ -493,6 +498,7 @@ export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	OSC: any
 	ZoomGroupData: ZoomGroupDataInterface[]
 	ZoomUserData: ZoomUserDataInterface
+	ZoomMeData: ZoomMeDataInterface
 	ZoomOutputData: ZoomOutputDataInterface
 	ZoomAudioLevelData: ZoomAudioLevelDataInterface
 	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface

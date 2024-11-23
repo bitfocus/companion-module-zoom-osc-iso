@@ -271,6 +271,12 @@ export class OSC {
 					case 'user':
 						// Set for all cases the ZoomCallerId
 						zoomId = parseInt(data.args[3].value)
+						if (zoomPart2 === 'me') {
+							this.instance.ZoomMeData = {
+								zoomId: zoomId,
+								userName: data.args[1].value,
+							}
+						}
 						// Check if user exists, returns -1 if not
 						if (!userExist(zoomId, this.instance.ZoomUserData)) {
 							if (this.instance.ZoomUserOffline[zoomId]) {

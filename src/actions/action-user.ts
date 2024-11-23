@@ -141,23 +141,25 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				const zoomId = instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
+				if (instance.config.enableVariablesForParticipants) {
+					const zoomId = instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
 
-				selectUser(instance, zoomId, action.options.option as string)
+					selectUser(instance, zoomId, action.options.option as string)
 
-				const variables: CompanionVariableValues = {}
-				updateSelectedCallersVariables(instance, variables)
-				instance.setVariableValues(variables)
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced,
-				)
+					const variables: CompanionVariableValues = {}
+					updateSelectedCallersVariables(instance, variables)
+					instance.setVariableValues(variables)
+					instance.checkFeedbacks(
+						FeedbackId.userNameBased,
+						FeedbackId.userNameBasedAdvanced,
+						FeedbackId.indexBased,
+						FeedbackId.indexBasedAdvanced,
+						FeedbackId.galleryBased,
+						FeedbackId.galleryBasedAdvanced,
+						FeedbackId.groupBased,
+						FeedbackId.groupBasedAdvanced,
+					)
+				}
 			},
 		},
 		[ActionIdUsers.clearParticipants]: {

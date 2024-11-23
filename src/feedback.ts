@@ -264,7 +264,10 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
+				if (
+					instance.config.enableVariablesForParticipants &&
+					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+				) {
 					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
@@ -287,12 +290,14 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomVariableLink[(feedback.options.position as number) - 1]) {
+				if (
+					instance.config.enableVariablesForParticipants &&
+					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+				) {
 					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
-
 				return {}
 			},
 		},
@@ -332,6 +337,16 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			callback: async (feedback, context) => {
 				const name = await context.parseVariablesInString(feedback.options.name as string)
 				let zoomID = 0
+
+				if (name === 'me') {
+					zoomID = instance.ZoomMeData.zoomId
+					if (zoomID !== 0) {
+						return feedbackResults(feedback.options.type, zoomID)
+					}
+
+					return false
+				}
+
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
@@ -357,6 +372,19 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			callback: async (feedback, context) => {
 				const name = await context.parseVariablesInString(feedback.options.name as string)
 				let zoomID = 0
+				if (name === 'me') {
+					zoomID = instance.ZoomMeData.zoomId
+					if (zoomID !== 0) {
+						return feedbackResultsMultiState(
+							instance,
+							zoomID,
+							feedback.image === undefined ? 72 : feedback.image.height,
+						)
+					}
+
+					return {}
+				}
+
 				for (const iterator of instance.ZoomVariableLink) {
 					if (iterator.userName === name) {
 						zoomID = iterator.zoomId
