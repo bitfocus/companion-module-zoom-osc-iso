@@ -13,6 +13,7 @@ import {
 	ZoomUserDataInterface,
 	ZoomUserOfflineInterface,
 	ZoomVariableLinkInterface,
+	ZoomMeDataInterface,
 } from './utils.js'
 
 import { updateVariableValues } from './variables/variable-values.js'
@@ -77,6 +78,8 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 	public ZoomUserOffline: ZoomUserOfflineInterface = {}
 
+	public ZoomMeData: ZoomMeDataInterface = { zoomId: 0, userName: '' }
+
 	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
 	public OSC: OSC | null = null
@@ -137,6 +140,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
 		this.ZoomUserOffline = []
+		this.ZoomMeData = { zoomId: 0, userName: '' }
 		this.ZoomAudioLevelData = []
 		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
