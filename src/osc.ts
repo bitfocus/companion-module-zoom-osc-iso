@@ -898,13 +898,12 @@ export class OSC {
 					}
 					// ISO data
 					case 'engineState': {
-						// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+						// this.instance.log('info', `engine state receiving: ${JSON.stringify(data)}`)
 						this.instance.ZoomClientDataObj.engineState = data.args[0].value
-						// this.instance.UpdateVariablesValues()
 						const variables: CompanionVariableValues = {}
 						updateZoomIsoEngineVariables(this.instance, variables)
 						this.instance.setVariableValues(variables)
-						this.instance.checkFeedbacks('engineState')
+						this.instance.checkFeedbacks(FeedbackId.engineState)
 						break
 					}
 					case 'audioLevels': {
