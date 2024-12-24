@@ -21,6 +21,7 @@ import { initVariableDefinitions } from './variables/variable-definitions.js'
 import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
 import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
+import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from './upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
 
 /**
  * @description Companion instance class for Zoom
@@ -42,6 +43,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		enableActionPresetAndFeedbackSync: true,
 		socialStreamId: '',
 		socialStreamQuestionPrefix: '',
+		socialStreamChatTypeToSend: [],
 	}
 
 	// Global call settings
@@ -186,4 +188,5 @@ runEntrypoint(ZoomInstance, [
 	UpgradeV2ToV3,
 	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
 	fixWrongPinCommands,
+	addNewConfigFieldsForSocialStreamChatMessagesToSend,
 ])

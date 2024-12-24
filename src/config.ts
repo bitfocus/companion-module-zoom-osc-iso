@@ -16,6 +16,7 @@ export interface ZoomConfig {
 	enableSocialStream: boolean
 	socialStreamId: string
 	socialStreamQuestionPrefix: string
+	socialStreamChatTypeToSend: number[]
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -122,7 +123,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'static-text',
 			width: 12,
 			value:
-				'If you would like to send the Zoom chat messages to <a target="blank" href="https://github.com/steveseguin/social_stream">Social Stream Ninja</a>, enable the integration below and add your Session Id',
+				'If you would like to send the Zoom chat messages to <a target="blank" href="https://github.com/steveseguin/social_stream">Social Stream Ninja</a>, enable the integration below and add your Session Id.  See module help for how to configure social stream ninja.',
 			id: 'socialStreamNote',
 			label: 'Sent Zoom Chat to Social Stream Ninja',
 		},
@@ -147,6 +148,30 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Prefix for Zoom Q&A Questions',
 			width: 5,
 			default: '',
+			isVisible: (options) => options['enableSocialStream'] === true,
+		},
+		{
+			type: 'static-text',
+			width: 2,
+			value: '',
+			id: 'socialStreamNote2',
+			label: '',
+		},
+		{
+			type: 'multidropdown',
+			id: 'socialStreamChatTypeToSend',
+			label: 'Chat Message Type to Send to Social Stream',
+			default: [0, 1, 2],
+			choices: [
+				{ id: 0, label: 'None' },
+				{ id: 1, label: 'All' },
+				{ id: 2, label: 'All Panelist' },
+				{ id: 3, label: 'Individual Panelist (DM)' },
+				{ id: 4, label: 'Individual (DM)' },
+				{ id: 5, label: 'Waiting Room' },
+			],
+			minChoicesForSearch: 0,
+			width: 10,
 			isVisible: (options) => options['enableSocialStream'] === true,
 		},
 		{
