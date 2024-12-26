@@ -41,6 +41,7 @@ export interface ZoomClientDataObjInterface {
 	selectedOutputs: number[]
 	selectedAudioOutputs: number[]
 	activeSpeaker: string
+	activeSpeakerZoomId: number
 	isSpeaking: string
 	zoomOSCVersion: string | number
 	callStatus: string | number
@@ -78,7 +79,7 @@ export interface ZoomOutputDataInterface {
 		enabled: boolean
 		outputName: string
 		mode: string
-		selection: string
+		selection: string | number
 		resolution: string
 		embeddedAudioInfo: string
 		status: string
