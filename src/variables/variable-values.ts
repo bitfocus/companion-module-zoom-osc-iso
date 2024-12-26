@@ -27,6 +27,7 @@ export function updateActiveSpeakerVariable(
 	variables: CompanionVariableValues,
 ): void {
 	variables['activeSpeaker'] = instance.ZoomClientDataObj.activeSpeaker
+	variables['activeSpeakerZoomId'] = instance.ZoomClientDataObj.activeSpeakerZoomId
 }
 
 export function updateIsSpeakingVariable(
@@ -46,6 +47,7 @@ export function updateHostGroupVariables(
 export function updateSpotlightGroupInitalizedVariable(variables: CompanionVariableValues): void {
 	variables['spotlightGroupTrackingInitalized'] = true
 }
+
 export function updateSpotlightGroupVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,
@@ -59,12 +61,16 @@ export function updateZoomIsoEngineVariables(
 ): void {
 	if (instance.ZoomClientDataObj.engineState === -1) {
 		variables['engineState'] = 'no engine found'
+		variables['engineStateNumber'] = -1
 	} else if (instance.ZoomClientDataObj.engineState === 0) {
 		variables['engineState'] = engineState.disabled
+		variables['engineStateNumber'] = 0
 	} else if (instance.ZoomClientDataObj.engineState === 1) {
 		variables['engineState'] = engineState.standby
+		variables['engineStateNumber'] = 1
 	} else if (instance.ZoomClientDataObj.engineState === 2) {
 		variables['engineState'] = engineState.enabled
+		variables['engineStateNumber'] = 2
 	}
 }
 
@@ -79,6 +85,48 @@ export function updateZoomIsoOutputVariables(
 			variables[`Output${output.outputNumber}resolution`] = output.resolution
 			variables[`Output${output.outputNumber}mode`] = output.mode
 			variables[`Output${output.outputNumber}status`] = output.status
+			variables[`Output${output.outputNumber}selection`] = output.selection
+			try {
+				if (output.mode === 'Participant') {
+					const zoomID = output.selection as number
+					variables[`Output${output.outputNumber}zoomId`] = zoomID
+					variables[`Output${output.outputNumber}Name`] = userExist(zoomID, instance.ZoomUserData)
+						? instance.ZoomUserData[zoomID].userName
+						: '-'
+				} else if (output.mode === 'Gallery Position') {
+					const zoomID = instance.ZoomClientDataObj.galleryOrder[output.selection as number]
+					variables[`Output${output.outputNumber}zoomId`] = zoomID
+					variables[`Output${output.outputNumber}Name`] = userExist(zoomID, instance.ZoomUserData)
+						? instance.ZoomUserData[zoomID].userName
+						: '-'
+				} else if (output.mode === 'Spotlight') {
+					const user = instance.ZoomGroupData[1].users[output.selection as number]
+					if (user) {
+						variables[`Output${output.outputNumber}zoomId`] = user.zoomID
+						variables[`Output${output.outputNumber}Name`] = userExist(user.zoomID, instance.ZoomUserData)
+							? user.userName
+							: '-'
+					} else {
+						variables[`Output${output.outputNumber}zoomId`] = -1
+						variables[`Output${output.outputNumber}Name`] = '-'
+					}
+				} else if (output.mode === 'Active Speaker') {
+					variables[`Output${output.outputNumber}zoomId`] = instance.ZoomClientDataObj.activeSpeakerZoomId
+					variables[`Output${output.outputNumber}Name`] = instance.ZoomClientDataObj.activeSpeaker
+				} else {
+					variables[`Output${output.outputNumber}zoomId`] = -1
+					variables[`Output${output.outputNumber}Name`] = '-'
+				}
+
+				// instance.log(
+				// 	'debug',
+				// 	`Output ${key} Mode: ${output.mode} ZoomID: ${variables[`Output${output.outputNumber}zoomId`]} Name: ${variables[`Output${output.outputNumber}Name`]}`,
+				// )
+			} catch (error) {
+				instance.log('error', `Error in updateZoomIsoOutputVariables: ${error}`)
+				variables[`Output${output.outputNumber}zoomId`] = -1
+				variables[`Output${output.outputNumber}Name`] = '-'
+			}
 		}
 	}
 }
@@ -167,6 +215,7 @@ export function updateGalleryCountVariables(
 ): void {
 	variables['galleryCount'] = instance.ZoomClientDataObj.galleryCount
 }
+
 export function updateGalleryVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,
@@ -190,6 +239,7 @@ export function updateAllGroupVariables(
 		updateGroupVariables(instance, variables, index)
 	}
 }
+
 export function updateZoomParticipantVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,

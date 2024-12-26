@@ -52,10 +52,10 @@ export class OSC {
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
 	private needToPingPong = true
-	private pingInterval: NodeJS.Timeout | undefined
+	private pingInterval: NodeJS.Timeout | undefined | null = null
 	private pingIntervalTime = 2000
-	private updatePresetsLoop: NodeJS.Timeout | undefined
-	private zoomISOPuller: NodeJS.Timeout | undefined
+	private updatePresetsLoop: NodeJS.Timeout | undefined | null = null
+	private zoomISOPuller: NodeJS.Timeout | undefined | null = null
 
 	constructor(instance: InstanceBaseExt<ZoomConfig>) {
 		this.instance = instance
@@ -77,27 +77,46 @@ export class OSC {
 		this.updateLoop = false
 		this.firstLoop = false
 		this.needToPingPong = false
-		if (this.pingInterval) clearInterval(this.pingInterval)
-		if (this.updatePresetsLoop) clearInterval(this.updatePresetsLoop)
-		if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+		this.destroyPingTimer()
+		this.destroyUpdatePresetsTimer()
+		this.destroyZoomIsoPullerTimer()
+	}
+
+	private readonly destroyPingTimer = (): void => {
+		if (this.pingInterval) {
+			clearInterval(this.pingInterval)
+			this.pingInterval = null
+		}
+	}
+
+	private readonly destroyUpdatePresetsTimer = (): void => {
+		if (this.updatePresetsLoop) {
+			clearInterval(this.updatePresetsLoop)
+			this.updatePresetsLoop = null
+		}
+	}
+
+	private readonly destroyZoomIsoPullerTimer = (): void => {
+		if (this.zoomISOPuller) {
+			clearInterval(this.zoomISOPuller)
+			this.zoomISOPuller = null
+		}
 	}
 
 	public readonly createZoomIsoPullerTimer = (): void => {
 		if (this.instance.config.version === (ZoomVersion.ZoomISO as number)) {
 			this.zoomISOPuller = setInterval(
 				() => {
-					if (this.instance.config.pulling !== 0) {
-						if (this.instance.ZoomClientDataObj.engineState === 2) {
-							this.sendISOPullingCommands()
-						} else if (this.instance.ZoomClientDataObj.engineState === -1) {
-							this.sendCommand('/zoom/getEngineState', [])
-						}
+					if (this.instance.ZoomClientDataObj.engineState === -1) {
+						this.sendCommand('/zoom/getEngineState', [])
+					} else {
+						this.sendISOPullingCommands()
 					}
 				},
 				this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
 			)
 		} else {
-			if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
+			this.destroyZoomIsoPullerTimer()
 		}
 	}
 
@@ -367,6 +386,7 @@ export class OSC {
 								// this.instance.log('info', 'active speaker receiving:' + JSON.stringify(data))
 								if (this.instance.ZoomClientDataObj.activeSpeaker !== data.args[1].value) {
 									this.instance.ZoomClientDataObj.activeSpeaker = data.args[1].value
+									this.instance.ZoomClientDataObj.activeSpeakerZoomId = data.args[3].value
 									const variables: CompanionVariableValues = {}
 									updateActiveSpeakerVariable(this.instance, variables)
 									this.instance.setVariableValues(variables)
@@ -749,15 +769,25 @@ export class OSC {
 
 						switch (versionInfo.substring(0, 4)) {
 							case 'ZISO': {
-								this.sendCommand('/zoom/getEngineState', [])
-								this.instance.config.version = ZoomVersion.ZoomISO
-								this.instance.saveConfig(this.instance.config)
+								// this.instance.log('debug', `Meeting Status: ${data.args[4].value}. Timer: ${this.zoomISOPuller}`)
+								if (!this.zoomISOPuller && data.args[4].value === 1) {
+									this.createZoomIsoPullerTimer()
+								}
+
+								if (this.instance.config.version !== (ZoomVersion.ZoomISO as number)) {
+									this.instance.config.version = ZoomVersion.ZoomISO
+									this.instance.saveConfig(this.instance.config)
+								}
 								break
 							}
 							case 'ZOSC':
-								// if (this.zoomISOPuller) clearInterval(this.zoomISOPuller)
-								this.instance.config.version = ZoomVersion.ZoomOSC
-								this.instance.saveConfig(this.instance.config)
+								if (this.zoomISOPuller) {
+									this.destroyZoomIsoPullerTimer()
+								}
+								if (this.instance.config.version !== (ZoomVersion.ZoomOSC as number)) {
+									this.instance.config.version = ZoomVersion.ZoomOSC
+									this.instance.saveConfig(this.instance.config)
+								}
 								break
 							default:
 								// Default to ZoomOSC no pulling of data
@@ -768,8 +798,9 @@ export class OSC {
 
 						this.needToPingPong = false
 						if (this.pingInterval) {
-							clearInterval(this.pingInterval)
+							this.destroyPingTimer()
 							this.pingIntervalTime = 60000
+							// if in call then start ping timer else destroy all timers
 							if (data.args[4].value === 1) {
 								this.pingInterval = setInterval(() => {
 									// When 60 seconds no response start pinging again
@@ -937,7 +968,7 @@ export class OSC {
 						break
 					}
 					case 'outputRouting': {
-						//this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
+						// this.instance.log('debug', `OutputRouting: ${JSON.stringify(data.args)}`)
 						const outputNumber = parseInt(data.args[1].value)
 						this.instance.ZoomOutputData[outputNumber] = {
 							numberOfOutputs: data.args[0].value,
@@ -954,7 +985,6 @@ export class OSC {
 						const variables: CompanionVariableValues = {}
 						updateZoomIsoOutputVariables(this.instance, variables)
 						this.instance.setVariableValues(variables)
-						// this.instance.UpdateVariablesValues()
 						this.instance.checkFeedbacks(
 							FeedbackId.userNameBased,
 							FeedbackId.userNameBasedAdvanced,
@@ -1003,6 +1033,7 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = (): void => {
+		// this.instance.log('debug', 'sendISOPullingCommands')
 		this.sendCommand('/zoom/getEngineState', [])
 		this.sendCommand('/zoom/getAudioLevels', [])
 		this.sendCommand('/zoom/getOutputRouting', [])

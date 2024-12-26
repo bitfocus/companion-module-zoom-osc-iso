@@ -55,6 +55,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		selectedAudioOutputs: [],
 		subscribeMode: 0,
 		activeSpeaker: 'None',
+		activeSpeakerZoomId: -1,
 		isSpeaking: 'None',
 		zoomOSCVersion: 'Not Connected',
 		callStatus: 0,
