@@ -28,6 +28,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 	const CHOICES_GROUPS: { id: string; label: string }[] = []
 	const CHOICES_GROUPS_NO_HOST: { id: string; label: string }[] = []
 	const CHOICES_GROUPS_DEFAULT = '1'
+	const CHOICES_GROUPS_NO_HOST_DEFAULT = '2'
 
 	instance.ZoomGroupData.forEach((group: { groupName: any }, index: { toString: () => any }) => {
 		CHOICES_GROUPS.push({ id: index.toString(), label: group.groupName })
@@ -46,7 +47,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		type: 'dropdown',
 		label: 'Group',
 		id: 'group',
-		default: CHOICES_GROUPS_DEFAULT,
+		default: CHOICES_GROUPS_NO_HOST_DEFAULT,
 		choices: CHOICES_GROUPS_NO_HOST,
 	}
 
