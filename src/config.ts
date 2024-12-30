@@ -93,7 +93,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			type: 'number',
 			id: 'numberOfGroups',
 			label: 'Number of selectable groups',
-			min: 1,
+			min: 0,
 			max: 100,
 			default: 3,
 			width: 6,

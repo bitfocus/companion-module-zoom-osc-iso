@@ -104,8 +104,10 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.config = config
 		this.saveConfig(config)
 		this.log('info', 'changing config!')
-		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups)
+		if (config.numberOfGroups !== this.ZoomClientDataObj.numberOfGroups) {
 			this.ZoomClientDataObj.numberOfGroups = config.numberOfGroups
+			this.ZoomGroupData = []
+		}
 
 		for (let index = 0; index < this.ZoomClientDataObj.numberOfGroups + 2; index++) {
 			this.ZoomGroupData[index] = {
