@@ -280,6 +280,7 @@ export function updateAllUserBasedVariables(
 	updateZoomUserVariables(instance, variables)
 	updateNumberOfUsers(instance, variables)
 	updateVideoOnCountVariable(instance, variables)
+	updateHandRaisedCountVariable(instance, variables)
 }
 
 export function updateCallStatusVariables(

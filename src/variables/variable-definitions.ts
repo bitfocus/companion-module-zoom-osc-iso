@@ -67,13 +67,14 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 	}
 
 	if (instance.config.enableVariablesForEachUser) {
-		for (const key in instance.ZoomUserData) {
-			if (userExist(Number(key), instance.ZoomUserData)) {
-				const user = instance.ZoomUserData[key]
-				if (user.zoomId > instance.ZoomClientDataObj.numberOfGroups)
-					userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
+		Object.entries(instance.ZoomUserData).forEach(([key, user]) => {
+			const zoomId = Number(key)
+
+			if (userExist(zoomId, instance.ZoomUserData)) {
+				//&& user.zoomId > instance.ZoomClientDataObj.numberOfGroups) {
+				userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
 			}
-		}
+		})
 	}
 
 	for (const key in instance.ZoomOutputData) {
