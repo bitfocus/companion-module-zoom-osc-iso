@@ -711,25 +711,17 @@ export class OSC {
 							return
 						}
 
-						this.instance.ZoomClientDataObj.galleryOrder.length = 0
-						data.args.forEach((order: { type: string; value: number }) => {
-							this.instance.ZoomClientDataObj.galleryOrder.push(order.value)
-						})
+						this.instance.ZoomClientDataObj.galleryOrder = data.args.map(
+							(order: { type: string; value: number }) => order.value,
+						)
+
 						this.instance.InitVariables()
 
 						const variables: CompanionVariableValues = {}
 						updateGalleryVariables(this.instance, variables)
 						this.instance.setVariableValues(variables)
 
-						// this.instance.UpdateVariablesValues()
-						this.instance.checkFeedbacks(
-							// FeedbackId.indexBased,
-							// FeedbackId.indexBasedAdvanced,
-							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced,
-							// FeedbackId.groupBased,
-							// FeedbackId.groupBasedAdvanced
-						)
+						this.instance.checkFeedbacks(FeedbackId.galleryBased, FeedbackId.galleryBasedAdvanced)
 						break
 					}
 					case 'galleryCount': {
@@ -873,21 +865,34 @@ export class OSC {
 						// 7 = Meeting Status Ended
 						if (data.args[0].value === 0 || data.args[0].value === 7) {
 							this.destroyTimers()
-							for (const key of Object.keys(this.instance.ZoomUserData)) {
-								if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-									delete this.instance.ZoomUserData[parseInt(key)]
-								}
+							this.instance.ZoomUserData = {}
+							this.instance.ZoomClientDataObj = {
+								last_response: this.instance.ZoomClientDataObj.last_response,
+								selectedCallers: [],
+								PreviousSelectedCallers: [],
+								selectedOutputs: [],
+								selectedAudioOutputs: [],
+								subscribeMode: this.instance.ZoomClientDataObj.subscribeMode,
+								activeSpeaker: 'None',
+								activeSpeakerZoomId: -1,
+								isSpeaking: 'None',
+								zoomOSCVersion: this.instance.ZoomClientDataObj.zoomOSCVersion,
+								callStatus: this.instance.ZoomClientDataObj.callStatus,
+								galleryCount: 0,
+								galleryOrder: [],
+								numberOfGroups: this.instance.ZoomClientDataObj.numberOfGroups,
+								engineState: this.instance.ZoomClientDataObj.engineState,
+								capturePermissionGranted: this.instance.ZoomClientDataObj.capturePermissionGranted,
 							}
-
-							this.instance.ZoomClientDataObj.selectedCallers.length = 0
 							this.instance.ZoomVariableLink.length = 0
-							this.instance.ZoomGroupData = []
-							for (let index = 0; index < this.instance.ZoomClientDataObj.numberOfGroups + 2; index++) {
-								this.instance.ZoomGroupData[index] = {
+
+							this.instance.ZoomGroupData = Array.from(
+								{ length: this.instance.ZoomClientDataObj.numberOfGroups + 2 },
+								(_, index) => ({
 									groupName: index === 0 ? 'Hosts' : index === 1 ? 'Spotlights' : `Group ${index}`,
 									users: [],
-								}
-							}
+								}),
+							)
 
 							this.instance.ZoomUserData = {}
 							this.instance.InitVariables()
@@ -910,15 +915,12 @@ export class OSC {
 						break
 					}
 					case 'listCleared': {
+						this.instance.log('debug', 'listCleared')
 						PreviousSelectedCallersSave(this.instance)
 						this.instance.ZoomClientDataObj.selectedCallers.length = 0
 						this.instance.ZoomVariableLink.length = 0
-						for (const key of Object.keys(this.instance.ZoomUserData)) {
-							if (parseInt(key) > this.instance.ZoomClientDataObj.numberOfGroups) {
-								delete this.instance.ZoomUserData[parseInt(key)]
-							}
-						}
-						this.instance.log('debug', 'listCleared')
+						this.instance.ZoomUserData = {}
+
 						this.instance.InitVariables()
 						const variables: CompanionVariableValues = {}
 						updateAllUserBasedVariables(this.instance, variables)

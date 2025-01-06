@@ -161,20 +161,18 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					instance.ZoomGroupData[group].users.length = 0
 				}
 
-				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: string | number) => {
+				instance.ZoomClientDataObj.selectedCallers.forEach((zoomID: number) => {
 					if (userExist(Number(zoomID), instance.ZoomUserData)) {
-						if (!instance.ZoomGroupData[group].users.find((o: { zoomID: string | number }) => o.zoomID === zoomID)) {
+						if (!instance.ZoomGroupData[group].users.some((o: { zoomID: number }) => o.zoomID === zoomID)) {
 							instance.ZoomGroupData[group].users.push({
-								zoomID: zoomID as number,
-								userName: instance.ZoomUserData[zoomID as number].userName,
+								zoomID: zoomID,
+								userName: instance.ZoomUserData[zoomID].userName,
 							})
 						}
 					}
 				})
 
 				PreviousSelectedCallersSave(instance)
-				// instance.ZoomClientDataObj.selectedCallers.length = 0
-				// instance.UpdateVariablesValues()
 				const variables: CompanionVariableValues = {}
 				updateGroupVariables(instance, variables, group)
 				instance.setVariableValues(variables)
@@ -245,8 +243,6 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					}
 
 					PreviousSelectedCallersSave(instance)
-					// instance.ZoomClientDataObj.selectedCallers.length = 0
-					// instance.UpdateVariablesValues()
 					const variables: CompanionVariableValues = {}
 					updateGroupVariables(instance, variables, group)
 					instance.setVariableValues(variables)
