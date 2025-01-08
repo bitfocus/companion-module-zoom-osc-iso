@@ -1,6 +1,6 @@
 import { CompanionActionDefinition } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options, userExist } from '../utils.js'
+import { InstanceBaseExt, options } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import {
 	createCommand,
@@ -113,21 +113,6 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 					},
 				}
 				sendActionCommand(instance, sendToCommand)
-				for (const key in instance.ZoomUserData) {
-					if (userExist(Number(key), instance.ZoomUserData)) {
-						instance.ZoomUserData[key].handRaised = false
-					}
-				}
-				instance.checkFeedbacks(
-					FeedbackId.userNameBased,
-					FeedbackId.userNameBasedAdvanced,
-					FeedbackId.indexBased,
-					FeedbackId.indexBasedAdvanced,
-					FeedbackId.galleryBased,
-					FeedbackId.galleryBasedAdvanced,
-					FeedbackId.groupBased,
-					FeedbackId.groupBasedAdvanced,
-				)
 			},
 		},
 		[ActionIdGlobal.clearSpotlight]: {
