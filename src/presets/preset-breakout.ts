@@ -14,7 +14,7 @@ export function GetPresetsBreakout(): CompanionPresetDefinitionsExt {
 		category: 'Breakout Actions',
 		name: `Send_Participant_To_BreakoutRoom`,
 		style: {
-			text: `Send To BreakoutRoom`,
+			text: `Send To Breakout Room`,
 			size: '14',
 			color: colorBlack,
 			bgcolor: colorLightGray,
