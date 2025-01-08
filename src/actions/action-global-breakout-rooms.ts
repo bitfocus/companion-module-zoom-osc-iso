@@ -67,7 +67,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms]: {
-			name: 'Request list of breakout rooms (PRO)',
+			name: 'Request list of Breakout Rooms (PRO)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'
@@ -83,7 +83,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			},
 		},
 		[ActionIdGlobalBreakoutRooms.configureBreakoutRooms]: {
-			name: 'Configure BreakoutRooms (PRO)',
+			name: 'Configure Breakout Rooms (PRO)',
 			options: [
 				options.postCloseSeconds,
 				options.allowChooseBreakout,
