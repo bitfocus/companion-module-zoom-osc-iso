@@ -9,7 +9,7 @@ const getChoicePositions = (): {
 	label: string
 }[] => {
 	const result = []
-	for (let index = 1; index < 1000; index++) {
+	for (let index = 1; index <= 1000; index++) {
 		result.push({ id: index.toString(), label: `Position ${index}` })
 	}
 
