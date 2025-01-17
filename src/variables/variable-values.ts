@@ -201,7 +201,7 @@ export function updateGroupVariables(
 			: ''
 	}
 
-	for (let position = 1; position < 1000; position++) {
+	for (let position = 1; position <= 1000; position++) {
 		variables[`Group${index}Position${position}`] =
 			group.users && group.users[position - 1] ? group.users[position - 1].userName : '-'
 	}
@@ -246,7 +246,7 @@ export function updateZoomParticipantVariables(
 ): void {
 	if (instance.config.enableVariablesForParticipants) {
 		// Use the participant selection
-		for (let index = 1; index < 1000; index++) {
+		for (let index = 1; index <= 1000; index++) {
 			variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
 				? instance.ZoomVariableLink[index - 1].userName
 				: '-'

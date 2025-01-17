@@ -37,7 +37,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 		label: string
 	}[] = []
 
-	for (let index = 1; index < 1000; index++) {
+	for (let index = 1; index <= 1000; index++) {
 		CHOICES_PARTICIPANT.push({ id: index.toString(), label: `Participant ${index}` })
 	}
 

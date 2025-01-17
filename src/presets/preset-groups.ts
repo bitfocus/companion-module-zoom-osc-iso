@@ -227,7 +227,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 			feedbacks: [],
 		}
 
-		for (let position = 1; position < 1000; position++) {
+		for (let position = 1; position <= 1000; position++) {
 			if (index == 1 && position > 9) {
 				break
 			}

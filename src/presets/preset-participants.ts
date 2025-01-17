@@ -17,7 +17,7 @@ export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>
 	/**
 	 * Select from Participants
 	 */
-	for (let index = 1; index < 1000; index++) {
+	for (let index = 1; index <= 1000; index++) {
 		const indexFeedbacks: PresetFeedbackDefinition = [
 			{
 				feedbackId: FeedbackId.indexBased,
