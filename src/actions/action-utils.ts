@@ -9,7 +9,7 @@ const getChoicePositions = (): {
 	label: string
 }[] => {
 	const result = []
-	for (let index = 1; index < 50; index++) {
+	for (let index = 1; index < 1000; index++) {
 		result.push({ id: index.toString(), label: `Position ${index}` })
 	}
 
@@ -79,7 +79,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 export const createCommand = (
 	instance: InstanceBaseExt<ZoomConfig>,
 	OSCAction: string,
-	name?: InputValue | string | undefined,
+	name?: InputValue | string,
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
 	shouldSavePreviousSelectedCallers = true,

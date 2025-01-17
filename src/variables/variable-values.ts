@@ -201,7 +201,7 @@ export function updateGroupVariables(
 			: ''
 	}
 
-	for (let position = 1; position < 50; position++) {
+	for (let position = 1; position < 1000; position++) {
 		variables[`Group${index}Position${position}`] =
 			group.users && group.users[position - 1] ? group.users[position - 1].userName : '-'
 	}
