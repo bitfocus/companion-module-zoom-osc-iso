@@ -80,14 +80,6 @@ The module respects the order of selections, so when acting on multiple particip
 
 There are several variables and actions to help you manage the selection process available in the module. For example, since actions do not automatically deselect the participants acted upon, you can add a “Clear Selections” action to deselect them.
 
-### Groups
-
-One of the most powerful features of this module is the ability to place participants into groups. Just like participants, groups are referenceable and selectable. You can index into groups with variables to display their members. In fact buttons with these properties are automatically available in the Presets area under “Manage Selections and Groups” by automatically generating new buttons based on the number of groups specified in the module setup.
-
-Groups can have a variety of purposes. For example, you might make a group called “Favorites” that contains the subset of users in your meeting that you will actually need to interact with. Then, you could have a page that shows who is in the Favorites group so you can select them and act upon them individually or together. Alternatively, you could have several groups representing the members of different panel conversations. Once the users are placed in the different panelist groups, you can select all members of a panel at once simply by selecting the corresponding group itself, and applying an action like Add Spotlight to the entire group.
-
-There is a default group called “Hosts” created and managed by the module itself. Its members are the host and co-host(s) of the meeting. This membership is automatically managed, so you cannot add or remove members (unless you change who the host and co-host(s) are) or change the group properties.
-
 ## Variables and Feedback
 
 This module supports many variables and feedback properties. These are helpful for automatically changing key properties like the name and color of a button. Variables can also be used for basic automation systems in the Triggers workflow within Companion. Most preset buttons already contain the necessary feedback and variable mapping for dynamic buttons, but advanced users may wish to read deeper into the module to build customized buttons and workflows.
@@ -99,32 +91,3 @@ When joining flow is 1 = Connecting, 8 = Audio Ready, 3 = Connected.
 When leaving flow is 4 = Disconnected, 7 = Ended.
 
 > Note: If module is restarted while in a meeting 0 = Not In meeting and 1 = In Meeting
-
-### Social Stream Ninja Integration
-
-One of the configuration options, is to send chat messages to Social Stream Ninja. In order for this to work, you need to provide your social stream ninja session id in the module configuration.
-
-Once the integration is turned on, you will need to update the urls you are using for your Social Stream Ninja browser source within OBS or other streaming software.
-
-The &server parameter in the url is the key to making it work as it tells it to listen to incoming API messages.
-
-Here is how to use it in OBS.
-
-1. Create a Custom Browser Dock and replace XXXXXXXX with your social stream id
-
-   - `https://socialstream.ninja/dock.html?session=XXXXXXXXX&server&server2&sync&label=main&limit=300`
-
-2. Create a browser source on a scene and use the following url and replace XXXXXXXX with your social stream id
-
-   - `https://socialstream.ninja/index.html?session=XXXXXXXXX&aligntop&server&server2`
-   - Width: 1200
-   - Height: 300
-   - Shutdown source when not visible
-
-## Support and Thanks
-
-The ZoomOSC/ISO Companion Module is not an official Zoom product. It is a community-driven project that utilizes the Open Sound Control public APIs of ZoomOSC and ZoomISO. While Zoom (and formerly Liminal) have designed its behavior, they hold no liability for this module or its upkeep. Ultimately it is managed by and the responsibility of the open-source Companion community, BitFocus, and its users.
-
-For support on this module, please utilize the GitHub and Slack for BitFocus Companion. If you have questions on ZoomOSC or ZoomISO, you can email [info@liminalet.com](mailto:info@liminalet.com) for Zoom’s official support of those products.
-
-This module is the result of several years of effort from multiple individuals and teams. The initial version of the v3 version of the module was created by Jeffrey Davidsz and designed by Andy Carluccio and Jonathan Kokotajlo from Zoom, the former co-founders of Liminal. The team is grateful for the work of several contributors to previous iterations of the module including Ash Green, Richard Williamson, Benjamin Antupit, and Johnny Estilles. The team would also like to thank the power users and beta testers whose contributions to the module have helped shape it over the years, with special recognition to Jeff Widgren, David Paskin, and Justin James.
