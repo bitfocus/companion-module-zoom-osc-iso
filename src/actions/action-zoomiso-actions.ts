@@ -6,6 +6,7 @@ import { sendActionCommand, PreviousSelectedCallersSave } from './action-utils.j
 
 export enum ActionIdZoomISOActions {
 	selectOutput = 'select_Output',
+	clearSelectOutput = 'clear_Select_Output',
 	selectAudioChannel = 'select_Audio_Channel',
 	applyOutput = 'apply_Output',
 	applyChannel = 'apply_Channel',
@@ -63,6 +64,15 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 				} else {
 					instance.ZoomClientDataObj.selectedOutputs.push(outputNumber)
 				}
+				// instance.log('debug', `outputNumber: ${outputNumber} selectedOutputs: ${JSON.stringify(instance.ZoomClientDataObj.selectedOutputs)}`)
+				instance.checkFeedbacks(FeedbackId.output)
+			},
+		},
+		[ActionIdZoomISOActions.clearSelectOutput]: {
+			name: 'Clear Select Output',
+			options: [],
+			callback: () => {
+				instance.ZoomClientDataObj.selectedOutputs = []
 				// instance.log('debug', `outputNumber: ${outputNumber} selectedOutputs: ${JSON.stringify(instance.ZoomClientDataObj.selectedOutputs)}`)
 				instance.checkFeedbacks(FeedbackId.output)
 			},

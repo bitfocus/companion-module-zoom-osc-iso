@@ -987,17 +987,7 @@ export class OSC {
 						const variables: CompanionVariableValues = {}
 						updateZoomIsoOutputVariables(this.instance, variables)
 						this.instance.setVariableValues(variables)
-						this.instance.checkFeedbacks(
-							FeedbackId.userNameBased,
-							FeedbackId.userNameBasedAdvanced,
-							FeedbackId.indexBased,
-							FeedbackId.indexBasedAdvanced,
-							FeedbackId.galleryBased,
-							FeedbackId.galleryBasedAdvanced,
-							FeedbackId.groupBased,
-							FeedbackId.groupBasedAdvanced,
-							FeedbackId.output,
-						)
+						this.instance.checkFeedbacks(FeedbackId.output)
 						break
 					}
 					default:
