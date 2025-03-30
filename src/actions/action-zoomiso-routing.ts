@@ -18,7 +18,8 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 			callback: async (action): Promise<void> => {
 				// type: 'ISO'
 				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
-				const command = createCommand(instance, '/outputISO', variableValue, select.multi)
+
+				const command = createCommand(instance, '/outputISO', variableValue, select.single, null, true, true)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.output })
 

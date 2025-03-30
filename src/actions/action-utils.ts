@@ -83,6 +83,8 @@ export const createCommand = (
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
 	shouldSavePreviousSelectedCallers = true,
+	allowEmptyUser = false,
+	emptyUser = -2,
 ): {
 	args: {
 		type: string
@@ -108,7 +110,8 @@ export const createCommand = (
 	if (singleUser === null || singleUser === undefined) {
 		command.oscPath = `/zoom${OSCAction}`
 	} else {
-		const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
+		const selectedCallers: number[] = instance.ZoomClientDataObj.selectedCallers
+		// Check if there are any selected callers
 		if (shouldSavePreviousSelectedCallers) {
 			PreviousSelectedCallersSave(instance)
 		}
@@ -123,26 +126,25 @@ export const createCommand = (
 			}
 			// Use the pre-selection options
 		} else {
-			if (Array.isArray(selectedCallers)) {
-				// should be otherwise somethings wrong
-				if (selectedCallers.length === 0) {
-					// return something to prevent users from sending a command
-					instance.log('error', 'Select a caller first')
-					command.isValidCommand = false
-				}
-				// When command is for one user only send first caller
-				else if (singleUser) {
+			if (allowEmptyUser == false && selectedCallers.length === 0) {
+				// return something to prevent users from sending a command
+				instance.log('error', 'Select a caller first')
+				command.isValidCommand = false
+			}
+			// When command is for one user only send first caller
+			else if (singleUser) {
+				if (allowEmptyUser && selectedCallers.length === 0) {
+					command.args.push({ type: 'i', value: emptyUser }) // Set to none
+				} else {
 					command.args.push({ type: 'i', value: selectedCallers[0] })
 					if (selectedCallers.length > 1) {
 						instance.log('warn', 'You have selected multiple participants but only the first one is allowed')
 					}
-				} else {
-					selectedCallers.forEach((caller) => {
-						command.args.push({ type: 'i', value: caller })
-					})
 				}
 			} else {
-				instance.log('warn', 'Wrong selection, no array')
+				selectedCallers.forEach((caller) => {
+					command.args.push({ type: 'i', value: caller })
+				})
 			}
 			// Different path when more than one users are selected
 			if (allExcept) {
