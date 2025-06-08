@@ -18,7 +18,10 @@
 		"type": "node22",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
-		"entrypoint": "../dist/index.js"
+		"entrypoint": "../dist/index.js",
+		"permissions": {
+			"filesystem": true
+		}
 	},
 	"manufacturer": "Zoom",
 	"products": ["OSC/ISO"],
