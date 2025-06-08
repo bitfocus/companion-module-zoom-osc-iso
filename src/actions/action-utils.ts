@@ -83,7 +83,8 @@ export const createCommand = (
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
 	shouldSavePreviousSelectedCallers = true,
-	allowEmptyUser = false,
+	isoAllowSetUserToNone = false,
+	isoForceSetToNone = false,
 	emptyUser = -2,
 ): {
 	args: {
@@ -126,14 +127,14 @@ export const createCommand = (
 			}
 			// Use the pre-selection options
 		} else {
-			if (allowEmptyUser == false && selectedCallers.length === 0) {
+			if (isoAllowSetUserToNone == false && selectedCallers.length === 0) {
 				// return something to prevent users from sending a command
 				instance.log('error', 'Select a caller first')
 				command.isValidCommand = false
 			}
 			// When command is for one user only send first caller
 			else if (singleUser) {
-				if (allowEmptyUser && selectedCallers.length === 0) {
+				if ((isoAllowSetUserToNone && selectedCallers.length === 0) || isoForceSetToNone) {
 					command.args.push({ type: 'i', value: emptyUser }) // Set to none
 				} else {
 					command.args.push({ type: 'i', value: selectedCallers[0] })
