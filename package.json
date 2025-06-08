@@ -2,41 +2,43 @@
 	"name": "zoom-osc-iso",
 	"version": "4.5.1",
 	"main": "dist/index.js",
+	"scripts": {
+		"postinstall": "husky",
+		"format": "prettier -w .",
+		"package": "run build && companion-module-build",
+		"build": "rimraf dist && run build:main",
+		"build:main": "tsc -p tsconfig.build.json",
+		"dev": "tsc -p tsconfig.build.json --watch",
+		"lint:raw": "eslint",
+		"lint": "run lint:raw ."
+	},
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/bitfocus/companion-module-zoom-osc-iso.git"
 	},
-	"scripts": {
-		"prepare": "husky install",
-		"postinstall": "husky",
-		"format": "prettier -w .",
-		"package": "yarn build && companion-module-build",
-		"dev": "yarn build:watch",
-		"build": "rimraf dist && yarn build:main",
-		"build:main": "tsc -p tsconfig.build.json",
-		"build:watch": "tsc -p tsconfig.build.json --watch",
-		"lint:raw": "eslint",
-		"lint": "yarn lint:raw ."
+	"engines": {
+		"node": "^22.14",
+		"yarn": "^4"
 	},
-	"license": "MIT",
-	"prettier": "@companion-module/tools/.prettierrc.json",
 	"dependencies": {
-		"@companion-module/base": "^1.11.3",
+		"@companion-module/base": "^1.12.1",
 		"got-cjs": "^12.5.4",
 		"osc": "^2.4.5"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.0.2",
 		"@types/got": "^9.6.12",
-		"@types/node": "^20.0.0",
-		"eslint": "^9.10.0",
-		"husky": "^9.1.5",
-		"lint-staged": "^15.2.10",
-		"prettier": "^3.3.3",
-		"rimraf": "^5.0.1",
-		"typescript": "^5.5.4",
-		"typescript-eslint": "^8.4.0"
+		"@types/node": "^22.14.1",
+		"eslint": "^9.24.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.1",
+		"prettier": "^3.5.3",
+		"rimraf": "^6.0.1",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.30.1"
 	},
+	"prettier": "@companion-module/tools/.prettierrc.json",
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
 			"prettier --write"
@@ -45,5 +47,5 @@
 			"yarn lint:raw --fix"
 		]
 	},
-	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+	"packageManager": "yarn@4.9.1"
 }
