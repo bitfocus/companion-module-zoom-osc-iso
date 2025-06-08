@@ -18,6 +18,7 @@ export enum ActionIdGlobal {
 	lowerAllHands = 'lowerAllHands',
 	clearSpotlight = 'clearSpotlight',
 	pingZoomOSC = 'pingZoomOSC',
+	startMeetng = 'startMeeting',
 	joinMeeting = 'joinMeeting',
 	leaveMeeting = 'leaveMeeting',
 	endMeeting = 'endMeeting',
@@ -139,6 +140,28 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				const command = createCommand(instance, '/ping')
 				const sendToCommand = {
 					id: ActionIdGlobal.pingZoomOSC,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdGlobal.startMeetng]: {
+			name: 'Start Meeting (PRO)',
+			options: [options.meetingID, options.password, options.name],
+			callback: async (action): Promise<void> => {
+				// type: 'Special'
+				const command = createCommand(instance, '/startMeeting')
+				const name = await instance.parseVariablesInString(action.options.name as string)
+				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				const password = await instance.parseVariablesInString(action.options.password as string)
+				command.args.push({ type: 's', value: meetingId })
+				command.args.push({ type: 's', value: password })
+				command.args.push({ type: 's', value: name })
+				const sendToCommand = {
+					id: ActionIdGlobal.startMeetng,
 					options: {
 						command: command.oscPath,
 						args: command.args,
