@@ -314,6 +314,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					label: 'Name',
 					id: 'name',
 					default: '',
+					useVariables: true,
+					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
 				},
 				{
 					type: 'dropdown',
@@ -367,6 +369,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					label: 'Name',
 					id: 'name',
 					default: '',
+					useVariables: true,
+					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
 				},
 			],
 			callback: async (feedback, context) => {
