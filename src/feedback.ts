@@ -1,7 +1,7 @@
 import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { InstanceBaseExt, userExist, colorRed } from './utils.js'
+import { InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -35,6 +35,8 @@ export enum feedbackType {
 	cameraOff = 7,
 	spotlightOn = 8,
 	spotlightOff = 9,
+	online,
+	offline,
 }
 
 export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
@@ -108,7 +110,18 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				return false
 			case feedbackType.selected:
 				return instance.ZoomClientDataObj.selectedCallers.find((element: number) => element === zoomID) ? true : false
-
+			case feedbackType.online: {
+				if (userExist(zoomID, instance.ZoomUserData)) {
+					return true
+				}
+				return false
+			}
+			case feedbackType.offline: {
+				if (userExist(zoomID, instance.ZoomUserData)) {
+					return false
+				}
+				return true
+			}
 			default:
 				return false
 		}
@@ -333,30 +346,29 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 						{ id: feedbackType.activeSpeaker, label: 'Active Speaker' },
 						{ id: feedbackType.spotlightOn, label: 'Spotlight On' },
 						{ id: feedbackType.spotlightOff, label: 'Spotlight Off' },
+						{ id: feedbackType.online, label: 'Online' },
+						{ id: feedbackType.offline, label: 'Offline' },
 					],
 				},
 			],
 			callback: async (feedback, context) => {
 				const name = await context.parseVariablesInString(feedback.options.name as string)
-				let zoomID = 0
-
-				if (name === 'me') {
-					zoomID = instance.ZoomMeData.zoomId
-					if (zoomID !== 0) {
-						return feedbackResults(feedback.options.type, zoomID)
-					}
-
+				if (name === '') {
 					return false
 				}
 
-				for (const iterator of instance.ZoomVariableLink) {
-					if (iterator.userName === name) {
-						zoomID = iterator.zoomId
-
-						return feedbackResults(feedback.options.type, zoomID)
-					}
+				if (name === 'me' && instance.ZoomMeData.zoomId !== 0) {
+					return feedbackResults(feedback.options.type, instance.ZoomMeData.zoomId)
 				}
-				return false
+
+				const user = getUserFromName(name, instance.ZoomVariableLink)
+				if (user !== undefined) {
+					return feedbackResults(feedback.options.type, user.zoomId)
+				} else if (feedback.options.type === feedbackType.offline) {
+					return true
+				} else {
+					return false
+				}
 			},
 		},
 		[FeedbackId.userNameBasedAdvanced]: {

@@ -177,6 +177,12 @@ export const userExist = (zoomId: number, zoomUserData: ZoomUserDataInterface): 
 	return false
 }
 
+export const getUserFromName = (
+	name: string,
+	zoomUserData: ZoomVariableLinkInterface[],
+): ZoomVariableLinkInterface | undefined => {
+	return zoomUserData.find((iterator: ZoomVariableLinkInterface) => iterator.userName === name)
+}
 export const options: Options = {
 	message: {
 		type: 'textinput',
