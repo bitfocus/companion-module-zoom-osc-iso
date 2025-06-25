@@ -120,9 +120,17 @@ export const createCommand = (
 		if (name != '' && name != undefined) {
 			// instance.log('debug', 'Override:' + name)
 			if (name === 'Me' || name === 'me' || name === 'all' || name === 'All') {
-				command.oscPath = `/zoom/${name.toLowerCase()}` + OSCAction
+				if (allExcept) {
+					command.oscPath = `/zoom/allExcept/${name.toLowerCase()}${OSCAction}`
+				} else {
+					command.oscPath = `/zoom/${name.toLowerCase()}${OSCAction}`
+				}
 			} else {
-				command.oscPath = `/zoom/userName` + OSCAction
+				if (allExcept) {
+					command.oscPath = `/zoom/allExcept/userName${OSCAction}`
+				} else {
+					command.oscPath = `/zoom/userName${OSCAction}`
+				}
 				command.args.push({ type: 's', value: name })
 			}
 			// Use the pre-selection options
