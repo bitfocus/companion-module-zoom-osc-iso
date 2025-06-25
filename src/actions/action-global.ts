@@ -72,8 +72,18 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Mute All Except Host but Mute Co-Host',
 			options: [],
 			callback: (): void => {
-				// type: 'Global'
-				const command = createCommand(instance, '/all/mute')
+				// const command = createCommand(instance, '/all/mute')
+
+				// hack because the /all/mute command mutes everyone except the
+				// ZoomISO host even when they are the co-host
+				// so we find the host and pass that to the /Mute command
+				const host = Object.values(instance.ZoomUserData).find((user) => user.userRole === 1)
+
+				instance.ZoomClientDataObj.selectedCallers.length = 0
+				instance.ZoomClientDataObj.selectedCallers.push(host.zoomId)
+				const shouldSavePreviousCaller = false
+				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+
 				const sendToCommand = {
 					id: ActionIdGlobal.muteAll,
 					options: {
@@ -336,6 +346,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [],
 			callback: (): void => {
 				// instance.log('debug', `before outputData: ${JSON.stringify(instance.ZoomOutputData)}`)
+
 				instance.updateInstance()
 				// instance.updateDefinitionsForActionsFeedbacksAndPresets()
 				// Make sure initial status is reflected

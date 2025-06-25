@@ -197,7 +197,7 @@ export function updateGroupVariables(
 	for (let userIndex = 0; userIndex < (group.users?.length ?? 0); userIndex++) {
 		const user = group.users[userIndex]
 		allUsers += userExist(Number(user.zoomID), instance.ZoomUserData)
-			? instance.ZoomUserData[user.zoomID as number].userName + ' '
+			? instance.ZoomUserData[user.zoomID as number].userName + ', '
 			: ''
 	}
 
