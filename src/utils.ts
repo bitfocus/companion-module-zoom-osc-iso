@@ -69,6 +69,7 @@ export interface ZoomUserDataInterface {
 		userRole?: number
 		spotlighted?: boolean
 		users: number[]
+		online?: boolean
 	}
 }
 
@@ -501,10 +502,12 @@ export const padding = (num: number, size: number): string => {
 export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	[x: string]: any
 	ZoomVariableLink: ZoomVariableLinkInterface[]
+	ZoomWaitingRoomVariableLink: ZoomVariableLinkInterface[]
 	ZoomClientDataObj: ZoomClientDataObjInterface
 	OSC: any
 	ZoomGroupData: ZoomGroupDataInterface[]
 	ZoomUserData: ZoomUserDataInterface
+	ZoomUserDataWaitingList: ZoomUserDataInterface
 	ZoomMeData: ZoomMeDataInterface
 	ZoomOutputData: ZoomOutputDataInterface
 	ZoomAudioLevelData: ZoomAudioLevelDataInterface

@@ -136,6 +136,11 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		})
 	}
 
+	selectUsersVariables.push({
+		name: `Waiting Room Participant ${1}`,
+		variableId: `WaitingRoomParticipant${padding(1, 3)}`,
+	})
+
 	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
 	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)
 	const outputVariablesDef: Set<CompanionVariableDefinition> = new Set(outputVariables)

@@ -254,6 +254,18 @@ export function updateZoomParticipantVariables(
 	}
 }
 
+export function updateZoomWaitingRoomParticipantVariables(
+	instance: InstanceBaseExt<ZoomConfig>,
+	variables: CompanionVariableValues,
+): void {
+	// Use the waiting room selection
+	for (let index = 1; index <= 1000; index++) {
+		variables[`WaitingRoomParticipant${padding(index, 3)}`] = instance.ZoomWaitingRoomVariableLink[index - 1]
+			? instance.ZoomWaitingRoomVariableLink[index - 1].userName
+			: '-'
+	}
+}
+
 export function updateZoomUserVariables(
 	instance: InstanceBaseExt<ZoomConfig>,
 	variables: CompanionVariableValues,

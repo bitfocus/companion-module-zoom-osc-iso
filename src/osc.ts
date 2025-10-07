@@ -25,6 +25,7 @@ import {
 	updateCallStatusVariables,
 	updateSpotlightGroupInitalizedVariable,
 	updateZoomOscVersion,
+	updateZoomWaitingRoomParticipantVariables,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -124,10 +125,11 @@ export class OSC {
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		this.pingInterval = setInterval(() => {
 			if (this.needToPingPong) {
-				// this.instance.log('debug', `**************** needToPingPong ${new Date()}.  Interval: ${this.pingIntervalTime}`)
+				this.instance.log('debug', `**************** needToPingPong ${new Date()}.  Interval: ${this.pingIntervalTime}`)
 				// Shall we leave this?
 				this.instance.updateStatus(InstanceStatus.Connecting, 'checking connection')
 				this.sendCommand('/zoom/ping')
+				// this.sendCommand('/zoom/listWaitingRoomUsers')
 			}
 		}, this.pingIntervalTime)
 	}
@@ -213,7 +215,19 @@ export class OSC {
 	 * @returns promise
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
+		// users is not online
+		if (data.args.length >= 10) {
+			if (data.args[7].value !== 1) {
+				this.instance.log('debug', `User is not online: ${JSON.stringify(data)}`)
+				return
+			} else {
+				// User is online
+				this.instance.log('debug', `User is online: ${JSON.stringify(data)}`)
+			}
+		}
+
 		const zoomId = parseInt(data.args[3].value)
+
 		// Only when a user is not in offline array
 		if (!this.instance.ZoomUserOffline[zoomId]) {
 			const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
@@ -229,17 +243,17 @@ export class OSC {
 					users: [],
 				}
 			} else if (data.args.length >= 10) {
-				// {int targetIndex}
-				// {str userName}
-				// {int galleryIndex}
-				// {int zoomID}
-				// {int targetCount}
-				// {int listCount}
-				// {int userRole}
-				// {int onlineStatus}
-				// {int videoStatus}
-				// {int audioStatus}
-				// {int handRaised}
+				// 0 {int targetIndex}
+				// 1 {str userName}
+				// 2 {int galleryIndex}
+				// 3 {int zoomID}
+				// 4 {int targetCount}
+				// 5 {int listCount}
+				// 6 {int userRole}
+				// 7 {int onlineStatus}
+				// 8 {int videoStatus}
+				// 9 {int audioStatus}
+				// 10 {int handRaised}
 				// this.instance.log('debug', `${data.args[1].value}, user role ${data.args[6].value}`)
 				this.instance.ZoomUserData[zoomId] = {
 					zoomId,
@@ -251,6 +265,7 @@ export class OSC {
 					mute: data.args[9].value === 0 ? true : false,
 					handRaised: data.args[10].value === 1 ? true : false,
 					users: [],
+					online: data.args[7].value === 1 ? true : false,
 				}
 				if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {
 					const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
@@ -269,6 +284,31 @@ export class OSC {
 			updateAllUserBasedVariables(this.instance, variables)
 			this.instance.setVariableValues(variables)
 			// this.instance.UpdateVariablesValues()
+		}
+	}
+
+	private createZoomUserWaitingRoom = async (data: ZoomOSCResponse) => {
+		const zoomId = parseInt(data.args[3].value)
+		const index = this.instance.ZoomWaitingRoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+		if (index === -1) {
+			this.instance.ZoomWaitingRoomVariableLink.push({ zoomId, userName: data.args[1].value })
+		}
+
+		if (data.args.length == 4) {
+			this.instance.ZoomUserDataWaitingList[zoomId] = {
+				zoomId,
+				targetIndex: data.args[0].value,
+				userName: data.args[1].value,
+				galleryIndex: data.args[2].value,
+				users: [],
+			}
+
+			this.instance.InitVariables()
+			const variables: CompanionVariableValues = {}
+			updateZoomWaitingRoomParticipantVariables(this.instance, variables)
+			this.instance.setVariableValues(variables)
+		} else {
+			this.instance.log('warn', 'create ZoomUserWaitingRoom wrong arguments in OSC feedback')
 		}
 	}
 
@@ -370,6 +410,38 @@ export class OSC {
 									)
 								}
 								break
+							case 'joinedWaitingRoom': {
+								this.instance.log('debug', 'receiving joinedWaitingRoom:' + JSON.stringify(data))
+								await this.createZoomUserWaitingRoom(data).then(() => {})
+								break
+							}
+							case 'leftWaitingRoom': {
+								this.instance.log('debug', 'receiving leftWaitingRoom:' + JSON.stringify(data))
+
+								if (userExist(zoomId, this.instance.ZoomUserDataWaitingList)) {
+									delete this.instance.ZoomUserDataWaitingList[zoomId]
+									const index = this.instance.ZoomWaitingRoomVariableLink.findIndex(
+										(id: { zoomId: number }) => id.zoomId === zoomId,
+									)
+									if (index > -1) {
+										this.instance.log(
+											'debug',
+											`Removed ${JSON.stringify(this.instance.ZoomWaitingRoomVariableLink.splice(index, 1))}`,
+										)
+									}
+									// this.instance.UpdateVariablesValues()
+									const variables: CompanionVariableValues = {}
+									updateZoomWaitingRoomParticipantVariables(this.instance, variables)
+									this.instance.setVariableValues(variables)
+								}
+								break
+								break
+							}
+							case 'waitingRoomUserList': {
+								this.instance.log('debug', 'receiving waitingRoomUserList:' + JSON.stringify(data))
+								await this.createZoomUserWaitingRoom(data).then(() => {})
+								break
+							}
 							case 'list':
 								// this.instance.log('info', 'receiving list data' + JSON.stringify(data))
 								// {int targetIndex}, {str userName}, {int galleryIndex}, {int zoomID}
@@ -565,7 +637,7 @@ export class OSC {
 								break
 							}
 							case 'userNameChanged': {
-								// this.instance.log('info', 'receiving:' + JSON.stringify(data))
+								// this.instance.log('info', 'userNameChanged receiving:' + JSON.stringify(data))
 								if (userExist(zoomId, this.instance.ZoomUserData)) {
 									this.instance.ZoomUserData[zoomId].userName = data.args[1].value
 									const findIndex = this.instance.ZoomVariableLink.findIndex(
@@ -692,10 +764,10 @@ export class OSC {
 								break
 							}
 							default:
-								// this.instance.log(
-								// 	'debug',
-								// 	`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`
-								// )
+								this.instance.log(
+									'debug',
+									`No Case provided for: ${data.address} - Arguments ${JSON.stringify(data.args)}`,
+								)
 								break
 						}
 						break
@@ -733,7 +805,7 @@ export class OSC {
 						break
 					}
 					case 'pong': {
-						this.instance.log('debug', 'receiving pong')
+						// this.instance.log('debug', 'receiving pong')
 						// this.instance.log('debug', `receiving pong ${JSON.stringify(data)}`)
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
@@ -885,6 +957,7 @@ export class OSC {
 								capturePermissionGranted: this.instance.ZoomClientDataObj.capturePermissionGranted,
 							}
 							this.instance.ZoomVariableLink.length = 0
+							this.instance.ZoomWaitingRoomVariableLink.length = 0
 
 							this.instance.ZoomGroupData = Array.from(
 								{ length: this.instance.ZoomClientDataObj.numberOfGroups + 2 },
@@ -895,6 +968,7 @@ export class OSC {
 							)
 
 							this.instance.ZoomUserData = {}
+							this.instance.ZoomUserDataWaitingList = {}
 							this.instance.InitVariables()
 							updateCallStatusVariables(this.instance, variables)
 							updateAllUserBasedVariables(this.instance, variables)
@@ -991,8 +1065,8 @@ export class OSC {
 						break
 					}
 					default:
-						// this.instance.log('info', 'No Case provided for:' + data.address)
-						// this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
+						this.instance.log('info', 'No Case provided for:' + data.address)
+						this.instance.log('info', 'Arguments' + JSON.stringify(data.args))
 						break
 				}
 			}
@@ -1025,6 +1099,7 @@ export class OSC {
 	}
 
 	public readonly sendISOPullingCommands = (): void => {
+		return
 		// this.instance.log('debug', 'sendISOPullingCommands')
 		this.sendCommand('/zoom/getEngineState', [])
 		this.sendCommand('/zoom/getAudioLevels', [])

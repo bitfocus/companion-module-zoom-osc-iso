@@ -68,6 +68,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	// Array with all callers
 	public ZoomUserData: ZoomUserDataInterface = {}
 
+	// Array with all callers waiting for the call
+	public ZoomUserDataWaitingList: ZoomUserDataInterface = {}
+
 	// Array with all output information
 	public ZoomOutputData: ZoomOutputDataInterface = {}
 
@@ -84,6 +87,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	public ZoomMeData: ZoomMeDataInterface = { zoomId: 0, userName: '' }
 
 	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
+	public ZoomWaitingRoomVariableLink: ZoomVariableLinkInterface[] = []
 
 	public OSC: OSC | null = null
 
@@ -142,6 +146,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 */
 	async destroy() {
 		this.ZoomUserData = {}
+		this.ZoomUserDataWaitingList = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
 		this.ZoomUserOffline = []
