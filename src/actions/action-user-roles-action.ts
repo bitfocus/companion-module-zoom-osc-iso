@@ -1,6 +1,6 @@
 import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
 import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, ZoomGroupDataInterface, options, userExist } from '../utils.js'
+import { InstanceBaseExt, ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
 import { sendActionCommand, createCommand, select, selectUser } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
 import {
@@ -10,6 +10,40 @@ import {
 	updateZoomParticipantVariables,
 	updateZoomUserVariables,
 } from '../variables/variable-values.js'
+import * as csv from '@fast-csv/parse'
+
+// Helper function to update local data after renaming a user
+function updateLocalUserData(instance: InstanceBaseExt<ZoomConfig>, name: string, newName: string): void {
+	const user = getUserFromName(name, instance.ZoomVariableLink)
+	if (user !== undefined) {
+		const oscPath = `/zoom/userName/rename`
+		const sendToCommand: any = {
+			id: 'rename',
+			options: {
+				command: oscPath,
+				args: [
+					{ type: 's', value: name },
+					{ type: 's', value: newName },
+				],
+			},
+		}
+		sendActionCommand(instance, sendToCommand)
+
+		instance.ZoomUserData[user.zoomId].userName = newName
+
+		// Update position and group
+		const index = instance.ZoomVariableLink.findIndex((finduser: { zoomId: number }) => finduser.zoomId === user.zoomId)
+		if (index !== -1) instance.ZoomVariableLink[index].userName = newName
+		instance.ZoomGroupData.forEach((group: ZoomGroupDataInterface) => {
+			group.users.forEach((user) => {
+				if (user.zoomID === user.zoomID) {
+					user.userName = newName
+					return
+				}
+			})
+		})
+	}
+}
 
 export enum ActionIdUserRolesAndAction {
 	makeHost = 'makeHost',
@@ -20,9 +54,11 @@ export enum ActionIdUserRolesAndAction {
 	makeAttendee = 'makeAttendee',
 	ejectParticipant = 'ejectParticipant',
 	rename = 'rename',
+	renameByName = 'renameByName',
 	allowToRecord = 'allowToRecord',
 	disallowToRecord = 'disallowToRecord',
 	selectUser = 'select_User',
+	bulkRename = 'bulk_Rename',
 }
 
 export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfig>): {
@@ -134,6 +170,75 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 				updateZoomUserVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
+			},
+		},
+		[ActionIdUserRolesAndAction.renameByName]: {
+			name: 'Rename By Name(PRO)',
+			options: [options.name, options.newName],
+			callback: async (action) => {
+				const name = await instance.parseVariablesInString(action.options.name as string)
+				const newName = await instance.parseVariablesInString(action.options.newName as string)
+				updateLocalUserData(instance, name, newName)
+			},
+		},
+		[ActionIdUserRolesAndAction.bulkRename]: {
+			name: 'Bulk Rename from CSV (PRO)',
+			options: [
+				{
+					type: 'textinput',
+					label: 'File to Load (Path and File Name)',
+					id: 'filepath',
+					useVariables: true,
+					default: '',
+				},
+				{
+					type: 'checkbox',
+					label: 'Has Header Row',
+					id: 'hasHeader',
+					default: false,
+				},
+			],
+			callback: async (action): Promise<void> => {
+				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+				const hasHeader = action.options.hasHeader as boolean
+				try {
+					let rowIndex = 0
+					csv
+						.parseFile(filepath, {
+							headers: false,
+							trim: true,
+							ignoreEmpty: true,
+						})
+						.on('error', (error: any) => instance.log('error', error))
+						.on('data', (row: any) => {
+							if (hasHeader && rowIndex++ === 0) return
+
+							const currentName = row[0]
+							const newName = row[1]
+							if (!currentName || !newName) {
+								instance.log(
+									'error',
+									`[WARN] Skipping row ${rowIndex}: need at least two columns. ${currentName}, ${newName}`,
+								)
+								return
+							}
+
+							updateLocalUserData(instance, currentName, newName)
+						})
+						.on('end', (rowCount: number) => {
+							if (rowCount > 0) {
+								const variables: CompanionVariableValues = {}
+								updateAllGroupVariables(instance, variables)
+								updateZoomParticipantVariables(instance, variables)
+								updateSelectedCallersVariables(instance, variables)
+								updateGalleryVariables(instance, variables)
+								updateZoomUserVariables(instance, variables)
+								instance.setVariableValues(variables)
+							}
+						})
+				} catch (error) {
+					instance.log('error', 'Error Reading File: ' + error)
+				}
 			},
 		},
 		[ActionIdUserRolesAndAction.makeHost]: {

@@ -130,6 +130,7 @@ export interface ZoomVariableLinkInterface {
 export interface Options {
 	message: EnforceDefault<CompanionInputFieldTextInput, string>
 	name: EnforceDefault<CompanionInputFieldTextInput, string>
+	newName: EnforceDefault<CompanionInputFieldTextInput, string>
 	audioChannelMode: EnforceDefault<CompanionInputFieldDropdown, string>
 	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
 	channel: EnforceDefault<CompanionInputFieldNumber, number>
@@ -195,6 +196,13 @@ export const options: Options = {
 		useVariables: true,
 		label: 'Name',
 		id: 'name',
+		default: '',
+	},
+	newName: {
+		type: 'textinput',
+		useVariables: true,
+		label: 'New Name',
+		id: 'newName',
 		default: '',
 	},
 	audioChannelMode: {
