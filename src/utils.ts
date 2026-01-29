@@ -50,6 +50,7 @@ export interface ZoomClientDataObjInterface {
 	numberOfGroups: number
 	engineState: number
 	capturePermissionGranted: boolean
+	isPro: boolean
 }
 
 export interface ZoomMeDataInterface {

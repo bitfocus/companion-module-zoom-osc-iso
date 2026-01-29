@@ -23,6 +23,7 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		{ name: 'Hands Raised Count', variableId: 'handRaisedCount' },
 		{ name: 'Share Screen On/Off', variableId: 'videoShareStatus' },
 		{ name: 'Spotlight Group Tracking Initalized', variableId: 'spotlightGroupTrackingInitalized' },
+		{ name: 'Is Pro License', variableId: 'isPro' },
 	])
 	// Groups
 	const groupPositionVariables = []
