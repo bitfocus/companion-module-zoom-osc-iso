@@ -761,6 +761,7 @@ export class OSC {
 						updateZoomOscVersion(this.instance, variables)
 						updateIsProVariable(this.instance, variables)
 						this.instance.setVariableValues(variables)
+						this.instance.checkFeedbacks(FeedbackId.isPro)
 
 						switch (versionInfo.substring(0, 4)) {
 							case 'ZISO': {
