@@ -298,6 +298,10 @@ export function updateZoomOscVersion(instance: InstanceBaseExt<ZoomConfig>, vari
 	variables['zoomVersion'] = instance.ZoomClientDataObj.zoomOSCVersion
 }
 
+export function updateIsProVariable(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
+	variables['isPro'] = instance.ZoomClientDataObj.isPro
+}
+
 export function updateNumberOfUsers(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
 	variables['numberOfUsers'] = Object.keys(instance.ZoomUserData).length
 }

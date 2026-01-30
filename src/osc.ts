@@ -25,6 +25,7 @@ import {
 	updateCallStatusVariables,
 	updateSpotlightGroupInitalizedVariable,
 	updateZoomOscVersion,
+	updateIsProVariable,
 } from './variables/variable-values.js'
 const osc = require('osc') // eslint-disable-line
 
@@ -752,12 +753,15 @@ export class OSC {
 						}
 
 						this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
+						this.instance.ZoomClientDataObj.isPro = data.args[7].value === 1
 						this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
 						updateCallStatusVariables(this.instance, variables)
 						updateZoomOscVersion(this.instance, variables)
+						updateIsProVariable(this.instance, variables)
 						this.instance.setVariableValues(variables)
+						this.instance.checkFeedbacks(FeedbackId.isPro)
 
 						switch (versionInfo.substring(0, 4)) {
 							case 'ZISO': {
@@ -883,6 +887,7 @@ export class OSC {
 								numberOfGroups: this.instance.ZoomClientDataObj.numberOfGroups,
 								engineState: this.instance.ZoomClientDataObj.engineState,
 								capturePermissionGranted: this.instance.ZoomClientDataObj.capturePermissionGranted,
+								isPro: this.instance.ZoomClientDataObj.isPro,
 							}
 							this.instance.ZoomVariableLink.length = 0
 

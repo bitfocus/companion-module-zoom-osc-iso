@@ -17,6 +17,7 @@ export enum FeedbackId {
 	audioOutput = 'audio_Output',
 	engineState = 'engine_State',
 	capturePermissionGranted = 'capture_permission_granted',
+	isPro = 'is_pro',
 }
 enum engineState {
 	disabled = 0,
@@ -538,6 +539,34 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			],
 			callback: (feedback) => {
 				if (instance.ZoomClientDataObj.capturePermissionGranted === feedback.options.state) {
+					return true
+				} else {
+					return false
+				}
+			},
+		},
+		[FeedbackId.isPro]: {
+			type: 'boolean',
+			name: 'Is Pro License',
+			description: 'Show feedback based on Pro or Lite/Essentials license',
+			defaultStyle: {
+				bgcolor: colorRed,
+			},
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Is Pro License',
+					id: 'isPro',
+					default: 1,
+					choices: [
+						{ id: 1, label: 'Pro' },
+						{ id: 0, label: 'Lite or Essentials' },
+					],
+				},
+			],
+			callback: (feedback) => {
+				const expectedIsPro = feedback.options.isPro === 1
+				if (instance.ZoomClientDataObj.isPro === expectedIsPro) {
 					return true
 				} else {
 					return false
