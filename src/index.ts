@@ -64,6 +64,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		numberOfGroups: 5,
 		engineState: -1,
 		capturePermissionGranted: false,
+		isPro: false,
 	}
 	// Array with all callers
 	public ZoomUserData: ZoomUserDataInterface = {}
