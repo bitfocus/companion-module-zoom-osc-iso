@@ -1,7 +1,6 @@
 ---
 name: companion-action-file-pattern
 description: 'Teaches the multi-file action pattern used in split-file Companion modules. Use when asked to add a new action category, create an action file, register actions in an aggregator, or extend the actions layer of a Companion module that splits actions across multiple files with a GetActions aggregator.'
-confidence: high
 ---
 
 # Companion Action File Pattern
@@ -10,10 +9,20 @@ This module splits action definitions across many files (one per category), then
 
 ## When to Use This Skill
 
-- Adding a new category of actions to a Companion module with split action files
-- Creating a new `src/actions/action-{category}.ts` file
-- Registering a new action file in the aggregator (`actions.ts`)
-- Understanding the TypeScript types and export shape for action files
+### ✅ Use this skill when:
+
+- You are adding a **new logical category** of actions that does not fit into any existing `src/actions/action-*.ts` file
+- You need to create a brand new `src/actions/action-{category}.ts` file from scratch
+- You need to wire a new file into the `actions.ts` aggregator for the first time
+- The new actions are conceptually distinct from existing categories (e.g., adding breakout room actions when none exist, or adding a recording actions file)
+
+### ❌ Do NOT use this skill when:
+
+- You only need to **add one or more actions to an existing file** — just open the existing `src/actions/action-{category}.ts`, add the new enum member(s) and action definition(s), and you're done. No new file, no aggregator changes needed.
+- You are modifying or renaming an existing action definition
+- You are adding a single utility action that logically belongs to a category that already has a file
+
+**The rule of thumb:** If a file for your category already exists → edit it directly. If no file exists for your category → use this skill to create one and wire it up.
 
 ## Pattern Overview
 
@@ -212,7 +221,7 @@ const actions: {
 	[id in
 		| ActionId // ← local enum for one-off actions defined inline
 		| ActionIdMyCategory
-		| ActionIdOtherCategory]: /* ... */ CompanionActionDefinition | undefined
+		| ActionIdOtherCategory /* ... */]: CompanionActionDefinition | undefined
 } = {
 	...actionsMyCategory,
 	...actionsOtherCategory,
