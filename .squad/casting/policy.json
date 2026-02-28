@@ -1,0 +1,7 @@
+{
+	"version": "1.0",
+	"universe_allowlist": ["lord-of-the-rings"],
+	"max_team_size": 20,
+	"allow_overflow": true,
+	"overflow_strategy": "diegetic-expansion"
+}

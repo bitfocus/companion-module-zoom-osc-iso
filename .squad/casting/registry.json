@@ -1,0 +1,50 @@
+[
+	{
+		"persistent_name": "Gandalf",
+		"universe": "lord-of-the-rings",
+		"role": "Lead",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	},
+	{
+		"persistent_name": "Samwise",
+		"universe": "lord-of-the-rings",
+		"role": "Integration Dev",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	},
+	{
+		"persistent_name": "Merry",
+		"universe": "lord-of-the-rings",
+		"role": "Module Dev",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	},
+	{
+		"persistent_name": "Eowyn",
+		"universe": "lord-of-the-rings",
+		"role": "Tester",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	},
+	{
+		"persistent_name": "Scribe",
+		"universe": null,
+		"role": "Session Logger",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	},
+	{
+		"persistent_name": "Ralph",
+		"universe": null,
+		"role": "Work Monitor",
+		"created_at": "2026-02-21T23:33:42.990Z",
+		"legacy_named": false,
+		"status": "active"
+	}
+]

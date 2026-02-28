@@ -1,0 +1,18 @@
+{
+	"assignments": [
+		{
+			"assignment_id": "init-2026-02-21",
+			"universe": "lord-of-the-rings",
+			"created_at": "2026-02-21T23:33:42.990Z",
+			"project": "companion-module-zoom-osc-iso",
+			"members": [
+				{ "name": "Gandalf", "role": "Lead" },
+				{ "name": "Samwise", "role": "Integration Dev" },
+				{ "name": "Merry", "role": "Module Dev" },
+				{ "name": "Eowyn", "role": "Tester" },
+				{ "name": "Scribe", "role": "Session Logger" },
+				{ "name": "Ralph", "role": "Work Monitor" }
+			]
+		}
+	]
+}
