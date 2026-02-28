@@ -25,3 +25,14 @@
 ## Learnings
 
 <!-- Append entries below -->
+
+### 2026-02-28: Created `companion-action-file-pattern` skill
+
+- **Location:** `.squad/skills/companion-action-file-pattern/SKILL.md`
+- **Covers:**
+  - Pattern 1 — Action file structure: TypeScript imports, the `ActionId*` enum, the `GetActions*()` factory function shape, all option types (textinput, number, dropdown, checkbox, etc.), accessing instance state in callbacks
+  - Pattern 2 — The aggregator (`actions.ts`): how it imports each file, calls each factory with typed locals, builds the union-typed combined object via spread, and returns it for `setActionDefinitions()`
+  - Pattern 3 — Step-by-step recipe with a fully generic file template and exact lines to add to `actions.ts`
+  - Common mistakes table (duplicate IDs, missing `.js` extension, missing async, missing type casts)
+- **Key insight:** `actions.ts` returns `CompanionActionDefinitions`; `index.ts` calls `this.setActionDefinitions(GetActions(this))`. The combined `actions` object uses a union of all category enums as its key type — adding a new file requires both adding to the union type AND spreading the factory result.
+- **Skill is generic** — no Zoom-specific references; placeholder names like `{Category}` and `myDevice_*` used throughout.

@@ -18,7 +18,7 @@ A reference skill for wiring the `osc` npm package into a Companion module. Cove
 ## Prerequisites
 
 - `@companion-module/base` installed
-- `osc` npm package installed (`npm install osc` or `yarn add osc`)
+- `osc` npm package installed (`yarn add osc`)
 - TypeScript project (tsconfig with `"module": "Node16"` or similar)
 
 ## Why `require()` Instead of ESM `import`
@@ -42,11 +42,11 @@ Define a typed interface for the incoming OSC message shape. The `osc` library d
 
 ```ts
 interface OSCMessage {
-  address: string
-  args: {
-    type: string   // OSC type tag: 'i' = int, 'f' = float, 's' = string, etc.
-    value: any
-  }[]
+	address: string
+	args: {
+		type: string // OSC type tag: 'i' = int, 'f' = float, 's' = string, etc.
+		value: any
+	}[]
 }
 ```
 
@@ -58,18 +58,18 @@ Keep the socket and all connection logic inside a dedicated `OSC` class. The `In
 
 ```ts
 export class OSC {
-  private readonly instance: InstanceBase<YourConfig>
-  private host = '127.0.0.1'
-  private txPort = 9000   // port we SEND to
-  private rxPort = 1234   // port we LISTEN on
-  private udpPort: any    // typed as any — osc package has no TS declarations
+	private readonly instance: InstanceBase<YourConfig>
+	private host = '127.0.0.1'
+	private txPort = 9000 // port we SEND to
+	private rxPort = 1234 // port we LISTEN on
+	private udpPort: any // typed as any — osc package has no TS declarations
 
-  constructor(instance: InstanceBase<YourConfig>) {
-    this.instance = instance
-    this.connect()
-  }
+	constructor(instance: InstanceBase<YourConfig>) {
+		this.instance = instance
+		this.connect()
+	}
 
-  // ...
+	// ...
 }
 ```
 
@@ -123,8 +123,6 @@ private readonly connect = (): void => {
   this.udpPort.open()
 }
 ```
-
-> **TCP alternative:** Replace `new osc.UDPPort(...)` with `new osc.TCPSocketPort({ address: this.host, port: this.txPort })` and call `.open()`. TCP uses a single bidirectional socket; there is no separate tx/rx port concept.
 
 ---
 
@@ -229,12 +227,12 @@ The standard pattern keeps the `sendCommand` call out of the action callback dir
 ```ts
 // action-utils.ts
 export const sendActionCommand = (
-  instance: InstanceBaseExt<YourConfig>,
-  action: { options: { command: string; args: any[] } },
+	instance: InstanceBaseExt<YourConfig>,
+	action: { options: { command: string; args: any[] } },
 ): void => {
-  if (instance.OSC) {
-    instance.OSC.sendCommand(action.options.command, action.options.args)
-  }
+	if (instance.OSC) {
+		instance.OSC.sendCommand(action.options.command, action.options.args)
+	}
 }
 ```
 
@@ -243,21 +241,21 @@ Then in an action definition:
 ```ts
 // actions/my-actions.ts
 export function GetMyActions(instance: InstanceBaseExt<YourConfig>): { [id: string]: CompanionActionDefinition } {
-  return {
-    myAction: {
-      name: 'Trigger device command',
-      options: [],
-      callback: (): void => {
-        const command = {
-          options: {
-            command: '/device/command',
-            args: [{ type: 'i', value: 1 }],
-          },
-        }
-        sendActionCommand(instance, command)
-      },
-    },
-  }
+	return {
+		myAction: {
+			name: 'Trigger device command',
+			options: [],
+			callback: (): void => {
+				const command = {
+					options: {
+						command: '/device/command',
+						args: [{ type: 'i', value: 1 }],
+					},
+				}
+				sendActionCommand(instance, command)
+			},
+		},
+	}
 }
 ```
 
@@ -380,37 +378,37 @@ this.instance.updateStatus(InstanceStatus.ConnectionFailure, 'Port in use')
 
 ## Error Handling Summary
 
-| Scenario | Where to handle | Action |
-|---|---|---|
-| `EADDRINUSE` on UDP open | `udpPort.on('error')` | Log error + `updateStatus(ConnectionFailure)` |
-| `sendCommand` throws | `try/catch` in `sendCommand` | Log error, do not rethrow |
-| Malformed incoming message | `try/catch` in `processMessage` | Log error with raw data |
-| Config changed mid-session | `configUpdated()` in module class | `destroy()` old OSC, create new |
+| Scenario                   | Where to handle                   | Action                                        |
+| -------------------------- | --------------------------------- | --------------------------------------------- |
+| `EADDRINUSE` on UDP open   | `udpPort.on('error')`             | Log error + `updateStatus(ConnectionFailure)` |
+| `sendCommand` throws       | `try/catch` in `sendCommand`      | Log error, do not rethrow                     |
+| Malformed incoming message | `try/catch` in `processMessage`   | Log error with raw data                       |
+| Config changed mid-session | `configUpdated()` in module class | `destroy()` old OSC, create new               |
 
 ---
 
 ## Key File Locations in This Repo (for reference)
 
-These files demonstrate the patterns above applied to a real Companion module (Zoom OSC):
+These files demonstrate the patterns above applied to a Companion module that integrates with an OSC device. Use them as a reference when implementing your own module:
 
-| Pattern | File |
-|---|---|
-| OSC class, socket, `sendCommand`, `processMessage` | `src/osc.ts` |
-| Module lifecycle (`init`, `configUpdated`, `destroy`) | `src/index.ts` |
-| Action-to-OSC wiring helpers (`createCommand`, `sendActionCommand`) | `src/actions/action-utils.ts` |
-| Sample action definition using `sendActionCommand` | `src/actions/action-global.ts` |
+| Pattern                                                             | File                           |
+| ------------------------------------------------------------------- | ------------------------------ |
+| OSC class, socket, `sendCommand`, `processMessage`                  | `src/osc.ts`                   |
+| Module lifecycle (`init`, `configUpdated`, `destroy`)               | `src/index.ts`                 |
+| Action-to-OSC wiring helpers (`createCommand`, `sendActionCommand`) | `src/actions/action-utils.ts`  |
+| Sample action definition using `sendActionCommand`                  | `src/actions/action-global.ts` |
 
 ---
 
 ## Troubleshooting
 
-| Issue | Likely Cause | Fix |
-|---|---|---|
-| `import osc from 'osc'` fails at runtime | osc package is CJS only | Use `const osc = require('osc')` |
-| No `args` on incoming message | `metadata: true` missing in UDPPort config | Add `metadata: true` |
-| `sendCommand` silently does nothing | `udpPort` not yet open | Ensure send is called after `'ready'` event |
-| Port conflict on config reload | Old socket not closed | Always call `destroy()` before creating new `OSC` instance |
-| Feedbacks not updating on message | `checkFeedbacks` not called | Call after updating state in `processMessage` handlers |
+| Issue                                    | Likely Cause                               | Fix                                                        |
+| ---------------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| `import osc from 'osc'` fails at runtime | osc package is CJS only                    | Use `const osc = require('osc')`                           |
+| No `args` on incoming message            | `metadata: true` missing in UDPPort config | Add `metadata: true`                                       |
+| `sendCommand` silently does nothing      | `udpPort` not yet open                     | Ensure send is called after `'ready'` event                |
+| Port conflict on config reload           | Old socket not closed                      | Always call `destroy()` before creating new `OSC` instance |
+| Feedbacks not updating on message        | `checkFeedbacks` not called                | Call after updating state in `processMessage` handlers     |
 
 ## References
 
