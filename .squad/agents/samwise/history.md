@@ -22,3 +22,20 @@
 ## Learnings
 
 <!-- Append entries below -->
+
+### 2026-02-28: Created `osc-integration` skill
+
+Wrote `.squad/skills/osc-integration/SKILL.md` — a generic, reusable skill covering the full OSC infrastructure pattern used in this codebase:
+- Why `require('osc')` is used instead of ESM import (CJS-only package)
+- `UDPPort` setup with `metadata: true`, tx/rx port split, and TCP alternative
+- Module lifecycle: `init` → `configUpdated` (destroy old OSC, create new) → `destroy`
+- `sendCommand` method with try/catch wrapping
+- `processMessage` address-splitting router pattern with try/catch
+- State update + `checkFeedbacks` pattern triggered by incoming OSC messages
+- Action-to-OSC wiring via `sendActionCommand` helper in `action-utils.ts`
+- Keepalive/polling timer pattern with nullable `NodeJS.Timeout` handles
+- `InstanceStatus` reporting at each connection lifecycle stage
+- Error handling table and troubleshooting guide
+- Key file pointers: `src/osc.ts`, `src/index.ts`, `src/actions/action-utils.ts`, `src/actions/action-global.ts`
+
+Skill is intentionally generic — no Zoom-specific address patterns included.

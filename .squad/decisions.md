@@ -57,3 +57,19 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 3. **Testing foundation (Eowyn)**: Set up vitest; start with unit tests for `utils.ts` helpers and action/feedback callbacks (pure functions)
 4. **Long-term (Samwise)**: Plan phased `osc.ts` decomposition (connection, message router, response handlers) — not urgent but core architectural debt
 5. **Optional**: Re-enable `no-explicit-any` as warning; gradually type `any` usages in `udpPort` and OSC response handlers
+
+---
+
+## 2026-02-28: User directives — Gandalf review clarifications
+
+**By:** Justin James (via Copilot)  
+**Decision:** Clarify intent on flagged items from Gandalf's review
+
+### Clarifications
+
+1. `UpgradeV2ToV3` registered twice is **intentional** — it runs (not registers) and must run twice. Not a bug.
+2. `require()` in osc.ts and feedback-state-machine.ts is **intentional** — the OSC library does not support ESM. Do not convert to ESM imports.
+3. `src/v2CommandsToUpgradeTov3.ts` orphan file at root is **intentional** — leave it alone.
+4. `no-explicit-any` disabled globally — acknowledged as legacy, defer typing improvements to later.
+
+**Rationale:** User clarification captured for team memory so agents do not re-flag these as issues.
