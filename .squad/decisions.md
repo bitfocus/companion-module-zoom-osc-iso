@@ -97,3 +97,31 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 4. `no-explicit-any` disabled globally — acknowledged as legacy, defer typing improvements to later.
 
 **Rationale:** User clarification captured for team memory so agents do not re-flag these as issues.
+
+---
+
+## 2025-03-01: Move tests to root-level `tests/` directory
+
+**By:** Eowyn (Tester)  
+**Requested by:** Gandalf (testing foundation recommendation)  
+**Decision:** Migrate all test files and mocks from `src/__tests__/` and `src/__mocks__/` to root-level `tests/` directory.
+
+### Changes Made
+
+- `src/__tests__/actions/*.ts` → `tests/actions/`
+- `src/__tests__/helpers/mock-instance.ts` → `tests/helpers/mock-instance.ts`
+- `src/__tests__/setup.ts` → `tests/setup.ts`
+- `src/__mocks__/feedback-state-machine.ts` → `tests/__mocks__/feedback-state-machine.ts`
+- `src/__mocks__/images.ts` → `tests/__mocks__/images.ts`
+- Updated all relative imports in moved files: `../../actions/` → `../../src/actions/`, etc.
+- Updated `jest.unstable_mockModule` path in `action-zoomiso-actions.test.ts`: `../../feedback.js` → `../../src/feedback.js`
+- Updated `jest.config.ts`: `testMatch`, `setupFilesAfterEnv`, and `moduleNameMapper` entries
+- Removed `src/__tests__/` and `src/__mocks__/`
+
+### Rationale
+
+Co-locating tests under a root-level `tests/` directory is a common convention that keeps `src/` clean and separates production code from test infrastructure. It also makes it easier to configure coverage, CI, and tooling that targets test files by directory.
+
+### Outcome
+
+All 318 tests across 28 test suites continue to pass after migration.

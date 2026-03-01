@@ -22,3 +22,13 @@
 ## Learnings
 
 <!-- Append entries below -->
+
+### 2025 — Tests moved to root-level `tests/` directory
+
+**Task:** Migrated all tests from `src/__tests__/` to `tests/` and mocks from `src/__mocks__/` to `tests/__mocks__/`.
+
+**Key learnings:**
+- When moving test files up one level (from `src/__tests__/actions/` to `tests/actions/`), all `../../` relative imports that previously pointed into `src/` must become `../../src/`. This applies to imports AND to `jest.unstable_mockModule()` path strings — both need the `src/` segment inserted.
+- The `moduleNameMapper` in `jest.config.ts` uses `<rootDir>` anchoring; updating those two paths (`feedback-state-machine` and `images`) was sufficient since no mock files have src-relative imports.
+- `perl -i -pe` is more reliable than `sed -i ''` on macOS for substitutions with special characters in paths.
+- After migration, 318/318 tests pass with 28 test suites.
