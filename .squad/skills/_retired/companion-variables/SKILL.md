@@ -210,21 +210,26 @@ export function UpdateVariableDefinitions(self: ModuleInstance): void {
 ## Common Pitfalls
 
 1. **Invalid variable IDs**
+
    - Variable IDs must be alphanumeric + underscore only
    - ❌ `'my-variable'`, `'My Variable'`, `'var.1'`
    - ✅ `'my_variable'`, `'var1'`, `'input_A_level'`
 
 2. **Not initializing values**
+
    - Always call `setVariableValues()` after `setVariableDefinitions()`
    - Undefined variables show as `$(internal:variable_not_found)` in buttons
 
 3. **Setting values before definitions**
+
    - Always call `setVariableDefinitions()` before `setVariableValues()`
 
 4. **Forgetting to update values**
+
    - Variables don't auto-update — you must call `setVariableValues()` when state changes
 
 5. **Using complex objects as values**
+
    - Variables only support primitives: string, number, boolean
    - Convert objects to strings: `JSON.stringify(obj)` if needed
 
