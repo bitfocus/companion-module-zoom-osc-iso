@@ -1,9 +1,9 @@
 import { CompanionPresetDefinitions } from '@companion-module/base'
 
 import { InstanceBaseExt } from './utils.js'
-import { CompanionPresetDefinitionsExt, CompanionPresetExt } from './presets/preset-utils.js'
-import { GetPresetsListParticipants } from './presets/preset-participants.js'
-import { GetPresetsListGallery } from './presets/preset-gallery.js'
+import { CompanionPresetExt } from './presets/preset-utils.js'
+import { PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
+import { PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
 import { PresetIdManageSelections, GetPresetsManageSelections } from './presets/preset-manage-selections.js'
 import { PresetIdGroups, GetPresetsGroups } from './presets/preset-groups.js'
 import {
@@ -25,30 +25,47 @@ import { PresetIdDataCustom, GetPresetsDataCustom } from './presets/preset-data-
 import { ZoomConfig } from './config.js'
 
 export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitions {
-	const presetsParticipants: CompanionPresetDefinitionsExt = GetPresetsListParticipants(instance)
-	const presetsGallery: CompanionPresetDefinitionsExt = GetPresetsListGallery(instance)
+	const presetsParticipants: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } =
+		GetPresetsListParticipants(instance)
+
+	const presetsGallery: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = GetPresetsListGallery(instance)
+
 	const presetsManageSelections: { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } =
 		GetPresetsManageSelections()
+
 	const presetsGroups: { [id in PresetIdGroups]: CompanionPresetExt | undefined } = GetPresetsGroups(instance)
+
 	const presetsPinSpotlightViewActions: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined } =
 		GetPresetsPinSpotlightViewActions()
+
 	const presetsVideoAudioActions: { [id in PresetIdVideoAudioActions]: CompanionPresetExt | undefined } =
 		GetPresetsVideoAudioActions()
+
 	const presetsZoomISOSelections: { [id in PresetIdZoomISOSelections]: CompanionPresetExt | undefined } =
 		GetPresetsZoomISOSelections(instance)
+
 	const presetsZoomISOActions: { [id in PresetIdZoomISOActions]: CompanionPresetExt | undefined } =
 		GetPresetsZoomISOActions(instance)
+
 	const presetsReactionNames: { [id in PresetIdReactionName]: CompanionPresetExt | undefined } =
 		GetPresetsReactionName(instance)
+
 	const presetsRoleManagement: { [id in PresetIdRoleManagement]: CompanionPresetExt | undefined } =
 		GetPresetsRoleManagement()
+
 	const presetsJoinLeaveEnd: { [id in PresetIdJoinLeaveEnd]: CompanionPresetExt | undefined } = GetPresetsJoinLeaveEnd()
+
 	const presetsDeviceSettings: { [id in PresetIdDeviceSettings]: CompanionPresetExt | undefined } =
 		GetPresetsDeviceSettings()
+
 	const presetChat: { [id in PresetIdChat]: CompanionPresetExt | undefined } = GetPresetsChat()
+
 	const presetSharing: { [id in PresetIdSharing]: CompanionPresetExt | undefined } = GetPresetsSharing()
+
 	const presetBreakout: { [id in PresetIdBreakout]: CompanionPresetExt | undefined } = GetPresetsBreakout()
+
 	const presetRecording: { [id in PresetIdRecording]: CompanionPresetExt | undefined } = GetPresetsRecording()
+
 	const presetDataCustom: { [id in PresetIdDataCustom]: CompanionPresetExt | undefined } = GetPresetsDataCustom()
 
 	const presets: {
@@ -68,7 +85,8 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 			| PresetIdSharing
 			| PresetIdBreakout
 			| PresetIdDataCustom
-			| string]: CompanionPresetExt | undefined
+			| PresetIdListParticipants
+			| PresetIdListGallery]: CompanionPresetExt | undefined
 	} = {
 		...presetsParticipants,
 		...presetsGallery,
