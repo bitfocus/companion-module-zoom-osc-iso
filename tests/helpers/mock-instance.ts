@@ -57,7 +57,7 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		},
 		log: jest.fn(),
 		OSC: { sendCommand: jest.fn() },
-		parseVariablesInString: jest.fn((s: string) => Promise.resolve(s)),
+		parseVariablesInString: jest.fn(async (s: string) => s),
 		ZoomVariableLink: [],
 		ZoomGroupData: [],
 		ZoomUserData: {},
