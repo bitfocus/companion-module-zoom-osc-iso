@@ -1,89 +1,126 @@
 import { FeedbackId } from '../feedback.js'
 import { InstanceBaseExt, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
-import { CompanionPresetDefinitionsExt } from './preset-utils.js'
+import { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ZoomConfig } from '../config.js'
 
-export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
-	const presets: CompanionPresetDefinitionsExt = {}
+export enum PresetIdZoomISOSelections {
+	applyOutput = 'Apply_Output',
+	applyOutputs = 'Apply_Outputs',
+	applyChannel = 'Apply_Channel',
+	selectChannel = 'Select_Channel',
+}
+
+export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): {
+	[id in PresetIdZoomISOSelections]: CompanionPresetExt | undefined
+} {
 	/**
 	 * ZoomISO Selections
 	 */
-	presets[`Apply_Output`] = {
-		type: 'button',
-		category: 'ZoomISO Selections',
-		name: `Apply_Output`,
-		style: {
-			text: `Apply Output`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOActions.applyOutput,
-						options: {},
-					},
-				],
-				up: [],
+	const presets: { [id in PresetIdZoomISOSelections]: CompanionPresetExt | undefined } = {
+		[PresetIdZoomISOSelections.applyOutput]: {
+			type: 'button',
+			category: 'ZoomISO Selections',
+			name: `Apply_Output`,
+			style: {
+				text: `Apply Output`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
 			},
-		],
-		feedbacks: [],
-	}
-	presets[`Apply_Outputs`] = {
-		type: 'button',
-		category: 'ZoomISO Selections',
-		name: `Apply_Outputs`,
-		style: {
-			text: `Apply Outputs`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdZoomISOActions.applyOutput,
+							options: {},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
 		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOActions.applyOutputs,
-						options: {},
-					},
-				],
-				up: [],
+		[PresetIdZoomISOSelections.applyOutputs]: {
+			type: 'button',
+			category: 'ZoomISO Selections',
+			name: `Apply_Outputs`,
+			style: {
+				text: `Apply Outputs`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
 			},
-		],
-		feedbacks: [],
-	}
-	presets[`Apply_Channel`] = {
-		type: 'button',
-		category: 'ZoomISO Selections',
-		name: `Apply_Channel`,
-		style: {
-			text: `Apply Channel`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdZoomISOActions.applyOutputs,
+							options: {},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
 		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOActions.applyChannel,
-						options: {},
-					},
-				],
-				up: [],
+		[PresetIdZoomISOSelections.applyChannel]: {
+			type: 'button',
+			category: 'ZoomISO Selections',
+			name: `Apply_Channel`,
+			style: {
+				text: `Apply Channel`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
 			},
-		],
-		feedbacks: [],
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdZoomISOActions.applyChannel,
+							options: {},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
+		},
+		[PresetIdZoomISOSelections.selectChannel]: {
+			type: 'button',
+			category: 'ZoomISO Selections',
+			name: `Select_Channel`,
+			style: {
+				text: `Select Channel`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
+			},
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdZoomISOActions.selectAudioChannel,
+							options: {
+								output: 1,
+							},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
+		},
 	}
+
+	const dynamicPresets = presets as { [key: string]: CompanionPresetExt | undefined }
 
 	const outputDataLength = Object.keys(instance.ZoomOutputData).length
 	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
 		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : `Output ${index}`
 
-		presets[`Select_Output_${index}`] = {
+		dynamicPresets[`Select_Output_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Selections',
 			name: `select_output_${index}`,
@@ -127,7 +164,7 @@ export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig
 		const outputAudioName = instance.ZoomAudioRoutingData[index]
 			? `${instance.ZoomAudioRoutingData[index].channel}. ${instance.ZoomAudioRoutingData[index].audio_device} - ${instance.ZoomAudioRoutingData[index].mode}`
 			: `Audio Channel ${index}`
-		presets[`Select_Audio_Channel_${index}`] = {
+		dynamicPresets[`Select_Audio_Channel_${index}`] = {
 			type: 'button',
 			category: 'ZoomISO Selections',
 			name: `Audio\nChannel${index}`,
@@ -162,32 +199,6 @@ export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig
 				},
 			],
 		}
-	}
-
-	presets[`Select_Channel`] = {
-		type: 'button',
-		category: 'ZoomISO Selections',
-		name: `Select_Channel`,
-		style: {
-			text: `Select Channel`,
-			size: '14',
-			color: colorBlack,
-			bgcolor: colorGreenOlive,
-		},
-		steps: [
-			{
-				down: [
-					{
-						actionId: ActionIdZoomISOActions.selectAudioChannel,
-						options: {
-							output: 1,
-						},
-					},
-				],
-				up: [],
-			},
-		],
-		feedbacks: [],
 	}
 
 	return presets
