@@ -1,11 +1,16 @@
-# Scribe — Project History
+# Project Context
+
+- **Project:** companion-module-zoom-osc-iso
+- **Created:** 2026-03-13
 
 ## Core Context
 
-**Project:** companion-module-zoom-osc-iso
-**User:** Justin James
-**My role:** Silent record-keeper. Write logs, merge decisions, maintain team memory.
+Agent Scribe initialized and ready for work.
+
+## Recent Updates
+
+📌 Team initialized on 2026-03-13
 
 ## Learnings
 
-<!-- Append entries below -->
+Initial setup complete.

@@ -1,50 +1,59 @@
-[
-	{
-		"persistent_name": "Gandalf",
-		"universe": "lord-of-the-rings",
-		"role": "Lead",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	},
-	{
-		"persistent_name": "Samwise",
-		"universe": "lord-of-the-rings",
-		"role": "Integration Dev",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	},
-	{
-		"persistent_name": "Merry",
-		"universe": "lord-of-the-rings",
-		"role": "Module Dev",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	},
-	{
-		"persistent_name": "Eowyn",
-		"universe": "lord-of-the-rings",
-		"role": "Tester",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	},
-	{
-		"persistent_name": "Scribe",
-		"universe": null,
-		"role": "Session Logger",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	},
-	{
-		"persistent_name": "Ralph",
-		"universe": null,
-		"role": "Work Monitor",
-		"created_at": "2026-02-21T23:33:42.990Z",
-		"legacy_named": false,
-		"status": "active"
-	}
-]
+{
+	"version": "1.0",
+	"assignments": [
+		{
+			"persistent_name": "Mal",
+			"universe": "Firefly",
+			"role": "Lead",
+			"agent_folder": "mal",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		},
+		{
+			"persistent_name": "Wash",
+			"universe": "Firefly",
+			"role": "Backend Dev",
+			"agent_folder": "wash",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		},
+		{
+			"persistent_name": "Kaylee",
+			"universe": "Firefly",
+			"role": "Module Dev",
+			"agent_folder": "kaylee",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		},
+		{
+			"persistent_name": "Zoe",
+			"universe": "Firefly",
+			"role": "Tester",
+			"agent_folder": "zoe",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		},
+		{
+			"persistent_name": "Scribe",
+			"universe": null,
+			"role": "Session Logger",
+			"agent_folder": "scribe",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		},
+		{
+			"persistent_name": "Ralph",
+			"universe": null,
+			"role": "Work Monitor",
+			"agent_folder": "ralph",
+			"legacy_named": false,
+			"status": "active",
+			"created_at": "2026-03-13T01:43:06Z"
+		}
+	]
+}

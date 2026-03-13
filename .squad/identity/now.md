@@ -1,9 +1,9 @@
 ---
-updated_at: 2026-02-21T23:33:42.990Z
-focus_area: Team setup
+updated_at: 2026-03-13T01:38:54.622Z
+focus_area: Initial setup
 active_issues: []
 ---
 
 # What We're Focused On
 
-Team hired and ready. Justin James is working on companion-module-zoom-osc-iso — a BitFocus Companion module for Zoom OSC/ISO via OSC protocol. Next step: assign work to the team.
+Getting started. Updated by coordinator at session start.

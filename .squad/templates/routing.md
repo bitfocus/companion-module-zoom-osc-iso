@@ -4,14 +4,16 @@ How to decide who handles what.
 
 ## Routing Table
 
-| Work Type                                      | Route To    | Examples                                                     |
-| ---------------------------------------------- | ----------- | ------------------------------------------------------------ |
-| Architecture, code review, scope               | Mal         | Module structure decisions, PR reviews, technical trade-offs |
-| OSC protocol, connection, variables            | Wash        | OSC message handling, connect/disconnect, state updates      |
-| Actions, feedbacks, presets, config            | Kaylee      | New actions, feedback definitions, module settings UI        |
-| Tests, quality, edge cases                     | Zoe         | Jest tests, coverage gaps, OSC message validation            |
-| Async issue work (bugs, tests, small features) | @copilot 🤖 | Well-defined tasks matching capability profile               |
-| Session logging                                | Scribe      | Automatic — never needs routing                              |
+| Work Type                                      | Route To    | Examples                                        |
+| ---------------------------------------------- | ----------- | ----------------------------------------------- |
+| {domain 1}                                     | {Name}      | {example tasks}                                 |
+| {domain 2}                                     | {Name}      | {example tasks}                                 |
+| {domain 3}                                     | {Name}      | {example tasks}                                 |
+| Code review                                    | {Name}      | Review PRs, check quality, suggest improvements |
+| Testing                                        | {Name}      | Write tests, find edge cases, verify fixes      |
+| Scope & priorities                             | {Name}      | What to build next, trade-offs, decisions       |
+| Async issue work (bugs, tests, small features) | @copilot 🤖 | Well-defined tasks matching capability profile  |
+| Session logging                                | Scribe      | Automatic — never needs routing                 |
 
 ## Issue Routing
 

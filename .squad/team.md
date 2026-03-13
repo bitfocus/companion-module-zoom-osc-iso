@@ -1,35 +1,29 @@
 # Squad Team
 
-## Project Context
+> companion-module-zoom-osc-iso
 
-**Project:** companion-module-zoom-osc-iso
-**Description:** BitFocus Companion module for Zoom OSC and Zoom ISO applications that communicate through the OSC protocol.
-**Stack:** TypeScript, Node.js, BitFocus Companion module API
-**User:** Justin James
-**Created:** 2026-02-21
+## Coordinator
 
----
+| Name  | Role        | Notes                                              |
+| ----- | ----------- | -------------------------------------------------- |
+| Squad | Coordinator | Routes work, enforces handoffs and reviewer gates. |
 
 ## Members
 
-| Name         | Role            | Specialty                                                                   | Badge      |
-| ------------ | --------------- | --------------------------------------------------------------------------- | ---------- |
-| Gandalf      | Lead            | Architecture, decisions, code review                                        | 🏗️ Lead    |
-| Samwise      | Integration Dev | OSC protocol, actions, feedbacks, state machine                             | 🔧 Backend |
-| Merry        | Module Dev      | Action definitions, feedbacks, variables, presets (Companion API standards) | 📐 Module  |
-| Eowyn        | Tester          | Tests, quality, edge cases                                                  | 🧪 Tester  |
-| Justin James | Final Approver  | Human review and approval gate for all significant work                     | 👤 Human   |
-| Scribe       | Session Logger  | Memory, decisions, session logs                                             | 📋 Scribe  |
-| Ralph        | Work Monitor    | Work queue, backlog, keep-alive                                             | 🔄 Monitor |
+| Name   | Role           | Charter                           | Status     |
+| ------ | -------------- | --------------------------------- | ---------- |
+| Mal    | Lead           | `.squad/agents/mal/charter.md`    | 🏗️ Active  |
+| Wash   | Backend Dev    | `.squad/agents/wash/charter.md`   | 🔧 Active  |
+| Kaylee | Module Dev     | `.squad/agents/kaylee/charter.md` | ⚛️ Active  |
+| Zoe    | Tester         | `.squad/agents/zoe/charter.md`    | 🧪 Active  |
+| Scribe | Session Logger | `.squad/agents/scribe/charter.md` | 📋 Silent  |
+| Ralph  | Work Monitor   | —                                 | 🔄 Monitor |
 
----
+## Project Context
 
-## Issue Source
-
-<!-- Populated when GitHub Issues Mode is activated -->
-
----
-
-## Human Team Members
-
-<!-- Populated when humans join the team -->
+- **Project:** companion-module-zoom-osc-iso
+- **Description:** BitFocus Companion module for Zoom OSC and Zoom ISO applications communicating via OSC protocol
+- **Stack:** TypeScript, Node.js, BitFocus Companion SDK
+- **Owner:** Justin James
+- **Created:** 2026-03-13
+- **Universe:** Firefly
