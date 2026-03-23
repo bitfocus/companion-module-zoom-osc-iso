@@ -5,7 +5,6 @@
  * if osc.ts is accidentally imported. Primary protection is the mock instance
  * (instance.OSC = { sendCommand: jest.fn() }) in mock-instance.ts.
  */
-import { jest } from '@jest/globals'
 jest.mock('osc', () => ({
 	UDPPort: jest.fn().mockImplementation(() => ({
 		send: jest.fn(),

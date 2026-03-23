@@ -1,17 +1,25 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
-import {
-	GetActionsUserBreakoutRooms,
-	ActionIdUserBreakoutRooms,
-} from '../../src/actions/action-user-breakout-rooms.js'
+import { GetActionsUserBreakoutRooms, ActionIdUserBreakoutRooms } from '../../src/actions/action-user-breakout-rooms.js'
 
 describe('GetActionsUserBreakoutRooms', () => {
 	// ── sendParticipantToBreakoutRoom ─────────────────────────────────────────
 	describe('sendParticipantToBreakoutRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/sendToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: 'John Smith', breakoutName: 'Room A' } } as any,
 					{} as any,
@@ -24,9 +32,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [1001] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/sendToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance({ selectedCallers: [1001] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: '', breakoutName: 'Room A' } } as any,
 					{} as any,
@@ -39,9 +58,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with multiple selected callers', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [1001, 1002] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/users/zoomID/sendToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance({ selectedCallers: [1001, 1002] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: '', breakoutName: 'Room B' } } as any,
 					{} as any,
@@ -58,9 +88,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 	// ── removeParticipantFromBreakoutRoom ─────────────────────────────────────
 	describe('removeParticipantFromBreakoutRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/removeFromBreakout', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom] as any).callback(
 					{ options: { userName: 'Jane Doe' } } as any,
 					{} as any,
@@ -72,9 +113,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [2002] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/removeFromBreakout', async () => {
-				const instance = createMockInstance({ selectedCallers: [2002] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
@@ -89,9 +141,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 	// ── assignParticipantToBreakoutRoom ───────────────────────────────────────
 	describe('assignParticipantToBreakoutRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/assignToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: 'John Smith', breakoutName: 'Room C' } } as any,
 					{} as any,
@@ -104,9 +167,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [3003] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/assignToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance({ selectedCallers: [3003] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: '', breakoutName: 'Room C' } } as any,
 					{} as any,
@@ -119,9 +193,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with multiple selected callers', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [3003, 3004] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/users/zoomID/assignToBreakout with breakoutName arg', async () => {
-				const instance = createMockInstance({ selectedCallers: [3003, 3004] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom] as any).callback(
 					{ options: { userName: '', breakoutName: 'Room D' } } as any,
 					{} as any,
@@ -138,9 +223,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 	// ── unassignParticipantFromBreakoutRoom ───────────────────────────────────
 	describe('unassignParticipantFromBreakoutRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/unassignFromBreakout', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom] as any).callback(
 					{ options: { userName: 'John Smith' } } as any,
 					{} as any,
@@ -152,9 +248,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [4004] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/unassignFromBreakout', async () => {
-				const instance = createMockInstance({ selectedCallers: [4004] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
@@ -169,9 +276,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 	// ── returnSelfToMainMeeting ───────────────────────────────────────────────
 	describe('returnSelfToMainMeeting', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/returnToMainMeeting', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.returnSelfToMainMeeting] as any).callback(
 					{ options: { userName: 'Jane Doe' } } as any,
 					{} as any,
@@ -183,9 +301,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [5005] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/returnToMainMeeting', async () => {
-				const instance = createMockInstance({ selectedCallers: [5005] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.returnSelfToMainMeeting] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
@@ -197,9 +326,20 @@ describe('GetActionsUserBreakoutRooms', () => {
 		})
 
 		describe('with multiple selected callers', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserBreakoutRooms>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [5005, 5006] })
+				actions = GetActionsUserBreakoutRooms(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/users/zoomID/returnToMainMeeting', async () => {
-				const instance = createMockInstance({ selectedCallers: [5005, 5006] })
-				const actions = GetActionsUserBreakoutRooms(instance)
 				await (actions[ActionIdUserBreakoutRooms.returnSelfToMainMeeting] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,

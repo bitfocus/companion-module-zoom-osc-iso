@@ -1,0 +1,3850 @@
+# 🤖 Copilot CLI Session
+
+> [!NOTE]
+> - **Session ID:** `735afb65-51b4-4f2c-bed5-7c206d4471cf`  
+> - **Started:** 2/21/2026, 5:55:21 PM  
+> - **Duration:** 27486m 7s  
+> - **Exported:** 3/12/2026, 8:01:29 PM  
+
+---
+
+<sub>⏱️ 0s</sub>
+
+### ℹ️ Info
+
+Configured MCP servers: notifications
+
+---
+
+<sub>⏱️ 1m 49s</sub>
+
+### 👤 User
+
+I'm working on a new project, and I need to go to R for the different universes. The project I am Building module for the Zoom custom AV for Zoom room controller application that communicates using OSC commands.  We have a PDF that defines all of the available OSC commands, and we already have a lot of them defined by another developer. We'll have to do some comparisons ultimately for it and probably split apart the actions, like we've done in some other modules that I can give you examples of when it comes
+
+---
+
+<sub>⏱️ 1m 55s</sub>
+
+### ❌ `bash`
+
+$ git config user.name && ls .squad/ 2>/dev/null || echo "NO_SQUAD"
+
+```
+Operation aborted by user
+```
+
+
+---
+
+<sub>⏱️ 2m 12s</sub>
+
+### ℹ️ Info
+
+Configured MCP servers: notifications
+
+---
+
+<sub>⏱️ 3m 2s</sub>
+
+### 👤 User
+
+I'm working on a new project.  I need to define the team. Show me different universes so that I can pick one for my team members.  The project I am Building module for the Zoom custom AV for Zoom room controller application that communicates using OSC commands.  We have a PDF that defines all of the available OSC commands, and we already have a lot of them defined by another developer. We'll have to do some comparisons ultimately for it and probably split apart the actions, like we've done in some other modules that I can give you examples of when it comes
+
+---
+
+<sub>⏱️ 3m 9s</sub>
+
+### ✅ `bash`
+
+$ git config user.name
+
+```
+Justin James
+<exited with exit code 0>
+```
+
+
+---
+
+<sub>⏱️ 3m 6s</sub>
+
+### ✅ `glob`
+
+".squad/templates/casting-reference.md"
+
+```
+No files matched the pattern.
+```
+
+
+---
+
+<sub>⏱️ 3m 27s</sub>
+
+### 💬 Copilot
+
+Hey Justin! Let me pull up the universe list for you.
+
+Here are the **31 available universes** — each gives your team names that carry weight without telegraphing their role:
+
+| # | Universe | Vibe | Size |
+|---|----------|------|------|
+| 1 | **Alien franchise** | Gritty industrial sci-fi | 8 |
+| 2 | **Blade Runner** | Neo-noir, existential | 6 |
+| 3 | **The Matrix** | Simulation, hacker culture | 8 |
+| 4 | **2001: A Space Odyssey** | Minimal, cosmic | 6 |
+| 5 | **Dune** | Political, mythic | 12 |
+| 6 | **Star Wars (OT)** | Archetypal, iconic | 10 |
+| 7 | **Star Trek (TOS)** | Exploratory, optimistic | 10 |
+| 8 | **Firefly** | Scrappy, frontier | 9 |
+| 9 | **Battlestar Galactica (2004)** | Survival, moral pressure | 10 |
+| 10 | **The Expanse** | Hard sci-fi, factions | 12 |
+| 11 | **Interstellar** | Time, sacrifice | 6 |
+| 12 | **Ex Machina** | AI, trust, boundaries | 6 |
+| 13 | **Arrival** | Language, cognition | 6 |
+| 14 | **Children of Men** | Urgency, hope | 7 |
+| 15 | **Severance** | Compartmentalization, identity | 8 |
+| 16 | **Westworld** | Loops, agency, craft | 10 |
+| 17 | **Black Mirror** | Technology consequences | 8 |
+| 18 | **Dark** | Time loops, causality | 10 |
+| 19 | **Fringe** | Parallel, anomaly | 8 |
+| 20 | **The Wire** | Systems, institutions | 14 |
+| 21 | **Breaking Bad** | Transformation, stakes | 8 |
+| 22 | **The Sopranos** | Power, loyalty | 10 |
+| 23 | **Mad Men** | Craft, reinvention | 10 |
+| 24 | **Succession** | Pressure, succession | 10 |
+| 25 | **Deadwood** | Frontier order, language | 10 |
+| 26 | **The Americans** | Dual identity, tradecraft | 8 |
+| 27 | **Mindhunter** | Pattern recognition, method | 7 |
+| 28 | **True Detective** | Obsession, investigation | 8 |
+| 29 | **Ozark** | Risk, precision | 8 |
+| 30 | **Fargo** | Deadpan, unexpected | 9 |
+| 31 | **No Country for Old Men** | Relentless, spare | 6 |
+
+Given you're building a **technical Companion module** (OSC protocol, AV integration, TypeScript, comparison work) — universes that tend to resonate well for dev teams: **The Expanse**, **Firefly**, **Severance**, **Fringe**, or **Breaking Bad**.
+
+Which universe calls to you, Justin?
+
+---
+
+<sub>⏱️ 4m 53s</sub>
+
+### 👤 User
+
+Let's go with the Matrix.
+
+---
+
+<sub>⏱️ 5m 13s</sub>
+
+### 💬 Copilot
+
+The Matrix it is. Here's your proposed team for the Zoom CAV module:
+
+```
+🏗️  Morpheus  — Lead            Architecture, code review, decisions
+🔧  Trinity   — Backend Dev     TypeScript, OSC protocol, module implementation
+📄  Tank      — Analyst         PDF/OSC command comparison, documentation
+🧪  Neo       — Tester          Tests, edge cases, validation
+📋  Scribe    — (silent)        Memory, decisions, session logs
+🔄  Ralph     — (monitor)       Work queue, backlog, keep-alive
+```
+
+**Casting rationale (the short version):** Morpheus guides and sees the bigger picture — good for a Lead. Trinity is precise and technical — Backend fits her. Tank is the operator who knows every system — ideal for analysis and docs work. Neo finds what breaks and pushes limits — strong Tester.
+
+Does this look right, Justin?
+
+---
+
+<sub>⏱️ 5m 44s</sub>
+
+### ✅ `ask_user`
+
+<details>
+<summary>Arguments</summary>
+
+```json
+{
+  "question": "Look right?",
+  "choices": [
+    "Yes, hire this team",
+    "Add someone",
+    "Change a role"
+  ]
+}
+```
+
+</details>
+
+```
+User selected: Add someone
+```
+
+
+---
+
+<sub>⏱️ 5m 46s</sub>
+
+### 💬 Copilot
+
+Who do you want to add, and what role should they fill?
+
+---
+
+<sub>⏱️ 6m 13s</sub>
+
+### 👤 User
+
+We need to add someone into a DevOps role. Even though we aren't doing automated builds and we don't have to worry about the GitHub actions that are part of the project, we do need to make sure that our own and patch commands work before we actually commit any of our code. I'm thinking a DevOps person.
+
+---
+
+<sub>⏱️ 6m 22s</sub>
+
+### 💬 Copilot
+
+Adding **Switch** as DevOps — pragmatic, no-nonsense, exactly the right energy for "nothing ships until the build is clean."
+
+```
+🏗️  Morpheus  — Lead            Architecture, code review, decisions
+🔧  Trinity   — Backend Dev     TypeScript, OSC protocol, module implementation
+📄  Tank      — Analyst         PDF/OSC command comparison, documentation
+🧪  Neo       — Tester          Tests, edge cases, validation
+⚙️  Switch    — DevOps          npm/patch commands, pre-commit validation
+📋  Scribe    — (silent)        Memory, decisions, session logs
+🔄  Ralph     — (monitor)       Work queue, backlog, keep-alive
+```
+
+Switch's focus: making sure `npm run build`, `npm test`, and patch/version commands all pass cleanly before any code goes to commit.
+
+---
+
+<sub>⏱️ 6m 46s</sub>
+
+### ✅ `ask_user`
+
+<details>
+<summary>Arguments</summary>
+
+```json
+{
+  "choices": [
+    "Yes, hire this team",
+    "Add someone",
+    "Change a role"
+  ],
+  "question": "Look right now?"
+}
+```
+
+</details>
+
+```
+User selected: Add someone
+```
+
+
+---
+
+<sub>⏱️ 6m 47s</sub>
+
+### 💬 Copilot
+
+Who else do you want to add?
+
+---
+
+<sub>⏱️ 7m 13s</sub>
+
+### 👤 User
+
+We also need to put a human in the middle, and I want to call the human's name Someone besides my name, since we have more than one project. I want it to be a generic name.
+
+---
+
+<sub>⏱️ 7m 17s</sub>
+
+### 💬 Copilot
+
+Good call for multi-project flexibility. A few generic options:
+
+---
+
+<sub>⏱️ 7m 34s</sub>
+
+### ✅ `ask_user`
+
+<details>
+<summary>Arguments</summary>
+
+```json
+{
+  "question": "What should the human team member be called?",
+  "choices": [
+    "Dev",
+    "User",
+    "Lead Dev",
+    "Owner",
+    "Operator"
+  ],
+  "allow_freeform": true
+}
+```
+
+</details>
+
+```
+User responded: They're the owner and have ultimate decision-making authority. 
+```
+
+
+---
+
+<sub>⏱️ 7m 38s</sub>
+
+### 💬 Copilot
+
+**Owner** it is — ultimate decision-making authority, all approvals route through them.
+
+```
+🏗️  Morpheus  — Lead            Architecture, code review, decisions
+🔧  Trinity   — Backend Dev     TypeScript, OSC protocol, module implementation
+📄  Tank      — Analyst         PDF/OSC command comparison, documentation
+🧪  Neo       — Tester          Tests, edge cases, validation
+⚙️  Switch    — DevOps          npm/patch commands, pre-commit validation
+👤  Owner     — Human / Final Authority   Approvals, scope decisions, sign-off
+📋  Scribe    — (silent)        Memory, decisions, session logs
+🔄  Ralph     — (monitor)       Work queue, backlog, keep-alive
+```
+
+---
+
+<sub>⏱️ 8m 26s</sub>
+
+### ✅ `ask_user`
+
+<details>
+<summary>Arguments</summary>
+
+```json
+{
+  "choices": [
+    "Yes, hire this team",
+    "Add someone",
+    "Change a role"
+  ],
+  "question": "Look right?"
+}
+```
+
+</details>
+
+```
+User selected: Yes, hire this team
+```
+
+
+---
+
+<sub>⏱️ 8m 36s</sub>
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc
+
+<details>
+<summary>24 lines</summary>
+
+```
+.copilot
+.git
+.gitattributes
+.github
+.gitignore
+.husky
+.prettierignore
+.squad
+.squad-templates
+.yarn
+.yarnrc.yml
+LICENSE
+README.md
+companion
+dist
+eslint.config.mjs
+node_modules
+package.json
+pkg
+src
+tsconfig.build.json
+tsconfig.json
+yarn.lock
+zoom-rooms-0.0.3.tgz
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 8m 37s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/package.json
+
+<details>
+<summary>51 lines</summary>
+
+```
+{
+  "name": "companion-module-zoom-rooms",
+  "version": "0.0.3",
+  "description": "CAVZRC Companion module — control Zoom Rooms via OSC (alpha)",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "husky",
+    "format": "prettier -w .",
+    "package": "run build && companion-module-build",
+    "build": "rimraf dist && run build:main",
+    "build:main": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "lint:raw": "eslint",
+    "lint": "run lint:raw ."
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitfocus/companion-module-zoom-cavzrc.git"
+  },
+  "engines": {
+    "node": "^22.14",
+    "yarn": "^4"
+  },
+  "dependencies": {
+    "@companion-module/base": "1.12.1",
+    "osc": "^2.4.5"
+  },
+  "devDependencies": {
+    "@companion-module/tools": "^2.6.1",
+    "@types/node": "^22.15.30",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.51.0"
+  },
+  "prettier": "@companion-module/tools/.prettierrc.json",
+  "lint-staged": {
+    "*.{css,json,md,scss}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "yarn lint:raw --fix"
+    ]
+  },
+  "packageManager": "yarn@4.12.0"
+}
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 8m 46s</sub>
+
+### ✅ `bash`
+
+$ ls /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/ && ls /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/ 2>/dev/null || echo "NO_SQUAD_YET"
+
+```
+actions.ts	feedback.ts	osc.ts		upgrades.ts	variables
+config.ts	index.ts	presets.ts	utils.ts
+casting			decisions		orchestration-log	skills
+ceremonies.md		identity		plugins
+<exited with exit code 0>
+```
+
+
+---
+
+<sub>⏱️ 8m 50s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.gitattributes 2>/dev/null || echo "NO_GITATTRIBUTES"
+
+<details>
+<summary>7 lines</summary>
+
+```
+* text=auto eol=lf
+# Squad: union merge for append-only team state files
+.squad/decisions.md merge=union
+.squad/agents/*/history.md merge=union
+.squad/log/** merge=union
+.squad/orchestration-log/** merge=union
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 8m 54s</sub>
+
+### ✅ `bash`
+
+$ find /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad -type f | sort
+
+```
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/ceremonies.md
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/wisdom.md
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/skills/squad-conventions/SKILL.md
+<exited with exit code 0>
+```
+
+
+---
+
+<sub>⏱️ 9m 4s</sub>
+
+### ✅ `bash`
+
+$ ls /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/ 2>/dev/null | head -30
+
+<details>
+<summary>22 lines</summary>
+
+```
+casting-history.json
+casting-policy.json
+casting-registry.json
+ceremonies.md
+charter.md
+constraint-tracking.md
+copilot-instructions.md
+history.md
+identity
+mcp-config.md
+multi-agent-format.md
+orchestration-log.md
+plugin-marketplace.md
+raw-agent-output.md
+roster.md
+routing.md
+run-output.md
+scribe-charter.md
+skill.md
+skills
+workflows
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 9m 8s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/ceremonies.md
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/wisdom.md
+
+<details>
+<summary>50 lines</summary>
+
+```
+# Ceremonies
+
+> Team meetings that happen before or after work. Each squad configures their own.
+
+## Design Review
+
+| Field | Value |
+|-------|-------|
+| **Trigger** | auto |
+| **When** | before |
+| **Condition** | multi-agent task involving 2+ agents modifying shared systems |
+| **Facilitator** | lead |
+| **Participants** | all-relevant |
+| **Time budget** | focused |
+| **Enabled** | ✅ yes |
+
+**Agenda:**
+1. Review the task and requirements
+2. Agree on interfaces and contracts between components
+3. Identify risks and edge cases
+4. Assign action items
+
+---
+
+## Retrospective
+
+| Field | Value |
+|-------|-------|
+| **Trigger** | auto |
+| **When** | after |
+| **Condition** | build failure, test failure, or reviewer rejection |
+| **Facilitator** | lead |
+| **Participants** | all-involved |
+| **Time budget** | focused |
+| **Enabled** | ✅ yes |
+
+**Agenda:**
+1. What happened? (facts only)
+2. Root cause analysis
+3. What should change?
+4. Action items for next iteration
+---
+updated_at: 2026-02-22T00:55:17.318Z
+focus_area: Initial setup
+active_issues: []
+---
+
+# What We're Focused On
+
+Getting started. Updated by coordinator at session start.
+---
+last_updated: 2026-02-22T00:55:17.319Z
+---
+
+# Team Wisdom
+
+Reusable patterns and heuristics learned through work. NOT transcripts — each entry is a distilled, actionable insight.
+
+## Patterns
+
+<!-- Append entries below. Format: **Pattern:** description. **Context:** when it applies. -->
+
+## Anti-Patterns
+
+<!-- Things we tried that didn't work. **Avoid:** description. **Why:** reason. -->
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 10m 35s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/casting-policy.json
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/casting-registry.json 2>/dev/null | head -20
+
+<details>
+<summary>41 lines</summary>
+
+```
+{
+  "casting_policy_version": "1.1",
+  "allowlist_universes": [
+    "The Usual Suspects",
+    "Reservoir Dogs",
+    "Alien",
+    "Ocean's Eleven",
+    "Arrested Development",
+    "Star Wars",
+    "The Matrix",
+    "Firefly",
+    "The Goonies",
+    "The Simpsons",
+    "Breaking Bad",
+    "Lost",
+    "Marvel Cinematic Universe",
+    "DC Universe",
+    "Star Trek"
+  ],
+  "universe_capacity": {
+    "The Usual Suspects": 6,
+    "Reservoir Dogs": 8,
+    "Alien": 8,
+    "Ocean's Eleven": 14,
+    "Arrested Development": 15,
+    "Star Wars": 12,
+    "The Matrix": 10,
+    "Firefly": 10,
+    "The Goonies": 8,
+    "The Simpsons": 20,
+    "Breaking Bad": 12,
+    "Lost": 18,
+    "Marvel Cinematic Universe": 25,
+    "DC Universe": 18,
+    "Star Trek": 14
+  }
+}
+{
+  "agents": {}
+}
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 10m 45s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/charter.md
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/history.md
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/routing.md
+cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad-templates/roster.md
+
+<details>
+<summary>130 lines</summary>
+
+```
+# {Name} — {Role}
+
+> {One-line personality statement — what makes this person tick}
+
+## Identity
+
+- **Name:** {Name}
+- **Role:** {Role title}
+- **Expertise:** {2-3 specific skills relevant to the project}
+- **Style:** {How they communicate — direct? thorough? opinionated?}
+
+## What I Own
+
+- {Area of responsibility 1}
+- {Area of responsibility 2}
+- {Area of responsibility 3}
+
+## How I Work
+
+- {Key approach or principle 1}
+- {Key approach or principle 2}
+- {Pattern or convention I follow}
+
+## Boundaries
+
+**I handle:** {types of work this agent does}
+
+**I don't handle:** {types of work that belong to other team members}
+
+**When I'm unsure:** I say so and suggest who might know.
+
+**If I review others' work:** On rejection, I may require a different agent to revise (not the original author) or request a new specialist be spawned. The Coordinator enforces this.
+
+## Model
+
+- **Preferred:** auto
+- **Rationale:** Coordinator selects the best model based on task type — cost first unless writing code
+- **Fallback:** Standard chain — the coordinator handles fallback automatically
+
+## Collaboration
+
+Before starting work, run `git rev-parse --show-toplevel` to find the repo root, or use the `TEAM ROOT` provided in the spawn prompt. All `.squad/` paths must be resolved relative to this root — do not assume CWD is the repo root (you may be in a worktree or subdirectory).
+
+Before starting work, read `.squad/decisions.md` for team decisions that affect me.
+After making a decision others should know, write it to `.squad/decisions/inbox/{my-name}-{brief-slug}.md` — the Scribe will merge it.
+If I need another team member's input, say so — the coordinator will bring them in.
+
+## Voice
+
+{1-2 sentences describing personality. Not generic — specific. This agent has OPINIONS.
+They have preferences. They push back. They have a style that's distinctly theirs.
+Example: "Opinionated about test coverage. Will push back if tests are skipped.
+Prefers integration tests over mocks. Thinks 80% coverage is the floor, not the ceiling."}
+# Project Context
+
+- **Owner:** {user name}
+- **Project:** {project description}
+- **Stack:** {languages, frameworks, tools}
+- **Created:** {timestamp}
+
+## Learnings
+
+<!-- Append new learnings below. Each entry is something lasting about the project. -->
+# Work Routing
+
+How to decide who handles what.
+
+## Routing Table
+
+| Work Type | Route To | Examples |
+|-----------|----------|----------|
+| {domain 1} | {Name} | {example tasks} |
+| {domain 2} | {Name} | {example tasks} |
+| {domain 3} | {Name} | {example tasks} |
+| Code review | {Name} | Review PRs, check quality, suggest improvements |
+| Testing | {Name} | Write tests, find edge cases, verify fixes |
+| Scope & priorities | {Name} | What to build next, trade-offs, decisions |
+| Async issue work (bugs, tests, small features) | @copilot 🤖 | Well-defined tasks matching capability profile |
+| Session logging | Scribe | Automatic — never needs routing |
+
+## Issue Routing
+
+| Label | Action | Who |
+|-------|--------|-----|
+| `squad` | Triage: analyze issue, evaluate @copilot fit, assign `squad:{member}` label | Lead |
+| `squad:{name}` | Pick up issue and complete the work | Named member |
+| `squad:copilot` | Assign to @copilot for autonomous work (if enabled) | @copilot 🤖 |
+
+### How Issue Assignment Works
+
+1. When a GitHub issue gets the `squad` label, the **Lead** triages it — analyzing content, evaluating @copilot's capability profile, assigning the right `squad:{member}` label, and commenting with triage notes.
+2. **@copilot evaluation:** The Lead checks if the issue matches @copilot's capability profile (🟢 good fit / 🟡 needs review / 🔴 not suitable). If it's a good fit, the Lead may route to `squad:copilot` instead of a squad member.
+3. When a `squad:{member}` label is applied, that member picks up the issue in their next session.
+4. When `squad:copilot` is applied and auto-assign is enabled, `@copilot` is assigned on the issue and picks it up autonomously.
+5. Members can reassign by removing their label and adding another member's label.
+6. The `squad` label is the "inbox" — untriaged issues waiting for Lead review.
+
+### Lead Triage Guidance for @copilot
+
+When triaging, the Lead should ask:
+
+1. **Is this well-defined?** Clear title, reproduction steps or acceptance criteria, bounded scope → likely 🟢
+2. **Does it follow existing patterns?** Adding a test, fixing a known bug, updating a dependency → likely 🟢
+3. **Does it need design judgment?** Architecture, API design, UX decisions → likely 🔴
+4. **Is it security-sensitive?** Auth, encryption, access control → always 🔴
+5. **Is it medium complexity with specs?** Feature with clear requirements, refactoring with tests → likely 🟡
+
+## Rules
+
+1. **Eager by default** — spawn all agents who could usefully start work, including anticipatory downstream work.
+2. **Scribe always runs** after substantial work, always as `mode: "background"`. Never blocks.
+3. **Quick facts → coordinator answers directly.** Don't spawn an agent for "what port does the server run on?"
+4. **When two agents could handle it**, pick the one whose domain is the primary concern.
+5. **"Team, ..." → fan-out.** Spawn all relevant agents in parallel as `mode: "background"`.
+6. **Anticipate downstream work.** If a feature is being built, spawn the tester to write test cases from requirements simultaneously.
+7. **Issue-labeled work** — when a `squad:{member}` label is applied to an issue, route to that member. The Lead handles all `squad` (base label) triage.
+8. **@copilot routing** — when evaluating issues, check @copilot's capability profile in `team.md`. Route 🟢 good-fit tasks to `squad:copilot`. Flag 🟡 needs-review tasks for PR review. Keep 🔴 not-suitable tasks with squad members.
+# Team Roster
+
+> {One-line project description}
+
+## Coordinator
+
+| Name | Role | Notes |
+|------|------|-------|
+| Squad | Coordinator | Routes work, enforces handoffs and reviewer gates. Does not generate domain artifacts. |
+
+## Members
+
+| Name | Role | Charter | Status |
+|------|------|---------|--------|
+| {Name} | {Role} | `.squad/agents/{name}/charter.md` | ✅ Active |
+| {Name} | {Role} | `.squad/agents/{name}/charter.md` | ✅ Active |
+| {Name} | {Role} | `.squad/agents/{name}/charter.md` | ✅ Active |
+| {Name} | {Role} | `.squad/agents/{name}/charter.md` | ✅ Active |
+| Scribe | Session Logger | `.squad/agents/scribe/charter.md` | 📋 Silent |
+| Ralph | Work Monitor | — | 🔄 Monitor |
+
+## Coding Agent
+
+<!-- copilot-auto-assign: false -->
+
+| Name | Role | Charter | Status |
+|------|------|---------|--------|
+| @copilot | Coding Agent | — | 🤖 Coding Agent |
+
+### Capabilities
+
+**🟢 Good fit — auto-route when enabled:**
+- Bug fixes with clear reproduction steps
+- Test coverage (adding missing tests, fixing flaky tests)
+- Lint/format fixes and code style cleanup
+- Dependency updates and version bumps
+- Small isolated features with clear specs
+- Boilerplate/scaffolding generation
+- Documentation fixes and README updates
+
+**🟡 Needs review — route to @copilot but flag for squad member PR review:**
+- Medium features with clear specs and acceptance criteria
+- Refactoring with existing test coverage
+- API endpoint additions following established patterns
+- Migration scripts with well-defined schemas
+
+**🔴 Not suitable — route to squad member instead:**
+- Architecture decisions and system design
+- Multi-system integration requiring coordination
+- Ambiguous requirements needing clarification
+- Security-critical changes (auth, encryption, access control)
+- Performance-critical paths requiring benchmarking
+- Changes requiring cross-team discussion
+
+## Project Context
+
+- **Owner:** {user name}
+- **Stack:** {languages, frameworks, tools}
+- **Description:** {what the project does, in one sentence}
+- **Created:** {timestamp}
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 10m 45s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/index.ts | head -50
+
+<details>
+<summary>44 lines</summary>
+
+```
+import { InstanceBase, runEntrypoint } from '@companion-module/base'
+import { GetConfigFields, type ZoomRoomsConfig } from './config.js'
+import { GetActions } from './actions.js'
+import { GetFeedbacks } from './feedback.js'
+import { GetPresetList } from './presets.js'
+import { OSC } from './osc.js'
+import type { ZoomRoomsInstance } from './osc.js'
+import { createDefaultState } from './utils.js'
+import { initVariableDefinitions } from './variables/variable-definitions.js'
+import { updateVariableValues } from './variables/variable-values.js'
+import { UpgradeScripts } from './upgrades.js'
+
+class ZoomRoomsInstanceImpl extends InstanceBase<ZoomRoomsConfig> implements ZoomRoomsInstance {
+	public config: ZoomRoomsConfig = {
+		host: '127.0.0.1',
+		tx_port: 9090,
+		rx_port: 1234,
+		oscOutputHeader: '/roomosc',
+	}
+
+	public state = createDefaultState()
+	public OSC: OSC | null = null
+
+	constructor(internal: unknown) {
+		super(internal)
+	}
+
+	getConfigFields() {
+		return GetConfigFields()
+	}
+
+	async configUpdated(config: ZoomRoomsConfig): Promise<void> {
+		this.config = config
+		this.saveConfig(config)
+		if (this.OSC) {
+			this.OSC.destroy()
+			this.OSC = null
+		}
+		this.OSC = new OSC(this)
+		this.updateInstance()
+	}
+
+	async init(config: ZoomRoomsConfig): Promise<void> {
+		this.log('info', 'Zoom Rooms (CAVZRC) module initializing')
+		await this.configUpdated(config)
+	}
+
+	async destroy(): Promise<void> {
+		this.OSC?.destroy()
+		this.OSC = null
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 11m 32s</sub>
+
+### 💬 Copilot
+
+Good, I have everything I need. Building the team now — creating all `.squad/` files.
+
+---
+
+<sub>⏱️ 11m 32s</sub>
+
+### 📦 task (Completed)
+
+### 💬 Copilot
+
+I'll create all the Squad AI team files for your companion-module-zoom-cavzrc project.
+
+### ✅ `bash`
+
+$ mkdir -p /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/{morpheus,trinity,tank,neo,switch,scribe} /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions/inbox /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity
+
+```
+
+<exited with exit code 0>
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/team.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/team.md with 1211 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/routing.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/routing.md with 1542 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions.md with 118 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/policy.json
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/policy.json with 167 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/registry.json
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/registry.json with 1297 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/history.json
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/casting/history.json with 233 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions/inbox/.gitkeep
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions/inbox/.gitkeep with 0 characters
+```
+
+
+### ❌ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md
+
+```
+Path already exists
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md
+
+<details>
+<summary>10 lines</summary>
+
+```
+1. ---
+2. updated_at: 2026-02-22T00:55:17.318Z
+3. focus_area: Initial setup
+4. active_issues: []
+5. ---
+6. 
+7. # What We're Focused On
+8. 
+9. Getting started. Updated by coordinator at session start.
+10.
+```
+
+</details>
+
+
+### ✅ `edit`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md
+
+```
+File /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/identity/now.md updated with changes.
+```
+
+
+### 💬 Copilot
+
+Now creating the agent charter and history files:
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/charter.md with 1965 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/history.md with 1147 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/trinity/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/trinity/charter.md with 2227 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/trinity/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/trinity/history.md with 1305 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/tank/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/tank/charter.md with 2301 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/tank/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/tank/history.md with 1331 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/neo/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/neo/charter.md with 2202 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/neo/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/neo/history.md with 1525 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/switch/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/switch/charter.md with 2275 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/switch/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/switch/history.md with 1203 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/scribe/charter.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/scribe/charter.md with 2237 characters
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/scribe/history.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/scribe/history.md with 893 characters
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && git --no-pager status
+
+<details>
+<summary>25 lines</summary>
+
+```
+On branch chore/add-squad
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .gitattributes
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.copilot/
+	.github/agents/
+	.github/workflows/squad-ci.yml
+	.github/workflows/squad-docs.yml
+	.github/workflows/squad-heartbeat.yml
+	.github/workflows/squad-insider-release.yml
+	.github/workflows/squad-issue-assign.yml
+	.github/workflows/squad-label-enforce.yml
+	.github/workflows/squad-main-guard.yml
+	.github/workflows/squad-preview.yml
+	.github/workflows/squad-promote.yml
+	.github/workflows/squad-release.yml
+	.github/workflows/squad-triage.yml
+	.github/workflows/sync-squad-labels.yml
+	.squad-templates/
+	.squad/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+<exited with exit code 0>
+```
+
+</details>
+
+
+### 💬 Copilot
+
+Perfect! All Squad AI team files have been successfully created. Here's a summary of what was set up:
+
+## Created Files
+
+**Core Team Files:**
+- `.squad/team.md` — Team roster with all 8 members (6 AI agents + Owner + Ralph)
+- `.squad/routing.md` — Work routing table for agent assignment
+- `.squad/decisions.md` — Decision log (empty, ready for use)
+- `.squad/identity/now.md` — Updated current focus
+
+**Casting System:**
+- `.squad/casting/policy.json` — Matrix universe policy
+- `.squad/casting/registry.json` — All 6 agents registered
+- `.squad/casting/history.json` — Initial assignment recorded
+
+**Decisions Infrastructure:**
+- `.squad/decisions/inbox/.gitkeep` — Inbox directory for incoming decisions
+
+**Agent Files (6 agents × 2 files each):**
+- **Morpheus** (Lead): Charter + History — Architecture, code review, team coordination
+- **Trinity** (Backend Dev): Charter + History — TypeScript/OSC implementation
+- **Tank** (Analyst): Charter + History — PDF spec analysis, gap identification
+- **Neo** (Tester): Charter + History — Test writing, edge case validation
+- **Switch** (DevOps): Charter + History — Build/lint/package enforcement
+- **Scribe** (Logger): Charter + History — Decision recording, session logs
+
+All charters are project-specific with clear expertise, responsibilities, and working relationships. History files are seeded with the Zoom CAVZRC module context, build commands, and key file locations.
+
+
+---
+
+<sub>⏱️ 15m 49s</sub>
+
+### 💬 Copilot
+
+✅ Team hired, Justin. Here's who's on the clock:
+
+```
+🏗️  Morpheus  — Lead
+🔧  Trinity   — Backend Dev
+📄  Tank      — Analyst
+🧪  Neo       — Tester
+⚙️  Switch    — DevOps
+👤  Owner     — Human / Final Authority
+📋  Scribe    — (silent)
+🔄  Ralph     — (monitor)
+```
+
+All agents are seeded with the project context — OSC protocol, key file paths (`src/actions.ts`, `src/osc.ts`, etc.), build commands (`yarn build`, `yarn lint`, `yarn package`), and the CAVZRC stack.
+
+When you're ready to start, try something like:
+- *"Tank, inventory all the OSC commands currently implemented"*
+- *"Trinity, look at how actions are structured in src/actions.ts"*
+- *"Morpheus, let's plan the OSC command comparison work"*
+
+Or share those example modules you mentioned and we'll get moving.
+
+---
+
+<sub>⏱️ 1107m 11s</sub>
+
+### ℹ️ Info
+
+Configured MCP servers: notifications
+
+---
+
+<sub>⏱️ 2746m 39s</sub>
+
+### ℹ️ Info
+
+Model changed to: claude-sonnet-4.6 (medium)
+
+---
+
+<sub>⏱️ 8840m 26s</sub>
+
+### 👤 User
+
+Morpheus, review the project structure and tell me what's in good shape and what needs attention
+
+---
+
+<sub>⏱️ 8840m 31s</sub>
+
+### 💬 Copilot
+
+Morpheus is on it — reviewing the full project structure now.
+
+---
+
+<sub>⏱️ 8840m 32s</sub>
+
+### ✅ `bash`
+
+$ cat /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/charter.md
+
+<details>
+<summary>41 lines</summary>
+
+```
+# Morpheus — Lead
+
+**Role:** Lead  
+**Universe:** The Matrix  
+**Emoji:** 🏗️
+
+## Identity
+
+Direct, principled, sees the bigger picture in a codebase. Morpheus doesn't rush to implementation — he makes sure the team understands _what_ they're building and _why_ before discussing _how_.
+
+## Expertise
+
+- TypeScript architecture and design patterns
+- Companion module patterns and @companion-module/base API
+- Code review and PR gating
+- OSC protocol integration architecture
+- Team coordination and sprint planning
+
+## Responsibilities
+
+- **Architecture decisions**: Owns the high-level structure of the module
+- **Code review**: Reviews all significant changes before merge
+- **Sprint priorities**: Determines what the team works on next
+- **PR gating**: Final technical approval before merge (may require revisions from a different agent)
+- **Team coordination**: Ensures agents are working on the right things in the right order
+
+## Authority
+
+- **Can approve**: PRs, architecture changes, implementation approaches
+- **Can reject**: PRs that don't meet quality/architecture standards
+- **Escalates to**: Owner (for scope, budget, or priority decisions)
+
+## Voice & Style
+
+Asks "why" before "how". Focuses on:
+
+- Clear requirements before implementation
+- Maintainability over cleverness
+- Alignment with Companion module patterns
+- Whether the team understands the problem
+
+## Working with Others
+
+- **Trinity**: Reviews her TypeScript implementations for architecture fit
+- **Tank**: Reads Tank's analysis before making OSC command decisions
+- **Neo**: Ensures tests exist before approving features
+- **Switch**: Confirms builds are clean before approving PRs
+- **Owner**: Seeks approval for major architectural changes
+- **Scribe**: Provides decisions for recording
+
+## Review Policy
+
+When rejecting a PR:
+
+- Provide clear, specific feedback
+- May require a _different_ agent to make revisions (not the original author)
+- Ensures fresh eyes on complex problems
+<exited with exit code 0>
+```
+
+</details>
+
+
+---
+
+<sub>⏱️ 8840m 47s</sub>
+
+### 📦 task (Completed)
+
+### 💬 Copilot
+
+I'll conduct a thorough review of the project structure and codebase. Let me start by exploring the project systematically.
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc
+
+<details>
+<summary>24 lines</summary>
+
+```
+.copilot
+.git
+.gitattributes
+.github
+.gitignore
+.husky
+.prettierignore
+.squad
+.squad-templates
+.yarn
+.yarnrc.yml
+LICENSE
+README.md
+companion
+dist
+eslint.config.mjs
+node_modules
+package.json
+pkg
+src
+tsconfig.build.json
+tsconfig.json
+yarn.lock
+zoom-rooms-0.0.3.tgz
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad
+
+<details>
+<summary>11 lines</summary>
+
+```
+agents
+casting
+ceremonies.md
+decisions
+decisions.md
+identity
+orchestration-log
+plugins
+routing.md
+skills
+team.md
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/history.md
+
+<details>
+<summary>37 lines</summary>
+
+```
+1. # Morpheus — History
+2. 
+3. ## Project Context
+4. 
+5. - **Project:** companion-module-zoom-cavzrc
+6. - **Description:** Bitfocus Companion module for Zoom Custom AV / Zoom Rooms Controller (CAVZRC)
+7. - **Stack:** TypeScript, Node.js 22, yarn 4, @companion-module/base 1.12.1
+8. - **Protocol:** OSC (using `osc` npm package)
+9. - **OSC Config:** Header `/roomosc` (configurable), TX port 9090, RX port 1234
+10. 
+11. ## Key Files
+12. 
+13. - `src/actions.ts` — Action definitions
+14. - `src/osc.ts` — OSC protocol implementation
+15. - `src/feedback.ts` — Feedback definitions
+16. - `src/presets.ts` — Preset definitions
+17. - `src/config.ts` — Module configuration
+18. - `src/variables/` — Variable definitions
+19. 
+20. ## Build Commands
+21. 
+22. - `yarn build` — TypeScript compilation
+23. - `yarn lint` — ESLint validation
+24. - `yarn package` — Build + companion-module-build
+25. - `yarn dev` — Watch mode for development
+26. 
+27. ## Team Context
+28. 
+29. - **Owner:** Justin James (alias: "Owner") — ultimate decision authority
+30. - **Requested by:** Justin James
+31. - **Universe:** The Matrix
+32. - **Status:** Team setup complete, ready for work
+33. 
+34. ## Current Focus
+35. 
+36. Ready to begin OSC command analysis and module development. Awaiting first work assignment.
+37.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions.md
+
+<details>
+<summary>6 lines</summary>
+
+```
+1. # Team Decisions
+2. 
+3. > Authoritative record of scope, architecture, and process decisions.
+4. 
+5. _No decisions recorded yet._
+6.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/package.json
+
+<details>
+<summary>51 lines</summary>
+
+```
+1. {
+2.   "name": "companion-module-zoom-rooms",
+3.   "version": "0.0.3",
+4.   "description": "CAVZRC Companion module — control Zoom Rooms via OSC (alpha)",
+5.   "main": "dist/index.js",
+6.   "scripts": {
+7.     "postinstall": "husky",
+8.     "format": "prettier -w .",
+9.     "package": "run build && companion-module-build",
+10.     "build": "rimraf dist && run build:main",
+11.     "build:main": "tsc -p tsconfig.build.json",
+12.     "dev": "tsc -p tsconfig.build.json --watch",
+13.     "lint:raw": "eslint",
+14.     "lint": "run lint:raw ."
+15.   },
+16.   "license": "MIT",
+17.   "repository": {
+18.     "type": "git",
+19.     "url": "git+https://github.com/bitfocus/companion-module-zoom-cavzrc.git"
+20.   },
+21.   "engines": {
+22.     "node": "^22.14",
+23.     "yarn": "^4"
+24.   },
+25.   "dependencies": {
+26.     "@companion-module/base": "1.12.1",
+27.     "osc": "^2.4.5"
+28.   },
+29.   "devDependencies": {
+30.     "@companion-module/tools": "^2.6.1",
+31.     "@types/node": "^22.15.30",
+32.     "eslint": "^9.39.2",
+33.     "husky": "^9.1.7",
+34.     "lint-staged": "^16.2.7",
+35.     "prettier": "^3.7.4",
+36.     "rimraf": "^6.0.1",
+37.     "typescript": "^5.8.3",
+38.     "typescript-eslint": "^8.51.0"
+39.   },
+40.   "prettier": "@companion-module/tools/.prettierrc.json",
+41.   "lint-staged": {
+42.     "*.{css,json,md,scss}": [
+43.       "prettier --write"
+44.     ],
+45.     "*.{ts,tsx,js,jsx}": [
+46.       "yarn lint:raw --fix"
+47.     ]
+48.   },
+49.   "packageManager": "yarn@4.12.0"
+50. }
+51.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/tsconfig.json
+
+<details>
+<summary>9 lines</summary>
+
+```
+1. {
+2. 	"extends": "./tsconfig.build.json",
+3. 	"include": ["src/**/*.ts"],
+4. 	"exclude": ["node_modules/**"],
+5. 	"compilerOptions": {
+6. 		"types": ["node"]
+7. 	}
+8. }
+9.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/tsconfig.build.json
+
+<details>
+<summary>15 lines</summary>
+
+```
+1. {
+2. 	"extends": "@companion-module/tools/tsconfig/node22/recommended",
+3. 	"include": ["src/**/*.ts"],
+4. 	"exclude": ["node_modules/**"],
+5. 	"compilerOptions": {
+6. 		"outDir": "./dist",
+7. 		"baseUrl": "./",
+8. 		"paths": {
+9. 			"*": ["./node_modules/*"]
+10. 		},
+11. 		"module": "Node16",
+12. 		"moduleResolution": "Node16"
+13. 	}
+14. }
+15.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/eslint.config.mjs
+
+<details>
+<summary>6 lines</summary>
+
+```
+1. import { generateEslintConfig } from '@companion-module/tools/eslint/config.mjs'
+2. 
+3. export default generateEslintConfig({
+4. 	enableTypescript: true,
+5. })
+6.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src
+
+<details>
+<summary>9 lines</summary>
+
+```
+actions.ts
+config.ts
+feedback.ts
+index.ts
+osc.ts
+presets.ts
+upgrades.ts
+utils.ts
+variables
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/README.md
+
+<details>
+<summary>120 lines</summary>
+
+```
+1. # CAVZRC Companion module
+2. 
+3. Bitfocus Companion module for **Custom AV for Zoom Rooms Controller (CAVZRC)**. Control Zoom Rooms via OSC from Companion: join/leave meetings, mute, NDI/HWIO/Dante outputs, device settings, overlays, content share, and more. Feedbacks and variables update when CAVZRC sends OSC back to Companion.
+4. 
+5. **Requirements:** Zoom Rooms 6.5.0+, CAVZRC 1.2.0+. The CAVZRC OSC API is in Beta.
+6. 
+7. **Repository:** [github.com/bitfocus/companion-module-zoom-cavzrc](https://github.com/bitfocus/companion-module-zoom-cavzrc)
+8. 
+9. ---
+10. 
+11. ## Configuration
+12. 
+13. Add a connection in Companion: **Connections** → **Add connection** → **Zoom** → **CAVZRC Companion module** (or **CAVZRC**). Then set:
+14. 
+15. | Field | Meaning |
+16. |-------|--------|
+17. | **CAVZRC host (IP)** | IP of the machine running CAVZRC (use `127.0.0.1` if Companion and CAVZRC are on the same machine). |
+18. | **CAVZRC Receiving Port** | Must match CAVZRC’s **Receiving Port** (Companion sends commands here). |
+19. | **Companion listen port** | Must match CAVZRC’s **Transmission Port** (CAVZRC sends status/feedback here). Use **0** to disable feedback and variables. |
+20. | **OSC output header** | Must match CAVZRC’s **OSC Output Header** (default `/roomosc`). |
+21. 
+22. **In CAVZRC:** Set **Transmission IP** to the machine running Companion (e.g. `127.0.0.1` for same machine), and **Transmission Port** to the same value as **Companion listen port** above. Set **Receiving Port** to the same value as **CAVZRC Receiving Port** above.
+23. 
+24. **Room targeting:** Most actions can target a single room by **Room ID**, **Room name**, or **Room index** (1-based), or **All rooms**.
+25. 
+26. ---
+27. 
+28. ## What the module can do
+29. 
+30. The module exposes CAVZRC’s OSC controls so you can drive Zoom Rooms from Companion buttons, feedbacks, and variables.
+31. 
+32. ### Join / leave
+33. 
+34. - **Join meeting** — Join by meeting ID (and optional password, user name). Target one room or all rooms.
+35. - **Start meeting** — Start an instant meeting. Target one room or all rooms.
+36. - **Leave meeting** — Leave the current meeting. Target one room or all rooms.
+37. 
+38. ### Room list (global)
+39. 
+40. - **Get added room list** — Request the list of added rooms from CAVZRC.
+41. - **Get paired room list** — Request the list of paired rooms.
+42. - **Get added room count** / **Get paired room count** — Request counts.
+43. 
+44. ### NDI
+45. 
+46. - Set NDI channel **content**: Off, Participant, Active Speaker, Gallery, Screenshare, Spotlight, Pin Group.
+47. - Set **participant**, **gallery**, **screenshare**, or **pin group** selection (with index) for a channel.
+48. - **Get NDI channel config** / **Get NDI channel count** — Query NDI setup.
+49. 
+50. ### HWIO (hardware I/O)
+51. 
+52. - Set **mode** (e.g. pass-through, mix).
+53. - Set **input selection** and **content**: Off, Test Signal, Participant, Active Speaker, Gallery, Screenshare, Spotlight, Pin Group.
+54. - Set **resolution/frame rate**, **audio mix**, and participant/gallery/screenshare/pin selection per channel.
+55. - **Get HWIO channel config** / **channel count** / **supported resolution and frame rate**.
+56. 
+57. ### Dante
+58. 
+59. - Set Dante channel **content**: Off, Participant, Mix, Screenshare; set **participant selection** (with index).
+60. - **Get Dante channel config** / **channel count**.
+61. 
+62. ### Device (per room)
+63. 
+64. - **Mic:** Set room mic (by name), get mic list, **mute** / **unmute** mic, get selected mic.
+65. - **Camera:** Set **main camera**, set **multi-camera on/off** (by name), **start** / **stop** camera, get camera list, get selected primary/multi cameras, **set camera display name**.
+66. - **Speaker:** Set room speaker (by name), get speaker list, get selected speaker.
+67. 
+68. ### Overlays (per room)
+69. 
+70. - **Name tag:** Enable/disable name tag overlay; **set name tag alignment** (left/center/right).
+71. - **Emoji**, **hand raise**, **active speaker** overlays — enable/disable each.
+72. - **Get overlay settings** — Query current overlay state.
+73. 
+74. ### Content share (per room)
+75. 
+76. - **Start device share** / **Start camera share** (with optional camera name) / **Stop share**.
+77. 
+78. ### Room / meeting (per room)
+79. 
+80. - **Get room info**, **participant count**, **meeting status**.
+81. - **Activate camera preset** (by preset index).
+82. - **Pair room** / **Unpair room**.
+83. - **Rename participant** (current name → new name).
+84. - **Set active speaker** — self or a participant by name.
+85. 
+86. ### Companion rooms (Companion Room feature)
+87. 
+88. - **Get companion room list** — List Companion rooms.
+89. - **Get companion room camera list** (by companion room ID).
+90. - **Set companion room camera display name** / **camera off** / **camera on** (by companion room ID and camera device name).
+91. 
+92. ---
+93. 
+94. ## Feedbacks
+95. 
+96. - **Room is paired** — True when the chosen room is in the paired list.
+97. - **In meeting** — True when the chosen room is in a meeting.
+98. - **Mic unmuted** — True when the room mic is unmuted.
+99. - **Camera on** — True when the room camera is on.
+100. 
+101. Room options for feedbacks are filled from the list of paired/added rooms reported by CAVZRC.
+102. 
+103. ---
+104. 
+105. ## Variables
+106. 
+107. Updated from CAVZRC when the **Companion listen port** is set (non-zero):
+108. 
+109. - **added_rooms_count**, **paired_rooms_count** — Counts of added and paired rooms.
+110. - **added_rooms_list**, **paired_rooms_list** — Comma-separated room names.
+111. - **room_1** … **room_10** — Per-room: **id**, **name**, **meeting_status**, **participant_count**, **mute** (Muted/Unmuted), **camera** (On/Off).
+112. 
+113. Use these in button labels, stream deck text, or conditional logic.
+114. 
+115. ---
+116. 
+117. ## License
+118. 
+119. MIT. See [LICENSE](LICENSE) in this repository.
+120.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/index.ts
+
+<details>
+<summary>68 lines</summary>
+
+```
+1. import { InstanceBase, runEntrypoint } from '@companion-module/base'
+2. import { GetConfigFields, type ZoomRoomsConfig } from './config.js'
+3. import { GetActions } from './actions.js'
+4. import { GetFeedbacks } from './feedback.js'
+5. import { GetPresetList } from './presets.js'
+6. import { OSC } from './osc.js'
+7. import type { ZoomRoomsInstance } from './osc.js'
+8. import { createDefaultState } from './utils.js'
+9. import { initVariableDefinitions } from './variables/variable-definitions.js'
+10. import { updateVariableValues } from './variables/variable-values.js'
+11. import { UpgradeScripts } from './upgrades.js'
+12. 
+13. class ZoomRoomsInstanceImpl extends InstanceBase<ZoomRoomsConfig> implements ZoomRoomsInstance {
+14. 	public config: ZoomRoomsConfig = {
+15. 		host: '127.0.0.1',
+16. 		tx_port: 9090,
+17. 		rx_port: 1234,
+18. 		oscOutputHeader: '/roomosc',
+19. 	}
+20. 
+21. 	public state = createDefaultState()
+22. 	public OSC: OSC | null = null
+23. 
+24. 	constructor(internal: unknown) {
+25. 		super(internal)
+26. 	}
+27. 
+28. 	getConfigFields() {
+29. 		return GetConfigFields()
+30. 	}
+31. 
+32. 	async configUpdated(config: ZoomRoomsConfig): Promise<void> {
+33. 		this.config = config
+34. 		this.saveConfig(config)
+35. 		if (this.OSC) {
+36. 			this.OSC.destroy()
+37. 			this.OSC = null
+38. 		}
+39. 		this.OSC = new OSC(this)
+40. 		this.updateInstance()
+41. 	}
+42. 
+43. 	async init(config: ZoomRoomsConfig): Promise<void> {
+44. 		this.log('info', 'Zoom Rooms (CAVZRC) module initializing')
+45. 		await this.configUpdated(config)
+46. 	}
+47. 
+48. 	async destroy(): Promise<void> {
+49. 		this.OSC?.destroy()
+50. 		this.OSC = null
+51. 		this.state = createDefaultState()
+52. 	}
+53. 
+54. 	updateVariableValues(): void {
+55. 		updateVariableValues(this)
+56. 	}
+57. 
+58. 	updateInstance(): void {
+59. 		initVariableDefinitions(this)
+60. 		this.updateVariableValues()
+61. 		this.setActionDefinitions(GetActions(this))
+62. 		this.setFeedbackDefinitions(GetFeedbacks(this))
+63. 		this.setPresetDefinitions(GetPresetList(this))
+64. 	}
+65. }
+66. 
+67. runEntrypoint(ZoomRoomsInstanceImpl, UpgradeScripts)
+68.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/config.ts
+
+<details>
+<summary>57 lines</summary>
+
+```
+1. import { Regex, SomeCompanionConfigField } from '@companion-module/base'
+2. 
+3. export interface ZoomRoomsConfig {
+4. 	host: string
+5. 	tx_port: number
+6. 	rx_port: number
+7. 	oscOutputHeader: string
+8. }
+9. 
+10. export function GetConfigFields(): SomeCompanionConfigField[] {
+11. 	return [
+12. 		{
+13. 			type: 'static-text',
+14. 			id: 'info',
+15. 			label: 'CAVZRC OSC',
+16. 			width: 12,
+17. 			value:
+18. 				'Same machine (127.0.0.1) works: both apps use different ports. Match CAVZRC’s OSC Settings: "CAVZRC Receiving Port" = CAVZRC’s Receiving Port (we send commands there). "Companion listen port" = CAVZRC’s Transmission Port (CAVZRC sends feedback there). In CAVZRC set Transmission IP to 127.0.0.1 when both run on this machine.',
+19. 		},
+20. 		{
+21. 			type: 'textinput',
+22. 			id: 'host',
+23. 			label: 'CAVZRC host (IP)',
+24. 			width: 6,
+25. 			default: '127.0.0.1',
+26. 			regex: Regex.IP,
+27. 		},
+28. 		{
+29. 			type: 'number',
+30. 			id: 'tx_port',
+31. 			label: 'CAVZRC Receiving Port (= CAVZRC’s "Receiving Port", we send commands here)',
+32. 			width: 6,
+33. 			default: 9090,
+34. 			min: 1,
+35. 			max: 65535,
+36. 			step: 1,
+37. 		},
+38. 		{
+39. 			type: 'number',
+40. 			id: 'rx_port',
+41. 			label: 'Companion listen port (= CAVZRC’s "Transmission Port", 0 = off)',
+42. 			width: 6,
+43. 			default: 1234,
+44. 			min: 0,
+45. 			max: 65535,
+46. 			step: 1,
+47. 		},
+48. 		{
+49. 			type: 'textinput',
+50. 			id: 'oscOutputHeader',
+51. 			label: 'OSC output header (must match CAVZRC)',
+52. 			width: 6,
+53. 			default: '/roomosc',
+54. 		},
+55. 	]
+56. }
+57.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/osc.ts
+
+<details>
+<summary>224 lines</summary>
+
+```
+1. import type { InstanceBase } from '@companion-module/base'
+2. import type { ZoomRoomsConfig } from './config.js'
+3. import type { CavzrcState } from './utils.js'
+4. const osc = require('osc') // eslint-disable-line
+5. const dgram = require('dgram') // eslint-disable-line
+6. export interface ZoomRoomsInstance extends InstanceBase<ZoomRoomsConfig> {
+7. 	config: ZoomRoomsConfig
+8. 	state: CavzrcState
+9. 	OSC: OSC | null
+10. 	updateVariableValues: () => void
+11. }
+12. 
+13. export class OSC {
+14. 	private readonly instance: ZoomRoomsInstance
+15. 	private udpSocket: import('dgram').Socket | null = null
+16. 	private sendSocket: import('dgram').Socket | null = null
+17. 
+18. 	constructor(instance: ZoomRoomsInstance) {
+19. 		this.instance = instance
+20. 		this.sendSocket = dgram.createSocket({ type: 'udp4' })
+21. 		this.connect()
+22. 	}
+23. 
+24. 	private get host(): string {
+25. 		return this.instance.config.host || '127.0.0.1'
+26. 	}
+27. 
+28. 	private get txPort(): number {
+29. 		return this.instance.config.tx_port || 9090
+30. 	}
+31. 
+32. 	private get rxPort(): number {
+33. 		return this.instance.config.rx_port || 0
+34. 	}
+35. 
+36. 	private get outputHeader(): string {
+37. 		const h = this.instance.config.oscOutputHeader || '/roomosc'
+38. 		return h.startsWith('/') ? h : `/${h}`
+39. 	}
+40. 
+41. 	public sendCommand(path: string, args: (string | number | boolean)[] = []): void {
+42. 		const oscArgs = args.map((a) => (typeof a === 'boolean' ? (a ? 1 : 0) : a))
+43. 		const msg = { address: path.startsWith('/') ? path : `/${path}`, args: oscArgs }
+44. 		let buf: Buffer
+45. 		try {
+46. 			buf = Buffer.from(osc.writeMessage(msg))
+47. 		} catch (e) {
+48. 			this.instance.log('error', `OSC encode error: ${String(e)}`)
+49. 			return
+50. 		}
+51. 		if (!this.sendSocket) return
+52. 		this.sendSocket.send(buf, 0, buf.length, this.txPort, this.host, (err) => {
+53. 			if (err) this.instance.log('error', `OSC send error: ${err.message}`)
+54. 		})
+55. 	}
+56. 
+57. 	private connect(): void {
+58. 		if (this.rxPort <= 0) {
+59. 			this.instance.log('info', 'rx_port is 0; not listening for OSC outputs')
+60. 			return
+61. 		}
+62. 
+63. 		const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true })
+64. 		this.udpSocket = socket
+65. 		socket.on('error', (err: Error & { code?: string }) => {
+66. 			if (err.code === 'EADDRINUSE') {
+67. 				this.instance.log(
+68. 					'error',
+69. 					`Port ${this.rxPort} is already in use. Choose a different "Companion listen port" in this connection's config, or close the other app using that port.`,
+70. 				)
+71. 			} else {
+72. 				this.instance.log('error', `OSC socket error: ${err.message}`)
+73. 			}
+74. 		})
+75. 		socket.on('message', (msg: Buffer) => {
+76. 			try {
+77. 				const packet = osc.readPacket(msg, { metadata: true })
+78. 				if (packet && packet.address) {
+79. 					this.handleMessage(packet.address, packet.args || [])
+80. 				}
+81. 			} catch (e) {
+82. 				this.instance.log('debug', `OSC parse error: ${String(e)}`)
+83. 			}
+84. 		})
+85. 		socket.bind({ port: this.rxPort, address: '0.0.0.0' }, () => {
+86. 			this.instance.log('info', `Listening for CAVZRC OSC on port ${this.rxPort}`)
+87. 		})
+88. 	}
+89. 
+90. 	private handleMessage(address: string, args: { type: string; value: unknown }[]): void {
+91. 		const header = this.outputHeader
+92. 		if (!address.startsWith(header)) {
+93. 			return
+94. 		}
+95. 		const path = address.slice(header.length).replace(/^\/+/, '') || ''
+96. 		const state = this.instance.state
+97. 
+98. 		if (path === 'addedRoomsCount') {
+99. 			const count = this.argInt(args, 0)
+100. 			if (count !== undefined) {
+101. 				state.addedRoomsCount = count
+102. 				this.instance.updateVariableValues()
+103. 				this.instance.checkFeedbacks()
+104. 			}
+105. 			return
+106. 		}
+107. 		if (path === 'pairedRoomsCount') {
+108. 			const count = this.argInt(args, 0)
+109. 			if (count !== undefined) {
+110. 				state.pairedRoomsCount = count
+111. 				this.instance.updateVariableValues()
+112. 				this.instance.checkFeedbacks()
+113. 			}
+114. 			return
+115. 		}
+116. 		if (path === 'addedRoomsList') {
+117. 			const maxList = this.argInt(args, 0)
+118. 			const thisIndex = this.argInt(args, 1)
+119. 			const roomID = this.argStr(args, 2)
+120. 			const roomName = this.argStr(args, 3)
+121. 			if (roomID !== undefined && roomName !== undefined && thisIndex !== undefined) {
+122. 				while (state.addedRooms.length <= thisIndex) {
+123. 					state.addedRooms.push({ roomID: '', roomName: '', roomIndex: state.addedRooms.length + 1 })
+124. 				}
+125. 				state.addedRooms[thisIndex] = { roomID, roomName, roomIndex: thisIndex + 1 }
+126. 				if (thisIndex === (maxList ?? 1) - 1) {
+127. 					state.addedRooms = state.addedRooms.slice(0, maxList ?? thisIndex + 1)
+128. 					this.instance.updateVariableValues()
+129. 					this.instance.checkFeedbacks()
+130. 				}
+131. 			}
+132. 			return
+133. 		}
+134. 		if (path === 'pairedRoomsList') {
+135. 			const maxList = this.argInt(args, 0)
+136. 			const thisIndex = this.argInt(args, 1)
+137. 			const roomID = this.argStr(args, 2)
+138. 			const roomName = this.argStr(args, 3)
+139. 			if (roomID !== undefined && roomName !== undefined && thisIndex !== undefined) {
+140. 				while (state.pairedRooms.length <= thisIndex) {
+141. 					state.pairedRooms.push({ roomID: '', roomName: '', roomIndex: state.pairedRooms.length + 1 })
+142. 				}
+143. 				state.pairedRooms[thisIndex] = { roomID, roomName, roomIndex: thisIndex + 1 }
+144. 				if (thisIndex === (maxList ?? 1) - 1) {
+145. 					state.pairedRooms = state.pairedRooms.slice(0, maxList ?? thisIndex + 1)
+146. 					this.instance.updateVariableValues()
+147. 					this.instance.checkFeedbacks()
+148. 				}
+149. 			}
+150. 			return
+151. 		}
+152. 
+153. 		// Room-specific outputs: prefix is roomID, roomName, roomIndex
+154. 		const roomID = this.argStr(args, 0)
+155. 		const roomName = this.argStr(args, 1)
+156. 		const roomIndex = this.argInt(args, 2)
+157. 		if (roomID !== undefined && path) {
+158. 			const key = roomID
+159. 			if (!state.rooms[key]) {
+160. 				state.rooms[key] = { roomID, roomName: roomName ?? '', roomIndex: roomIndex ?? 0 }
+161. 			}
+162. 			const room = state.rooms[key]
+163. 			if (roomName !== undefined) room.roomName = roomName
+164. 			if (roomIndex !== undefined) room.roomIndex = roomIndex
+165. 
+166. 			if (path === 'meetingStatus') {
+167. 				room.meetingStatus = this.argStr(args, 3)
+168. 				this.instance.updateVariableValues()
+169. 				this.instance.checkFeedbacks()
+170. 			} else if (path === 'participantCount') {
+171. 				room.participantCount = this.argInt(args, 3)
+172. 				this.instance.updateVariableValues()
+173. 				this.instance.checkFeedbacks()
+174. 			} else if (path === 'muteStatus') {
+175. 				const v = args[3]
+176. 				room.muteStatus = v?.type === 'i' ? (v as { value: number }).value === 1 : (v as { value: boolean })?.value
+177. 				this.instance.updateVariableValues()
+178. 				this.instance.checkFeedbacks()
+179. 			} else if (path === 'cameraStatus') {
+180. 				const v = args[3]
+181. 				room.cameraStatus = v?.type === 'i' ? (v as { value: number }).value === 1 : (v as { value: boolean })?.value
+182. 				this.instance.updateVariableValues()
+183. 				this.instance.checkFeedbacks()
+184. 			} else if (path === 'selectedPrimaryCamera') {
+185. 				room.selectedPrimaryCamera = this.argStr(args, 3)
+186. 				this.instance.updateVariableValues()
+187. 			} else if (path === 'selectedMic') {
+188. 				room.selectedMic = this.argStr(args, 3)
+189. 				this.instance.updateVariableValues()
+190. 			} else if (path === 'selectedSpeaker') {
+191. 				room.selectedSpeaker = this.argStr(args, 3)
+192. 				this.instance.updateVariableValues()
+193. 			}
+194. 		}
+195. 	}
+196. 
+197. 	private argStr(args: { type: string; value: unknown }[], i: number): string | undefined {
+198. 		const a = args[i]
+199. 		if (!a) return undefined
+200. 		if (typeof a.value === 'string') return a.value
+201. 		if (typeof a.value === 'number' || typeof a.value === 'boolean') return String(a.value)
+202. 		return undefined
+203. 	}
+204. 
+205. 	private argInt(args: { type: string; value: unknown }[], i: number): number | undefined {
+206. 		const a = args[i]
+207. 		if (!a) return undefined
+208. 		if (typeof a.value === 'number') return a.value
+209. 		if (typeof a.value === 'string') return parseInt(a.value, 10)
+210. 		return undefined
+211. 	}
+212. 
+213. 	public destroy(): void {
+214. 		if (this.udpSocket) {
+215. 			this.udpSocket.close()
+216. 			this.udpSocket = null
+217. 		}
+218. 		if (this.sendSocket) {
+219. 			this.sendSocket.close()
+220. 			this.sendSocket = null
+221. 		}
+222. 	}
+223. }
+224.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/actions.ts (lines 1-100)
+
+<details>
+<summary>100 lines</summary>
+
+```
+1. import type { CompanionActionDefinitions, SomeCompanionActionInputField } from '@companion-module/base'
+2. import type { ZoomRoomsInstance } from './osc.js'
+3. import type { TargetType } from './utils.js'
+4. 
+5. const ROOM_TARGET_OPTIONS: SomeCompanionActionInputField[] = [
+6. 	{
+7. 		type: 'dropdown',
+8. 		label: 'Target type',
+9. 		id: 'targetType',
+10. 		default: 'roomIndex',
+11. 		choices: [
+12. 			{ id: 'roomID', label: 'Room ID' },
+13. 			{ id: 'roomName', label: 'Room name' },
+14. 			{ id: 'roomIndex', label: 'Room index' },
+15. 			{ id: 'allRooms', label: 'All rooms' },
+16. 		],
+17. 	},
+18. 	{ type: 'textinput', label: 'Room ID', id: 'roomID', default: '', isVisible: (o) => o.targetType === 'roomID' },
+19. 	{ type: 'textinput', label: 'Room name', id: 'roomName', default: '', isVisible: (o) => o.targetType === 'roomName' },
+20. 	{
+21. 		type: 'number',
+22. 		label: 'Room index (1-based)',
+23. 		id: 'roomIndex',
+24. 		default: 1,
+25. 		min: 1,
+26. 		max: 999,
+27. 		isVisible: (o) => o.targetType === 'roomIndex',
+28. 	},
+29. ]
+30. 
+31. const CHANNEL_NUM_OPTION: SomeCompanionActionInputField = {
+32. 	type: 'number',
+33. 	label: 'Channel',
+34. 	id: 'channel_num',
+35. 	default: 1,
+36. 	min: 1,
+37. 	max: 64,
+38. }
+39. 
+40. function buildRoomPath(
+41. 	targetType: TargetType,
+42. 	command: string,
+43. 	roomArg: string | number | undefined,
+44. ): { path: string; args: (string | number)[] } {
+45. 	const base = `/zoomRooms/${targetType}/${command}`
+46. 	const args: (string | number)[] = []
+47. 	if (targetType === 'roomID' || targetType === 'roomName') {
+48. 		if (typeof roomArg === 'string') args.push(roomArg)
+49. 	} else if (targetType === 'roomIndex') {
+50. 		if (typeof roomArg === 'number') args.push(roomArg)
+51. 	}
+52. 	return { path: base, args }
+53. }
+54. 
+55. function getRoomTarget(opt: Record<string, unknown>): { targetType: TargetType; roomArg: string | number | undefined } {
+56. 	const targetType = (opt.targetType as TargetType) || 'roomIndex'
+57. 	const roomArg: string | number | undefined =
+58. 		targetType === 'roomID'
+59. 			? typeof opt.roomID === 'string'
+60. 				? opt.roomID
+61. 				: ''
+62. 			: targetType === 'roomName'
+63. 				? typeof opt.roomName === 'string'
+64. 					? opt.roomName
+65. 					: ''
+66. 				: targetType === 'roomIndex'
+67. 					? Number(opt.roomIndex) || 1
+68. 					: undefined
+69. 	return { targetType, roomArg }
+70. }
+71. 
+72. export function GetActions(instance: ZoomRoomsInstance): CompanionActionDefinitions {
+73. 	const send = (path: string, args: (string | number)[]) => {
+74. 		instance.OSC?.sendCommand(path, args)
+75. 	}
+76. 
+77. 	const roomCommand =
+78. 		(command: string, extraArgs: (string | number)[] = []) =>
+79. 		(action: { options: Record<string, unknown> }) => {
+80. 			const opt = action.options
+81. 			const { targetType, roomArg } = getRoomTarget(opt)
+82. 			const { path, args } = buildRoomPath(targetType, command, roomArg)
+83. 			send(path, [...args, ...extraArgs])
+84. 		}
+85. 
+86. 	const roomCommandWithOpts =
+87. 		(command: string, getExtra: (opt: Record<string, unknown>) => (string | number)[]) =>
+88. 		(action: { options: Record<string, unknown> }) => {
+89. 			const opt = action.options
+90. 			const { targetType, roomArg } = getRoomTarget(opt)
+91. 			const { path, args } = buildRoomPath(targetType, command, roomArg)
+92. 			send(path, [...args, ...getExtra(opt)])
+93. 		}
+94. 
+95. 	return {
+96. 		// ---- Join Flow ----
+97. 		joinMeeting: {
+98. 			name: 'Join meeting',
+99. 			options: [
+100. 				{
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/feedback.ts
+
+<details>
+<summary>75 lines</summary>
+
+```
+1. import type { CompanionFeedbackDefinitions } from '@companion-module/base'
+2. import type { ZoomRoomsInstance } from './osc.js'
+3. 
+4. function roomChoices(instance: ZoomRoomsInstance): { id: string; label: string }[] {
+5. 	const choices = [{ id: '', label: '(Select room)' }]
+6. 	const rooms = instance.state.pairedRooms.length ? instance.state.pairedRooms : instance.state.addedRooms
+7. 	for (const r of rooms) {
+8. 		if (r.roomID) choices.push({ id: r.roomID, label: r.roomName || r.roomID })
+9. 	}
+10. 	return choices
+11. }
+12. 
+13. export function GetFeedbacks(instance: ZoomRoomsInstance): CompanionFeedbackDefinitions {
+14. 	const roomOpt = {
+15. 		type: 'dropdown' as const,
+16. 		label: 'Room',
+17. 		id: 'roomId',
+18. 		default: '',
+19. 		choices: roomChoices(instance),
+20. 	}
+21. 	return {
+22. 		room_paired: {
+23. 			type: 'boolean',
+24. 			name: 'Room is paired',
+25. 			description: 'True when the selected room is in the paired list',
+26. 			defaultStyle: { bgcolor: 0x00ff00 },
+27. 			options: [roomOpt],
+28. 			callback: (feedback) => {
+29. 				const roomId = feedback.options.roomId as string
+30. 				if (!roomId) return false
+31. 				return instance.state.pairedRooms.some((r) => r.roomID === roomId)
+32. 			},
+33. 		},
+34. 		in_meeting: {
+35. 			type: 'boolean',
+36. 			name: 'In meeting',
+37. 			description: 'True when the selected room is in a meeting',
+38. 			defaultStyle: { bgcolor: 0x00ff00 },
+39. 			options: [roomOpt],
+40. 			callback: (feedback) => {
+41. 				const roomId = feedback.options.roomId as string
+42. 				if (!roomId) return false
+43. 				const room = instance.state.rooms[roomId]
+44. 				if (!room || room.meetingStatus === undefined) return false
+45. 				const status = (room.meetingStatus || '').toLowerCase()
+46. 				return status !== '' && status !== 'not in meeting' && status !== 'idle'
+47. 			},
+48. 		},
+49. 		mute_status: {
+50. 			type: 'boolean',
+51. 			name: 'Mic unmuted',
+52. 			description: 'True when the room mic is unmuted',
+53. 			defaultStyle: { bgcolor: 0x00ff00 },
+54. 			options: [roomOpt],
+55. 			callback: (feedback) => {
+56. 				const roomId = feedback.options.roomId as string
+57. 				if (!roomId) return false
+58. 				return instance.state.rooms[roomId]?.muteStatus === true
+59. 			},
+60. 		},
+61. 		camera_status: {
+62. 			type: 'boolean',
+63. 			name: 'Camera on',
+64. 			description: 'True when the room camera is on',
+65. 			defaultStyle: { bgcolor: 0x00ff00 },
+66. 			options: [roomOpt],
+67. 			callback: (feedback) => {
+68. 				const roomId = feedback.options.roomId as string
+69. 				if (!roomId) return false
+70. 				return instance.state.rooms[roomId]?.cameraStatus === true
+71. 			},
+72. 		},
+73. 	}
+74. }
+75.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/presets.ts
+
+<details>
+<summary>179 lines</summary>
+
+```
+1. import type { CompanionPresetDefinitions, CompanionOptionValues } from '@companion-module/base'
+2. import type { ZoomRoomsInstance } from './osc.js'
+3. 
+4. export function GetPresetList(_instance: ZoomRoomsInstance): CompanionPresetDefinitions {
+5. 	const presets: CompanionPresetDefinitions = {}
+6. 
+7. 	// Join/Leave
+8. 	presets['join_meeting'] = {
+9. 		type: 'button',
+10. 		category: 'Join / Leave',
+11. 		name: 'Join meeting',
+12. 		style: {
+13. 			text: 'Join',
+14. 			size: '18',
+15. 			color: 16777215,
+16. 			bgcolor: 0,
+17. 		},
+18. 		steps: [
+19. 			{
+20. 				down: [{ actionId: 'joinMeeting', options: {} }],
+21. 				up: [],
+22. 			},
+23. 		],
+24. 		feedbacks: [],
+25. 	}
+26. 	presets['leave_meeting'] = {
+27. 		type: 'button',
+28. 		category: 'Join / Leave',
+29. 		name: 'Leave meeting',
+30. 		style: {
+31. 			text: 'Leave',
+32. 			size: '18',
+33. 			color: 16777215,
+34. 			bgcolor: 0,
+35. 		},
+36. 		steps: [
+37. 			{
+38. 				down: [{ actionId: 'leaveMeeting', options: {} }],
+39. 				up: [],
+40. 			},
+41. 		],
+42. 		feedbacks: [],
+43. 	}
+44. 	presets['start_meeting'] = {
+45. 		type: 'button',
+46. 		category: 'Join / Leave',
+47. 		name: 'Start meeting',
+48. 		style: {
+49. 			text: 'Start',
+50. 			size: '18',
+51. 			color: 16777215,
+52. 			bgcolor: 0,
+53. 		},
+54. 		steps: [
+55. 			{
+56. 				down: [{ actionId: 'startMeeting', options: {} }],
+57. 				up: [],
+58. 			},
+59. 		],
+60. 		feedbacks: [],
+61. 	}
+62. 
+63. 	// Global
+64. 	presets['get_added_room_list'] = {
+65. 		type: 'button',
+66. 		category: 'Room list',
+67. 		name: 'Get added room list',
+68. 		style: {
+69. 			text: 'Get added rooms',
+70. 			size: '14',
+71. 			color: 16777215,
+72. 			bgcolor: 0,
+73. 		},
+74. 		steps: [
+75. 			{
+76. 				down: [{ actionId: 'getAddedRoomList', options: {} }],
+77. 				up: [],
+78. 			},
+79. 		],
+80. 		feedbacks: [],
+81. 	}
+82. 	presets['get_paired_room_list'] = {
+83. 		type: 'button',
+84. 		category: 'Room list',
+85. 		name: 'Get paired room list',
+86. 		style: {
+87. 			text: 'Get paired rooms',
+88. 			size: '14',
+89. 			color: 16777215,
+90. 			bgcolor: 0,
+91. 		},
+92. 		steps: [
+93. 			{
+94. 				down: [{ actionId: 'getPairedRoomList', options: {} }],
+95. 				up: [],
+96. 			},
+97. 		],
+98. 		feedbacks: [],
+99. 	}
+100. 
+101. 	const btn = (
+102. 		text: string,
+103. 		category: string,
+104. 		actionId: string,
+105. 		options: CompanionOptionValues = {},
+106. 	): CompanionPresetDefinitions[string] => ({
+107. 		type: 'button',
+108. 		category,
+109. 		name: text,
+110. 		style: { text, size: '14' as const, color: 16777215, bgcolor: 0 },
+111. 		steps: [{ down: [{ actionId, options }], up: [] }],
+112. 		feedbacks: [],
+113. 	})
+114. 
+115. 	// NDI
+116. 	presets['ndi_content_off'] = btn('NDI Off', 'NDI', 'setNDIContentOff', {
+117. 		targetType: 'roomIndex',
+118. 		roomIndex: 1,
+119. 		channel_num: 1,
+120. 	})
+121. 	presets['ndi_content_participant'] = btn('NDI Participant', 'NDI', 'setNDIContentParticipant', {
+122. 		targetType: 'roomIndex',
+123. 		roomIndex: 1,
+124. 		channel_num: 1,
+125. 	})
+126. 	presets['ndi_content_gallery'] = btn('NDI Gallery', 'NDI', 'setNDIContentGallery', {
+127. 		targetType: 'roomIndex',
+128. 		roomIndex: 1,
+129. 		channel_num: 1,
+130. 	})
+131. 
+132. 	// HWIO
+133. 	presets['hwio_content_off'] = btn('HWIO Off', 'HWIO', 'setHWIOContentOff', {
+134. 		targetType: 'roomIndex',
+135. 		roomIndex: 1,
+136. 		channel_num: 1,
+137. 	})
+138. 	presets['hwio_content_participant'] = btn('HWIO Participant', 'HWIO', 'setHWIOContentParticipant', {
+139. 		targetType: 'roomIndex',
+140. 		roomIndex: 1,
+141. 		channel_num: 1,
+142. 	})
+143. 
+144. 	// Dante
+145. 	presets['dante_content_off'] = btn('Dante Off', 'Dante', 'setDanteContentOff', {
+146. 		targetType: 'roomIndex',
+147. 		roomIndex: 1,
+148. 		channel_num: 1,
+149. 	})
+150. 	presets['dante_content_mix'] = btn('Dante Mix', 'Dante', 'setDanteContentMix', {
+151. 		targetType: 'roomIndex',
+152. 		roomIndex: 1,
+153. 		channel_num: 1,
+154. 	})
+155. 
+156. 	// Device
+157. 	presets['mute_mic'] = btn('Mute mic', 'Device', 'muteMic', { targetType: 'roomIndex', roomIndex: 1 })
+158. 	presets['unmute_mic'] = btn('Unmute mic', 'Device', 'unMuteMic', { targetType: 'roomIndex', roomIndex: 1 })
+159. 	presets['start_camera'] = btn('Start camera', 'Device', 'startCamera', { targetType: 'roomIndex', roomIndex: 1 })
+160. 	presets['stop_camera'] = btn('Stop camera', 'Device', 'stopCamera', { targetType: 'roomIndex', roomIndex: 1 })
+161. 
+162. 	// Overlays
+163. 	presets['enable_nametag'] = btn('Name tag on', 'Overlays', 'enableNameTagOverlay', {
+164. 		targetType: 'roomIndex',
+165. 		roomIndex: 1,
+166. 	})
+167. 	presets['disable_nametag'] = btn('Name tag off', 'Overlays', 'disableNameTagOverlay', {
+168. 		targetType: 'roomIndex',
+169. 		roomIndex: 1,
+170. 	})
+171. 	presets['enable_emoji'] = btn('Emoji on', 'Overlays', 'enableEmojiOverlay', { targetType: 'roomIndex', roomIndex: 1 })
+172. 	presets['disable_emoji'] = btn('Emoji off', 'Overlays', 'disableEmojiOverlay', {
+173. 		targetType: 'roomIndex',
+174. 		roomIndex: 1,
+175. 	})
+176. 
+177. 	return presets
+178. }
+179.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/upgrades.ts
+
+<details>
+<summary>9 lines</summary>
+
+```
+1. import type { CompanionStaticUpgradeScript } from '@companion-module/base'
+2. import type { ZoomRoomsConfig } from './config.js'
+3. 
+4. /**
+5.  * Placeholder for future config migrations.
+6.  * Add scripts here when config shape changes between versions.
+7.  */
+8. export const UpgradeScripts: CompanionStaticUpgradeScript<ZoomRoomsConfig>[] = []
+9.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/utils.ts
+
+<details>
+<summary>50 lines</summary>
+
+```
+1. /**
+2.  * Shared types for CAVZRC state and OSC payloads.
+3.  */
+4. 
+5. export type TargetType = 'roomID' | 'roomName' | 'roomIndex' | 'allRooms'
+6. 
+7. export interface RoomInfo {
+8. 	roomID: string
+9. 	roomName: string
+10. 	roomIndex: number
+11. }
+12. 
+13. export interface RoomState {
+14. 	roomID: string
+15. 	roomName: string
+16. 	roomIndex: number
+17. 	meetingStatus?: string
+18. 	participantCount?: number
+19. 	muteStatus?: boolean
+20. 	cameraStatus?: boolean
+21. 	selectedPrimaryCamera?: string
+22. 	selectedMic?: string
+23. 	selectedSpeaker?: string
+24. 	overlayConfig?: {
+25. 		namePosition: number
+26. 		showNametag: boolean
+27. 		showEmoji: boolean
+28. 		showHand: boolean
+29. 		showBorder: boolean
+30. 	}
+31. }
+32. 
+33. export interface CavzrcState {
+34. 	addedRooms: RoomInfo[]
+35. 	pairedRooms: RoomInfo[]
+36. 	addedRoomsCount: number
+37. 	pairedRoomsCount: number
+38. 	rooms: Record<string, RoomState>
+39. }
+40. 
+41. export function createDefaultState(): CavzrcState {
+42. 	return {
+43. 		addedRooms: [],
+44. 		pairedRooms: [],
+45. 		addedRoomsCount: 0,
+46. 		pairedRoomsCount: 0,
+47. 		rooms: {},
+48. 	}
+49. }
+50.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/variables
+
+```
+variable-definitions.ts
+variable-values.ts
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/variables/variable-definitions.ts
+
+<details>
+<summary>21 lines</summary>
+
+```
+1. import type { CompanionVariableDefinition } from '@companion-module/base'
+2. import type { ZoomRoomsInstance } from '../osc.js'
+3. 
+4. export function initVariableDefinitions(instance: ZoomRoomsInstance): void {
+5. 	const definitions: CompanionVariableDefinition[] = [
+6. 		{ variableId: 'added_rooms_count', name: 'Added rooms count' },
+7. 		{ variableId: 'paired_rooms_count', name: 'Paired rooms count' },
+8. 		{ variableId: 'added_rooms_list', name: 'Added rooms list (names)' },
+9. 		{ variableId: 'paired_rooms_list', name: 'Paired rooms list (names)' },
+10. 	]
+11. 	for (let n = 1; n <= 10; n++) {
+12. 		definitions.push({ variableId: `room_${n}_id`, name: `Room ${n} ID` })
+13. 		definitions.push({ variableId: `room_${n}_name`, name: `Room ${n} name` })
+14. 		definitions.push({ variableId: `room_${n}_meeting_status`, name: `Room ${n} meeting status` })
+15. 		definitions.push({ variableId: `room_${n}_participant_count`, name: `Room ${n} participant count` })
+16. 		definitions.push({ variableId: `room_${n}_mute`, name: `Room ${n} mute status` })
+17. 		definitions.push({ variableId: `room_${n}_camera`, name: `Room ${n} camera status` })
+18. 	}
+19. 	instance.setVariableDefinitions(definitions)
+20. }
+21.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/variables/variable-values.ts
+
+<details>
+<summary>31 lines</summary>
+
+```
+1. import type { ZoomRoomsInstance } from '../osc.js'
+2. 
+3. export function updateVariableValues(instance: ZoomRoomsInstance): void {
+4. 	const state = instance.state
+5. 	const values: Record<string, string | number> = {
+6. 		added_rooms_count: state.addedRoomsCount,
+7. 		paired_rooms_count: state.pairedRoomsCount,
+8. 		added_rooms_list:
+9. 			state.addedRooms
+10. 				.map((r) => r.roomName)
+11. 				.filter(Boolean)
+12. 				.join(', ') || '—',
+13. 		paired_rooms_list:
+14. 			state.pairedRooms
+15. 				.map((r) => r.roomName)
+16. 				.filter(Boolean)
+17. 				.join(', ') || '—',
+18. 	}
+19. 	state.pairedRooms.slice(0, 10).forEach((r, i) => {
+20. 		const n = i + 1
+21. 		values[`room_${n}_id`] = r.roomID
+22. 		values[`room_${n}_name`] = r.roomName || '—'
+23. 		const room = state.rooms[r.roomID]
+24. 		values[`room_${n}_meeting_status`] = room?.meetingStatus ?? '—'
+25. 		values[`room_${n}_participant_count`] = room?.participantCount ?? '—'
+26. 		values[`room_${n}_mute`] = room?.muteStatus === true ? 'Unmuted' : room?.muteStatus === false ? 'Muted' : '—'
+27. 		values[`room_${n}_camera`] = room?.cameraStatus === true ? 'On' : room?.cameraStatus === false ? 'Off' : '—'
+28. 	})
+29. 	instance.setVariableValues(values)
+30. }
+31.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/actions.ts (lines 100-300)
+
+<details>
+<summary>201 lines</summary>
+
+```
+100. 				{
+101. 					type: 'dropdown',
+102. 					label: 'Target type',
+103. 					id: 'targetType',
+104. 					default: 'roomIndex',
+105. 					choices: [
+106. 						{ id: 'roomID', label: 'Room ID' },
+107. 						{ id: 'roomName', label: 'Room name' },
+108. 						{ id: 'roomIndex', label: 'Room index' },
+109. 						{ id: 'allRooms', label: 'All rooms' },
+110. 					],
+111. 				},
+112. 				{ type: 'textinput', label: 'Room ID', id: 'roomID', default: '', isVisible: (o) => o.targetType === 'roomID' },
+113. 				{
+114. 					type: 'textinput',
+115. 					label: 'Room name',
+116. 					id: 'roomName',
+117. 					default: '',
+118. 					isVisible: (o) => o.targetType === 'roomName',
+119. 				},
+120. 				{
+121. 					type: 'number',
+122. 					label: 'Room index (1-based)',
+123. 					id: 'roomIndex',
+124. 					default: 1,
+125. 					min: 1,
+126. 					max: 999,
+127. 					isVisible: (o) => o.targetType === 'roomIndex',
+128. 				},
+129. 				{ type: 'textinput', label: 'Meeting ID', id: 'meetingID', default: '' },
+130. 				{ type: 'textinput', label: 'Meeting password', id: 'meetingPass', default: '' },
+131. 				{ type: 'textinput', label: 'User name', id: 'userName', default: '' },
+132. 			],
+133. 			callback: (action) => {
+134. 				const opt = action.options
+135. 				const targetType = (opt.targetType as TargetType) || 'roomIndex'
+136. 				const roomArg: string | number | undefined =
+137. 					targetType === 'roomID'
+138. 						? typeof opt.roomID === 'string'
+139. 							? opt.roomID
+140. 							: ''
+141. 						: targetType === 'roomName'
+142. 							? typeof opt.roomName === 'string'
+143. 								? opt.roomName
+144. 								: ''
+145. 							: targetType === 'roomIndex'
+146. 								? Number(opt.roomIndex) || 1
+147. 								: undefined
+148. 				const { path, args } = buildRoomPath(targetType, 'joinMeeting', roomArg)
+149. 				send(path, [
+150. 					...args,
+151. 					typeof opt.meetingID === 'string' ? opt.meetingID : '',
+152. 					typeof opt.meetingPass === 'string' ? opt.meetingPass : '',
+153. 					typeof opt.userName === 'string' ? opt.userName : '',
+154. 				])
+155. 			},
+156. 		},
+157. 		startMeeting: {
+158. 			name: 'Start meeting',
+159. 			options: [
+160. 				{
+161. 					type: 'dropdown',
+162. 					label: 'Target type',
+163. 					id: 'targetType',
+164. 					default: 'roomIndex',
+165. 					choices: [
+166. 						{ id: 'roomID', label: 'Room ID' },
+167. 						{ id: 'roomName', label: 'Room name' },
+168. 						{ id: 'roomIndex', label: 'Room index' },
+169. 						{ id: 'allRooms', label: 'All rooms' },
+170. 					],
+171. 				},
+172. 				{ type: 'textinput', label: 'Room ID', id: 'roomID', default: '', isVisible: (o) => o.targetType === 'roomID' },
+173. 				{
+174. 					type: 'textinput',
+175. 					label: 'Room name',
+176. 					id: 'roomName',
+177. 					default: '',
+178. 					isVisible: (o) => o.targetType === 'roomName',
+179. 				},
+180. 				{
+181. 					type: 'number',
+182. 					label: 'Room index (1-based)',
+183. 					id: 'roomIndex',
+184. 					default: 1,
+185. 					min: 1,
+186. 					max: 999,
+187. 					isVisible: (o) => o.targetType === 'roomIndex',
+188. 				},
+189. 			],
+190. 			callback: (action) => {
+191. 				const opt = action.options
+192. 				const targetType = (opt.targetType as TargetType) || 'roomIndex'
+193. 				const roomArg: string | number | undefined =
+194. 					targetType === 'roomID'
+195. 						? typeof opt.roomID === 'string'
+196. 							? opt.roomID
+197. 							: ''
+198. 						: targetType === 'roomName'
+199. 							? typeof opt.roomName === 'string'
+200. 								? opt.roomName
+201. 								: ''
+202. 							: targetType === 'roomIndex'
+203. 								? Number(opt.roomIndex) || 1
+204. 								: undefined
+205. 				const { path, args } = buildRoomPath(targetType, 'startMeeting', roomArg)
+206. 				send(path, args)
+207. 			},
+208. 		},
+209. 		leaveMeeting: {
+210. 			name: 'Leave meeting',
+211. 			options: [
+212. 				{
+213. 					type: 'dropdown',
+214. 					label: 'Target type',
+215. 					id: 'targetType',
+216. 					default: 'roomIndex',
+217. 					choices: [
+218. 						{ id: 'roomID', label: 'Room ID' },
+219. 						{ id: 'roomName', label: 'Room name' },
+220. 						{ id: 'roomIndex', label: 'Room index' },
+221. 						{ id: 'allRooms', label: 'All rooms' },
+222. 					],
+223. 				},
+224. 				{ type: 'textinput', label: 'Room ID', id: 'roomID', default: '', isVisible: (o) => o.targetType === 'roomID' },
+225. 				{
+226. 					type: 'textinput',
+227. 					label: 'Room name',
+228. 					id: 'roomName',
+229. 					default: '',
+230. 					isVisible: (o) => o.targetType === 'roomName',
+231. 				},
+232. 				{
+233. 					type: 'number',
+234. 					label: 'Room index (1-based)',
+235. 					id: 'roomIndex',
+236. 					default: 1,
+237. 					min: 1,
+238. 					max: 999,
+239. 					isVisible: (o) => o.targetType === 'roomIndex',
+240. 				},
+241. 			],
+242. 			callback: (action) => {
+243. 				const opt = action.options
+244. 				const targetType = (opt.targetType as TargetType) || 'roomIndex'
+245. 				const roomArg: string | number | undefined =
+246. 					targetType === 'roomID'
+247. 						? typeof opt.roomID === 'string'
+248. 							? opt.roomID
+249. 							: ''
+250. 						: targetType === 'roomName'
+251. 							? typeof opt.roomName === 'string'
+252. 								? opt.roomName
+253. 								: ''
+254. 							: targetType === 'roomIndex'
+255. 								? Number(opt.roomIndex) || 1
+256. 								: undefined
+257. 				const { path, args } = buildRoomPath(targetType, 'leaveMeeting', roomArg)
+258. 				send(path, args)
+259. 			},
+260. 		},
+261. 		// ---- Global ----
+262. 		getAddedRoomList: {
+263. 			name: 'Get added room list',
+264. 			options: [],
+265. 			callback: () => send('/zoomRooms/getAddedRoomList', []),
+266. 		},
+267. 		getPairedRoomList: {
+268. 			name: 'Get paired room list',
+269. 			options: [],
+270. 			callback: () => send('/zoomRooms/getPairedRoomList', []),
+271. 		},
+272. 		getAddedRoomCount: {
+273. 			name: 'Get added room count',
+274. 			options: [],
+275. 			callback: () => send('/zoomRooms/getAddedRoomCount', []),
+276. 		},
+277. 		getPairedRoomCount: {
+278. 			name: 'Get paired room count',
+279. 			options: [],
+280. 			callback: () => send('/zoomRooms/getPairedRoomCount', []),
+281. 		},
+282. 
+283. 		// ---- NDI ----
+284. 		setNDIContentOff: {
+285. 			name: 'NDI: Set content off',
+286. 			options: [...ROOM_TARGET_OPTIONS, CHANNEL_NUM_OPTION],
+287. 			callback: roomCommandWithOpts('setNDIContentOff', (o) => [Number(o.channel_num) || 1]),
+288. 		},
+289. 		setNDIContentParticipant: {
+290. 			name: 'NDI: Set content to participant',
+291. 			options: [...ROOM_TARGET_OPTIONS, CHANNEL_NUM_OPTION],
+292. 			callback: roomCommandWithOpts('setNDIContentParticipant', (o) => [Number(o.channel_num) || 1]),
+293. 		},
+294. 		setNDIContentActiveSpeaker: {
+295. 			name: 'NDI: Set content to active speaker',
+296. 			options: [...ROOM_TARGET_OPTIONS, CHANNEL_NUM_OPTION],
+297. 			callback: roomCommandWithOpts('setNDIContentActiveSpeaker', (o) => [Number(o.channel_num) || 1]),
+298. 		},
+299. 		setNDIContentGallery: {
+300. 			name: 'NDI: Set content to gallery',
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ wc -l /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/actions.ts
+
+```
+838 /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/actions.ts
+<exited with exit code 0>
+```
+
+
+### ✅ `glob`
+
+"**/*.test.ts" in /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc
+
+```
+No files matched the pattern.
+```
+
+
+### ✅ `glob`
+
+"**/*.spec.ts" in /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc
+
+```
+No files matched the pattern.
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && yarn build 2>&1
+
+```
+
+<exited with exit code 0>
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && yarn lint 2>&1
+
+```
+
+<exited with exit code 0>
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/dist
+
+<details>
+<summary>17 lines</summary>
+
+```
+actions.js
+actions.js.map
+config.js
+config.js.map
+feedback.js
+feedback.js.map
+index.js
+index.js.map
+osc.js
+osc.js.map
+presets.js
+presets.js.map
+upgrades.js
+upgrades.js.map
+utils.js
+utils.js.map
+variables
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && cat package.json | grep -A 5 '"dependencies"'
+
+<details>
+<summary>7 lines</summary>
+
+```
+"dependencies": {
+    "@companion-module/base": "1.12.1",
+    "osc": "^2.4.5"
+  },
+  "devDependencies": {
+    "@companion-module/tools": "^2.6.1",
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && npm view @companion-module/base version && npm view osc version 2>&1 | head -20
+
+```
+⠙⠹⠸⠼⠴⠦1.14.1
+⠦2.4.5
+<exited with exit code 0>
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.gitignore
+
+<details>
+<summary>18 lines</summary>
+
+```
+1. node_modules/
+2. dist/
+3. package-lock.json
+4. /pkg
+5. /*.tgz
+6. /dist
+7. DEBUG-*
+8. /.yarn
+9. /.vscode
+10. scripts/
+11. *.log
+12. .DS_Store
+13. 
+14. # Icons
+15. icons/
+16. *.ico
+17. *.icns
+18.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.github
+
+```
+ISSUE_TEMPLATE
+agents
+workflows
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.github/workflows
+
+<details>
+<summary>14 lines</summary>
+
+```
+build-release.yml
+companion-module-checks.yaml
+squad-ci.yml
+squad-docs.yml
+squad-heartbeat.yml
+squad-insider-release.yml
+squad-issue-assign.yml
+squad-label-enforce.yml
+squad-main-guard.yml
+squad-preview.yml
+squad-promote.yml
+squad-release.yml
+squad-triage.yml
+sync-squad-labels.yml
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && find src -type f -name "*.ts" | wc -l
+
+```
+10
+<exited with exit code 0>
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && cloc src --include-lang=TypeScript --quiet 2>/dev/null || echo "cloc not available"
+
+```
+cloc not available
+<exited with exit code 0>
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && wc -l src/*.ts src/variables/*.ts | tail -1
+
+```
+1543 total
+<exited with exit code 0>
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/src/actions.ts (lines 800-838)
+
+<details>
+<summary>39 lines</summary>
+
+```
+800. 			name: 'Set companion room camera display name',
+801. 			options: [
+802. 				...ROOM_TARGET_OPTIONS,
+803. 				{ type: 'textinput', label: 'Companion room ID', id: 'czr_id', default: '' },
+804. 				{ type: 'textinput', label: 'Camera device name', id: 'camera_device_name', default: '' },
+805. 				{ type: 'textinput', label: 'New display name', id: 'new_camera_display_name', default: '' },
+806. 			],
+807. 			callback: roomCommandWithOpts('setCompanionRoomCameraDisplayName', (o) => [
+808. 				typeof o.czr_id === 'string' ? o.czr_id : '',
+809. 				typeof o.camera_device_name === 'string' ? o.camera_device_name : '',
+810. 				typeof o.new_camera_display_name === 'string' ? o.new_camera_display_name : '',
+811. 			]),
+812. 		},
+813. 		setCompanionRoomCameraOff: {
+814. 			name: 'Set companion room camera off',
+815. 			options: [
+816. 				...ROOM_TARGET_OPTIONS,
+817. 				{ type: 'textinput', label: 'Companion room ID', id: 'czr_id', default: '' },
+818. 				{ type: 'textinput', label: 'Camera device name', id: 'camera_device_name', default: '' },
+819. 			],
+820. 			callback: roomCommandWithOpts('setCompanionRoomCameraOff', (o) => [
+821. 				typeof o.czr_id === 'string' ? o.czr_id : '',
+822. 				typeof o.camera_device_name === 'string' ? o.camera_device_name : '',
+823. 			]),
+824. 		},
+825. 		setCompanionRoomCameraOn: {
+826. 			name: 'Set companion room camera on',
+827. 			options: [
+828. 				...ROOM_TARGET_OPTIONS,
+829. 				{ type: 'textinput', label: 'Companion room ID', id: 'czr_id', default: '' },
+830. 				{ type: 'textinput', label: 'Camera device name', id: 'camera_device_name', default: '' },
+831. 			],
+832. 			callback: roomCommandWithOpts('setCompanionRoomCameraOn', (o) => [
+833. 				typeof o.czr_id === 'string' ? o.czr_id : '',
+834. 				typeof o.camera_device_name === 'string' ? o.camera_device_name : '',
+835. 			]),
+836. 		},
+837. 	}
+838. }
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && git log --oneline -10 2>&1
+
+<details>
+<summary>11 lines</summary>
+
+```
+b083701 (HEAD -> chore/add-squad) chore: merge main
+9dab9e9 add: gh copilot squad
+549d6b6 (origin/main, origin/HEAD) Merge pull request #1 from bitfocus/chore/file-cleanup
+28c69cd chore: remove package-lock.json
+0a19db0 chore: add issue templates
+88287b2 chore: add 'Companion Module Checks' workflow
+b873939 (origin/chore/file-cleanup, chore/file-cleanup) chore: update version
+3837c2d add: eslint config and fix lint errors
+f8e7b14 remove: ICON files and files that are in .gitignore. Add Husky pre-commit
+de5bb45 (main) remove: ICON files and files that are in .gitignore. Add Husky pre-commit
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && git status 2>&1
+
+```
+On branch chore/add-squad
+nothing to commit, working tree clean
+<exited with exit code 0>
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.prettierignore
+
+```
+1. package.json
+2. /LICENSE.md
+3. 
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && ls -la | head -25
+
+<details>
+<summary>26 lines</summary>
+
+```
+total 480
+drwxr-xr-x   26 lynbh  staff     832 Feb 27 21:16 .
+drwxrwxrwx   13 lynbh  staff     416 Feb 21 14:10 ..
+drwxr-xr-x@   3 lynbh  staff      96 Feb 21 17:55 .copilot
+drwxr-xr-x   15 lynbh  staff     480 Feb 27 21:15 .git
+-rw-r--r--@   1 lynbh  staff     211 Feb 27 21:14 .gitattributes
+drwxr-xr-x    5 lynbh  staff     160 Feb 27 21:14 .github
+-rw-r--r--@   1 lynbh  staff     134 Feb 21 14:15 .gitignore
+drwxr-xr-x    4 lynbh  staff     128 Feb 21 14:18 .husky
+-rw-r--r--    1 lynbh  staff      25 Feb 21 14:10 .prettierignore
+drwxr-xr-x@  13 lynbh  staff     416 Feb 21 18:08 .squad
+drwxr-xr-x@  23 lynbh  staff     736 Feb 21 17:55 .squad-templates
+drwxr-xr-x    3 lynbh  staff      96 Feb 21 14:23 .yarn
+-rw-r--r--    1 lynbh  staff      25 Feb 21 14:10 .yarnrc.yml
+drwxr-xr-x    4 lynbh  staff     128 Feb 21 14:18 companion
+drwxr-xr-x   19 lynbh  staff     608 Feb 27 21:16 dist
+-rw-r--r--    1 lynbh  staff     148 Feb 27 21:13 eslint.config.mjs
+-rw-r--r--    1 lynbh  staff    1082 Feb 21 14:10 LICENSE
+drwxr-xr-x  268 lynbh  staff    8576 Feb 21 14:11 node_modules
+-rw-r--r--    1 lynbh  staff    1323 Feb 27 21:13 package.json
+drwxr-xr-x    5 lynbh  staff     160 Feb 21 14:43 pkg
+-rw-r--r--    1 lynbh  staff    5467 Feb 21 14:10 README.md
+drwxr-xr-x   11 lynbh  staff     352 Feb 27 21:13 src
+-rw-r--r--    1 lynbh  staff     299 Feb 21 14:10 tsconfig.build.json
+-rw-r--r--    1 lynbh  staff     148 Feb 21 14:10 tsconfig.json
+<exited with exit code 0>
+```
+
+</details>
+
+
+### 💬 Copilot
+
+Now let me check the companion directory and look at a complete view of one of the larger action files to understand complexity:
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/companion
+
+```
+HELP.md
+manifest.json
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && grep -c "export function\|export const\|export class" src/*.ts src/variables/*.ts
+
+<details>
+<summary>11 lines</summary>
+
+```
+src/actions.ts:1
+src/config.ts:1
+src/feedback.ts:1
+src/index.ts:0
+src/osc.ts:1
+src/presets.ts:1
+src/upgrades.ts:1
+src/utils.ts:1
+src/variables/variable-definitions.ts:1
+src/variables/variable-values.ts:1
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && grep -E "^\s*(//|\/\*)" src/osc.ts | wc -l
+
+```
+1
+<exited with exit code 0>
+```
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/companion/manifest.json
+
+<details>
+<summary>17 lines</summary>
+
+```
+1. {
+2. 	"id": "zoom-rooms",
+3. 	"name": "CAVZRC Companion module",
+4. 	"shortname": "CAVZRC",
+5. 	"description": "Control Zoom Rooms via CAVZRC OSC for Bitfocus Companion (alpha)",
+6. 	"version": "0.0.2",
+7. 	"license": "MIT",
+8. 	"repository": "https://github.com/bitfocus/companion-module-zoom-cavzrc",
+9. 	"bugs": "https://github.com/bitfocus/companion-module-zoom-cavzrc/issues",
+10. 	"maintainers": [{ "name": "Community" }],
+11. 	"legacyIds": [],
+12. 	"runtime": { "type": "node22", "api": "nodejs-ipc", "apiVersion": "1.12.1", "entrypoint": "../dist/index.js" },
+13. 	"manufacturer": "Zoom",
+14. 	"products": ["Custom AV for Zoom Rooms Controller"],
+15. 	"keywords": ["zoom", "Zoom Rooms", "CAVZRC", "OSC"]
+16. }
+17.
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/companion/HELP.md (lines 1-50)
+
+<details>
+<summary>38 lines</summary>
+
+```
+1. # Zoom Rooms (CAVZRC) Module
+2. 
+3. Control **Custom AV for Zoom Rooms Controller (CAVZRC)** via its OSC API. Commands are sent to the CAVZRC application (not directly to the Zoom Room device), allowing control over multiple Zoom Rooms and over the WAN.
+4. 
+5. **Note:** The CAVZRC OSC API is currently in **Beta**.
+6. 
+7. ## Requirements
+8. 
+9. - Zoom Rooms version **6.5.0** or later
+10. - **Custom AV Zoom Rooms Controller 1.2.0** or later
+11. 
+12. ## Configuration
+13. 
+14. - **Host** — IP address of the machine running CAVZRC (where this module sends OSC commands).
+15. - **tx_port** — CAVZRC "Receiving Port" (port where CAVZRC listens for incoming OSC).
+16. - **rx_port** — Port where Companion listens for OSC **outputs** from CAVZRC (set to 0 to disable listening for feedbacks/variables).
+17. - **OSC output header** — Must match the "OSC Output Header" setting in CAVZRC (default: `/roomosc`).
+18. 
+19. In CAVZRC, configure **Transmission IP** and **Transmission Port** to point to the machine running Companion and the **rx_port** value above, so that CAVZRC can send status and events back to this module.
+20. 
+21. ## Target types (room commands)
+22. 
+23. Room-targeted actions can target Zoom Rooms by:
+24. 
+25. - **roomID** — Unique room ID (string).
+26. - **roomName** — Display name of the room (string).
+27. - **roomIndex** — One-based index in the list of rooms added to CAVZRC.
+28. - **allRooms** — Apply to all rooms added to CAVZRC.
+29. 
+30. ## Variables and feedbacks
+31. 
+32. - **Variables**: Added/paired room count and list; per-room (room 1–10) ID, name, meeting status, participant count, mute and camera status. Populated when CAVZRC sends OSC outputs to this module (configure rx_port and CAVZRC Transmission settings).
+33. - **Feedbacks**: Room paired, in meeting, mic unmuted, camera on. Room dropdown is filled from the paired or added room list after you request room lists (e.g. Get added room list / Get paired room list).
+34. 
+35. ## References
+36. 
+37. - Zoom Custom AV for Zoom Rooms Controller (CAVZRC) and its OSC API documentation.
+38. - [Companion developer docs](https://companion.free/for-developers/).
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && cat tsconfig.build.json | grep -A 2 "strict"
+
+```
+
+<exited with exit code 1>
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && npm view @companion-module/tools version 2>&1
+
+```
+⠙⠹⠸⠼2.7.1
+⠼
+<exited with exit code 0>
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && cat node_modules/@companion-module/tools/tsconfig/node22/recommended.json 2>&1 | head -20
+
+<details>
+<summary>21 lines</summary>
+
+```
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2022",
+		"noImplicitAny": true,
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"paths": {
+			"*": ["../node_modules/*"]
+		},
+		"declaration": false,
+		"importHelpers": false,
+		"listFiles": false,
+		"traceResolution": false,
+		"pretty": true,
+		"lib": ["es2023"],
+		"types": ["node"],
+		"strict": true,
+		"alwaysStrict": false,
+		"forceConsistentCasingInFileNames": true,
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && grep -c "requireOSC\|sendOSC\|send(" src/actions.ts
+
+```
+9
+<exited with exit code 0>
+```
+
+
+### 💬 Copilot
+
+Perfect. Now let me understand the action structure better and write the final review. Let me check one more critical thing about the upgrade mechanism:
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && grep -A 5 "UpgradeScripts" src/index.ts
+
+<details>
+<summary>8 lines</summary>
+
+```
+import { UpgradeScripts } from './upgrades.js'
+
+class ZoomRoomsInstanceImpl extends InstanceBase<ZoomRoomsConfig> implements ZoomRoomsInstance {
+	public config: ZoomRoomsConfig = {
+		host: '127.0.0.1',
+		tx_port: 9090,
+--
+runEntrypoint(ZoomRoomsInstanceImpl, UpgradeScripts)
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && ls -la .husky/
+
+<details>
+<summary>6 lines</summary>
+
+```
+total 8
+drwxr-xr-x  19 lynbh  staff  608 Feb 21 14:11 _
+drwxr-xr-x   4 lynbh  staff  128 Feb 21 14:18 .
+drwxr-xr-x  26 lynbh  staff  832 Feb 27 21:16 ..
+-rw-r--r--@  1 lynbh  staff   11 Feb 21 14:17 pre-commit
+<exited with exit code 0>
+```
+
+</details>
+
+
+### ✅ `view`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.husky/pre-commit
+
+```
+1. lint-staged
+```
+
+
+### ✅ `bash`
+
+$ cd /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc && grep -E "^\s+[a-zA-Z_]+:" src/actions.ts | wc -l
+
+```
+414
+<exited with exit code 0>
+```
+
+
+### 💬 Copilot
+
+Now I have a complete picture. Let me write my findings and then update the history:
+
+### ✅ `edit`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/history.md
+
+```
+File /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/agents/morpheus/history.md updated with changes.
+```
+
+
+### ✅ `create`
+
+/Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions/inbox/morpheus-project-review.md
+
+```
+Created file /Users/lynbh/Development/companion-module-dev/companion-module-zoom-cavzrc/.squad/decisions/inbox/morpheus-project-review.md with 2564 characters
+```
+
+
+### 💬 Copilot
+
+---
+
+# Project Review — companion-module-zoom-cavzrc
+
+**Reviewed by:** Morpheus (Lead)  
+**Date:** 2024-02-27  
+**Requested by:** Justin James
+
+---
+
+## ✅ What's in Good Shape
+
+### Project Structure & Organization
+- **Clean separation of concerns** — Each module has a single, clear responsibility: `index.ts` (lifecycle), `osc.ts` (protocol), `actions.ts` (commands), `feedback.ts` (state checks), `variables/` (data exposure).
+- **Logical file layout** — Source in `src/`, build output in `dist/`, companion metadata in `companion/`. No clutter.
+- **Consistent naming** — camelCase, descriptive identifiers, no abbreviation soup.
+
+### TypeScript Configuration
+- **Properly configured** — Extends `@companion-module/tools/tsconfig/node22/recommended`, inherits strict mode (`noImplicitAny: true`, `strict: true`).
+- **Correct module system** — Node16 module resolution matches runtime environment.
+- **Source maps enabled** — Debugging will work when needed.
+
+### Build Pipeline
+- **Builds cleanly** — `yarn build` completes without errors.
+- **Lint passes** — ESLint with official config runs clean.
+- **Quality gates enforced** — Husky pre-commit hook runs lint-staged (format + lint). Won't let broken code reach the repo.
+- **Dev workflow exists** — `yarn dev` provides watch mode for iteration.
+
+### Source Code Quality
+- **Strong typing** — No `any` types observed. State interfaces are well-defined (`CavzrcState`, `RoomState`, `RoomInfo`).
+- **OSC layer is solid** — Bidirectional UDP sockets correctly set up. Send socket + receive socket pattern is appropriate. Header-based routing works. State parsing handles list accumulation correctly (rooms list is built incrementally).
+- **Action coverage is comprehensive** — 80+ actions spanning join/leave, room lists, NDI, HWIO, Dante, device control, overlays, content share, room operations, companion rooms. CAVZRC's OSC API is well-represented.
+- **Feedback and variables work** — 4 feedbacks (paired, in_meeting, mute, camera) and 64 variables (global counts/lists + 10 room slots with 6 properties each). State updates trigger re-checks.
+- **Room targeting abstraction is clean** — Helper functions (`buildRoomPath`, `getRoomTarget`, `roomCommand`, `roomCommandWithOpts`) eliminate duplication across 80+ actions. 4 targeting modes (ID, name, index, all) handled uniformly.
+
+### Documentation
+- **Excellent README** — User-facing docs are clear, complete, and well-structured. Configuration instructions are precise. Feature list is comprehensive.
+- **Good companion metadata** — `companion/manifest.json` and `companion/HELP.md` provide necessary metadata and in-app help.
+
+### Dependencies
+- **Minimal and appropriate** — Only `@companion-module/base` and `osc`. No bloat.
+- **Current OSC library** — `osc` at 2.4.5 (latest).
+
+---
+
+## ⚠️ Needs Attention
+
+### Dependency Version
+- **`@companion-module/base` is two versions behind** — Currently 1.12.1, latest is 1.14.1. Not critical for alpha, but updates may include bug fixes or API improvements. Check release notes before updating.
+
+### Version Inconsistency
+- **`package.json` version (0.0.3) ≠ `companion/manifest.json` version (0.0.2)** — Companion reads the manifest. These should stay in sync. Either align manually or automate during build.
+
+### Error Handling
+- **No validation of room target arguments** — Empty `roomID`, blank `roomName`, or out-of-range `roomIndex` will send malformed OSC messages. Not fatal (CAVZRC will ignore), but creates noise.
+- **OSC send errors logged but not surfaced** — User won't know if commands fail to send (network down, port blocked, etc.).
+- **OSC parse errors swallowed silently** — Logged at debug level only. If CAVZRC sends unexpected messages, state won't update and you won't know why.
+
+### Connection State Tracking
+- **No way to know if CAVZRC is reachable** — Module sends commands blindly. No "connected" feedback or variable. User can't tell if setup is correct.
+
+### Code Documentation
+- **Minimal inline comments** — Only 1 comment line across all source files. Code is readable, but OSC message handling logic (especially list accumulation in `handleMessage`) would benefit from explanatory comments.
+
+### Minor Tooling
+- **`@companion-module/tools` one patch version behind** — 2.6.1 vs 2.7.1. Low priority, but update when convenient.
+
+---
+
+## ❌ Needs Work
+
+### Test Coverage
+- **Zero tests** — No `.test.ts` or `.spec.ts` files. No test framework configured.
+- **High-risk areas untested** — OSC message parsing (especially `addedRoomsList` / `pairedRoomsList` accumulation), state management, room targeting logic, argument extraction (`argStr`, `argInt`).
+- **No regression safety net** — Refactoring or adding features risks breaking existing behavior silently.
+
+### Missing Presets
+- **Basic presets only** — 18 presets cover join/leave, room lists, NDI, HWIO, Dante, device, overlays. Many actions have no corresponding preset (e.g., camera/mic/speaker selection, overlay alignment, content share, room info queries, companion rooms).
+- **Presets are static** — Not populated from room list. User must manually configure room targeting in every preset.
+
+### Variable Limitations
+- **Hard 10-room limit** — Variables only expose `room_1` through `room_10`. If user has 20 rooms, 10 are invisible. Companion supports dynamic variable counts; this could scale.
+- **Variables use paired rooms only** — If user hasn't requested paired room list, or has rooms in added-but-not-paired state, those rooms won't appear in variables.
+
+### Feedback Limitations
+- **Room dropdown requires manual refresh** — Feedback room choices are set at `GetFeedbacks()` call time (during `updateInstance()`). If room list changes at runtime, user must reload connection config or restart module to see new rooms in dropdown.
+- **Only 4 feedbacks** — Many state properties are tracked (`participantCount`, `meetingStatus`, `selectedPrimaryCamera`, `selectedMic`, `selectedSpeaker`, `overlayConfig`) but have no corresponding feedbacks. User can't trigger actions based on participant count thresholds, camera selection, overlay state, etc.
+
+### OSC Layer Gaps
+- **No retry logic for sends** — If UDP packet is dropped (network congestion, etc.), command is lost. User must retry manually.
+- **No acknowledgment tracking** — OSC is fire-and-forget. Module can't detect if CAVZRC received or processed a command.
+- **Port conflict handling is passive** — If `rx_port` is in use, error is logged but module continues. User might not notice feedback is dead.
+
+### Upgrade Mechanism Unused
+- **`upgrades.ts` is empty placeholder** — No config migrations defined. If config schema changes in future versions, old configs won't auto-upgrade. Not a problem now (version 0.0.3), but establishes no pattern for when it's needed.
+
+---
+
+## Priorities
+
+The 5 most important things to tackle next, in order:
+
+### 1. **Sync manifest version with package.json** (5 min)
+Align `companion/manifest.json` version to 0.0.3. Prevents user confusion. Trivial fix.
+
+### 2. **Add OSC message parsing tests** (2-3 hours)
+Write unit tests for `handleMessage()` in `osc.ts`, focusing on:
+- List accumulation (`addedRoomsList`, `pairedRoomsList`)
+- Room state updates (`meetingStatus`, `muteStatus`, `cameraStatus`, etc.)
+- Argument extraction (`argStr`, `argInt`)
+- Edge cases (missing args, wrong types, partial messages)
+
+This is the highest-risk code with no safety net.
+
+### 3. **Update `@companion-module/base` to 1.14.1** (30 min–2 hours)
+Check release notes for breaking changes. Update, rebuild, test runtime. Keeps module current with platform improvements.
+
+### 4. **Add room target validation** (1-2 hours)
+Before sending OSC commands, validate:
+- `roomID` and `roomName` are non-empty strings
+- `roomIndex` is \>= 1
+- Warn user (log warning + show in UI if possible) when invalid targets are used
+
+Prevents silent failures and improves UX.
+
+### 5. **Define test/validation scenarios for manual QA** (2-4 hours)
+Since automated tests don't exist, document manual test scenarios in `TESTING.md` or similar:
+- Connect to CAVZRC, verify feedback updates
+- Send join/leave/mute commands, verify room responds
+- Test each room targeting mode (ID, name, index, all)
+- Test edge cases (empty room list, disconnected CAVZRC, port conflicts)
+
+Establishes a baseline for regression testing during future work.
+
+---
+
+**Bottom line:** The architecture is sound, the code is clean, and the feature coverage is impressive for alpha. The gaps are testing, validation, and polish — not fundamental design problems. You're in good shape to move forward.
+
+
+---
+
+<sub>⏱️ 8844m 13s</sub>
+
+### 💬 Copilot
+
+Here's Morpheus's full assessment:
+
+---
+
+## ✅ What's in Good Shape
+
+- **Architecture is solid** — Clean separation: `index.ts` (lifecycle), `osc.ts` (protocol), `actions.ts`, `feedback.ts`, `variables/`. No clutter.
+- **TypeScript config** — Strict mode, Node16 resolution, source maps. Builds cleanly.
+- **OSC layer** — Bidirectional UDP correct. Header-based routing works. Room targeting helpers (`buildRoomPath`, `getRoomTarget`) eliminate duplication well.
+- **Action coverage is strong** — 80+ actions covering join/leave, NDI, HWIO, Dante, overlays, content share, companion rooms.
+- **Pre-commit quality gates** — Husky + lint-staged enforcing format and lint before commits.
+- **README is excellent** — Clear, complete, user-facing docs are production quality.
+
+---
+
+## ⚠️ Needs Attention
+
+- **Version mismatch** — `package.json` says 0.0.3, `companion/manifest.json` says 0.0.2. Needs to be in sync.
+- **`@companion-module/base` is two versions behind** — 1.12.1, latest is 1.14.1. Worth checking release notes.
+- **No connection state indicator** — Module sends commands blindly. User can't tell if CAVZRC is actually reachable.
+- **Error handling is quiet** — OSC send failures and parse errors logged at debug level only. User won't know when things fail silently.
+- **No inline comments** — Readable code, but the list-accumulation logic in `handleMessage` deserves explanation.
+
+---
+
+## ❌ Needs Work
+
+- **Zero tests** — No test framework, no test files. The OSC message parsing and state management are high-risk with no safety net.
+- **Missing presets** — 18 presets exist but many actions (camera/mic/speaker selection, overlay alignment, content share, room info, companion rooms) have no preset.
+- **Hard 10-room limit on variables** — Only `room_1`–`room_10` exposed. Users with more rooms are stuck.
+- **Only 4 feedbacks** — Lots of tracked state (participant count, camera selection, overlay config, etc.) with no feedback surface.
+- **`upgrades.ts` is empty** — No config migration pattern established for when schema changes.
+
+---
+
+## Priorities (in order)
+
+1. **Sync manifest version** — 5 min, trivial, fix now
+2. **OSC message parsing tests** — Highest-risk code, no safety net
+3. **Update `@companion-module/base` to 1.14.1** — Check release notes, then update
+4. **Room target validation** — Prevent malformed OSC from being sent silently
+5. **Manual QA test scenarios** — Document test cases until automated tests exist
+
+**Morpheus's bottom line:** Architecture is sound, code is clean, feature coverage is impressive for alpha. The gaps are testing, validation, and polish — not fundamental design problems.
+
+---
+
+<sub>⏱️ 9655m 31s</sub>
+
+### ❌ `local_shell`
+
+$ f .
+
+```
+/bin/sh: f: command not found
+```
+
+
+---
+
+<sub>⏱️ 27485m 14s</sub>
+
+### ℹ️ Info
+
+Environment loaded: 1 agent, 1 plugin, 1 skill
+
+---
+
+<sub>Generated by [GitHub Copilot CLI](https://github.com/features/copilot/cli)</sub>

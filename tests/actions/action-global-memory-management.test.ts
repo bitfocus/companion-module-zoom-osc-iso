@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import {
 	GetActionsGlobalMemoryManagement,
@@ -7,14 +7,19 @@ import {
 
 describe('GetActionsGlobalMemoryManagement', () => {
 	let instance: ReturnType<typeof createMockInstance>
+	let actions: ReturnType<typeof GetActionsGlobalMemoryManagement>
+
+	beforeAll(() => {
+		instance = createMockInstance()
+		actions = GetActionsGlobalMemoryManagement(instance)
+	})
 
 	beforeEach(() => {
-		instance = createMockInstance()
-		;(instance.OSC.sendCommand as any).mockClear()
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	it('listUsers sends /zoom/list with no args', async () => {
-		const actions = GetActionsGlobalMemoryManagement(instance)
 		await (actions[ActionIdGlobalMemoryManagement.listUsers] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/list', [])
 	})

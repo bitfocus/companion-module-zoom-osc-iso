@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import {
 	GetActionsZoomISOOutputSettings,
@@ -9,13 +9,19 @@ import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISOOutputSettings', () => {
 	let instance: InstanceBaseExt<ZoomConfig>
+	let actions: ReturnType<typeof GetActionsZoomISOOutputSettings>
 
-	beforeEach(() => {
+	beforeAll(() => {
 		instance = createMockInstance()
+		actions = GetActionsZoomISOOutputSettings(instance)
+	})
+
+	afterEach(() => {
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.setOutputCount} sends /zoom/setOutputCount with count arg`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.setOutputCount] as any).callback(
 			{ options: { count: 4 } } as any,
 			{} as any,
@@ -24,7 +30,6 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.enableOutput} sends /zoom/enableOutput with output arg`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.enableOutput] as any).callback(
 			{ options: { output: 2 } } as any,
 			{} as any,
@@ -33,7 +38,6 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.disableOutput} sends /zoom/disableOutput with output arg`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.disableOutput] as any).callback(
 			{ options: { output: 3 } } as any,
 			{} as any,
@@ -42,7 +46,6 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.setOutputMode} sends /zoom/setOutputMode with output and mode args`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.setOutputMode] as any).callback(
 			{ options: { output: 1, outputMode: 'Spotlight' } } as any,
 			{} as any,
@@ -54,7 +57,6 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.setOutputName} sends /zoom/setOutputName with output and name args`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.setOutputName] as any).callback(
 			{ options: { output: 2, name: 'Camera A' } } as any,
 			{} as any,
@@ -66,24 +68,19 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.setVideoLossMode} sends /zoom/setVideoLossMode with mode arg`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.setVideoLossMode] as any).callback(
 			{ options: { videoLossMode: 'Freeze' } } as any,
 			{} as any,
 		)
-		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/setVideoLossMode', [
-			{ type: 's', value: 'Freeze' },
-		])
+		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/setVideoLossMode', [{ type: 's', value: 'Freeze' }])
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.addOutput} sends /zoom/addOutput with no args`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.addOutput] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/addOutput', [])
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.deleteOutput} sends /zoom/deleteOutput with output arg`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.deleteOutput] as any).callback(
 			{ options: { output: 5 } } as any,
 			{} as any,
@@ -92,7 +89,6 @@ describe('GetActionsZoomISOOutputSettings', () => {
 	})
 
 	it(`${ActionIdZoomISOOutputSettings.setAudioMode} sends /zoom/setAudioMode with channel number and mode args`, async () => {
-		const actions = GetActionsZoomISOOutputSettings(instance)
 		await (actions[ActionIdZoomISOOutputSettings.setAudioMode] as any).callback(
 			{ options: { number: 3, audioChannelMode: 'Mix' } } as any,
 			{} as any,

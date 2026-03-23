@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { createCommand, sendActionCommand } from '../../src/actions/action-utils.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
@@ -162,8 +162,18 @@ describe('createCommand', () => {
 
 // ── sendActionCommand ──────────────────────────────────────────────────────────
 describe('sendActionCommand', () => {
+	let instance: ReturnType<typeof createMockInstance>
+
+	beforeAll(() => {
+		instance = createMockInstance()
+	})
+
+	afterEach(() => {
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
+	})
+
 	it('calls instance.OSC.sendCommand with path and args', () => {
-		const instance = createMockInstance()
 		sendActionCommand(instance, {
 			options: {
 				command: '/zoom/startLocalRecording',
@@ -174,7 +184,6 @@ describe('sendActionCommand', () => {
 	})
 
 	it('passes args correctly', () => {
-		const instance = createMockInstance()
 		const args = [{ type: 'i', value: 1001 }]
 		sendActionCommand(instance, {
 			options: { command: '/zoom/zoomID/videoOn', args },
@@ -184,9 +193,8 @@ describe('sendActionCommand', () => {
 
 	it('does not throw when instance.OSC is null/undefined', () => {
 		const instance = createMockInstance()
-		;(instance as any).OSC = null
-		expect(() =>
-			sendActionCommand(instance, { options: { command: '/zoom/test', args: [] } })
-		).not.toThrow()
+		const anyInstance = instance as any
+		anyInstance.OSC = null
+		expect(() => sendActionCommand(instance, { options: { command: '/zoom/test', args: [] } })).not.toThrow()
 	})
 })

@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUserWaitingRoom, ActionIdUserWaitingRoom } from '../../src/actions/action-user-waiting-room.js'
 
@@ -6,9 +6,20 @@ describe('GetActionsUserWaitingRoom', () => {
 	// ── admitSomeoneFromWaitingRoom ───────────────────────────────────────────
 	describe('admitSomeoneFromWaitingRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/admit', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom] as any).callback(
 					{ options: { userName: 'John Smith' } } as any,
 					{} as any,
@@ -20,23 +31,43 @@ describe('GetActionsUserWaitingRoom', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [1001] })
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/admit', async () => {
-				const instance = createMockInstance({ selectedCallers: [1001] })
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
 				)
-				expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/zoomID/admit', [
-					{ type: 'i', value: 1001 },
-				])
+				expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/zoomID/admit', [{ type: 'i', value: 1001 }])
 			})
 		})
 
 		describe('with multiple selected callers', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [1001, 1002] })
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/users/zoomID/admit', async () => {
-				const instance = createMockInstance({ selectedCallers: [1001, 1002] })
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
@@ -52,9 +83,20 @@ describe('GetActionsUserWaitingRoom', () => {
 	// ── sendSomeoneToWaitingRoom ──────────────────────────────────────────────
 	describe('sendSomeoneToWaitingRoom', () => {
 		describe('with userName override', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance()
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/userName/sendToWaitingRoom', async () => {
-				const instance = createMockInstance()
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom] as any).callback(
 					{ options: { userName: 'Jane Doe' } } as any,
 					{} as any,
@@ -66,9 +108,20 @@ describe('GetActionsUserWaitingRoom', () => {
 		})
 
 		describe('with single selected caller', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [2002] })
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/zoomID/sendToWaitingRoom', async () => {
-				const instance = createMockInstance({ selectedCallers: [2002] })
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,
@@ -80,9 +133,20 @@ describe('GetActionsUserWaitingRoom', () => {
 		})
 
 		describe('with multiple selected callers', () => {
+			let instance: ReturnType<typeof createMockInstance>
+			let actions: ReturnType<typeof GetActionsUserWaitingRoom>
+
+			beforeAll(() => {
+				instance = createMockInstance({ selectedCallers: [2002, 2003] })
+				actions = GetActionsUserWaitingRoom(instance)
+			})
+
+			afterEach(() => {
+				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				sendCommand.mockClear()
+			})
+
 			it('sends /zoom/users/zoomID/sendToWaitingRoom', async () => {
-				const instance = createMockInstance({ selectedCallers: [2002, 2003] })
-				const actions = GetActionsUserWaitingRoom(instance)
 				await (actions[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom] as any).callback(
 					{ options: { userName: '' } } as any,
 					{} as any,

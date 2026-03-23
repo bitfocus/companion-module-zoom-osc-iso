@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import {
 	GetActionsGlobalBreakoutRooms,
@@ -7,38 +7,39 @@ import {
 
 describe('GetActionsGlobalBreakoutRooms', () => {
 	let instance: ReturnType<typeof createMockInstance>
+	let actions: ReturnType<typeof GetActionsGlobalBreakoutRooms>
+
+	beforeAll(() => {
+		instance = createMockInstance()
+		actions = GetActionsGlobalBreakoutRooms(instance)
+	})
 
 	beforeEach(() => {
-		instance = createMockInstance()
-		;(instance.OSC.sendCommand as any).mockClear()
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	it('requestListOfBreakoutRooms sends /zoom/listBreakouts with no args', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/listBreakouts', [])
 	})
 
 	it('openBreakoutRooms sends /zoom/openBreakouts with no args', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.openBreakoutRooms] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/openBreakouts', [])
 	})
 
 	it('closeBreakoutRooms sends /zoom/closeBreakouts with no args', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.closeBreakoutRooms] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/closeBreakouts', [])
 	})
 
 	it('deleteAllBreakoutRooms sends /zoom/deleteAllBreakouts with no args', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.deleteAllBreakoutRooms] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/deleteAllBreakouts', [])
 	})
 
 	it('createBreakoutRoom sends /zoom/createBreakout with name arg', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.createBreakoutRoom] as any).callback(
 			{ options: { name: 'Room A' } } as any,
 			{} as any,
@@ -47,7 +48,6 @@ describe('GetActionsGlobalBreakoutRooms', () => {
 	})
 
 	it('deleteBreakoutRoom sends /zoom/deleteBreakout with name arg', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.deleteBreakoutRoom] as any).callback(
 			{ options: { name: 'Room A' } } as any,
 			{} as any,
@@ -56,7 +56,6 @@ describe('GetActionsGlobalBreakoutRooms', () => {
 	})
 
 	it('configureBreakoutRooms sends /zoom/configureBreakouts with numeric args', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.configureBreakoutRooms] as any).callback(
 			{
 				options: {
@@ -83,7 +82,6 @@ describe('GetActionsGlobalBreakoutRooms', () => {
 	})
 
 	it('broadcastMessageToBreakoutRooms sends /zoom/broadcastToBreakouts with message arg', async () => {
-		const actions = GetActionsGlobalBreakoutRooms(instance)
 		await (actions[ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms] as any).callback(
 			{ options: { message: 'Hello rooms!' } } as any,
 			{} as any,

@@ -1,91 +1,72 @@
-import { jest, describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
-
-// Must be registered before any static import of modules that transitively
-// require feedback-state-machine (which uses a CJS require() for images).
-await jest.unstable_mockModule('../../feedback-state-machine.js', () => ({
-	feedbackResultsMultiState: jest.fn().mockReturnValue([]),
-}))
-
-const { createMockInstance } = await import('../helpers/mock-instance.js')
-const { GetActionsGallery, ActionIdGallery } = await import('../../src/actions/action-gallery.js')
+import { createMockInstance } from '../helpers/mock-instance.js'
+import { GetActionsGallery, ActionIdGallery } from '../../src/actions/action-gallery.js'
 
 describe('GetActionsGallery', () => {
 	let instance: InstanceBaseExt<ZoomConfig>
+	let actions: ReturnType<typeof GetActionsGallery>
+
+	beforeAll(() => {
+		instance = createMockInstance({ selectedCallers: [] })
+		actions = GetActionsGallery(instance)
+	})
 
 	beforeEach(() => {
-		instance = createMockInstance({ selectedCallers: [] })
 		instance.ZoomClientDataObj.galleryOrder = [1001, 1002, 1003]
+		instance.ZoomClientDataObj.selectedCallers = []
+	})
+
+	afterEach(() => {
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	describe('selectFromGalleryPosition', () => {
 		it('selects user at gallery position 1 with select option', () => {
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toContain(1001)
 		})
 
 		it('selects user at gallery position 2 with select option', () => {
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 2, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 2, option: 'select' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toContain(1002)
 		})
 
 		it('removes user at gallery position 1 with remove option', () => {
-			instance = createMockInstance({ selectedCallers: [1001] })
-			instance.ZoomClientDataObj.galleryOrder = [1001, 1002, 1003]
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'remove' } } as any,
-				{} as any,
-			)
+			instance.ZoomClientDataObj.selectedCallers = [1001]
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'remove' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).not.toContain(1001)
 		})
 
 		it('toggles selection off when user is already selected (single mode)', () => {
-			instance = createMockInstance({ selectedCallers: [1001], selectionMethod: 1 })
-			instance.ZoomClientDataObj.galleryOrder = [1001, 1002, 1003]
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'toggle' } } as any,
-				{} as any,
-			)
+			instance.config.selectionMethod = 1 // single selection mode
+			instance.ZoomClientDataObj.selectedCallers = [1001]
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'toggle' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).not.toContain(1001)
 		})
 
 		it('saves previous selection before selecting', () => {
-			instance = createMockInstance({ selectedCallers: [9999] })
-			instance.ZoomClientDataObj.galleryOrder = [1001, 1002, 1003]
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			instance.ZoomClientDataObj.selectedCallers = [9999]
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.PreviousSelectedCallers).toContain(9999)
 		})
 
 		it('calls checkFeedbacks after selection', () => {
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.checkFeedbacks).toHaveBeenCalled()
 		})
 
 		it('calls setVariableValues after selection', () => {
-			const actions = GetActionsGallery(instance)
-			;(actions[ActionIdGallery.selectFromGalleryPosition] as any).callback(
-				{ options: { position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.setVariableValues).toHaveBeenCalled()
 		})
 	})

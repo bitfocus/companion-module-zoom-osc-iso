@@ -1,5 +1,5 @@
 import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request.js'
-import { ActionId } from '../actions.js'
+import { ActionIdCustom } from '../actions/action-custom.js'
 import { colorBlack, colorLightGray } from '../utils.js'
 import { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
@@ -155,7 +155,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 				{
 					down: [
 						{
-							actionId: ActionId.customCommand,
+							actionId: ActionIdCustom.customCommand,
 							options: {},
 						},
 					],
@@ -179,7 +179,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 				{
 					down: [
 						{
-							actionId: ActionId.customCommandWithArguments,
+							actionId: ActionIdCustom.customCommandWithArguments,
 							options: {},
 						},
 					],

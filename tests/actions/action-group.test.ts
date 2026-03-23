@@ -1,21 +1,19 @@
-import { jest, describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
-
-// Must be registered before any static import of modules that transitively
-// require feedback-state-machine (which uses a CJS require() for images).
-await jest.unstable_mockModule('../../feedback-state-machine.js', () => ({
-	feedbackResultsMultiState: jest.fn().mockReturnValue([]),
-}))
-
-const { createMockInstance } = await import('../helpers/mock-instance.js')
-const { GetActionsGroups, ActionIdGroups } = await import('../../src/actions/action-group.js')
+import { createMockInstance } from '../helpers/mock-instance.js'
+import { GetActionsGroups, ActionIdGroups } from '../../src/actions/action-group.js'
 
 describe('GetActionsGroups', () => {
 	let instance: InstanceBaseExt<ZoomConfig>
+	let actions: ReturnType<typeof GetActionsGroups>
+
+	beforeAll(() => {
+		instance = createMockInstance({ selectedCallers: [1001] })
+		actions = GetActionsGroups(instance)
+	})
 
 	beforeEach(() => {
-		instance = createMockInstance({ selectedCallers: [1001] })
 		// Index 0 = All, 1 = Host/Me, 2+ = user-defined groups
 		instance.ZoomGroupData = [
 			{ groupName: 'All', users: [] },
@@ -30,44 +28,37 @@ describe('GetActionsGroups', () => {
 		} as any
 	})
 
+	afterEach(() => {
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
+	})
+
 	describe('addToGroup', () => {
 		it('adds selected callers to the specified group', () => {
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.addToGroup] as any).callback(
-				{ options: { group: 2, groupOption: 'add' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.addToGroup] as any).callback
+			callback({ options: { group: 2, groupOption: 'add' } } as any, {} as any)
 			expect(instance.ZoomGroupData[2].users).toHaveLength(1)
 			expect(instance.ZoomGroupData[2].users[0].zoomID).toBe(1001)
 		})
 
 		it('replaces group users when groupOption is replace', () => {
 			instance.ZoomGroupData[2].users = [{ zoomID: 9999, userName: 'Old User' }]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.addToGroup] as any).callback(
-				{ options: { group: 2, groupOption: 'replace' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.addToGroup] as any).callback
+			callback({ options: { group: 2, groupOption: 'replace' } } as any, {} as any)
 			expect(instance.ZoomGroupData[2].users).toHaveLength(1)
 			expect(instance.ZoomGroupData[2].users[0].zoomID).toBe(1001)
 		})
 
 		it('does not add duplicate users', () => {
 			instance.ZoomGroupData[2].users = [{ zoomID: 1001, userName: 'Alice' }]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.addToGroup] as any).callback(
-				{ options: { group: 2, groupOption: 'add' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.addToGroup] as any).callback
+			callback({ options: { group: 2, groupOption: 'add' } } as any, {} as any)
 			expect(instance.ZoomGroupData[2].users).toHaveLength(1)
 		})
 
 		it('calls checkFeedbacks after adding', () => {
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.addToGroup] as any).callback(
-				{ options: { group: 2, groupOption: 'add' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.addToGroup] as any).callback
+			callback({ options: { group: 2, groupOption: 'add' } } as any, {} as any)
 			expect(instance.checkFeedbacks).toHaveBeenCalled()
 		})
 	})
@@ -78,20 +69,14 @@ describe('GetActionsGroups', () => {
 				{ zoomID: 1001, userName: 'Alice' },
 				{ zoomID: 1002, userName: 'Bob' },
 			]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.clearGroup] as any).callback(
-				{ options: { group: 2 } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.clearGroup] as any).callback
+			callback({ options: { group: 2 } } as any, {} as any)
 			expect(instance.ZoomGroupData[2].users).toHaveLength(0)
 		})
 
 		it('calls checkFeedbacks after clearing', () => {
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.clearGroup] as any).callback(
-				{ options: { group: 2 } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.clearGroup] as any).callback
+			callback({ options: { group: 2 } } as any, {} as any)
 			expect(instance.checkFeedbacks).toHaveBeenCalled()
 		})
 	})
@@ -99,7 +84,6 @@ describe('GetActionsGroups', () => {
 	describe('removeFromGroup', () => {
 		it('removes selected caller from group when no name is given', async () => {
 			instance.ZoomGroupData[2].users = [{ zoomID: 1001, userName: 'Alice' }]
-			const actions = GetActionsGroups(instance)
 			await (actions[ActionIdGroups.removeFromGroup] as any).callback(
 				{ options: { group: 2, userName: '' } } as any,
 				{} as any,
@@ -112,7 +96,6 @@ describe('GetActionsGroups', () => {
 				{ zoomID: 1001, userName: 'Alice' },
 				{ zoomID: 1002, userName: 'Bob' },
 			]
-			const actions = GetActionsGroups(instance)
 			await (actions[ActionIdGroups.removeFromGroup] as any).callback(
 				{ options: { group: 2, userName: 'Alice' } } as any,
 				{} as any,
@@ -122,7 +105,6 @@ describe('GetActionsGroups', () => {
 		})
 
 		it('logs a warning for invalid group', async () => {
-			const actions = GetActionsGroups(instance)
 			await (actions[ActionIdGroups.removeFromGroup] as any).callback(
 				{ options: { group: 99, userName: '' } } as any,
 				{} as any,
@@ -133,7 +115,6 @@ describe('GetActionsGroups', () => {
 
 	describe('renameGroup', () => {
 		it('renames the specified group', async () => {
-			const actions = GetActionsGroups(instance)
 			await (actions[ActionIdGroups.renameGroup] as any).callback(
 				{ options: { group: 2, name: 'New Name' } } as any,
 				{} as any,
@@ -142,7 +123,6 @@ describe('GetActionsGroups', () => {
 		})
 
 		it('calls setVariableValues after renaming', async () => {
-			const actions = GetActionsGroups(instance)
 			await (actions[ActionIdGroups.renameGroup] as any).callback(
 				{ options: { group: 2, name: 'Updated' } } as any,
 				{} as any,
@@ -157,31 +137,22 @@ describe('GetActionsGroups', () => {
 				{ zoomID: 1001, userName: 'Alice' },
 				{ zoomID: 1002, userName: 'Bob' },
 			]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectGroup] as any).callback(
-				{ options: { group: 2 } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectGroup] as any).callback
+			callback({ options: { group: 2 } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1001, 1002])
 		})
 
 		it('clears selectedCallers when the group is empty', () => {
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectGroup] as any).callback(
-				{ options: { group: 2 } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectGroup] as any).callback
+			callback({ options: { group: 2 } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toHaveLength(0)
 		})
 
 		it('saves previous selection before selecting group', () => {
 			instance.ZoomClientDataObj.selectedCallers = [9999]
 			instance.ZoomGroupData[2].users = [{ zoomID: 1001, userName: 'Alice' }]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectGroup] as any).callback(
-				{ options: { group: 2 } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectGroup] as any).callback
+			callback({ options: { group: 2 } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.PreviousSelectedCallers).toContain(9999)
 		})
 	})
@@ -193,11 +164,8 @@ describe('GetActionsGroups', () => {
 				{ zoomID: 1002, userName: 'Bob' },
 			]
 			instance.ZoomClientDataObj.selectedCallers = []
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback(
-				{ options: { group: 2, position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback
+			callback({ options: { group: 2, position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toContain(1001)
 		})
 
@@ -207,21 +175,15 @@ describe('GetActionsGroups', () => {
 				{ zoomID: 1002, userName: 'Bob' },
 			]
 			instance.ZoomClientDataObj.selectedCallers = []
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback(
-				{ options: { group: 2, position: 2, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback
+			callback({ options: { group: 2, position: 2, option: 'select' } } as any, {} as any)
 			expect(instance.ZoomClientDataObj.selectedCallers).toContain(1002)
 		})
 
 		it('calls checkFeedbacks after selection', () => {
 			instance.ZoomGroupData[2].users = [{ zoomID: 1001, userName: 'Alice' }]
-			const actions = GetActionsGroups(instance)
-			;(actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback(
-				{ options: { group: 2, position: 1, option: 'select' } } as any,
-				{} as any,
-			)
+			const callback = (actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback
+			callback({ options: { group: 2, position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.checkFeedbacks).toHaveBeenCalled()
 		})
 	})

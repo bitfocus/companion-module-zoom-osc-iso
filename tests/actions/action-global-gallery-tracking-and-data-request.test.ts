@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import {
 	GetActionsGlobalGalleryTrackingAndDataRequest,
@@ -7,10 +7,16 @@ import {
 
 describe('GetActionsGlobalGalleryTrackingAndDataRequest', () => {
 	let instance: ReturnType<typeof createMockInstance>
+	let actions: ReturnType<typeof GetActionsGlobalGalleryTrackingAndDataRequest>
+
+	beforeAll(() => {
+		instance = createMockInstance()
+		actions = GetActionsGlobalGalleryTrackingAndDataRequest(instance)
+	})
 
 	beforeEach(() => {
-		instance = createMockInstance()
-		;(instance.OSC.sendCommand as any).mockClear()
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	const cases: [ActionIdGlobalGalleryTrackingAndDataRequest, string][] = [
@@ -20,7 +26,6 @@ describe('GetActionsGlobalGalleryTrackingAndDataRequest', () => {
 	]
 
 	it.each(cases)('%s sends %s with no args', async (actionId, expectedPath) => {
-		const actions = GetActionsGlobalGalleryTrackingAndDataRequest(instance)
 		await (actions[actionId] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith(expectedPath, [])
 	})

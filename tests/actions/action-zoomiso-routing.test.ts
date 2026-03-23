@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsZoomISORouting, ActionIdZoomISORouting } from '../../src/actions/action-zoomiso-routing.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
@@ -6,9 +6,16 @@ import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISORouting', () => {
 	let instance: InstanceBaseExt<ZoomConfig>
+	let actions: ReturnType<typeof GetActionsZoomISORouting>
 
 	beforeEach(() => {
 		instance = createMockInstance()
+		actions = GetActionsZoomISORouting(instance)
+	})
+
+	afterEach(() => {
+		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		sendCommand.mockClear()
 	})
 
 	describe(ActionIdZoomISORouting.outputISO, () => {
@@ -26,7 +33,6 @@ describe('GetActionsZoomISORouting', () => {
 		})
 
 		it('routes to /zoom/userName/outputISO when userName is provided', async () => {
-			const actions = GetActionsZoomISORouting(instance)
 			await (actions[ActionIdZoomISORouting.outputISO] as any).callback(
 				{ options: { userName: 'John Doe', output: 1, setToNoneIfNotUserSelected: false } } as any,
 				{} as any,
@@ -73,7 +79,6 @@ describe('GetActionsZoomISORouting', () => {
 		})
 
 		it('routes to /zoom/userName/audioISO when userName is provided', async () => {
-			const actions = GetActionsZoomISORouting(instance)
 			await (actions[ActionIdZoomISORouting.audioISO] as any).callback(
 				{ options: { userName: 'Jane', output: 2 } } as any,
 				{} as any,
@@ -94,7 +99,6 @@ describe('GetActionsZoomISORouting', () => {
 
 	describe(ActionIdZoomISORouting.outputISOSetToNone, () => {
 		it('sends /zoom/zoomID/outputISO with zoomId=-2 and output (force set to none)', async () => {
-			const actions = GetActionsZoomISORouting(instance)
 			await (actions[ActionIdZoomISORouting.outputISOSetToNone] as any).callback(
 				{ options: { output: 5 } } as any,
 				{} as any,
