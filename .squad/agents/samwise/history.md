@@ -23,9 +23,30 @@
 
 <!-- Append entries below -->
 
+### 2026-03-02: Added per-command polling toggle options for ZoomISO
+
+**Requested by:** Justin James
+
+**What changed:**
+
+- Added 4 new boolean config fields (`pollEngineState`, `pollAudioLevels`, `pollOutputRouting`, `pollAudioRouting`) to `ZoomConfig` interface (all default `true`)
+- Added UI checkboxes in `config.ts` after the existing `pulling` dropdown with a static-text header
+- Updated `src/index.ts` config initializer with 4 new defaults
+- Gated each of the 4 commands in `sendISOPullingCommands()` (`src/osc.ts`) behind corresponding config option using if-guards
+- Added 4 new toggle actions across 3 action files:
+  - `togglePollEngineState` in `action-zoomiso-engine.ts`
+  - `togglePollAudioLevels` in `action-zoomiso-actions.ts`
+  - `togglePollOutputRouting` and `togglePollAudioRouting` in `action-zoomiso-routing.ts`
+- All toggle actions use the pattern: `instance.config.pollX = !instance.config.pollX; instance.saveConfig(instance.config)`
+
+**Why:** Users can now control which data is polled from ZoomISO, reducing unnecessary traffic or troubleshooting specific polling commands.
+
+**Key pattern:** Config-driven command gating in OSC layer + companion actions to toggle config at runtime. The `saveConfig()` method persists changes immediately.
+
 ### 2026-02-28: Created `osc-integration` skill
 
 Wrote `.squad/skills/osc-integration/SKILL.md` — a generic, reusable skill covering the full OSC infrastructure pattern used in this codebase:
+
 - Why `require('osc')` is used instead of ESM import (CJS-only package)
 - `UDPPort` setup with `metadata: true`, tx/rx port split, and TCP alternative
 - Module lifecycle: `init` → `configUpdated` (destroy old OSC, create new) → `destroy`

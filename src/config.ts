@@ -9,6 +9,10 @@ export interface ZoomConfig {
 	selectionMethod: number
 	numberOfGroups: number
 	pulling: number
+	pollEngineState: boolean
+	pollAudioLevels: boolean
+	pollOutputRouting: boolean
+	pollAudioRouting: boolean
 	feedbackImagesWithIcons: number
 	enableVariablesForEachUser: boolean
 	enableVariablesForParticipants: boolean
@@ -98,6 +102,42 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			],
 			default: 1000,
 			width: 12,
+		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'<b>Polling Options (ZoomISO only)</b><br />Select which data to request on each polling cycle.<br />Turning off each setting will effect variables and feedbacks for ZoomISO. Default is to have all settings polled.',
+			id: 'pullingOptionsNote',
+			label: '',
+		},
+		{
+			type: 'checkbox',
+			id: 'pollEngineState',
+			width: 6,
+			default: true,
+			label: 'Poll Engine State',
+		},
+		{
+			type: 'checkbox',
+			id: 'pollAudioLevels',
+			width: 6,
+			default: true,
+			label: 'Poll Audio Levels',
+		},
+		{
+			type: 'checkbox',
+			id: 'pollOutputRouting',
+			width: 6,
+			default: true,
+			label: 'Poll Output Routing',
+		},
+		{
+			type: 'checkbox',
+			id: 'pollAudioRouting',
+			width: 6,
+			default: true,
+			label: 'Poll Audio Routing',
 		},
 		{
 			type: 'dropdown',

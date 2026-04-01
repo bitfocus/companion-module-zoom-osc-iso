@@ -26,6 +26,15 @@
 
 <!-- Append entries below -->
 
+### 2026-03-01: Created upgrade script for polling config options
+
+- **File:** `src/upgrades/addPollingConfigOptions.ts`
+- **Purpose:** Sets default values (`true`) for 4 new boolean config properties added by Samwise: `pollEngineState`, `pollAudioLevels`, `pollOutputRouting`, `pollAudioRouting`
+- **Pattern followed:** Exact match to `addNewConfigFieldsForSocialStreamAndPerformanceTweaks.ts` — spreads `_context.currentConfig`, adds new fields with default values, returns `CompanionStaticUpgradeResult<ZoomConfig>`
+- **Integration:** Added import to `index.ts` line 25 and appended as last entry to `runEntrypoint()` upgrade array
+- **Verification:** `yarn build` passes cleanly
+- **Key insight:** Upgrade scripts ensure backward compatibility by setting sensible defaults for new config fields when users upgrade from older module versions
+
 ### 2026-02-28: Created `companion-action-file-pattern` skill
 
 - **Location:** `.squad/skills/companion-action-file-pattern/SKILL.md`

@@ -1028,10 +1028,10 @@ export class OSC {
 
 	public readonly sendISOPullingCommands = (): void => {
 		// this.instance.log('debug', 'sendISOPullingCommands')
-		this.sendCommand('/zoom/getEngineState', [])
-		this.sendCommand('/zoom/getAudioLevels', [])
-		this.sendCommand('/zoom/getOutputRouting', [])
-		this.sendCommand('/zoom/getAudioRouting', [])
+		if (this.instance.config.pollEngineState) this.sendCommand('/zoom/getEngineState', [])
+		if (this.instance.config.pollAudioLevels) this.sendCommand('/zoom/getAudioLevels', [])
+		if (this.instance.config.pollOutputRouting) this.sendCommand('/zoom/getOutputRouting', [])
+		if (this.instance.config.pollAudioRouting) this.sendCommand('/zoom/getAudioRouting', [])
 		return
 	}
 }

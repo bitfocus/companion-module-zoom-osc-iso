@@ -7,6 +7,8 @@ export enum ActionIdZoomISORouting {
 	outputISO = 'output_ISO',
 	outputISOSetToNone = 'output_ISO_set_to_none',
 	audioISO = 'audio_ISO',
+	togglePollOutputRouting = 'toggle_poll_output_routing',
+	togglePollAudioRouting = 'toggle_poll_audio_routing',
 }
 
 export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>): {
@@ -92,6 +94,22 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 					}
 					sendActionCommand(instance, sendToCommand)
 				}
+			},
+		},
+		[ActionIdZoomISORouting.togglePollOutputRouting]: {
+			name: 'Toggle Poll Output Routing',
+			options: [],
+			callback: (): void => {
+				instance.config.pollOutputRouting = !instance.config.pollOutputRouting
+				instance.saveConfig(instance.config)
+			},
+		},
+		[ActionIdZoomISORouting.togglePollAudioRouting]: {
+			name: 'Toggle Poll Audio Routing',
+			options: [],
+			callback: (): void => {
+				instance.config.pollAudioRouting = !instance.config.pollAudioRouting
+				instance.saveConfig(instance.config)
 			},
 		},
 	}
