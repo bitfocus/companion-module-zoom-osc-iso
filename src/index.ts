@@ -22,6 +22,7 @@ import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrade
 import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
 import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from './upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
+import { addPollingConfigOptions } from './upgrades/addPollingConfigOptions.js'
 
 /**
  * @description Companion instance class for Zoom
@@ -36,6 +37,10 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		selectionMethod: 0,
 		numberOfGroups: 0,
 		pulling: 0,
+		pollEngineState: true,
+		pollAudioLevels: true,
+		pollOutputRouting: true,
+		pollAudioRouting: true,
 		feedbackImagesWithIcons: 1,
 		enableSocialStream: false,
 		enableVariablesForEachUser: true,
@@ -193,4 +198,5 @@ runEntrypoint(ZoomInstance, [
 	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
 	fixWrongPinCommands,
 	addNewConfigFieldsForSocialStreamChatMessagesToSend,
+	addPollingConfigOptions,
 ])
