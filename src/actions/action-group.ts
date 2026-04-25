@@ -62,10 +62,11 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					id: 'filepath',
 					useVariables: true,
 					default: '',
+					expressionDescription: 'Provide the destination file path as a string.',
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+				const filepath = (action.options.filepath as string).trim()
 				const group = action.options.group as number
 				const users = instance.ZoomGroupData[group].users
 				let data = ''
@@ -88,10 +89,11 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					id: 'filepath',
 					useVariables: true,
 					default: '',
+					expressionDescription: 'Provide the source file path as a string.',
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+				const filepath = (action.options.filepath as string).trim()
 				const group = action.options.group as number
 				try {
 					fs.readFile(filepath, 'utf8', (err, data) => {
@@ -205,7 +207,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, groupOptionNoHost],
 			callback: async (action) => {
 				const group = action.options.group as number
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				if (instance.ZoomGroupData[group] !== undefined) {
 					// When someone overides the selection by entering a name
 					if (userName !== undefined && userName !== '') {
@@ -256,7 +258,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Rename Group',
 			options: [groupOption, options.name],
 			callback: async (action) => {
-				const newName = await instance.parseVariablesInString(action.options.name)
+				const newName = action.options.name as string
 				instance.ZoomGroupData[action.options.group as number].groupName = newName
 
 				const variables: CompanionVariableValues = {}

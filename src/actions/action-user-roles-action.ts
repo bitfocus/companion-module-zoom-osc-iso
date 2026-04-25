@@ -131,7 +131,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			name: 'Rename (PRO)',
 			options: [userOption, options.name],
 			callback: async (action) => {
-				const newName = await instance.parseVariablesInString(action.options.name)
+				const newName = action.options.name as string
 				const ZoomID = action.options.user as number
 				const oscPath = `/zoom/zoomID/rename`
 				const sendToCommand: any = {
@@ -176,8 +176,8 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			name: 'Rename By Name(PRO)',
 			options: [options.name, options.newName],
 			callback: async (action) => {
-				const name = await instance.parseVariablesInString(action.options.name)
-				const newName = await instance.parseVariablesInString(action.options.newName)
+				const name = action.options.name as string
+				const newName = action.options.newName as string
 				updateLocalUserData(instance, name, newName)
 			},
 		},
@@ -190,6 +190,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 					id: 'filepath',
 					useVariables: true,
 					default: '',
+					expressionDescription: 'Provide the CSV file path as a string.',
 				},
 				{
 					type: 'checkbox',
@@ -199,7 +200,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+				const filepath = (action.options.filepath as string).trim()
 				const hasHeader = action.options.hasHeader as boolean
 				try {
 					let rowIndex = 0
@@ -246,7 +247,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/makeHost', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -265,7 +266,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/makeCoHost', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -284,7 +285,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				if (userName === undefined || userName === '') {
 					const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 
@@ -339,7 +340,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/makePanelist', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -358,7 +359,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/makeAttendee', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -377,7 +378,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/eject', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -396,7 +397,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/allowToRecord', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -415,7 +416,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/disallowToRecord', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

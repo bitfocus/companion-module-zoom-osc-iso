@@ -343,6 +343,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					default: '',
 					useVariables: true,
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
+					expressionDescription: 'Provide the participant name as a string, or use "me" for the current operator user.',
 				},
 				{
 					type: 'dropdown',
@@ -397,6 +398,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					default: '',
 					useVariables: true,
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
+					expressionDescription: 'Provide the participant name as a string, or use "me" for the current operator user.',
 				},
 			],
 			callback: async (feedback) => {

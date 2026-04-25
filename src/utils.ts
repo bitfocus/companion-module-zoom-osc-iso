@@ -188,9 +188,11 @@ export const getUserFromName = (
 export const options: Options = {
 	message: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'Message',
 		id: 'message',
 		default: '',
+		expressionDescription: 'Provide the final chat/message text, or use an expression that resolves to a string.',
 	},
 	name: {
 		type: 'textinput',
@@ -198,6 +200,8 @@ export const options: Options = {
 		label: 'Name',
 		id: 'name',
 		default: '',
+		expressionDescription:
+			'Provide the participant/display name as a string. Leave blank when the action uses the current selection.',
 	},
 	newName: {
 		type: 'textinput',
@@ -205,6 +209,7 @@ export const options: Options = {
 		label: 'New Name',
 		id: 'newName',
 		default: '',
+		expressionDescription: 'Provide the new participant/display name as a string.',
 	},
 	audioChannelMode: {
 		type: 'dropdown',
@@ -228,6 +233,7 @@ export const options: Options = {
 		label: 'Name of breakout room',
 		id: 'breakoutName',
 		default: '',
+		expressionDescription: 'Provide the breakout room name as a string.',
 	},
 	channel: {
 		type: 'number',
@@ -266,6 +272,7 @@ export const options: Options = {
 		id: 'userName',
 		useVariables: true,
 		default: '',
+		expressionDescription: 'Provide a participant name string, or leave blank to use the current selection.',
 	},
 	meetingID: {
 		type: 'textinput',
@@ -273,12 +280,15 @@ export const options: Options = {
 		label: 'Meeting ID',
 		id: 'meetingID',
 		default: '',
+		expressionDescription: 'Provide the meeting ID as a string.',
 	},
 	path: {
 		type: 'textinput',
+		useVariables: true,
 		label: 'absolute path',
 		id: 'path',
 		default: '',
+		expressionDescription: 'Provide the full OSC path as a string beginning with /. ',
 	},
 	customArgs: {
 		type: 'textinput',
@@ -361,6 +371,7 @@ export const options: Options = {
 		id: 'password',
 		useVariables: true,
 		default: '',
+		expressionDescription: 'Provide the meeting password as a string.',
 	},
 	zak: {
 		type: 'textinput',
@@ -368,6 +379,7 @@ export const options: Options = {
 		label: 'Zak',
 		id: 'zak',
 		default: '',
+		expressionDescription: 'Provide the ZAK token as a string.',
 	},
 	video: {
 		type: 'dropdown',

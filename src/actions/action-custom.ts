@@ -43,7 +43,7 @@ export function GetActionsCustom(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.path],
 			callback: async (action): Promise<void> => {
 				// type: 'Special'
-				const customPath = await instance.parseVariablesInString(action.options.path)
+				const customPath = action.options.path as string
 				// Did they try a JSON object?
 				if (customPath.startsWith('{')) {
 					try {

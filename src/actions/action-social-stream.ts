@@ -20,8 +20,8 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action): Promise<void> => {
 				const socialStreamEnabled = instance.config.enableSocialStream
 				if (socialStreamEnabled) {
-					const message = await instance.parseVariablesInString(action.options.message)
-					const name = await instance.parseVariablesInString(action.options.name)
+					const message = action.options.message as string
+					const name = action.options.name as string
 					await socialStreamApi.postMessage(name, message, instance)
 				} else {
 					instance.log('warn', 'Social Stream is not enabled in config')

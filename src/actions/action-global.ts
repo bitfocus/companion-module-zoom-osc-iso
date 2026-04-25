@@ -164,9 +164,9 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action): Promise<void> => {
 				// type: 'Special'
 				const command = createCommand(instance, '/startMeeting')
-				const name = await instance.parseVariablesInString(action.options.name)
-				const meetingId = await instance.parseVariablesInString(action.options.meetingID)
-				const password = await instance.parseVariablesInString(action.options.password)
+				const name = action.options.name as string
+				const meetingId = action.options.meetingID as string
+				const password = action.options.password as string
 				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: password })
 				command.args.push({ type: 's', value: name })
@@ -186,9 +186,9 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action): Promise<void> => {
 				// type: 'Special'
 				const command = createCommand(instance, '/joinMeeting')
-				const newName = await instance.parseVariablesInString(action.options.name)
-				const newNMeetingId = await instance.parseVariablesInString(action.options.meetingID)
-				const newNPassword = await instance.parseVariablesInString(action.options.password)
+				const newName = action.options.name as string
+				const newNMeetingId = action.options.meetingID as string
+				const newNPassword = action.options.password as string
 				command.args.push({ type: 's', value: newNMeetingId })
 				command.args.push({ type: 's', value: newNPassword })
 				command.args.push({ type: 's', value: newName })
@@ -240,7 +240,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: async (action): Promise<void> => {
 				// type: 'Global'
 				const command = createCommand(instance, '/chatAll')
-				const message = await instance.parseVariablesInString(action.options.message)
+				const message = action.options.message as string
 				command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
 				const sendToCommand = {
 					id: ActionIdGlobal.sendAChatToEveryone,
@@ -273,7 +273,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/Mute', userName, select.multi, true)
 				if (command.isValidCommand) {
 					const sendToCommand = {

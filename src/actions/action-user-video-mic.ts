@@ -21,7 +21,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/videoOn', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -40,7 +40,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/videoOff', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -59,7 +59,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/toggleVideo', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -78,7 +78,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/mute', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -97,7 +97,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/unMute', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -116,7 +116,7 @@ export function GetActionsUserVideoMic(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/toggleMute', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

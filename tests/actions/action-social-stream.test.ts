@@ -56,13 +56,10 @@ describe('GetActionsSocalSteam', () => {
 			expect(instance.log).toHaveBeenCalledWith('warn', 'Social Stream is not enabled in config')
 		})
 
-		it('resolves variables in name and message before posting', async () => {
+		it('passes through v2-resolved name and message values before posting', async () => {
 			instance.config.enableSocialStream = true
-			// action resolves message first, then name
-			const parseVars = instance.parseVariablesInString as jest.Mock
-			parseVars.mockResolvedValueOnce('Resolved Message' as never).mockResolvedValueOnce('Resolved Name' as never)
 			await (actions[ActionIdSocialStream.sendAChatToSocialStream] as any).callback(
-				{ options: { name: '$(var:name)', message: '$(var:msg)' } } as any,
+				{ options: { name: 'Resolved Name', message: 'Resolved Message' } } as any,
 				{} as any,
 			)
 			expect(postMessageSpy).toHaveBeenCalledWith('Resolved Name', 'Resolved Message', instance)
