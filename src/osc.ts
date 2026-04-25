@@ -2,18 +2,34 @@ import { InstanceBaseExt, ZoomVersion } from './utils.js'
 import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
-import { sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
+import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
 import { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
-const osc = require('osc') // eslint-disable-line
+type NodeOscArgument = string | number | boolean | { type: string; value: string | number | boolean }
+type NodeOscMessage = [string, ...NodeOscArgument[]]
+type NodeOscClient = {
+	close(cb?: () => void): void
+	send(address: string, ...args: unknown[]): void
+}
+type NodeOscServer = {
+	close(cb?: () => void): void
+	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
+	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
+}
+type NodeOscModule = {
+	Client: new (host: string, port: number) => NodeOscClient
+	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
+}
+const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
 
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
 	private oscHost = ''
 	private oscTXPort = 9090
 	private oscRXPort = 1234
-	private udpPort: any
+	private client: NodeOscClient | null = null
+	private server: NodeOscServer | null = null
 	private updateLoop = true
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
@@ -33,7 +49,10 @@ export class OSC {
 	 * @description Close connection on instance disable/removal
 	 */
 	public readonly destroy = (): void => {
-		if (this.udpPort) this.udpPort.close()
+		this.server?.close()
+		this.client?.close()
+		this.server = null
+		this.client = null
 		this.destroyTimers()
 		return
 	}
@@ -136,37 +155,24 @@ export class OSC {
 		this.oscRXPort = this.instance.config.rx_port || 1234
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
-
-		this.udpPort = new osc.UDPPort({
-			localAddress: '0.0.0.0',
-			localPort: this.oscRXPort,
-			metadata: true,
-		})
-
-		// Listen for incoming OSC messages.
-		this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
-			// this.instance.log('info', JSON.stringify(oscMsg))
-			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(oscMsg)
-		})
-
-		this.udpPort.on('error', (err: { code: string; message: string }) => {
-			if (err.code === 'EADDRINUSE') {
-				this.instance.log('error', 'Error: Selected port in use.' + err.message)
-			}
-		})
-
-		// Open the socket.
-		this.udpPort.open()
-
-		// When the port is ready
-		this.udpPort.on('ready', () => {
+		this.client = new nodeOsc.Client(this.oscHost, this.oscTXPort)
+		this.server = new nodeOsc.Server(this.oscRXPort, '0.0.0.0', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
-			// See if ZoomOSC is active
 			this.needToPingPong = true
 			this.createPingTimer()
 			this.createUpdatePresetsTimer()
+		})
+
+		this.server.on('message', (oscMsg) => {
+			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
+			this.processData(normalizeNodeOscMessage(oscMsg) as ZoomOSCResponse)
+		})
+
+		this.server.on('error', (err: { code?: string; message: string }) => {
+			if (err.code === 'EADDRINUSE') {
+				this.instance.log('error', 'Error: Selected port in use.' + err.message)
+			}
 		})
 
 		return
@@ -236,7 +242,10 @@ export class OSC {
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
 		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		try {
-			sendOscCommand(this.udpPort, this.oscHost, this.oscTXPort, path, args)
+			if (!this.client) {
+				throw new Error('OSC client is not connected')
+			}
+			sendOscCommand(this.client, path, args)
 		} catch (error) {
 			this.instance.log(
 				'error',

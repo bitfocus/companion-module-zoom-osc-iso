@@ -1437,6 +1437,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-osc@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@types/node-osc@npm:10.0.0"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/8f9dfa2712a38eadc8a249c09d50fcd70f6e947377a18d345e61575cf4bd854a92a19e94416fe8198259cbe9353903ccd3798a4cf573c08a6d56a1291f1cc49e
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:^22.15.30":
   version: 22.15.30
   resolution: "@types/node@npm:22.15.30"
@@ -5202,6 +5211,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-osc@npm:^11.4.0":
+  version: 11.4.0
+  resolution: "node-osc@npm:11.4.0"
+  checksum: 10c0/e9911909373df94f05196e1049887fca0a6f27408b0d5a6d848a4da968fc0284483bc33154c62176749b21934627961802688310aafe0a5cafc8d8ed4087a721
+  languageName: node
+  linkType: hard
+
 "node-releases@npm:^2.0.27":
   version: 2.0.27
   resolution: "node-releases@npm:2.0.27"
@@ -6934,11 +6950,13 @@ __metadata:
     "@types/got": "npm:^9.6.12"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^22.15.30"
+    "@types/node-osc": "npm:^10.0.0"
     eslint: "npm:^9.28.0"
     got-cjs: "npm:^12.5.4"
     husky: "npm:^9.1.7"
     jest: "npm:^30.2.0"
     lint-staged: "npm:^15.5.2"
+    node-osc: "npm:^11.4.0"
     osc: "npm:^2.4.5"
     prettier: "npm:^3.5.3"
     rimraf: "npm:^6.0.1"
