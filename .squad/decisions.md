@@ -12,6 +12,49 @@ No decisions recorded yet.
 
 ---
 
+## 2026-04-25: Merge origin/main into feature/preset-architecture
+
+**By:** Mal (Lead)  
+**Status:** Completed  
+**Reviewed by:** Zoe (Tester)
+
+### Summary
+
+Merged 6 upstream commits from origin/main into feature/preset-architecture to integrate v4.10.0 ZoomISO v3 support, v4.11.0 polling config options, and security dependency updates.
+
+### Conflict Resolution
+
+Single conflict in `yarn.lock` resolved using standard workflow:
+
+1. Accepted their version temporarily (`git checkout --theirs yarn.lock`)
+2. Regenerated lockfile with `yarn install` based on merged package.json
+3. Staged regenerated lockfile
+4. Completed merge commit
+
+Lockfile conflicts are best resolved by package managers rather than manual conflict resolution to ensure accurate dependency trees.
+
+### Validation Results
+
+✅ **Build:** Passed  
+✅ **Lint:** Passed  
+✅ **Tests:** All 323 tests passing (30 test suites)  
+✅ **Regression Risk:** LOW — All changes backward compatible, no dropped behavior
+
+### Changes Merged
+
+- **v4.11.0:** 4 new polling config checkboxes + 4 new toggle actions + upgrade script
+- **v4.10.0:** ZoomISO v3 API compatibility updates
+- **Security:** picomatch, flatted, tar dependency updates
+
+### Outcome
+
+- Merge completed successfully (commit 4df60cb)
+- Feature branch now 8 commits ahead of origin/feature/preset-architecture
+- Code patterns established for config + upgrade + action pattern
+- Ready for continued feature development
+
+---
+
 ## 2026-02-28: New skill — companion-add-action
 
 **By:** Kaylee (requested by Justin James)
