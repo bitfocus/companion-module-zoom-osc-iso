@@ -3,6 +3,7 @@ import { CompanionVariableValues, InstanceStatus, OSCSomeArguments } from '@comp
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { updateAllUserBasedVariables } from './variables/variable-values.js'
+import { sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
 import { OSCHandlerContext, UserRole, ZoomOSCResponse } from './osc/types.js'
 const osc = require('osc') // eslint-disable-line
@@ -289,14 +290,7 @@ export class OSC {
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
 		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
 		try {
-			this.udpPort.send(
-				{
-					address: path,
-					args: args ? args : [],
-				},
-				this.oscHost,
-				this.oscTXPort,
-			)
+			sendOscCommand(this.udpPort, this.oscHost, this.oscTXPort, path, args)
 		} catch (error) {
 			this.instance.log(
 				'error',
@@ -307,10 +301,7 @@ export class OSC {
 
 	public readonly sendISOPullingCommands = (): void => {
 		// this.instance.log('debug', 'sendISOPullingCommands')
-		this.sendCommand('/zoom/getEngineState', [])
-		this.sendCommand('/zoom/getAudioLevels', [])
-		this.sendCommand('/zoom/getOutputRouting', [])
-		this.sendCommand('/zoom/getAudioRouting', [])
+		sendZoomIsoPullingCommands(this.sendCommand)
 		return
 	}
 }

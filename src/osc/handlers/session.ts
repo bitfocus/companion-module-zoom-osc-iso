@@ -1,6 +1,6 @@
 import { CompanionVariableValues, InstanceStatus } from '@companion-module/base'
 import { PreviousSelectedCallersRestore, PreviousSelectedCallersSave } from '../../actions/action-utils.js'
-import { SubscribeMode, ZoomVersion } from '../../utils.js'
+import { ZoomVersion } from '../../utils.js'
 import {
 	updateAllUserBasedVariables,
 	updateCallStatusVariables,
@@ -8,6 +8,7 @@ import {
 	updateZoomOscVersion,
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
+import { sendZoomSubscriptions } from '../commands.js'
 import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
 
 export function handleSessionMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {
@@ -73,9 +74,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 	}
 
 	context.configureConnectedPingWatchdog(data.args[4].value)
-	context.sendCommand('/zoom/subscribe', [{ type: 'i', value: SubscribeMode.All }])
-	context.sendCommand('/zoom/galTrackMode', [{ type: 'i', value: 1 }])
-	context.sendCommand('/zoom/getSpotOrder', [])
+	sendZoomSubscriptions((path, args) => context.sendCommand(path, args))
 	context.setUpdateLoop(true)
 }
 
