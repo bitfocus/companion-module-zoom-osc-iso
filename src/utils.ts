@@ -507,7 +507,7 @@ export const padding = (num: number, size: number): string => {
 	return converted
 }
 
-export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
+export interface InstanceBaseExt<TConfig> extends InstanceBase<ModuleSchema> {
 	[x: string]: any
 	ZoomVariableLink: ZoomVariableLinkInterface[]
 	ZoomClientDataObj: ZoomClientDataObjInterface
@@ -521,3 +521,4 @@ export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	ZoomUserOffline: ZoomUserOfflineInterface
 	config: TConfig
 }
+import type { ModuleSchema } from './main.js'

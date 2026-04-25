@@ -148,7 +148,7 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 			callback: async (action): Promise<void> => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setOutputName')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = await instance.parseVariablesInString(action.options.name)
 				command.args.push({ type: 'i', value: action.options.output })
 				command.args.push({ type: 's', value: newName })
 

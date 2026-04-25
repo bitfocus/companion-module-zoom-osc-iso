@@ -1,7 +1,12 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import type {
+	CompanionFeedbackDefinition,
+	CompanionFeedbackDefinitions,
+	CompanionOptionValues,
+} from '@companion-module/base'
+import type { JsonValue } from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
+import { colorRed, getUserFromName, type InstanceBaseExt, userExist } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -40,13 +45,21 @@ export enum feedbackType {
 	offline,
 }
 
-export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
+export type FeedbacksSchema = Record<
+	string,
+	{
+		type: 'boolean' | 'advanced'
+		options: CompanionOptionValues
+	}
+>
+
+export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions<FeedbacksSchema> {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
-	function feedbackResults(type: InputValue | undefined, zoomID: number) {
+	function feedbackResults(type: JsonValue | undefined, zoomID: number) {
 		if (type === undefined) {
 			return false
 		}
@@ -352,8 +365,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					],
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: async (feedback) => {
+				const name = feedback.options.name as string
 				if (name === '') {
 					return false
 				}
@@ -386,8 +399,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: async (feedback) => {
+				const name = feedback.options.name as string
 				let zoomID = 0
 				if (name === 'me') {
 					zoomID = instance.ZoomMeData.zoomId

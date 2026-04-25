@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { jest } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'

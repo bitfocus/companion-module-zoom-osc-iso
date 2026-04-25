@@ -1,4 +1,4 @@
-import got from 'got-cjs'
+import { got } from 'got-cjs'
 import { InstanceBaseExt } from './utils.js'
 import { ZoomConfig } from './config.js'
 

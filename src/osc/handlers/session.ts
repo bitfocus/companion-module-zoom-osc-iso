@@ -60,7 +60,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 				context.createZoomIsoPullerTimer()
 			}
 
-			if (context.instance.config.version !== (ZoomVersion.ZoomISO as number)) {
+			if (Number(context.instance.config.version) !== Number(ZoomVersion.ZoomISO)) {
 				context.instance.config.version = ZoomVersion.ZoomISO
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -69,7 +69,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 			if (context.hasZoomIsoPuller()) {
 				context.destroyZoomIsoPullerTimer()
 			}
-			if (context.instance.config.version !== (ZoomVersion.ZoomOSC as number)) {
+			if (Number(context.instance.config.version) !== Number(ZoomVersion.ZoomOSC)) {
 				context.instance.config.version = ZoomVersion.ZoomOSC
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -122,7 +122,6 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			}),
 		)
 
-		context.instance.ZoomUserData = {}
 		setVariables(context.instance, (variables) => {
 			updateCallStatusVariables(context.instance, variables)
 			updateAllUserBasedVariables(context.instance, variables)

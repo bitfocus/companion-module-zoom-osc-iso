@@ -139,7 +139,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/enableOriginalSound', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -158,7 +158,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/disableOriginalSound', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -209,7 +209,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/enableMirrorVideo', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -228,7 +228,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/disableMirrorVideo', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -247,7 +247,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setBackground', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.id })
@@ -267,7 +267,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setVideoFilter', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.id })
@@ -287,7 +287,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setCameraDevice', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.id })
@@ -307,7 +307,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.level],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setSpeakerVolume', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.level })
@@ -327,7 +327,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setSpeakerDevice', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.id })
@@ -347,7 +347,7 @@ export function GetActionsUserSettings(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.id],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/setMicDevice', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.id })

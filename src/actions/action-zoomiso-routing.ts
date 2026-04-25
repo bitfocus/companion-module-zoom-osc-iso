@@ -29,7 +29,7 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 			],
 			callback: async (action): Promise<void> => {
 				// type: 'ISO'
-				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
+				const variableValue = await instance.parseVariablesInString(action.options.userName)
 				const setToNoneIfNotUserSelected = (action.options.setToNoneIfNotUserSelected as boolean) ?? false
 				const command = createCommand(
 					instance,
@@ -60,7 +60,7 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 			options: [options.userName, options.output],
 			callback: async (action): Promise<void> => {
 				// type: 'ISO'
-				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
+				const variableValue = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/audioISO', variableValue, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.output })

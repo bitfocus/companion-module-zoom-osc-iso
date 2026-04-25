@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { jest } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUserView, ActionIdUserView } from '../../src/actions/action-user-view.js'
 

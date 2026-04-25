@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import type { ZoomConfig } from '../../src/config.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
 

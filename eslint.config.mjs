@@ -16,6 +16,7 @@ const customConfig = [
 			'@typescript-eslint/unbound-method': 'off',
 			'@typescript-eslint/await-thenable': 'off',
 			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
+			'n/no-unpublished-import': 'off',
 		},
 	},
 	// Config files: dev deps are valid imports

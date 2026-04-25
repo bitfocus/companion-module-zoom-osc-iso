@@ -17,7 +17,7 @@ export function GetActionsUserWebinar(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/allowToSpeak', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -36,7 +36,7 @@ export function GetActionsUserWebinar(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				const command = createCommand(instance, '/disallowToSpeak', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

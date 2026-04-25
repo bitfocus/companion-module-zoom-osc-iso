@@ -1,6 +1,17 @@
-import { CompanionActionDefinition, CompanionActionDefinitions } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
-import { InstanceBaseExt } from './utils.js'
+import type {
+	CompanionActionDefinition,
+	CompanionActionDefinitions,
+	CompanionOptionValues,
+} from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
+import type { InstanceBaseExt } from './utils.js'
+
+export type ActionsSchema = Record<
+	string,
+	{
+		options: CompanionOptionValues
+	}
+>
 
 import { ActionIdGroups, GetActionsGroups } from './actions/action-group.js'
 import { ActionIdGallery, GetActionsGallery } from './actions/action-gallery.js'
@@ -51,7 +62,7 @@ import {
  * @param instance Give the instance so we can extract data
  * @returns CompanionActions
  */
-export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions {
+export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions<ActionsSchema> {
 	const actionsGroups: { [id in ActionIdGroups]: CompanionActionDefinition | undefined } = GetActionsGroups(instance)
 
 	const actionsGallery: { [id in ActionIdGallery]: CompanionActionDefinition | undefined } = GetActionsGallery(instance)

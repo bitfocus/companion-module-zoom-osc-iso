@@ -205,7 +205,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, groupOptionNoHost],
 			callback: async (action) => {
 				const group = action.options.group as number
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = await instance.parseVariablesInString(action.options.userName)
 				if (instance.ZoomGroupData[group] !== undefined) {
 					// When someone overides the selection by entering a name
 					if (userName !== undefined && userName !== '') {
@@ -256,7 +256,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Rename Group',
 			options: [groupOption, options.name],
 			callback: async (action) => {
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = await instance.parseVariablesInString(action.options.name)
 				instance.ZoomGroupData[action.options.group as number].groupName = newName
 
 				const variables: CompanionVariableValues = {}

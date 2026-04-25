@@ -1,10 +1,17 @@
-import { CompanionVariableDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, padding, userExist } from '../utils.js'
+import type { CompanionVariableValues } from '@companion-module/base'
+import type { ZoomConfig } from '../config.js'
+import { type InstanceBaseExt, padding, userExist } from '../utils.js'
+
+type LegacyVariableDefinition = {
+	name: string
+	variableId: string
+}
+
+export type VariablesSchema = CompanionVariableValues
 
 export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): void {
 	// instance.log('debug', `initVariableDefinitions ${new Date()}`)
-	const globalSettings: Set<CompanionVariableDefinition> = new Set([
+	const globalSettings: Set<LegacyVariableDefinition> = new Set([
 		// Status
 		{ name: 'Zoom version', variableId: 'zoomVersion' },
 		{ name: 'Call Status', variableId: 'callStatus' },
@@ -137,12 +144,12 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		})
 	}
 
-	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
-	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)
-	const outputVariablesDef: Set<CompanionVariableDefinition> = new Set(outputVariables)
-	const audioLevelVariablesDef: Set<CompanionVariableDefinition> = new Set(audioLevelVariables)
-	const groupPositionVariablesDef: Set<CompanionVariableDefinition> = new Set(groupPositionVariables)
-	const gallery: Set<CompanionVariableDefinition> = new Set([{ name: 'gallery count', variableId: 'galleryCount' }])
+	const galleryVariablesDef: Set<LegacyVariableDefinition> = new Set(galleryVariables)
+	const userVariablesDef: Set<LegacyVariableDefinition> = new Set(userVariables)
+	const outputVariablesDef: Set<LegacyVariableDefinition> = new Set(outputVariables)
+	const audioLevelVariablesDef: Set<LegacyVariableDefinition> = new Set(audioLevelVariables)
+	const groupPositionVariablesDef: Set<LegacyVariableDefinition> = new Set(groupPositionVariables)
+	const gallery: Set<LegacyVariableDefinition> = new Set([{ name: 'gallery count', variableId: 'galleryCount' }])
 
 	const filteredVariables = [
 		...outputVariablesDef,
@@ -155,5 +162,10 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 		...groupPositionVariablesDef,
 	]
 
-	instance.setVariableDefinitions(filteredVariables)
+	instance.setVariableDefinitions(
+		filteredVariables.reduce<Record<string, { name: string }>>((definitions, variable) => {
+			definitions[variable.variableId] = { name: variable.name }
+			return definitions
+		}, {}),
+	)
 }
