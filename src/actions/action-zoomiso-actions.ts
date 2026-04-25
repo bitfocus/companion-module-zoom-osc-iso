@@ -11,6 +11,7 @@ export enum ActionIdZoomISOActions {
 	applyOutput = 'apply_Output',
 	applyChannel = 'apply_Channel',
 	applyOutputs = 'apply_Outputs',
+	togglePollAudioLevels = 'toggle_poll_audio_levels',
 }
 
 export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): {
@@ -154,6 +155,14 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 				}
 
 				PreviousSelectedCallersSave(instance)
+			},
+		},
+		[ActionIdZoomISOActions.togglePollAudioLevels]: {
+			name: 'Toggle Poll Audio Levels',
+			options: [],
+			callback: (): void => {
+				instance.config.pollAudioLevels = !instance.config.pollAudioLevels
+				instance.saveConfig(instance.config)
 			},
 		},
 	}

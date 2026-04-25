@@ -8,6 +8,7 @@ export enum ActionIdZoomISOEngine {
 	startISOEngine = 'start_ISO_Engine',
 	standbyISOEngine = 'standby_ISO_Engine',
 	requestCapturePermission = 'request_capture_permission',
+	togglePollEngineState = 'toggle_poll_engine_state',
 }
 
 export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): {
@@ -80,6 +81,14 @@ export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): 
 					},
 				}
 				sendActionCommand(instance, sendToCommand)
+			},
+		},
+		[ActionIdZoomISOEngine.togglePollEngineState]: {
+			name: 'Toggle Poll Engine State',
+			options: [],
+			callback: (): void => {
+				instance.config.pollEngineState = !instance.config.pollEngineState
+				instance.saveConfig(instance.config)
 			},
 		},
 	}

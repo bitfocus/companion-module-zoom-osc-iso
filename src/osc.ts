@@ -122,6 +122,7 @@ export class OSC {
 	}
 
 	public readonly createPingTimer = (): void => {
+		// this.instance.log('debug', `Creating ping timer. Need to ping pong: ${this.needToPingPong}`)
 		if (this.pingInterval) clearInterval(this.pingInterval)
 		this.pingInterval = setInterval(() => {
 			if (this.needToPingPong) {
@@ -191,9 +192,6 @@ export class OSC {
 			}
 		})
 
-		// Open the socket.
-		this.udpPort.open()
-
 		// When the port is read
 		this.udpPort.on('ready', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
@@ -203,6 +201,9 @@ export class OSC {
 			this.createPingTimer()
 			this.createUpdatePresetsTimer()
 		})
+
+		// Open the socket.
+		this.udpPort.open()
 
 		return
 	}
@@ -734,7 +735,7 @@ export class OSC {
 						break
 					}
 					case 'pong': {
-						this.instance.log('debug', 'receiving pong')
+						// this.instance.log('debug', 'receiving pong')
 						// this.instance.log('debug', `receiving pong ${JSON.stringify(data)}`)
 						// // {str zoomOSCversion}
 						// // {int subscribeMode}
@@ -745,15 +746,11 @@ export class OSC {
 						// // {int isPro (1=true, 0-false)}
 						const variables: CompanionVariableValues = {}
 						const versionInfo = data.args[1].value as string
-						if (data.args[7].value === 1) {
-							this.instance.updateStatus(InstanceStatus.Ok)
-						} else if (data.args[7].value === 0 || data.args[1].value.includes('lite')) {
-							this.instance.updateStatus(InstanceStatus.Ok)
-							// this.instance.updateStatus(InstanceStatus.UnknownError, 'LIMITED, UNLICENSED')
-						}
+						const isProValue = data.args[7].value === 1 || data.args[7].value === true
+						this.instance.updateStatus(InstanceStatus.Ok)
 
-						this.instance.log('debug', `${versionInfo} ${data.args[7].value === 1 ? 'Pro' : 'Lite or Essentials'}`)
-						this.instance.ZoomClientDataObj.isPro = data.args[7].value === 1
+						// this.instance.log('debug', `${versionInfo} ${isProValue ? 'Pro' : 'Lite or Essentials'}`)
+						this.instance.ZoomClientDataObj.isPro = isProValue
 						this.instance.ZoomClientDataObj.zoomOSCVersion = versionInfo
 						this.instance.ZoomClientDataObj.subscribeMode = data.args[2].value
 						this.instance.ZoomClientDataObj.callStatus = data.args[4].value
@@ -1031,10 +1028,10 @@ export class OSC {
 
 	public readonly sendISOPullingCommands = (): void => {
 		// this.instance.log('debug', 'sendISOPullingCommands')
-		this.sendCommand('/zoom/getEngineState', [])
-		this.sendCommand('/zoom/getAudioLevels', [])
-		this.sendCommand('/zoom/getOutputRouting', [])
-		this.sendCommand('/zoom/getAudioRouting', [])
+		if (this.instance.config.pollEngineState) this.sendCommand('/zoom/getEngineState', [])
+		if (this.instance.config.pollAudioLevels) this.sendCommand('/zoom/getAudioLevels', [])
+		if (this.instance.config.pollOutputRouting) this.sendCommand('/zoom/getOutputRouting', [])
+		if (this.instance.config.pollAudioRouting) this.sendCommand('/zoom/getAudioRouting', [])
 		return
 	}
 }
