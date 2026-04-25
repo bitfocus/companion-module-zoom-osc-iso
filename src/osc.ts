@@ -1,11 +1,11 @@
 import { InstanceBaseExt, ZoomVersion } from './utils.js'
-import { CompanionVariableValues, InstanceStatus, OSCSomeArguments } from '@companion-module/base'
+import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
-import { updateAllUserBasedVariables } from './variables/variable-values.js'
 import { sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import { OSCHandlerContext, UserRole, ZoomOSCResponse } from './osc/types.js'
+import { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import { createZoomUser } from './osc/users.js'
 const osc = require('osc') // eslint-disable-line
 
 export class OSC {
@@ -179,63 +179,7 @@ export class OSC {
 	 * @returns promise
 	 */
 	private createZoomUser = async (data: ZoomOSCResponse) => {
-		const zoomId = parseInt(data.args[3].value)
-		// Only when a user is not in offline array
-		if (!this.instance.ZoomUserOffline[zoomId]) {
-			const index = this.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-			if (index === -1) {
-				this.instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
-			}
-			if (data.args.length == 4) {
-				this.instance.ZoomUserData[zoomId] = {
-					zoomId,
-					targetIndex: data.args[0].value,
-					userName: data.args[1].value,
-					galleryIndex: data.args[2].value,
-					users: [],
-				}
-			} else if (data.args.length >= 10) {
-				// {int targetIndex}
-				// {str userName}
-				// {int galleryIndex}
-				// {int zoomID}
-				// {int targetCount}
-				// {int listCount}
-				// {int userRole}
-				// {int onlineStatus}
-				// {int videoStatus}
-				// {int audioStatus}
-				// {int handRaised}
-				// this.instance.log('debug', `${data.args[1].value}, user role ${data.args[6].value}`)
-				this.instance.ZoomUserData[zoomId] = {
-					zoomId,
-					targetIndex: data.args[0].value,
-					userName: data.args[1].value,
-					galleryIndex: data.args[2].value,
-					userRole: data.args[6].value,
-					videoOn: data.args[8].value === 1 ? true : false,
-					mute: data.args[9].value === 0 ? true : false,
-					handRaised: data.args[10].value === 1 ? true : false,
-					users: [],
-				}
-				if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {
-					const index = this.instance.ZoomGroupData[0].users.findIndex((id) => id.zoomID === zoomId)
-					if (index === -1) {
-						this.instance.ZoomGroupData[0].users.push({
-							zoomID: zoomId,
-							userName: data.args[1].value,
-						})
-					}
-				}
-			} else {
-				this.instance.log('warn', 'create ZoomUser wrong arguments in OSC feedback')
-			}
-			this.instance.InitVariables()
-			const variables: CompanionVariableValues = {}
-			updateAllUserBasedVariables(this.instance, variables)
-			this.instance.setVariableValues(variables)
-			// this.instance.UpdateVariablesValues()
-		}
+		await createZoomUser(this.instance, data)
 	}
 
 	private readonly createHandlerContext = (): OSCHandlerContext => ({
