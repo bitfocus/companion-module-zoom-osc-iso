@@ -203,16 +203,20 @@ async function onDeviceConnected(self: ModuleInstance): Promise<void> {
 ## Common Pitfalls
 
 1. **Forgetting to call `setActionDefinitions` on update**
+
    - Always call `UpdateActions(self)` after module state changes that affect available actions
 
 2. **Not typing event.options correctly**
+
    - TypeScript doesn't enforce option types — cast them: `event.options.num as number`
 
 3. **Blocking the callback**
+
    - Mark callbacks as `async` and use `await` for device commands
    - Don't use long synchronous operations
 
 4. **Mutating options directly**
+
    - `event.options` is read-only — don't attempt to modify it
 
 5. **Not handling errors**

@@ -3,7 +3,7 @@ import {
 	CompanionButtonStyleProps,
 	CompanionFeedbackButtonStyleResult,
 } from '@companion-module/base'
-import { ActionId } from '../actions.js'
+import { ActionIdZoomISORecordingConsent } from '../actions/action-zoomiso-recording-consent.js'
 import { FeedbackId } from '../feedback.js'
 import { InstanceBaseExt, colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils.js'
 import { ActionIdGroups } from '../actions/action-group.js'
@@ -31,6 +31,7 @@ import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
+import { ActionIdCustom } from '../actions/action-custom.js'
 import { ZoomConfig } from '../config.js'
 
 export type PresetFeedbackDefinition = Array<
@@ -45,7 +46,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 		down: Array<
 			{
 				actionId:
-					| ActionId
+					| ActionIdZoomISORecordingConsent
 					| ActionIdGroups
 					| ActionIdGallery
 					| ActionIdGlobalBreakoutRooms
@@ -71,12 +72,13 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdZoomISORouting
 					| ActionIdZoomISOActions
 					| ActionIdUsers
+					| ActionIdCustom
 			} & CompanionButtonPresetDefinition['steps'][0]['down'][0]
 		>
 		up: Array<
 			{
 				actionId:
-					| ActionId
+					| ActionIdZoomISORecordingConsent
 					| ActionIdGroups
 					| ActionIdGallery
 					| ActionIdGlobalBreakoutRooms
@@ -102,6 +104,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdZoomISORouting
 					| ActionIdZoomISOActions
 					| ActionIdUsers
+					| ActionIdCustom
 			} & CompanionButtonPresetDefinition['steps'][0]['up'][0]
 		>
 	}>

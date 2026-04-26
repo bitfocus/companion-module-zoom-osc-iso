@@ -1,7 +1,7 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
 import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils.js'
 import {
-	CompanionPresetDefinitionsExt,
+	CompanionPresetExt,
 	PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
@@ -11,15 +11,29 @@ import {
 import { ActionIdGroups } from '../actions/action-group.js'
 import { ZoomConfig } from '../config.js'
 
-export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
-	const presets: CompanionPresetDefinitionsExt = {}
+export enum PresetIdGroups {
+	replaceGroup = 'Replace_group_',
+	addToGroup = 'Add_to_group_',
+	clearGroup = 'Clear_group_',
+	removeFromGroup = 'Remove_from_group_',
+	saveGroupToFile = 'Save_',
+	loadGroupFromFile = 'Load_',
+	renameGroup = 'Rename_',
+	selectGroup = 'Select_',
+	groupPosition = 'Group',
+}
+
+export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): {
+	[id in PresetIdGroups]: CompanionPresetExt | undefined
+} {
+	const presets = {} as { [id in PresetIdGroups]: CompanionPresetExt | undefined }
 
 	const ZoomGroupData: ZoomGroupDataInterface[] = instance.ZoomGroupData
 
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
 		if (index !== 0 && index !== 1) {
-			presets[`Replace_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Replace_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: `Replace ${ZoomGroupData[index].groupName} participants`,
@@ -45,7 +59,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Add_to_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Add_to_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: `Add to group: ${ZoomGroupData[index].groupName}`,
@@ -71,7 +85,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Clear_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Clear_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: `Clear group: ${ZoomGroupData[index].groupName}`,
@@ -96,7 +110,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Remove_from_group_${ZoomGroupData[index].groupName}`] = {
+			presets[`Remove_from_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: `Remove_from group: ${ZoomGroupData[index].groupName}`,
@@ -121,7 +135,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Save_${ZoomGroupData[index].groupName}_To_File`] = {
+			presets[`Save_${ZoomGroupData[index].groupName}_To_File` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: ZoomGroupData[index].groupName,
@@ -147,7 +161,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Load_${ZoomGroupData[index].groupName}_To_File`] = {
+			presets[`Load_${ZoomGroupData[index].groupName}_To_File` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: ZoomGroupData[index].groupName,
@@ -173,7 +187,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				],
 				feedbacks: [],
 			}
-			presets[`Rename_${ZoomGroupData[index].groupName}`] = {
+			presets[`Rename_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 				type: 'button',
 				category: 'Manage Selections of Groups',
 				name: ZoomGroupData[index].groupName,
@@ -201,7 +215,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 			}
 		}
 
-		presets[`Select_${ZoomGroupData[index].groupName}`] = {
+		presets[`Select_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
 			type: 'button',
 			category: `Manage Selections of Groups`,
 			name: ZoomGroupData[index].groupName,
@@ -273,7 +287,7 @@ export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): Compani
 				},
 			})
 
-			presets[`Group${index}_Position${position}`] = {
+			presets[`Group${index}_Position${position}` as PresetIdGroups] = {
 				type: 'button',
 				category: `Select ${ZoomGroupData[index].groupName} participants`,
 				name: 'Group selection',

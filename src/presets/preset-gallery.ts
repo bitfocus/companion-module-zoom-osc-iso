@@ -1,18 +1,22 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
 import {
-	CompanionPresetDefinitionsExt,
+	CompanionPresetExt,
 	PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils.js'
+
+export type PresetIdListGallery = `Gallery_position_${number}`
 import { ActionIdGallery } from '../actions/action-gallery.js'
 import { InstanceBaseExt, padding } from '../utils.js'
 import { ZoomConfig } from '../config.js'
 
-export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitionsExt {
-	const presets: CompanionPresetDefinitionsExt = {}
+export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): {
+	[id: PresetIdListGallery]: CompanionPresetExt | undefined
+} {
+	const presets: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = {}
 
 	for (let index = 1; index < 50; index++) {
 		const galleryFeedbacks: PresetFeedbackDefinition = [
@@ -52,7 +56,7 @@ export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): Co
 			},
 		})
 
-		presets[`Gallery_position_${index})`] = {
+		presets[`Gallery_position_${index}`] = {
 			type: 'button',
 			category: 'Select from Gallery',
 			name: `$(zoomosc:Gallery position ${index})`,

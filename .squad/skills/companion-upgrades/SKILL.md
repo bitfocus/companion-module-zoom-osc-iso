@@ -322,26 +322,32 @@ export const UpgradeScripts: CompanionStaticUpgradeScript<ModuleConfig>[] = [
 ## Common Pitfalls
 
 1. **Removing or reordering scripts**
+
    - ❌ NEVER remove or reorder scripts in the array
    - ✅ Add new scripts to the end, use `EmptyUpgradeScript` for no-op versions
 
 2. **Not returning all three properties**
+
    - Always return `{ updatedConfig, updatedActions, updatedFeedbacks }`
    - Return original values if unchanged (or `null` for config)
 
 3. **Forgetting to delete old properties**
+
    - After renaming, delete the old property to avoid confusion
    - `delete config.oldField`
 
 4. **Not handling undefined values**
+
    - Always check if property exists before migrating
    - `if (config.oldField !== undefined) { ... }`
 
 5. **Mutating without returning**
+
    - Must return the mutated arrays/config, not just mutate in place
    - Scripts should modify AND return
 
 6. **Wrong TypeScript types**
+
    - Cast config to `any` when accessing renamed fields: `const config = props.config as any`
    - Cast back to `ModuleConfig` when returning: `updatedConfig: config as ModuleConfig`
 

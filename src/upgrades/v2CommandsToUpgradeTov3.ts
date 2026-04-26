@@ -1,4 +1,4 @@
-import { ActionId } from '../actions.js'
+import { ActionIdZoomISORecordingConsent } from '../actions/action-zoomiso-recording-consent.js'
 import { ActionIdGroups } from '../actions/action-group.js'
 import { ActionIdGallery } from '../actions/action-gallery.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
@@ -25,6 +25,7 @@ import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
+import { ActionIdCustom } from '../actions/action-custom.js'
 import {
 	oldActionToNewAction,
 	oldFeedbackToNewFeedback,
@@ -678,12 +679,12 @@ export const oldActionToNewActions: oldActionToNewAction = {
 	},
 	CustomCommand: {
 		oldActionId: 'CustomCommand',
-		newActionId: ActionId.customCommand,
+		newActionId: ActionIdCustom.customCommand,
 		type: 'SpecialActions',
 	},
 	CustomCommandWithArguments: {
 		oldActionId: 'CustomCommandWithArguments',
-		newActionId: ActionId.customCommandWithArguments,
+		newActionId: ActionIdCustom.customCommandWithArguments,
 		type: 'SpecialActions',
 	},
 	setVideoLossMode: {
@@ -764,7 +765,7 @@ export const oldActionToNewActions: oldActionToNewAction = {
 	},
 	acceptRecordingConsent: {
 		oldActionId: 'acceptRecordingConsent',
-		newActionId: ActionId.acceptRecordingConsent,
+		newActionId: ActionIdZoomISORecordingConsent.acceptRecordingConsent,
 		type: 'ISOActions',
 	},
 	selectionMethod: {

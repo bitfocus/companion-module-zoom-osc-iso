@@ -371,21 +371,27 @@ async connect(): Promise<void> {
 ## Common Pitfalls
 
 1. **Not matching `ModuleConfig` interface to field IDs**
+
    - Ensure every field `id` has a corresponding interface property with matching type
 
 2. **Forgetting `default` values**
+
    - Always provide defaults to avoid `undefined` values on first init
 
 3. **Wrong width values**
+
    - Width is 1-12 (12-column grid). Typically: 12 = full width, 8 = main field, 4 = secondary
 
 4. **Not updating `this.config` in `configUpdated()`**
+
    - ALWAYS: `this.config = config` as first line
 
 5. **Using invalid regex**
+
    - Test your regex patterns. Use built-in `Regex.*` constants when possible
 
 6. **Not handling optional fields**
+
    - Use optional properties (`?`) in interface or provide defaults to avoid undefined errors
 
 7. **Blocking `configUpdated()`**

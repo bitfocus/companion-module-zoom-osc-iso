@@ -1,9 +1,10 @@
 ---
-updated_at: 2026-02-21T23:33:42.990Z
-focus_area: Team setup
+updated_at: 2026-04-25T22:13:44Z
+focus_area: Feature development on preset-architecture after origin/main integration
 active_issues: []
+dispatched_team: None currently dispatched
 ---
 
 # What We're Focused On
 
-Team hired and ready. Justin James is working on companion-module-zoom-osc-iso — a BitFocus Companion module for Zoom OSC/ISO via OSC protocol. Next step: assign work to the team.
+Merge of origin/main into feature/preset-architecture completed successfully. All upstream changes (v4.10.0 ZoomISO v3 support, v4.11.0 polling config options, security updates) integrated and validated. Team ready for next phase of feature development on preset-architecture branch.

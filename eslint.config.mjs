@@ -7,7 +7,23 @@ const baseConfig = await generateEslintConfig({
 const customConfig = [
 	...baseConfig,
 	{
-		files: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.mjs'],
+		files: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.mjs', 'tests/**/*.ts', 'jest.config.ts'],
+	},
+	// Test files: relax rules that are noisy in Jest test contexts
+	{
+		files: ['tests/**/*.ts'],
+		rules: {
+			'@typescript-eslint/unbound-method': 'off',
+			'@typescript-eslint/await-thenable': 'off',
+			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
+		},
+	},
+	// Config files: dev deps are valid imports
+	{
+		files: ['jest.config.ts', '*.config.ts', '*.config.mjs'],
+		rules: {
+			'n/no-unpublished-import': 'off',
+		},
 	},
 	{
 		rules: {

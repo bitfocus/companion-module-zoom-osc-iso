@@ -9,8 +9,10 @@
 		"build": "rimraf dist && run build:main",
 		"build:main": "tsc -p tsconfig.build.json",
 		"dev": "tsc -p tsconfig.build.json --watch",
+		"test": "jest",
 		"lint:raw": "eslint",
-		"lint": "run lint:raw ."
+		"lint": "run lint:raw .",
+		"prettier": "prettier --write"
 	},
 	"license": "MIT",
 	"repository": {
@@ -30,12 +32,16 @@
 	"devDependencies": {
 		"@companion-module/tools": "^2.6.1",
 		"@types/got": "^9.6.12",
+		"@types/jest": "^30.0.0",
 		"@types/node": "^22.15.30",
 		"eslint": "^9.28.0",
 		"husky": "^9.1.7",
+		"jest": "^30.2.0",
 		"lint-staged": "^15.5.2",
 		"prettier": "^3.5.3",
 		"rimraf": "^6.0.1",
+		"ts-jest": "^29.4.6",
+		"ts-node": "^10.9.2",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.33.1"
 	},

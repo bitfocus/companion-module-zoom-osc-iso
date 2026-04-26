@@ -1,12 +1,63 @@
-# Team Decisions
+# Squad Decisions
 
-Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions/inbox/`.
+## Active Decisions
+
+No decisions recorded yet.
+
+## Governance
+
+- All meaningful changes require team consensus
+- Document architectural decisions here
+- Keep history focused on work, decisions focused on direction
+
+---
+
+## 2026-04-25: Merge origin/main into feature/preset-architecture
+
+**By:** Mal (Lead)  
+**Status:** Completed  
+**Reviewed by:** Zoe (Tester)
+
+### Summary
+
+Merged 6 upstream commits from origin/main into feature/preset-architecture to integrate v4.10.0 ZoomISO v3 support, v4.11.0 polling config options, and security dependency updates.
+
+### Conflict Resolution
+
+Single conflict in `yarn.lock` resolved using standard workflow:
+
+1. Accepted their version temporarily (`git checkout --theirs yarn.lock`)
+2. Regenerated lockfile with `yarn install` based on merged package.json
+3. Staged regenerated lockfile
+4. Completed merge commit
+
+Lockfile conflicts are best resolved by package managers rather than manual conflict resolution to ensure accurate dependency trees.
+
+### Validation Results
+
+✅ **Build:** Passed  
+✅ **Lint:** Passed  
+✅ **Tests:** All 323 tests passing (30 test suites)  
+✅ **Regression Risk:** LOW — All changes backward compatible, no dropped behavior
+
+### Changes Merged
+
+- **v4.11.0:** 4 new polling config checkboxes + 4 new toggle actions + upgrade script
+- **v4.10.0:** ZoomISO v3 API compatibility updates
+- **Security:** picomatch, flatted, tar dependency updates
+
+### Outcome
+
+- Merge completed successfully (commit 4df60cb)
+- Feature branch now 8 commits ahead of origin/feature/preset-architecture
+- Code patterns established for config + upgrade + action pattern
+- Ready for continued feature development
 
 ---
 
 ## 2026-02-28: New skill — companion-add-action
 
-**By:** Merry (requested by Justin James)
+**By:** Kaylee (requested by Justin James)
 **What:** Created companion-add-action skill covering the 3-step workflow for adding an action to an existing action category file.
 **Why:** Complements companion-action-file-pattern; agents now have clear guidance for both the "new file" and "extend existing file" cases.
 
@@ -14,7 +65,7 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 
 ## 2026-03-01: New skill — companion-preset-category-file
 
-**By:** Merry (requested by Justin James)
+**By:** Kaylee (requested by Justin James)
 **What:** Created skill for adding a new preset category file + wiring into presets.ts aggregator.
 **Why:** Complements companion-action-file-pattern for the presets layer; enables consistent multi-file preset architecture.
 
@@ -22,7 +73,7 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 
 ## 2026-03-01: New skill — companion-add-preset-to-category-file
 
-**By:** Merry (requested by Justin James)
+**By:** Kaylee (requested by Justin James)
 **What:** Created skill for adding a preset to an existing preset category file (3-step, no aggregator changes needed).
 **Why:** Complements companion-add-action-to-category-file for the presets layer.
 
@@ -32,14 +83,14 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 
 **By:** Justin James
 **Decision:** Hired a Lord of the Rings–cast team for companion-module-zoom-osc-iso.
-**Roster:** Gandalf (Lead), Samwise (Integration Dev), Merry (Module Dev), Eowyn (Tester), Scribe, Ralph.
+**Roster:** Mal (Lead), Samwise (Integration Dev), Kaylee (Module Dev), Zoe (Tester), Scribe, Ralph.
 **Rationale:** BitFocus handles the UI layer; this team focuses on OSC protocol integration, Companion API definitions, and quality.
 
 ---
 
 ## 2026-02-28: Project Structure Review — Technical Findings
 
-**By:** Gandalf (Lead)  
+**By:** Mal (Lead)  
 **Status:** Assessment complete
 
 ### Strengths
@@ -76,18 +127,18 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 
 ### Recommended Actions
 
-1. **Quick wins (Merry)**: Fix duplicate `UpgradeV2ToV3` registration, duplicate config IDs, remove orphan file
-2. **Type safety (Merry)**: Fix `destroy()` to use `{}` instead of `[]`; convert `./images` require to ESM import
-3. **Testing foundation (Eowyn)**: Set up vitest; start with unit tests for `utils.ts` helpers and action/feedback callbacks (pure functions)
+1. **Quick wins (Kaylee)**: Fix duplicate `UpgradeV2ToV3` registration, duplicate config IDs, remove orphan file
+2. **Type safety (Kaylee)**: Fix `destroy()` to use `{}` instead of `[]`; convert `./images` require to ESM import
+3. **Testing foundation (Zoe)**: Set up vitest; start with unit tests for `utils.ts` helpers and action/feedback callbacks (pure functions)
 4. **Long-term (Samwise)**: Plan phased `osc.ts` decomposition (connection, message router, response handlers) — not urgent but core architectural debt
 5. **Optional**: Re-enable `no-explicit-any` as warning; gradually type `any` usages in `udpPort` and OSC response handlers
 
 ---
 
-## 2026-02-28: User directives — Gandalf review clarifications
+## 2026-02-28: User directives — Mal review clarifications
 
 **By:** Justin James (via Copilot)  
-**Decision:** Clarify intent on flagged items from Gandalf's review
+**Decision:** Clarify intent on flagged items from Mal's review
 
 ### Clarifications
 
@@ -97,3 +148,31 @@ Canonical decision ledger. Append-only. Updated by Scribe from `.squad/decisions
 4. `no-explicit-any` disabled globally — acknowledged as legacy, defer typing improvements to later.
 
 **Rationale:** User clarification captured for team memory so agents do not re-flag these as issues.
+
+---
+
+## 2025-03-01: Move tests to root-level `tests/` directory
+
+**By:** Zoe (Tester)  
+**Requested by:** Mal (testing foundation recommendation)  
+**Decision:** Migrate all test files and mocks from `src/__tests__/` and `src/__mocks__/` to root-level `tests/` directory.
+
+### Changes Made
+
+- `src/__tests__/actions/*.ts` → `tests/actions/`
+- `src/__tests__/helpers/mock-instance.ts` → `tests/helpers/mock-instance.ts`
+- `src/__tests__/setup.ts` → `tests/setup.ts`
+- `src/__mocks__/feedback-state-machine.ts` → `tests/__mocks__/feedback-state-machine.ts`
+- `src/__mocks__/images.ts` → `tests/__mocks__/images.ts`
+- Updated all relative imports in moved files: `../../actions/` → `../../src/actions/`, etc.
+- Updated `jest.unstable_mockModule` path in `action-zoomiso-actions.test.ts`: `../../feedback.js` → `../../src/feedback.js`
+- Updated `jest.config.ts`: `testMatch`, `setupFilesAfterEnv`, and `moduleNameMapper` entries
+- Removed `src/__tests__/` and `src/__mocks__/`
+
+### Rationale
+
+Co-locating tests under a root-level `tests/` directory is a common convention that keeps `src/` clean and separates production code from test infrastructure. It also makes it easier to configure coverage, CI, and tooling that targets test files by directory.
+
+### Outcome
+
+All 318 tests across 28 test suites continue to pass after migration.

@@ -1,8 +1,7 @@
 import { CompanionActionDefinition, CompanionActionDefinitions } from '@companion-module/base'
 import { ZoomConfig } from './config.js'
-import { InstanceBaseExt, options } from './utils.js'
+import { InstanceBaseExt } from './utils.js'
 
-import { createCommand, sendActionCommand } from './actions/action-utils.js'
 import { ActionIdGroups, GetActionsGroups } from './actions/action-group.js'
 import { ActionIdGallery, GetActionsGallery } from './actions/action-gallery.js'
 import { ActionIdGlobalBreakoutRooms, GetActionsGlobalBreakoutRooms } from './actions/action-global-breakout-rooms.js'
@@ -41,12 +40,11 @@ import { ActionIdZoomISORouting, GetActionsZoomISORouting } from './actions/acti
 import { ActionIdZoomISOActions, GetActionsZoomISOActions } from './actions/action-zoomiso-actions.js'
 import { ActionIdUsers, GetActionsUsers } from './actions/action-user.js'
 import { ActionIdSocialStream, GetActionsSocalSteam } from './actions/action-social-stream.js'
-
-export enum ActionId {
-	acceptRecordingConsent = 'accept_Recording_Consent',
-	customCommandWithArguments = 'customCommandWithArguments',
-	customCommand = 'customCommand',
-}
+import { ActionIdCustom, GetActionsCustom } from './actions/action-custom.js'
+import {
+	ActionIdZoomISORecordingConsent,
+	GetActionsZoomISORecordingConsent,
+} from './actions/action-zoomiso-recording-consent.js'
 
 /**
  * Main function to create the actions
@@ -130,9 +128,16 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 	const actionSocialStream: { [id in ActionIdSocialStream]: CompanionActionDefinition | undefined } =
 		GetActionsSocalSteam(instance)
 
+	const actionCustom: { [id in ActionIdCustom]: CompanionActionDefinition | undefined } = GetActionsCustom(instance)
+
+	const actionZoomISORecordingConsent: {
+		[id in ActionIdZoomISORecordingConsent]: CompanionActionDefinition | undefined
+	} = GetActionsZoomISORecordingConsent(instance)
+
 	const actions: {
 		[id in
-			| ActionId
+			| ActionIdZoomISORecordingConsent
+			| ActionIdCustom
 			| ActionIdGroups
 			| ActionIdGallery
 			| ActionIdGlobalBreakoutRooms
@@ -186,74 +191,8 @@ export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActi
 		...actionZoomISOActions,
 		...actionUsers,
 		...actionSocialStream,
-		[ActionId.acceptRecordingConsent]: {
-			name: 'Accept Recording Consent',
-			options: [],
-			callback: (): void => {
-				// type: 'ISO'
-				const command = createCommand(instance, '/acceptRecordingConsent')
-				const sendToCommand = {
-					id: ActionId.acceptRecordingConsent,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
-		[ActionId.customCommand]: {
-			name: 'Custom command',
-			options: [options.path],
-			callback: async (action): Promise<void> => {
-				// type: 'Special'
-				const customPath = await instance.parseVariablesInString(action.options.path as string)
-				// Did they try a JSON object?
-				if (customPath.startsWith('{')) {
-					try {
-						const convertedString = JSON.parse(customPath)
-						const command = createCommand(instance, convertedString)
-						const sendToCommand = {
-							id: ActionId.customCommand,
-							options: {
-								command: command.oscPath,
-								args: command.args,
-							},
-						}
-						sendActionCommand(instance, sendToCommand)
-					} catch (error) {
-						instance.log('error', `$Not a JSON value, ${customPath}. Error: ${error}`)
-					}
-				} else {
-					const command = createCommand(instance, customPath)
-					const sendToCommand = {
-						id: ActionId.customCommand,
-						options: {
-							command: command.oscPath,
-							args: command.args,
-						},
-					}
-					sendActionCommand(instance, sendToCommand)
-				}
-			},
-		},
-		[ActionId.customCommandWithArguments]: {
-			name: 'Custom w/args',
-			options: [options.path, options.customArgs],
-			callback: (action): void => {
-				// type: 'Special'
-				const command = createCommand(instance, action.options.path as string)
-				command.args.push(JSON.parse(action.options.customArgs as string))
-				const sendToCommand = {
-					id: ActionId.customCommandWithArguments,
-					options: {
-						command: command.oscPath,
-						args: command.args,
-					},
-				}
-				sendActionCommand(instance, sendToCommand)
-			},
-		},
+		...actionCustom,
+		...actionZoomISORecordingConsent,
 	}
 
 	return actions

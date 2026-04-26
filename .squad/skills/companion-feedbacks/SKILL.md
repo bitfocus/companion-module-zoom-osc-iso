@@ -245,18 +245,23 @@ export function UpdateFeedbacks(self: ModuleInstance): void {
 ## Common Pitfalls
 
 1. **Using integers instead of `combineRgb()`**
+
    - Always use `combineRgb(r, g, b)` for colors, not raw integers
 
 2. **Forgetting to trigger re-checks**
+
    - Call `self.checkFeedbacks()` or `self.checkAllFeedbacks()` when state changes
 
 3. **Blocking callbacks**
+
    - Callbacks should be fast — compute from cached state, don't query devices synchronously
 
 4. **Not handling missing state**
+
    - Always provide fallback values: `self.deviceState.level ?? 0`
 
 5. **Confusing boolean vs. advanced**
+
    - Use boolean for simple on/off styling
    - Use advanced only when you need full rendering control (custom text, images)
 
