@@ -93,7 +93,6 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 	// 7 = Meeting Status Ended
 	if (data.args[0].value === 0 || data.args[0].value === 7) {
 		context.destroyTimers()
-		context.instance.ZoomUserData = {}
 		context.instance.ZoomClientDataObj = {
 			last_response: context.instance.ZoomClientDataObj.last_response,
 			selectedCallers: [],
