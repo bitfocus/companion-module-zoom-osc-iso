@@ -12,6 +12,11 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 		return
 	}
 
+	const index = instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+	if (index === -1) {
+		instance.ZoomVariableLink.push({ zoomId, userName })
+	}
+
 	if (data.args.length === 4) {
 		instance.ZoomUserData[zoomId] = {
 			zoomId,
@@ -55,11 +60,6 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 	} else {
 		instance.log('warn', 'create ZoomUser wrong arguments in OSC feedback')
 		return
-	}
-
-	const index = instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-	if (index === -1) {
-		instance.ZoomVariableLink.push({ zoomId, userName })
 	}
 
 	setVariables(instance, (variables) => updateAllUserBasedVariables(instance, variables))

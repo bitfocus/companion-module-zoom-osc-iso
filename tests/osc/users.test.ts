@@ -47,6 +47,6 @@ describe('createZoomUser', () => {
 
 		expect(instance.log).toHaveBeenCalledWith('warn', 'create ZoomUser wrong arguments in OSC feedback')
 		expect(instance.ZoomUserData[101]).toBeUndefined()
-		expect(instance.ZoomVariableLink).toEqual([])
+		expect(instance.ZoomVariableLink).toEqual([{ zoomId: 101, userName: 'Alice' }])
 	})
 })
