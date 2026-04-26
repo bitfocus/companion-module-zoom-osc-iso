@@ -45,6 +45,10 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 			selectionMethod,
 			numberOfGroups: 5,
 			pulling: 0,
+			pollEngineState: true,
+			pollAudioLevels: true,
+			pollOutputRouting: true,
+			pollAudioRouting: true,
 			feedbackImagesWithIcons: 1,
 			enableSocialStream: false,
 			enableVariablesForEachUser: false,
@@ -65,7 +69,6 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		ZoomAudioLevelData: {},
 		ZoomAudioRoutingData: {},
 		ZoomUserOffline: {},
-		InitVariables: jest.fn(),
 		// Companion base stubs (unused in action tests)
 		checkFeedbacks: jest.fn(),
 		setVariableValues: jest.fn(),
@@ -74,6 +77,7 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		setFeedbackDefinitions: jest.fn(),
 		setPresetDefinitions: jest.fn(),
 		updateStatus: jest.fn(),
+		saveConfig: jest.fn(),
 		updateDefinitionsForActionsFeedbacksAndPresets: jest.fn(),
 	} as unknown as InstanceBaseExt<ZoomConfig>
 }
