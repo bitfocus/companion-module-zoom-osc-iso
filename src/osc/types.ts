@@ -22,6 +22,7 @@ export interface OSCHandlerContext {
 	instance: InstanceBaseExt<ZoomConfig>
 	createZoomUser(data: ZoomOSCResponse): Promise<void>
 	setUpdateLoop(value: boolean): void
+	setNeedToPingPong(value: boolean): void
 	isSpotlightGroupTrackingInitialized(): boolean
 	setSpotlightGroupTrackingInitialized(value: boolean): void
 	destroyTimers(): void

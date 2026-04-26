@@ -188,6 +188,9 @@ export class OSC {
 		setUpdateLoop: (value) => {
 			this.updateLoop = value
 		},
+		setNeedToPingPong: (value) => {
+			this.needToPingPong = value
+		},
 		isSpotlightGroupTrackingInitialized: () => this.spotlightGroupTrackingInitalized,
 		setSpotlightGroupTrackingInitialized: (value) => {
 			this.spotlightGroupTrackingInitalized = value
@@ -245,7 +248,7 @@ export class OSC {
 
 	public readonly sendISOPullingCommands = (): void => {
 		// this.instance.log('debug', 'sendISOPullingCommands')
-		sendZoomIsoPullingCommands(this.sendCommand)
+		sendZoomIsoPullingCommands(this.sendCommand, this.instance.config)
 		return
 	}
 }

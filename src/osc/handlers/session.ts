@@ -125,6 +125,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 	}
 
 	if (context.instance.ZoomClientDataObj.callStatus === 3) {
+		context.setNeedToPingPong(true)
 		context.createPingTimer()
 		context.createUpdatePresetsTimer()
 		context.createZoomIsoPullerTimer()
