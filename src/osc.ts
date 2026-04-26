@@ -11,7 +11,7 @@ const osc = require('osc') // eslint-disable-line
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
 	private oscHost = ''
-	private oscTXPort = 9099
+	private oscTXPort = 9090
 	private oscRXPort = 1234
 	private udpPort: any
 	private updateLoop = true
@@ -159,7 +159,7 @@ export class OSC {
 		// Open the socket.
 		this.udpPort.open()
 
-		// When the port is read
+		// When the port is ready
 		this.udpPort.on('ready', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
@@ -222,7 +222,6 @@ export class OSC {
 
 	private processData = async (data: ZoomOSCResponse) => {
 		// this.instance.log('debug', '+++++++++++receiving:' + JSON.stringify(data))
-		// Do a switch block to go fast through the rest of the data
 		try {
 			await dispatchOscMessage(this.createHandlerContext(), data)
 		} catch (error) {

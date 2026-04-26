@@ -1,4 +1,3 @@
-import { CompanionVariableValues } from '@companion-module/base'
 import { socialStreamApi } from '../../socialstream.js'
 import { arrayRemove, userExist, ZoomGroupDataInterface } from '../../utils.js'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../../variables/variable-values.js'
 import { checkGroupFeedbacks, checkUserRelatedFeedbacks } from '../feedbacks.js'
 import { OSCHandlerContext, UserRole, ZoomOSCResponse } from '../types.js'
+import { setVariables } from '../variables.js'
 
 async function ensureZoomUser(context: OSCHandlerContext, data: ZoomOSCResponse, zoomId: number): Promise<void> {
 	if (userExist(zoomId, context.instance.ZoomUserData)) {
@@ -26,15 +26,6 @@ async function ensureZoomUser(context: OSCHandlerContext, data: ZoomOSCResponse,
 	if (!context.instance.ZoomUserOffline[zoomId]) {
 		await context.createZoomUser(data)
 	}
-}
-
-function setVariables(
-	instance: OSCHandlerContext['instance'],
-	updater: (variables: CompanionVariableValues) => void,
-): void {
-	const variables: CompanionVariableValues = {}
-	updater(variables)
-	instance.setVariableValues(variables)
 }
 
 function handleSpotlightState(
@@ -55,11 +46,11 @@ function handleSpotlightState(
 			zoomID: zoomId,
 			userName: data.args[1].value,
 		})
-		setVariables(context.instance, (variables) => updateSpotlightGroupVariables(context.instance, variables))
 	} else if (!enabled && index > -1) {
 		context.instance.ZoomGroupData[1].users.splice(index, 1)
-		setVariables(context.instance, (variables) => updateSpotlightGroupVariables(context.instance, variables))
 	}
+
+	setVariables(context.instance, (variables) => updateSpotlightGroupVariables(context.instance, variables))
 
 	checkUserRelatedFeedbacks(context.instance)
 }
@@ -160,6 +151,13 @@ function handleUserNameChanged(context: OSCHandlerContext, data: ZoomOSCResponse
 }
 
 async function handleChat(context: OSCHandlerContext, data: ZoomOSCResponse): Promise<void> {
+	// Chat Message Target:
+	// 0 None
+	// 1 All
+	// 2 All Panelist
+	// 3 Individual Panelist
+	// 4 Individual
+	// 5 Waiting Room
 	if (
 		context.instance.config.enableSocialStream &&
 		context.instance.config.socialStreamId.length > 0 &&
@@ -185,22 +183,27 @@ async function handleAskedQuestion(context: OSCHandlerContext, data: ZoomOSCResp
 }
 
 function handleRoleChanged(context: OSCHandlerContext, data: ZoomOSCResponse, zoomId: number): void {
-	if (userExist(zoomId, context.instance.ZoomUserData)) {
-		context.instance.ZoomUserData[zoomId].userRole = data.args[4].value
-	} else {
+	if (!userExist(zoomId, context.instance.ZoomUserData)) {
 		return
 	}
 
+	context.instance.ZoomUserData[zoomId].userRole = data.args[4].value
+
+	const index = context.instance.ZoomGroupData[0].users.findIndex((id) => id !== null && id.zoomID === zoomId)
+
 	if (data.args[4].value === UserRole.Participant) {
-		const index = context.instance.ZoomGroupData[0].users.findIndex((id) => id !== null && id.zoomID === zoomId)
 		if (index > -1) {
 			context.instance.ZoomGroupData[0].users.splice(index, 1)
+			context.instance.log('debug', `removed host: ${data.args[1].value}`)
 			setVariables(context.instance, (variables) => updateHostGroupVariables(context.instance, variables))
 			checkGroupFeedbacks(context.instance)
 			context.setUpdateLoop(true)
 		}
-	} else if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
-		const index = context.instance.ZoomGroupData[0].users.findIndex((id) => id !== null && id.zoomID === zoomId)
+
+		return
+	}
+
+	if (data.args[4].value === UserRole.Host || data.args[4].value === UserRole.CoHost) {
 		if (index === -1) {
 			context.instance.ZoomGroupData[0].users.push({
 				zoomID: zoomId,
@@ -211,6 +214,8 @@ function handleRoleChanged(context: OSCHandlerContext, data: ZoomOSCResponse, zo
 			checkGroupFeedbacks(context.instance)
 			context.setUpdateLoop(true)
 		}
+
+		return
 	}
 }
 
@@ -221,10 +226,9 @@ function handleIsSpeaking(context: OSCHandlerContext, data: ZoomOSCResponse): vo
 
 function handleShareStatus(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 	const shareType = data.args[4].value
-	const variables: CompanionVariableValues = {
-		videoShareStatus: shareType === 'videoShareStarted' ? 'On' : 'Off',
-	}
-	context.instance.setVariableValues(variables)
+	setVariables(context.instance, (variables) => {
+		variables.videoShareStatus = shareType === 'videoShareStarted' ? 'On' : 'Off'
+	})
 }
 
 export async function handleUserMessage(

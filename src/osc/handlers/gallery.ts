@@ -1,4 +1,3 @@
-import { CompanionVariableValues } from '@companion-module/base'
 import { userExist } from '../../utils.js'
 import {
 	updateGalleryCountVariables,
@@ -8,6 +7,7 @@ import {
 } from '../../variables/variable-values.js'
 import { checkGalleryFeedbacks, checkSpotlightFeedbacks } from '../feedbacks.js'
 import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import { setVariables } from '../variables.js'
 
 export function handleGalleryMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {
 	switch (zoomPart2) {
@@ -35,19 +35,13 @@ function handleGalleryOrder(context: OSCHandlerContext, data: ZoomOSCResponse): 
 	context.instance.ZoomClientDataObj.galleryOrder = data.args.map(
 		(order: { type: string; value: number }) => order.value,
 	)
-	context.instance.InitVariables()
-
-	const variables: CompanionVariableValues = {}
-	updateGalleryVariables(context.instance, variables)
-	context.instance.setVariableValues(variables)
+	setVariables(context.instance, (variables) => updateGalleryVariables(context.instance, variables))
 	checkGalleryFeedbacks(context.instance)
 }
 
 function handleGalleryCount(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 	context.instance.ZoomClientDataObj.galleryCount = data.args[0].value
-	const variables: CompanionVariableValues = {}
-	updateGalleryCountVariables(context.instance, variables)
-	context.instance.setVariableValues(variables)
+	setVariables(context.instance, (variables) => updateGalleryCountVariables(context.instance, variables))
 }
 
 function handleSpotOrder(context: OSCHandlerContext, data: ZoomOSCResponse): void {
@@ -72,11 +66,10 @@ function handleSpotOrder(context: OSCHandlerContext, data: ZoomOSCResponse): voi
 
 	if (updatedData || !context.isSpotlightGroupTrackingInitialized()) {
 		context.setSpotlightGroupTrackingInitialized(true)
-		context.instance.InitVariables()
-		const variables: CompanionVariableValues = {}
-		updateSpotlightGroupInitalizedVariable(variables)
-		updateSpotlightGroupVariables(context.instance, variables)
-		context.instance.setVariableValues(variables)
+		setVariables(context.instance, (variables) => {
+			updateSpotlightGroupInitalizedVariable(variables)
+			updateSpotlightGroupVariables(context.instance, variables)
+		})
 		checkSpotlightFeedbacks(context.instance)
 		context.instance.updateDefinitionsForActionsFeedbacksAndPresets()
 	}

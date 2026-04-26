@@ -520,5 +520,4 @@ export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
 	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
 	ZoomUserOffline: ZoomUserOfflineInterface
 	config: TConfig
-	InitVariables(): void
 }

@@ -1,4 +1,3 @@
-import { CompanionVariableValues } from '@companion-module/base'
 import {
 	updateZoomIsoAudioLevelVariables,
 	updateZoomIsoAudioRoutingVariables,
@@ -7,6 +6,7 @@ import {
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
 import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import { setVariables } from '../variables.js'
 
 export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {
 	switch (zoomPart2) {
@@ -20,7 +20,6 @@ export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCRespon
 				channel: parseInt(data.args[0].value),
 				level: parseInt(data.args[1].value),
 			}
-			context.instance.InitVariables()
 			setVariables(context.instance, (variables) => updateZoomIsoAudioLevelVariables(context.instance, variables))
 			return
 		case 'audioRouting':
@@ -32,7 +31,6 @@ export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCRespon
 				gain_reduction: parseInt(data.args[4].value),
 				selection: data.args[5].value,
 			}
-			context.instance.InitVariables()
 			setVariables(context.instance, (variables) => updateZoomIsoAudioRoutingVariables(context.instance, variables))
 			return
 		case 'outputRouting': {
@@ -48,7 +46,6 @@ export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCRespon
 				embeddedAudioInfo: data.args[7].value,
 				status: data.args[8].value,
 			}
-			context.instance.InitVariables()
 			setVariables(context.instance, (variables) => updateZoomIsoOutputVariables(context.instance, variables))
 			context.instance.checkFeedbacks(FeedbackId.output)
 			return
@@ -56,13 +53,4 @@ export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCRespon
 		default:
 			return
 	}
-}
-
-function setVariables(
-	instance: OSCHandlerContext['instance'],
-	updater: (variables: CompanionVariableValues) => void,
-): void {
-	const variables: CompanionVariableValues = {}
-	updater(variables)
-	instance.setVariableValues(variables)
 }

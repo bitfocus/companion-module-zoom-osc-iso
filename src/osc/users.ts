@@ -1,8 +1,8 @@
-import { CompanionVariableValues } from '@companion-module/base'
 import type { ZoomConfig } from '../config.js'
 import type { InstanceBaseExt } from '../utils.js'
 import { updateAllUserBasedVariables } from '../variables/variable-values.js'
 import { UserRole, ZoomOSCResponse } from './types.js'
+import { setVariables } from './variables.js'
 
 export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data: ZoomOSCResponse): Promise<void> {
 	const zoomId = parseInt(data.args[3].value)
@@ -25,6 +25,17 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 			users: [],
 		}
 	} else if (data.args.length >= 11) {
+		// {int targetIndex}
+		// {str userName}
+		// {int galleryIndex}
+		// {int zoomID}
+		// {int targetCount}
+		// {int listCount}
+		// {int userRole}
+		// {int onlineStatus}
+		// {int videoStatus}
+		// {int audioStatus}
+		// {int handRaised}
 		instance.ZoomUserData[zoomId] = {
 			zoomId,
 			targetIndex: data.args[0].value,
@@ -49,8 +60,5 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 		instance.log('warn', 'create ZoomUser wrong arguments in OSC feedback')
 	}
 
-	instance.InitVariables()
-	const variables: CompanionVariableValues = {}
-	updateAllUserBasedVariables(instance, variables)
-	instance.setVariableValues(variables)
+	setVariables(instance, (variables) => updateAllUserBasedVariables(instance, variables))
 }
