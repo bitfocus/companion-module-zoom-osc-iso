@@ -163,7 +163,7 @@ async function handleChat(context: OSCHandlerContext, data: ZoomOSCResponse): Pr
 	if (
 		context.instance.config.enableSocialStream &&
 		context.instance.config.socialStreamId.length > 0 &&
-		data.args.length >= 5 &&
+		data.args.length >= 7 &&
 		context.instance.config.socialStreamChatTypeToSend.includes(data.args[6].value)
 	) {
 		await socialStreamApi.postMessage(data.args[1].value, data.args[4].value, context.instance)

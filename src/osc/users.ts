@@ -24,7 +24,7 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 			galleryIndex: data.args[2].value,
 			users: [],
 		}
-	} else if (data.args.length >= 10) {
+	} else if (data.args.length >= 11) {
 		instance.ZoomUserData[zoomId] = {
 			zoomId,
 			targetIndex: data.args[0].value,
