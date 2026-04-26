@@ -6,21 +6,17 @@ import { setVariables } from './variables.js'
 
 export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data: ZoomOSCResponse): Promise<void> {
 	const zoomId = parseInt(data.args[3].value)
+	const userName = data.args[1].value
 
 	if (instance.ZoomUserOffline[zoomId]) {
 		return
-	}
-
-	const index = instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
-	if (index === -1) {
-		instance.ZoomVariableLink.push({ zoomId, userName: data.args[1].value })
 	}
 
 	if (data.args.length === 4) {
 		instance.ZoomUserData[zoomId] = {
 			zoomId,
 			targetIndex: data.args[0].value,
-			userName: data.args[1].value,
+			userName,
 			galleryIndex: data.args[2].value,
 			users: [],
 		}
@@ -39,7 +35,7 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 		instance.ZoomUserData[zoomId] = {
 			zoomId,
 			targetIndex: data.args[0].value,
-			userName: data.args[1].value,
+			userName,
 			galleryIndex: data.args[2].value,
 			userRole: data.args[6].value,
 			videoOn: data.args[8].value === 1,
@@ -52,12 +48,18 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 			if (hostIndex === -1) {
 				instance.ZoomGroupData[0].users.push({
 					zoomID: zoomId,
-					userName: data.args[1].value,
+					userName,
 				})
 			}
 		}
 	} else {
 		instance.log('warn', 'create ZoomUser wrong arguments in OSC feedback')
+		return
+	}
+
+	const index = instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
+	if (index === -1) {
+		instance.ZoomVariableLink.push({ zoomId, userName })
 	}
 
 	setVariables(instance, (variables) => updateAllUserBasedVariables(instance, variables))
