@@ -12,8 +12,10 @@ export enum PresetIdReactionName {
 	lowerAllHands = 'Lower_All_Hands',
 }
 
+export type DynamicReactionNamePresetId = `Rename_Participant_${number}`
+
 export function GetPresetsReactionName(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in PresetIdReactionName]: CompanionPresetExt | undefined
+	[id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined
 } {
 	const presets = {
 		[PresetIdReactionName.raiseHand]: {
@@ -108,14 +110,15 @@ export function GetPresetsReactionName(instance: InstanceBaseExt<ZoomConfig>): {
 			],
 			feedbacks: [],
 		},
-	} as { [id in PresetIdReactionName]: CompanionPresetExt | undefined }
+	} as { [id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined }
 	const zoomUserData: ZoomUserDataInterface = instance.zoomUserData
 
 	// User selection
 	for (const key in zoomUserData) {
 		if (userExist(Number(key), zoomUserData)) {
 			const user = zoomUserData[key]
-			presets[`Rename_Participant_${user.zoomId}` as PresetIdReactionName] = {
+			const dynamicPresetId: DynamicReactionNamePresetId = `Rename_Participant_${user.zoomId}`
+			presets[dynamicPresetId] = {
 				type: 'button',
 				category: 'Reaction & Name Actions',
 				name: user.userName,

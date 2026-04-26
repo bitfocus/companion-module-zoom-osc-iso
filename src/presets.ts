@@ -13,7 +13,11 @@ import {
 import { PresetIdVideoAudioActions, GetPresetsVideoAudioActions } from './presets/preset-video-audio-actions.js'
 import { PresetIdZoomISOSelections, GetPresetsZoomISOSelections } from './presets/preset-zoomiso-selections.js'
 import { PresetIdZoomISOActions, GetPresetsZoomISOActions } from './presets/preset-zoomiso-actions.js'
-import { PresetIdReactionName, GetPresetsReactionName } from './presets/preset-reaction-name.js'
+import {
+	PresetIdReactionName,
+	type DynamicReactionNamePresetId,
+	GetPresetsReactionName,
+} from './presets/preset-reaction-name.js'
 import { PresetIdRoleManagement, GetPresetsRoleManagement } from './presets/preset-role-management.js'
 import { PresetIdJoinLeaveEnd, GetPresetsJoinLeaveEnd } from './presets/preset-join-leave-end.js'
 import { PresetIdDeviceSettings, GetPresetsDeviceSettings } from './presets/preset-devices-settings.js'
@@ -47,8 +51,9 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 	const presetsZoomISOActions: { [id in PresetIdZoomISOActions]: CompanionPresetExt | undefined } =
 		GetPresetsZoomISOActions(instance)
 
-	const presetsReactionNames: { [id in PresetIdReactionName]: CompanionPresetExt | undefined } =
-		GetPresetsReactionName(instance)
+	const presetsReactionNames: {
+		[id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined
+	} = GetPresetsReactionName(instance)
 
 	const presetsRoleManagement: { [id in PresetIdRoleManagement]: CompanionPresetExt | undefined } =
 		GetPresetsRoleManagement()
@@ -78,6 +83,7 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 			| PresetIdZoomISOSelections
 			| PresetIdZoomISOActions
 			| PresetIdReactionName
+			| DynamicReactionNamePresetId
 			| PresetIdRoleManagement
 			| PresetIdJoinLeaveEnd
 			| PresetIdDeviceSettings
