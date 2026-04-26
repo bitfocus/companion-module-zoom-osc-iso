@@ -14,6 +14,7 @@ describe('GetActionsCustom', () => {
 	beforeEach(() => {
 		const sendCommand = instance.OSC.sendCommand as jest.Mock
 		sendCommand.mockClear()
+		;(instance.log as jest.Mock).mockClear()
 	})
 
 	// ── customCommand ──────────────────────────────────────────────────────────
@@ -28,13 +29,21 @@ describe('GetActionsCustom', () => {
 		it('parses the JSON object and sends the oscPath when the path is valid JSON', async () => {
 			const action = actions[ActionIdCustom.customCommand] as any
 			await action.callback({ options: { path: '{"oscPath":"/zoom/json","args":[]}' } } as any, {} as any)
-			expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom[object Object]', [])
+			expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/json', [])
 		})
 
 		it('does not call sendCommand when the path is invalid JSON', async () => {
 			const action = actions[ActionIdCustom.customCommand] as any
 			await action.callback({ options: { path: '{bad json}' } } as any, {} as any)
 			expect(instance.OSC.sendCommand).not.toHaveBeenCalled()
+			expect(instance.log).toHaveBeenCalledWith('error', expect.stringContaining('Not a JSON value'))
+		})
+
+		it('does not call sendCommand when the path JSON has the wrong shape', async () => {
+			const action = actions[ActionIdCustom.customCommand] as any
+			await action.callback({ options: { path: '{"command":"/zoom/json"}' } } as any, {} as any)
+			expect(instance.OSC.sendCommand).not.toHaveBeenCalled()
+			expect(instance.log).toHaveBeenCalledWith('error', 'Invalid JSON command shape: {"command":"/zoom/json"}')
 		})
 	})
 
@@ -48,6 +57,20 @@ describe('GetActionsCustom', () => {
 				{} as any,
 			)
 			expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/zoom/userName/mute', [{ type: 's', value: 'Alice' }])
+		})
+
+		it('does not call sendCommand when customArgs is invalid JSON', () => {
+			const action = actions[ActionIdCustom.customCommandWithArguments] as any
+			action.callback({ options: { path: '/zoom/userName/mute', customArgs: '{bad json}' } } as any, {} as any)
+			expect(instance.OSC.sendCommand).not.toHaveBeenCalled()
+			expect(instance.log).toHaveBeenCalledWith('error', expect.stringContaining('Not a JSON value'))
+		})
+
+		it('does not call sendCommand when customArgs has the wrong shape', () => {
+			const action = actions[ActionIdCustom.customCommandWithArguments] as any
+			action.callback({ options: { path: '/zoom/userName/mute', customArgs: '{"foo":"bar"}' } } as any, {} as any)
+			expect(instance.OSC.sendCommand).not.toHaveBeenCalled()
+			expect(instance.log).toHaveBeenCalledWith('error', 'Invalid custom argument shape: {"foo":"bar"}')
 		})
 	})
 })
