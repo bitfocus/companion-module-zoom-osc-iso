@@ -12,6 +12,14 @@ export interface ZoomOSCResponse {
 	args: ZoomOSCArgument[]
 }
 
+export type NodeOscTypedArgument = {
+	type: string
+	value: string | number | boolean
+}
+
+export type NodeOscArgument = string | number | boolean | NodeOscTypedArgument
+export type NodeOscMessage = [string, ...NodeOscArgument[]]
+
 export enum UserRole {
 	Host = 1,
 	CoHost = 2,

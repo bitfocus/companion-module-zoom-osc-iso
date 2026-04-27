@@ -1,6 +1,6 @@
 {
 	"name": "zoom-osc-iso",
-	"version": "4.11.1",
+	"version": "4.12.0",
 	"main": "dist/index.js",
 	"scripts": {
 		"postinstall": "husky",
@@ -27,13 +27,14 @@
 		"@companion-module/base": "^1.12.1",
 		"@fast-csv/parse": "^5.0.5",
 		"got-cjs": "^12.5.4",
-		"osc": "^2.4.5"
+		"node-osc": "^11.4.0"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.6.1",
 		"@types/got": "^9.6.12",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^22.15.30",
+		"@types/node-osc": "^10.0.0",
 		"eslint": "^9.28.0",
 		"husky": "^9.1.7",
 		"jest": "^30.2.0",

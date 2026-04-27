@@ -1,15 +1,17 @@
 /**
  * Global test setup — runs after Jest framework is installed.
  *
- * Safety-net Layer 2: prevents the `osc` UDP library from opening real sockets
+ * Safety-net Layer 2: prevents the OSC transport library from opening real sockets
  * if osc.ts is accidentally imported. Primary protection is the mock instance
  * (instance.OSC = { sendCommand: jest.fn() }) in mock-instance.ts.
  */
-jest.mock('osc', () => ({
-	UDPPort: jest.fn().mockImplementation(() => ({
+jest.mock('node-osc', () => ({
+	Client: jest.fn().mockImplementation(() => ({
 		send: jest.fn(),
+		close: jest.fn(),
+	})),
+	Server: jest.fn().mockImplementation(() => ({
 		on: jest.fn(),
-		open: jest.fn(),
 		close: jest.fn(),
 	})),
 }))
