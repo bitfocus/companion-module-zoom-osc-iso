@@ -1,6 +1,5 @@
-import type { OSCSomeArguments } from '@companion-module/base'
+import type { OSCSomeArguments, OSCArgument, OSCMetaArgument } from '@companion-module/base'
 import type { ZoomConfig } from '../config.js'
-import type { OSCArgument, OSCMetaArgument } from '@companion-module/base'
 import { SubscribeMode } from '../utils.js'
 import type { NodeOscArgument, NodeOscMessage, ZoomOSCResponse } from './types.js'
 

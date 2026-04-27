@@ -47,20 +47,18 @@ export class OSC {
 	 * @description Close connection on instance disable/removal
 	 */
 	public readonly destroy = async (): Promise<void> => {
-		const server = this.server
-		const client = this.client
+		this.destroyTimers()
 
-		if (server) {
-			await server.close()
+		if (this.server) {
+			await this.server.close()
 		}
 
-		if (client) {
-			await client.close()
+		if (this.client) {
+			await this.client.close()
 		}
 
 		this.server = null
 		this.client = null
-		this.destroyTimers()
 	}
 
 	public readonly destroyTimers = (): void => {
