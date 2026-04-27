@@ -21,6 +21,16 @@ type NodeOscModule = {
 }
 const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
 
+async function closeNodeOscEndpoint(endpoint: NodeOscClient | NodeOscServer | null): Promise<void> {
+	if (!endpoint) {
+		return
+	}
+
+	await new Promise<void>((resolve) => {
+		endpoint.close(() => resolve())
+	})
+}
+
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
 	private oscHost = ''
@@ -46,13 +56,15 @@ export class OSC {
 	/**
 	 * @description Close connection on instance disable/removal
 	 */
-	public readonly destroy = (): void => {
-		this.server?.close()
-		this.client?.close()
+	public readonly destroy = async (): Promise<void> => {
+		const server = this.server
+		const client = this.client
+
+		await Promise.all([closeNodeOscEndpoint(server), closeNodeOscEndpoint(client)])
+
 		this.server = null
 		this.client = null
 		this.destroyTimers()
-		return
 	}
 
 	public readonly destroyTimers = (): void => {

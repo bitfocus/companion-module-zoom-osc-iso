@@ -121,7 +121,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 				users: [],
 			}
 		}
-		if (this.OSC) this.OSC.destroy()
+		if (this.OSC) await this.OSC.destroy()
 		this.OSC = new OSC(this)
 		this.updateInstance()
 	}
@@ -155,7 +155,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.ZoomAudioLevelData = []
 		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
-		this.OSC?.destroy()
+		await this.OSC?.destroy()
 	}
 
 	/**
