@@ -126,7 +126,22 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			updateCallStatusVariables(context.instance, variables)
 			updateAllUserBasedVariables(context.instance, variables)
 		})
-		context.instance.checkFeedbacks()
+		context.instance.checkFeedbacks(
+			FeedbackId.selectionMethod,
+			FeedbackId.groupBased,
+			FeedbackId.groupBasedAdvanced,
+			FeedbackId.indexBased,
+			FeedbackId.indexBasedAdvanced,
+			FeedbackId.galleryBased,
+			FeedbackId.galleryBasedAdvanced,
+			FeedbackId.userNameBased,
+			FeedbackId.userNameBasedAdvanced,
+			FeedbackId.output,
+			FeedbackId.audioOutput,
+			FeedbackId.engineState,
+			FeedbackId.capturePermissionGranted,
+			FeedbackId.isPro,
+		)
 		return
 	}
 

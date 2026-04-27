@@ -74,6 +74,10 @@ describe('handleUserMessage chat handling', () => {
 		}
 
 		await handleUserMessage(context, data, 'user', 'chat')
-		expect(postMessageSpy).toHaveBeenCalledWith('Alice', 'Hello', context.instance)
+		expect(postMessageSpy).toHaveBeenCalledTimes(1)
+		const [name, message, instance] = postMessageSpy.mock.calls[0] as [string, string, unknown]
+		expect(name).toBe('Alice')
+		expect(message).toBe('Hello')
+		expect(instance).toBe(context.instance)
 	})
 })

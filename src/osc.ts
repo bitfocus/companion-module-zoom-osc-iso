@@ -8,11 +8,11 @@ import type { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/t
 import { createZoomUser } from './osc/users.js'
 import { type InstanceBaseExt, ZoomVersion } from './utils.js'
 type NodeOscClient = {
-	close(): Promise<void>
+	close(): Promise<void> | undefined
 	send(address: string, ...args: unknown[]): void
 }
 type NodeOscServer = {
-	close(): Promise<void>
+	close(): Promise<void> | undefined
 	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
 	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
 }
@@ -155,20 +155,21 @@ export class OSC {
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
 		this.client = new Client(this.oscHost, this.oscTXPort)
-		this.server = new Server(this.oscRXPort, '0.0.0.0', () => {
+		const server = new Server(this.oscRXPort, '0.0.0.0', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			this.needToPingPong = true
 			this.createPingTimer()
 			this.createUpdatePresetsTimer()
 		})
+		this.server = server
 
-		this.server.on('message', (oscMsg) => {
+		server.on('message', (oscMsg) => {
 			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
 			this.processData(normalizeNodeOscMessage(oscMsg))
 		})
 
-		this.server.on('error', (err: { code?: string; message: string }) => {
+		server.on('error', (err: { code?: string; message: string }) => {
 			if (err.code === 'EADDRINUSE') {
 				this.instance.log('error', 'Error: Selected port in use.' + err.message)
 			}
