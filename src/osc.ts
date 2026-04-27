@@ -4,10 +4,8 @@ import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
-type NodeOscArgument = string | number | boolean | { type: string; value: string | number | boolean }
-type NodeOscMessage = [string, ...NodeOscArgument[]]
 type NodeOscClient = {
 	close(cb?: () => void): void
 	send(address: string, ...args: unknown[]): void
@@ -166,7 +164,7 @@ export class OSC {
 
 		this.server.on('message', (oscMsg) => {
 			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(normalizeNodeOscMessage(oscMsg) as ZoomOSCResponse)
+			this.processData(normalizeNodeOscMessage(oscMsg))
 		})
 
 		this.server.on('error', (err: { code?: string; message: string }) => {

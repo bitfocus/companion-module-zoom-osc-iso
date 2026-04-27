@@ -2,14 +2,13 @@ import type { OSCSomeArguments } from '@companion-module/base'
 import type { ZoomConfig } from '../config.js'
 import type { OSCArgument, OSCMetaArgument } from '@companion-module/base'
 import { SubscribeMode } from '../utils.js'
+import type { NodeOscArgument, NodeOscMessage, ZoomOSCResponse } from './types.js'
 
 type SendCommand = (path: string, args?: OSCSomeArguments) => void
 type OSCClientSender = {
 	send(address: string, ...args: Array<OSCArgument | OSCMetaArgument>): void
 }
 
-type NodeOscArgument = string | number | boolean | { type: string; value: string | number | boolean }
-type NodeOscMessage = [string, ...NodeOscArgument[]]
 type OscArgumentArray = Array<OSCArgument | OSCMetaArgument>
 
 function toArgumentArray(args?: OSCSomeArguments): OscArgumentArray {
@@ -37,7 +36,7 @@ export function sendZoomIsoPullingCommands(sendCommand: SendCommand, config: Zoo
 	if (config.pollAudioRouting) sendCommand('/zoom/getAudioRouting', [])
 }
 
-export function normalizeNodeOscMessage(message: NodeOscMessage): { address: string; args: OSCMetaArgument[] } {
+export function normalizeNodeOscMessage(message: NodeOscMessage): ZoomOSCResponse {
 	const [address, ...args] = message
 
 	return {
