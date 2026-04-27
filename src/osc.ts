@@ -50,7 +50,13 @@ export class OSC {
 		const server = this.server
 		const client = this.client
 
-		await Promise.all([server?.close(), client?.close()])
+		if (server) {
+			await server.close()
+		}
+
+		if (client) {
+			await client.close()
+		}
 
 		this.server = null
 		this.client = null
