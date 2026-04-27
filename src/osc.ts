@@ -7,11 +7,11 @@ import { dispatchOscMessage } from './osc/handlers/index.js'
 import { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
 type NodeOscClient = {
-	close(cb?: () => void): void
+	close(): Promise<void>
 	send(address: string, ...args: unknown[]): void
 }
 type NodeOscServer = {
-	close(cb?: () => void): void
+	close(): Promise<void>
 	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
 	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
 }
@@ -20,16 +20,6 @@ type NodeOscModule = {
 	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
 }
 const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
-
-async function closeNodeOscEndpoint(endpoint: NodeOscClient | NodeOscServer | null): Promise<void> {
-	if (!endpoint) {
-		return
-	}
-
-	await new Promise<void>((resolve) => {
-		endpoint.close(() => resolve())
-	})
-}
 
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
@@ -60,7 +50,7 @@ export class OSC {
 		const server = this.server
 		const client = this.client
 
-		await Promise.all([closeNodeOscEndpoint(server), closeNodeOscEndpoint(client)])
+		await Promise.all([server?.close(), client?.close()])
 
 		this.server = null
 		this.client = null

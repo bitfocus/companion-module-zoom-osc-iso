@@ -2,8 +2,6 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { OSC } from '../../src/osc.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
 
-type CloseCallback = (() => void) | undefined
-
 const nodeOscMock = jest.requireMock('node-osc') as {
 	Client: jest.Mock
 	Server: jest.Mock
@@ -15,24 +13,26 @@ describe('OSC destroy', () => {
 		nodeOscMock.Server.mockReset()
 	})
 
-	it('waits for node-osc close callbacks before resolving destroy', async () => {
-		let serverCloseCallback: CloseCallback
-		let clientCloseCallback: CloseCallback
+	it('waits for node-osc close promises before resolving destroy', async () => {
+		let resolveServerClose!: () => void
+		let resolveClientClose!: () => void
+		const serverClosePromise = new Promise<void>((resolve) => {
+			resolveServerClose = resolve
+		})
+		const clientClosePromise = new Promise<void>((resolve) => {
+			resolveClientClose = resolve
+		})
 
 		nodeOscMock.Client.mockImplementation(() => ({
 			send: jest.fn(),
-			close: jest.fn((callback?: () => void) => {
-				clientCloseCallback = callback
-			}),
+			close: jest.fn(async () => clientClosePromise),
 		}))
 		nodeOscMock.Server.mockImplementation((...args: unknown[]) => {
 			const ready = args[2] as (() => void) | undefined
 			ready?.()
 			return {
 				on: jest.fn().mockReturnThis(),
-				close: jest.fn((callback?: () => void) => {
-					serverCloseCallback = callback
-				}),
+				close: jest.fn(async () => serverClosePromise),
 			}
 		})
 
@@ -46,11 +46,11 @@ describe('OSC destroy', () => {
 		await Promise.resolve()
 		expect(resolved).toBe(false)
 
-		serverCloseCallback?.()
+		resolveServerClose()
 		await Promise.resolve()
 		expect(resolved).toBe(false)
 
-		clientCloseCallback?.()
+		resolveClientClose()
 		await destroyPromise
 		expect(resolved).toBe(true)
 	})
