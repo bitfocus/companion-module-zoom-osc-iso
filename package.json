@@ -26,7 +26,6 @@
 	"dependencies": {
 		"@companion-module/base": "^1.12.1",
 		"@fast-csv/parse": "^5.0.5",
-		"@types/node-osc": "^10.0.0",
 		"got-cjs": "^12.5.4",
 		"node-osc": "^11.4.0"
 	},
@@ -35,6 +34,7 @@
 		"@types/got": "^9.6.12",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^22.15.30",
+		"@types/node-osc": "^10.0.0",
 		"eslint": "^9.28.0",
 		"husky": "^9.1.7",
 		"jest": "^30.2.0",
