@@ -1,5 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals'
-import { sendZoomIsoPullingCommands } from '../../src/osc/commands.js'
+import { normalizeNodeOscMessage, sendZoomIsoPullingCommands } from '../../src/osc/commands.js'
 import type { ZoomConfig } from '../../src/config.js'
 
 function createConfig(overrides: Partial<ZoomConfig> = {}): ZoomConfig {
@@ -43,5 +43,40 @@ describe('sendZoomIsoPullingCommands', () => {
 		expect(sendCommand).toHaveBeenCalledTimes(2)
 		expect(sendCommand).toHaveBeenNthCalledWith(1, '/zoom/getEngineState', [])
 		expect(sendCommand).toHaveBeenNthCalledWith(2, '/zoom/getOutputRouting', [])
+	})
+})
+
+describe('normalizeNodeOscMessage', () => {
+	it('normalizes string, integer, float, and boolean arguments', () => {
+		expect(normalizeNodeOscMessage(['/zoom/test', 'hello', 4, 1.5, true, false])).toEqual({
+			address: '/zoom/test',
+			args: [
+				{ type: 's', value: 'hello' },
+				{ type: 'i', value: 4 },
+				{ type: 'f', value: 1.5 },
+				{ type: 'i', value: 1 },
+				{ type: 'i', value: 0 },
+			],
+		})
+	})
+
+	it('normalizes typed node-osc arguments into OSC meta arguments', () => {
+		expect(
+			normalizeNodeOscMessage([
+				'/zoom/typed',
+				{ type: 's', value: 12 },
+				{ type: 'f', value: '2.25' },
+				{ type: 'i', value: '7' },
+				{ type: 'b', value: true },
+			]),
+		).toEqual({
+			address: '/zoom/typed',
+			args: [
+				{ type: 's', value: '12' },
+				{ type: 'f', value: 2.25 },
+				{ type: 'i', value: 7 },
+				{ type: 'i', value: 1 },
+			],
+		})
 	})
 })
