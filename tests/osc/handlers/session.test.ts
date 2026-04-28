@@ -133,4 +133,19 @@ describe('handleSessionMessage', () => {
 		expect(context.instance.config.version).toBe(0)
 		expect((context.instance.saveConfig as jest.Mock).mock.calls[0][0]).toBe(context.instance.config)
 	})
+
+	it.each([0, 7])('clears ZoomUserData when meeting status %i indicates the call has ended', (callStatus) => {
+		const context = createContext()
+		context.instance.ZoomUserData = {
+			1: { zoomId: 1, userName: 'Alice', targetIndex: 0, galleryIndex: 0, users: [] } as never,
+		}
+		const data: ZoomOSCResponse = {
+			address: '/zoomosc/meetingStatus',
+			args: [{ type: 'i', value: callStatus }],
+		}
+
+		handleSessionMessage(context, data, 'meetingStatus')
+
+		expect(context.instance.ZoomUserData).toEqual({})
+	})
 })

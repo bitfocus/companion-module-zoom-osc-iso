@@ -113,6 +113,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			isPro: context.instance.ZoomClientDataObj.isPro,
 		}
 		context.instance.ZoomVariableLink.length = 0
+		context.instance.ZoomUserData = {}
 
 		context.instance.ZoomGroupData = Array.from(
 			{ length: context.instance.ZoomClientDataObj.numberOfGroups + 2 },
