@@ -42,3 +42,8 @@
 - **Regression risk**: LOW - All changes backward compatible, no dropped behavior
 - **Pattern observed**: Config changes require upgrade script + new action toggles for runtime control
 - **Test strategy**: Existing test suite validates merge quality - no test updates needed for config additions
+### 2026-04-28: Session handler meeting-end regression coverage
+
+- `tests/osc/handlers/session.test.ts` is the right place for focused `handleSessionMessage()` regression tests around `/zoomosc/meetingStatus` branches.
+- For meeting-ended behavior, cover both Zoom OSC statuses `0` (idle) and `7` (ended) with `it.each(...)` because the handler treats both as the same teardown path.
+- `src/osc/handlers/session.ts` now clears `ZoomUserData` in the meeting-ended branch, so the regression assertion should pin that behavior directly.
