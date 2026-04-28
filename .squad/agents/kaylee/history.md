@@ -7,6 +7,8 @@
 
 ## Recent Updates
 
+📌 **2026-04-28T03-57-11Z** — Scribe completed manifest routing: orchestration log, session log, and team history updates all finalized. Config exclusion work fully documented in squad records.
+📌 **2026-04-28T01-07-35Z** — Committed eslint config exclusions (commit 61bdb7f). Both package.json and eslint.config.mjs now explicitly exclude `.squad/**`. Working tree clean.
 📌 **2026-04-28T00-41-22Z** — Config exclusion task completed. Orchestration log written. Decision merged to decisions.md.
 
 ## Learnings
