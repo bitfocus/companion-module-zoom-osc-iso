@@ -1,14 +1,21 @@
-import { beforeEach, afterEach, describe, expect, it, jest } from '@jest/globals'
-import { OSC } from '../../src/osc.js'
-import { createMockInstance } from '../helpers/mock-instance.js'
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { InstanceStatus } from '@companion-module/base'
 import { FeedbackId } from '../../src/feedback.js'
 import { ZoomVersion } from '../../src/utils.js'
+import { createMockInstance } from '../helpers/mock-instance.js'
 
-const nodeOscMock = jest.requireMock('node-osc') as {
+jest.unstable_mockModule('node-osc', () => ({
+	Client: jest.fn(),
+	Server: jest.fn(),
+}))
+
+const { OSC } = await import('../../src/osc.js')
+const nodeOscMock = (await import('node-osc')) as unknown as {
 	Client: jest.Mock
 	Server: jest.Mock
 }
+
+const oscInstances: InstanceType<typeof OSC>[] = []
 
 describe('OSC', () => {
 	beforeEach(() => {
@@ -16,7 +23,10 @@ describe('OSC', () => {
 		nodeOscMock.Server.mockReset()
 	})
 
-	afterEach(() => {
+	afterEach(async () => {
+		for (const osc of oscInstances.splice(0)) {
+			await osc.destroy()
+		}
 		jest.useRealTimers()
 	})
 
@@ -44,6 +54,7 @@ describe('OSC', () => {
 		})
 
 		const osc = new OSC(createMockInstance())
+		oscInstances.push(osc)
 		const destroyPromise = osc.destroy()
 		let resolved = false
 		void destroyPromise.then(() => {
@@ -78,6 +89,7 @@ describe('OSC', () => {
 		instance.config.version = ZoomVersion.ZoomISO
 		instance.config.pulling = 500
 		const osc = new OSC(instance)
+		oscInstances.push(osc)
 		const sendCommandSpy = jest.spyOn(osc, 'sendCommand')
 
 		osc.createZoomIsoPullerTimer()
@@ -101,6 +113,7 @@ describe('OSC', () => {
 
 		const instance = createMockInstance()
 		const osc = new OSC(instance)
+		oscInstances.push(osc)
 
 		osc.createUpdatePresetsTimer()
 		jest.advanceTimersByTime(2000)
@@ -135,6 +148,7 @@ describe('OSC', () => {
 
 		const instance = createMockInstance()
 		const osc = new OSC(instance)
+		oscInstances.push(osc)
 
 		await osc.destroy()
 		osc.sendCommand('/zoom/ping')
