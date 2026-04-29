@@ -5,8 +5,8 @@ import { socialStreamApi } from '../../src/socialstream.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
 
-// Mock got-cjs to prevent real HTTP calls from socialstream internals
-jest.mock('got-cjs', () => ({
+// Mock got to prevent real HTTP calls from socialstream internals
+jest.mock('got', () => ({
 	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
 }))
 

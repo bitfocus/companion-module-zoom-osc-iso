@@ -4,7 +4,7 @@ import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.
 import { createMockInstance } from '../../helpers/mock-instance.js'
 import { socialStreamApi } from '../../../src/socialstream.js'
 
-jest.mock('got-cjs', () => ({
+jest.mock('got', () => ({
 	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
 }))
 
