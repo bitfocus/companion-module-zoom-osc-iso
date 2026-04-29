@@ -57,93 +57,140 @@ import {
 	GetActionsZoomISORecordingConsent,
 } from './actions/action-zoomiso-recording-consent.js'
 
+function prefixActionNames<T extends string>(
+	prefix: string,
+	actions: Record<T, CompanionActionDefinition | undefined>,
+): Record<T, CompanionActionDefinition | undefined> {
+	return Object.fromEntries(
+		Object.entries(actions).map(([id, action]) => [
+			id,
+			action && typeof action === 'object' && 'name' in action
+				? { ...action, name: `${prefix}: ${action.name}` }
+				: action,
+		]),
+	) as Record<T, CompanionActionDefinition | undefined>
+}
+
 /**
  * Main function to create the actions
  * @param instance Give the instance so we can extract data
  * @returns CompanionActions
  */
 export function GetActions(instance: InstanceBaseExt<ZoomConfig>): CompanionActionDefinitions<ActionsSchema> {
-	const actionsGroups: { [id in ActionIdGroups]: CompanionActionDefinition | undefined } = GetActionsGroups(instance)
+	const actionsGroups: { [id in ActionIdGroups]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Groups',
+		GetActionsGroups(instance),
+	)
 
-	const actionsGallery: { [id in ActionIdGallery]: CompanionActionDefinition | undefined } = GetActionsGallery(instance)
+	const actionsGallery: { [id in ActionIdGallery]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Gallery',
+		GetActionsGallery(instance),
+	)
 
-	const actionUserVideoMic: { [id in ActionIdUserVideoMic]: CompanionActionDefinition | undefined } =
-		GetActionsUserVideoMic(instance)
+	const actionUserVideoMic: { [id in ActionIdUserVideoMic]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User Video/Mic',
+		GetActionsUserVideoMic(instance),
+	)
 
 	const actionUserSpotlight: { [id in ActionIdUserSpotlight]: CompanionActionDefinition | undefined } =
-		GetActionsUserSpotlight(instance)
+		prefixActionNames('User Spotlight', GetActionsUserSpotlight(instance))
 
 	const actionUserHandRaised: { [id in ActionIdUserHandRaised]: CompanionActionDefinition | undefined } =
-		GetActionsUserHandRaised(instance)
+		prefixActionNames('User Hand Raised', GetActionsUserHandRaised(instance))
 
-	const actionUserPin: { [id in ActionIdUserPin]: CompanionActionDefinition | undefined } = GetActionsUserPin(instance)
+	const actionUserPin: { [id in ActionIdUserPin]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User Pin',
+		GetActionsUserPin(instance),
+	)
 
-	const actionUserView: { [id in ActionIdUserView]: CompanionActionDefinition | undefined } =
-		GetActionsUserView(instance)
+	const actionUserView: { [id in ActionIdUserView]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User View',
+		GetActionsUserView(instance),
+	)
 
 	const actionGlobalGalleryTrackingAndDataRequest: {
 		[id in ActionIdGlobalGalleryTrackingAndDataRequest]: CompanionActionDefinition | undefined
-	} = GetActionsGlobalGalleryTrackingAndDataRequest(instance)
+	} = prefixActionNames(
+		'Global Gallery Tracking and Data Request',
+		GetActionsGlobalGalleryTrackingAndDataRequest(instance),
+	)
 
 	const actionUserRolesAndAction: { [id in ActionIdUserRolesAndAction]: CompanionActionDefinition | undefined } =
-		GetActionsUserRolesAndAction(instance)
+		prefixActionNames('User Roles and Action', GetActionsUserRolesAndAction(instance))
 
-	const actionUserChat: { [id in ActionIdUserChat]: CompanionActionDefinition | undefined } =
-		GetActionsUserChat(instance)
+	const actionUserChat: { [id in ActionIdUserChat]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User Chat',
+		GetActionsUserChat(instance),
+	)
 
-	const actionUserWebinar: { [id in ActionIdUserWebinar]: CompanionActionDefinition | undefined } =
-		GetActionsUserWebinar(instance)
+	const actionUserWebinar: { [id in ActionIdUserWebinar]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User Webinar',
+		GetActionsUserWebinar(instance),
+	)
 
 	const actionUserBreakoutRooms: { [id in ActionIdUserBreakoutRooms]: CompanionActionDefinition | undefined } =
-		GetActionsUserBreakoutRooms(instance)
+		prefixActionNames('User Breakout Rooms', GetActionsUserBreakoutRooms(instance))
 
 	const actionUserWaitingRoom: { [id in ActionIdUserWaitingRoom]: CompanionActionDefinition | undefined } =
-		GetActionsUserWaitingRoom(instance)
+		prefixActionNames('User Waiting Room', GetActionsUserWaitingRoom(instance))
 
 	const actionUserSharescreen: { [id in ActionIdUserScreenshare]: CompanionActionDefinition | undefined } =
-		GetActionsUserScreenshare(instance)
+		prefixActionNames('User Screenshare', GetActionsUserScreenshare(instance))
 
-	const actionUserSettings: { [id in ActionIdUserSettings]: CompanionActionDefinition | undefined } =
-		GetActionsUserSettings(instance)
+	const actionUserSettings: { [id in ActionIdUserSettings]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'User Settings',
+		GetActionsUserSettings(instance),
+	)
 
-	const actionGlobal: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = GetActionsGlobal(instance)
+	const actionGlobal: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Global',
+		GetActionsGlobal(instance),
+	)
 
 	const actionGlobalBreakoutRooms: { [id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined } =
-		GetActionsGlobalBreakoutRooms(instance)
+		prefixActionNames('Global Breakout Rooms', GetActionsGlobalBreakoutRooms(instance))
 
 	const actionGlobalRecording: { [id in ActionIdGlobalRecording]: CompanionActionDefinition | undefined } =
-		GetActionsGlobalRecording(instance)
+		prefixActionNames('Global Recording', GetActionsGlobalRecording(instance))
 
 	const actionGlobalWaitingRoomsAndZak: {
 		[id in ActionIdGlobalWaitingRoomsAndZak]: CompanionActionDefinition | undefined
-	} = GetActionsGlobalWaitingRoomsAndZak(instance)
+	} = prefixActionNames('Global Waiting Rooms and ZAK', GetActionsGlobalWaitingRoomsAndZak(instance))
 
 	const actionGlobalMemoryManagement: {
 		[id in ActionIdGlobalMemoryManagement]: CompanionActionDefinition | undefined
-	} = GetActionsGlobalMemoryManagement(instance)
+	} = prefixActionNames('Global Memory Management', GetActionsGlobalMemoryManagement(instance))
 
 	const actionZoomISORouting: { [id in ActionIdZoomISORouting]: CompanionActionDefinition | undefined } =
-		GetActionsZoomISORouting(instance)
+		prefixActionNames('ZoomISO Routing', GetActionsZoomISORouting(instance))
 
 	const actionZoomISOEngine: { [id in ActionIdZoomISOEngine]: CompanionActionDefinition | undefined } =
-		GetActionsZoomISOEngine(instance)
+		prefixActionNames('ZoomISO Engine', GetActionsZoomISOEngine(instance))
 
 	const actionZoomISOOutputSettings: { [id in ActionIdZoomISOOutputSettings]: CompanionActionDefinition | undefined } =
-		GetActionsZoomISOOutputSettings(instance)
+		prefixActionNames('ZoomISO Output Settings', GetActionsZoomISOOutputSettings(instance))
 
 	const actionZoomISOActions: { [id in ActionIdZoomISOActions]: CompanionActionDefinition | undefined } =
-		GetActionsZoomISOActions(instance)
+		prefixActionNames('ZoomISO Actions', GetActionsZoomISOActions(instance))
 
-	const actionUsers: { [id in ActionIdUsers]: CompanionActionDefinition | undefined } = GetActionsUsers(instance)
+	const actionUsers: { [id in ActionIdUsers]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Users',
+		GetActionsUsers(instance),
+	)
 
-	const actionSocialStream: { [id in ActionIdSocialStream]: CompanionActionDefinition | undefined } =
-		GetActionsSocalSteam(instance)
+	const actionSocialStream: { [id in ActionIdSocialStream]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Social Stream',
+		GetActionsSocalSteam(instance),
+	)
 
-	const actionCustom: { [id in ActionIdCustom]: CompanionActionDefinition | undefined } = GetActionsCustom(instance)
+	const actionCustom: { [id in ActionIdCustom]: CompanionActionDefinition | undefined } = prefixActionNames(
+		'Custom',
+		GetActionsCustom(instance),
+	)
 
 	const actionZoomISORecordingConsent: {
 		[id in ActionIdZoomISORecordingConsent]: CompanionActionDefinition | undefined
-	} = GetActionsZoomISORecordingConsent(instance)
+	} = prefixActionNames('ZoomISO Recording Consent', GetActionsZoomISORecordingConsent(instance))
 
 	const actions: {
 		[id in

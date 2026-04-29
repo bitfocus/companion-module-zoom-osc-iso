@@ -53,6 +53,20 @@ export type FeedbacksSchema = Record<
 	}
 >
 
+function prefixFeedbackNames<T extends string>(
+	namePrefixes: Record<T, string>,
+	feedbacks: Record<T, CompanionFeedbackDefinition | undefined>,
+): Record<T, CompanionFeedbackDefinition | undefined> {
+	return Object.fromEntries(
+		Object.entries(feedbacks).map(([id, feedback]) => [
+			id,
+			feedback && typeof feedback === 'object' && 'name' in feedback
+				? { ...feedback, name: `${namePrefixes[id as T]}: ${feedback.name}` }
+				: feedback,
+		]),
+	) as Record<T, CompanionFeedbackDefinition | undefined>
+}
+
 export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions<FeedbacksSchema> {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
@@ -640,5 +654,23 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 	}
 
-	return feedbacks
+	return prefixFeedbackNames(
+		{
+			[FeedbackId.selectionMethod]: 'Users',
+			[FeedbackId.groupBased]: 'Groups',
+			[FeedbackId.groupBasedAdvanced]: 'Groups',
+			[FeedbackId.indexBased]: 'Users',
+			[FeedbackId.indexBasedAdvanced]: 'Users',
+			[FeedbackId.galleryBased]: 'Gallery',
+			[FeedbackId.galleryBasedAdvanced]: 'Gallery',
+			[FeedbackId.userNameBased]: 'Users',
+			[FeedbackId.userNameBasedAdvanced]: 'Users',
+			[FeedbackId.output]: 'ZoomISO Output Settings',
+			[FeedbackId.audioOutput]: 'ZoomISO Output Settings',
+			[FeedbackId.engineState]: 'ZoomISO Engine',
+			[FeedbackId.capturePermissionGranted]: 'ZoomISO Engine',
+			[FeedbackId.isPro]: 'ZoomISO Engine',
+		},
+		feedbacks,
+	)
 }
