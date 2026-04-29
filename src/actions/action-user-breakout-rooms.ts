@@ -20,7 +20,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			options: [options.userName, options.breakoutName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/sendToBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 's', value: action.options.breakoutName as string })
@@ -40,7 +40,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/removeFromBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -59,8 +59,8 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			options: [options.userName, options.breakoutName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const breakoutName = await instance.parseVariablesInString(action.options.breakoutName as string)
+				const userName = action.options.userName as string
+				const breakoutName = action.options.breakoutName as string
 				const command = createCommand(instance, '/assignToBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 's', value: breakoutName })
@@ -80,7 +80,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/unassignFromBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -99,7 +99,7 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/returnToMainMeeting', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

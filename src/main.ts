@@ -1,7 +1,7 @@
-import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
-import { GetConfigFields, ZoomConfig } from './config.js'
-import { GetActions } from './actions.js'
-import { GetFeedbacks } from './feedback.js'
+import { InstanceBase, type SomeCompanionConfigField } from '@companion-module/base'
+import { GetActions, type ActionsSchema } from './actions.js'
+import { GetConfigFields, type ZoomConfig } from './config.js'
+import { GetFeedbacks, type FeedbacksSchema } from './feedback.js'
 import { GetPresetList } from './presets.js'
 import { OSC } from './osc.js'
 import {
@@ -17,7 +17,7 @@ import {
 } from './utils.js'
 
 import { updateVariableValues } from './variables/variable-values.js'
-import { initVariableDefinitions } from './variables/variable-definitions.js'
+import { initVariableDefinitions, type VariablesSchema } from './variables/variable-definitions.js'
 import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
 import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
@@ -27,7 +27,23 @@ import { addPollingConfigOptions } from './upgrades/addPollingConfigOptions.js'
 /**
  * @description Companion instance class for Zoom
  */
-class ZoomInstance extends InstanceBase<ZoomConfig> {
+export const UpgradeScripts = [
+	UpgradeV2ToV3,
+	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
+	fixWrongPinCommands,
+	addNewConfigFieldsForSocialStreamChatMessagesToSend,
+	addPollingConfigOptions,
+]
+
+export type ModuleSchema = {
+	config: ZoomConfig
+	secrets: undefined
+	actions: ActionsSchema
+	feedbacks: FeedbacksSchema
+	variables: VariablesSchema
+}
+
+export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	public config: ZoomConfig = {
 		label: '',
 		host: '',
@@ -146,7 +162,7 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	/**
 	 * @description close connections and stop timers/intervals
 	 */
-	async destroy() {
+	async destroy(): Promise<void> {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
@@ -168,21 +184,14 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 		this.setActionDefinitions(GetActions(this))
 		this.setFeedbackDefinitions(GetFeedbacks(this))
-		this.setPresetDefinitions(GetPresetList(this))
+		const { structure, presets } = GetPresetList(this)
+		this.setPresetDefinitions(structure, presets)
 	}
 
 	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
 		this.setActionDefinitions(GetActions(this))
 		this.setFeedbackDefinitions(GetFeedbacks(this))
-		this.setPresetDefinitions(GetPresetList(this))
+		const { structure, presets } = GetPresetList(this)
+		this.setPresetDefinitions(structure, presets)
 	}
 }
-
-runEntrypoint(ZoomInstance, [
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
-	fixWrongPinCommands,
-	addNewConfigFieldsForSocialStreamChatMessagesToSend,
-	addPollingConfigOptions,
-])

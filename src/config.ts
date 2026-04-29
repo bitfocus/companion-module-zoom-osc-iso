@@ -1,6 +1,7 @@
-import { Regex, SomeCompanionConfigField } from '@companion-module/base'
+import { Regex, type JsonValue, type SomeCompanionConfigField } from '@companion-module/base'
 
 export interface ZoomConfig {
+	[key: string]: JsonValue
 	label: string
 	host: string
 	tx_port: number
@@ -174,6 +175,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			width: 2,
 			default: false,
 			label: 'Enable',
+			disableAutoExpression: true,
 		},
 		{
 			type: 'textinput',
@@ -181,7 +183,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Session Id for Social Stream',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream) == true',
 		},
 		{
 			type: 'textinput',
@@ -189,7 +191,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Prefix for Zoom Q&A Questions',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream) == true',
 		},
 		{
 			type: 'static-text',
@@ -213,7 +215,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			],
 			minChoicesForSearch: 0,
 			width: 10,
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream) == true',
 		},
 		{
 			type: 'static-text',

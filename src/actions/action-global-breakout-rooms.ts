@@ -119,7 +119,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			callback: async (action): Promise<void> => {
 				// type: 'Global'
 				const command = createCommand(instance, '/createBreakout')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = action.options.name as string
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalBreakoutRooms.createBreakoutRoom,
@@ -137,7 +137,7 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 			callback: async (action): Promise<void> => {
 				// type: 'Global'
 				const command = createCommand(instance, '/deleteBreakout')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = action.options.name as string
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalBreakoutRooms.deleteBreakoutRoom,

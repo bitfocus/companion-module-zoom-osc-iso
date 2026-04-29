@@ -4,7 +4,7 @@ import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.
 import { createMockInstance } from '../../helpers/mock-instance.js'
 import { socialStreamApi } from '../../../src/socialstream.js'
 
-jest.mock('got-cjs', () => ({
+jest.mock('got', () => ({
 	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
 }))
 
@@ -74,6 +74,10 @@ describe('handleUserMessage chat handling', () => {
 		}
 
 		await handleUserMessage(context, data, 'user', 'chat')
-		expect(postMessageSpy).toHaveBeenCalledWith('Alice', 'Hello', context.instance)
+		expect(postMessageSpy).toHaveBeenCalledTimes(1)
+		const [name, message, instance] = postMessageSpy.mock.calls[0] as [string, string, unknown]
+		expect(name).toBe('Alice')
+		expect(message).toBe('Hello')
+		expect(instance).toBe(context.instance)
 	})
 })

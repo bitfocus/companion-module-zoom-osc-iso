@@ -1,26 +1,21 @@
-import { InstanceBaseExt, ZoomVersion } from './utils.js'
-import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import { Client, Server } from 'node-osc'
+import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import type { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
+import { type InstanceBaseExt, ZoomVersion } from './utils.js'
 type NodeOscClient = {
-	close(): Promise<void>
+	close(): Promise<void> | undefined
 	send(address: string, ...args: unknown[]): void
 }
 type NodeOscServer = {
-	close(): Promise<void>
+	close(): Promise<void> | undefined
 	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
 	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
 }
-type NodeOscModule = {
-	Client: new (host: string, port: number) => NodeOscClient
-	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
-}
-const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
-
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>
 	private oscHost = ''
@@ -93,7 +88,7 @@ export class OSC {
 	}
 
 	public readonly createZoomIsoPullerTimer = (): void => {
-		if (this.instance.config.version === (ZoomVersion.ZoomISO as number)) {
+		if (Number(this.instance.config.version) === Number(ZoomVersion.ZoomISO)) {
 			this.zoomISOPuller = setInterval(
 				() => {
 					if (this.instance.ZoomClientDataObj.engineState === -1) {
@@ -159,21 +154,22 @@ export class OSC {
 		this.oscRXPort = this.instance.config.rx_port || 1234
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
-		this.client = new nodeOsc.Client(this.oscHost, this.oscTXPort)
-		this.server = new nodeOsc.Server(this.oscRXPort, '0.0.0.0', () => {
+		this.client = new Client(this.oscHost, this.oscTXPort)
+		const server = new Server(this.oscRXPort, '0.0.0.0', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			this.needToPingPong = true
 			this.createPingTimer()
 			this.createUpdatePresetsTimer()
 		})
+		this.server = server
 
-		this.server.on('message', (oscMsg) => {
+		server.on('message', (oscMsg) => {
 			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
 			this.processData(normalizeNodeOscMessage(oscMsg))
 		})
 
-		this.server.on('error', (err: { code?: string; message: string }) => {
+		server.on('error', (err: { code?: string; message: string }) => {
 			if (err.code === 'EADDRINUSE') {
 				this.instance.log('error', 'Error: Selected port in use.' + err.message)
 			}

@@ -67,11 +67,11 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				if (action.options.selectionMethod === selectionMethod.ToggleSelection) {
+				if (Number(action.options.selectionMethod) === Number(selectionMethod.ToggleSelection)) {
 					instance.config.selectionMethod =
-						instance.config.selectionMethod === (selectionMethod.SingleSelection as number)
-							? (selectionMethod.MultiSelection as number)
-							: (selectionMethod.SingleSelection as number)
+						Number(instance.config.selectionMethod) === Number(selectionMethod.SingleSelection)
+							? selectionMethod.MultiSelection
+							: selectionMethod.SingleSelection
 				} else {
 					instance.config.selectionMethod = action.options.selectionMethod as number
 				}
@@ -96,7 +96,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const selectedName = await instance.parseVariablesInString(action.options.name as string)
+				const selectedName = action.options.name as string
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
@@ -315,6 +315,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					id: 'filepath',
 					useVariables: true,
 					default: '',
+					expressionDescription: 'Provide the destination file path as a string.',
 				},
 				{
 					type: 'checkbox',
@@ -324,7 +325,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+				const filepath = (action.options.filepath as string).trim()
 				let data = ''
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {

@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import type { ZoomConfig } from '../../src/config.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
 
@@ -60,7 +61,6 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		},
 		log: jest.fn(),
 		OSC: { sendCommand: jest.fn() },
-		parseVariablesInString: jest.fn(async (s: string) => s),
 		ZoomVariableLink: [],
 		ZoomGroupData: [],
 		ZoomUserData: {},

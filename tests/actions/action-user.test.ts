@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { jest } from '@jest/globals'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
 import { createMockInstance } from '../helpers/mock-instance.js'

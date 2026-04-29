@@ -1,6 +1,6 @@
 ---
-updated_at: { timestamp }
-focus_area: { brief description }
+updated_at: {timestamp}
+focus_area: {brief description}
 active_issues: []
 ---
 

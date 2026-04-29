@@ -1,5 +1,5 @@
 ---
-last_updated: { timestamp }
+last_updated: {timestamp}
 ---
 
 # Team Wisdom

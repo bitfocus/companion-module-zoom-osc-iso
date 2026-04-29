@@ -1,7 +1,12 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import type {
+	CompanionFeedbackDefinition,
+	CompanionFeedbackDefinitions,
+	CompanionOptionValues,
+} from '@companion-module/base'
+import type { JsonValue } from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
+import { colorRed, getUserFromName, type InstanceBaseExt, userExist } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -40,13 +45,35 @@ export enum feedbackType {
 	offline,
 }
 
-export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
+export type FeedbacksSchema = Record<
+	string,
+	{
+		type: 'boolean' | 'advanced'
+		options: CompanionOptionValues
+	}
+>
+
+function prefixFeedbackNames<T extends string>(
+	namePrefixes: Record<T, string>,
+	feedbacks: Record<T, CompanionFeedbackDefinition | undefined>,
+): Record<T, CompanionFeedbackDefinition | undefined> {
+	return Object.fromEntries(
+		Object.entries(feedbacks).map(([id, feedback]) => [
+			id,
+			feedback && typeof feedback === 'object' && 'name' in feedback
+				? { ...feedback, name: `${namePrefixes[id as T]}: ${feedback.name}` }
+				: feedback,
+		]),
+	) as Record<T, CompanionFeedbackDefinition | undefined>
+}
+
+export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions<FeedbacksSchema> {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
-	function feedbackResults(type: InputValue | undefined, zoomID: number) {
+	function feedbackResults(type: JsonValue | undefined, zoomID: number) {
 		if (type === undefined) {
 			return false
 		}
@@ -330,6 +357,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					default: '',
 					useVariables: true,
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
+					expressionDescription: 'Provide the participant name as a string, or use "me" for the current operator user.',
 				},
 				{
 					type: 'dropdown',
@@ -352,8 +380,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					],
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: async (feedback) => {
+				const name = feedback.options.name as string
 				if (name === '') {
 					return false
 				}
@@ -384,10 +412,11 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					default: '',
 					useVariables: true,
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
+					expressionDescription: 'Provide the participant name as a string, or use "me" for the current operator user.',
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: async (feedback) => {
+				const name = feedback.options.name as string
 				let zoomID = 0
 				if (name === 'me') {
 					zoomID = instance.ZoomMeData.zoomId
@@ -625,5 +654,23 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 	}
 
-	return feedbacks
+	return prefixFeedbackNames(
+		{
+			[FeedbackId.selectionMethod]: 'Users',
+			[FeedbackId.groupBased]: 'Groups',
+			[FeedbackId.groupBasedAdvanced]: 'Groups',
+			[FeedbackId.indexBased]: 'Users',
+			[FeedbackId.indexBasedAdvanced]: 'Users',
+			[FeedbackId.galleryBased]: 'Gallery',
+			[FeedbackId.galleryBasedAdvanced]: 'Gallery',
+			[FeedbackId.userNameBased]: 'Users',
+			[FeedbackId.userNameBasedAdvanced]: 'Users',
+			[FeedbackId.output]: 'ZoomISO Output Settings',
+			[FeedbackId.audioOutput]: 'ZoomISO Output Settings',
+			[FeedbackId.engineState]: 'ZoomISO Engine',
+			[FeedbackId.capturePermissionGranted]: 'ZoomISO Engine',
+			[FeedbackId.isPro]: 'ZoomISO Engine',
+		},
+		feedbacks,
+	)
 }

@@ -9,9 +9,13 @@ Agent Scribe initialized and ready for work.
 
 ## Recent Updates
 
+## Recent Updates
+
 📌 Team initialized on 2026-03-13  
 📌 **Session launch:** Justin requested help merging origin/main into feature/preset-architecture. Mal (Lead) and Zoe (Tester) dispatched for task coordination.  
-📌 **Session completion:** 2026-04-25T22:13:44Z — Merge completed and validated. Orchestration logs, session log, and decision documentation generated. Ready for next phase.
+📌 **Session completion:** 2026-04-25T22:13:44Z — Merge completed and validated. Orchestration logs, session log, and decision documentation generated. Ready for next phase.  
+📌 **Session completion:** 2026-04-28T00-41-22Z — Kaylee config-tooling task orchestrated. Routing log, session log, and decision merge completed.
+📌 **Manifest routing:** 2026-04-28T03-57-11Z — Scribe completed post-commit documentation tasks. Orchestration log, session log, and team history updates finalized.
 
 ## Learnings
 
