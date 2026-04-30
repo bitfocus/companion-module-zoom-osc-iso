@@ -166,10 +166,10 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []
-		this.ZoomUserOffline = []
+		this.ZoomUserOffline = {}
 		this.ZoomMeData = { zoomId: 0, userName: '' }
-		this.ZoomAudioLevelData = []
-		this.ZoomAudioRoutingData = []
+		this.ZoomAudioLevelData = {}
+		this.ZoomAudioRoutingData = {}
 		this.log('debug', `Instance destroyed: ${this.id}`)
 		await this.OSC?.destroy()
 	}
