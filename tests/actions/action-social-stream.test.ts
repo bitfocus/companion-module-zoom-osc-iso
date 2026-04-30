@@ -1,12 +1,12 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { jest } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
 
-// Mock got-cjs to prevent real HTTP calls from socialstream internals
-jest.mock('got-cjs', () => ({
+// Mock got to prevent real HTTP calls from socialstream internals
+jest.mock('got', () => ({
 	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
 }))
 
@@ -56,13 +56,10 @@ describe('GetActionsSocalSteam', () => {
 			expect(instance.log).toHaveBeenCalledWith('warn', 'Social Stream is not enabled in config')
 		})
 
-		it('resolves variables in name and message before posting', async () => {
+		it('passes through v2-resolved name and message values before posting', async () => {
 			instance.config.enableSocialStream = true
-			// action resolves message first, then name
-			const parseVars = instance.parseVariablesInString as jest.Mock
-			parseVars.mockResolvedValueOnce('Resolved Message' as never).mockResolvedValueOnce('Resolved Name' as never)
 			await (actions[ActionIdSocialStream.sendAChatToSocialStream] as any).callback(
-				{ options: { name: '$(var:name)', message: '$(var:msg)' } } as any,
+				{ options: { name: 'Resolved Name', message: 'Resolved Message' } } as any,
 				{} as any,
 			)
 			expect(postMessageSpy).toHaveBeenCalledWith('Resolved Name', 'Resolved Message', instance)

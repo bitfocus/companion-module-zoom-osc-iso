@@ -1,7 +1,8 @@
-import {
-	CompanionButtonPresetDefinition,
-	CompanionButtonStyleProps,
+import type {
 	CompanionFeedbackButtonStyleResult,
+	CompanionPresetDefinition,
+	CompanionPresetDefinitions,
+	CompanionButtonStyleProps,
 } from '@companion-module/base'
 import { ActionIdZoomISORecordingConsent } from '../actions/action-zoomiso-recording-consent.js'
 import { FeedbackId } from '../feedback.js'
@@ -32,15 +33,18 @@ import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
+import type { ModuleSchema } from '../main.js'
 
 export type PresetFeedbackDefinition = Array<
 	{
 		feedbackId: FeedbackId
-	} & CompanionButtonPresetDefinition['feedbacks'][0]
+	} & CompanionPresetDefinition<ModuleSchema>['feedbacks'][0]
 >
 
-export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
+export interface CompanionPresetExt extends Omit<CompanionPresetDefinition<ModuleSchema>, 'type'> {
+	type?: 'button' | CompanionPresetDefinition<ModuleSchema>['type']
+	category?: string
 	feedbacks: PresetFeedbackDefinition
 	steps: Array<{
 		down: Array<
@@ -73,7 +77,7 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdZoomISOActions
 					| ActionIdUsers
 					| ActionIdCustom
-			} & CompanionButtonPresetDefinition['steps'][0]['down'][0]
+			} & CompanionPresetDefinition<ModuleSchema>['steps'][0]['down'][0]
 		>
 		up: Array<
 			{
@@ -105,13 +109,12 @@ export interface CompanionPresetExt extends CompanionButtonPresetDefinition {
 					| ActionIdZoomISOActions
 					| ActionIdUsers
 					| ActionIdCustom
-			} & CompanionButtonPresetDefinition['steps'][0]['up'][0]
+			} & CompanionPresetDefinition<ModuleSchema>['steps'][0]['up'][0]
 		>
 	}>
 }
-export interface CompanionPresetDefinitionsExt {
-	[id: string]: CompanionPresetExt | undefined
-}
+export type CompanionPresetDefinitionsExt = CompanionPresetDefinitions<ModuleSchema> &
+	Record<string, CompanionPresetExt | undefined>
 
 export const buttonTextDefaultLength = 50
 export const buttonTextActiveSpeakerLength = 40

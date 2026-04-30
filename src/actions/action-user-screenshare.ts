@@ -175,7 +175,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			options: [options.userName, options.intX, options.intY],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/setWindowPosition', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.intX })
@@ -196,7 +196,7 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 			options: [options.userName, options.intX, options.intY],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/setWindowSize', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.intX })

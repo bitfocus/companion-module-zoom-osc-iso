@@ -23,7 +23,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/pin', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -42,7 +42,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/addPin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -61,7 +61,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/unPin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -80,7 +80,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/pin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -99,7 +99,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/unPin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -118,7 +118,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/togglePin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -137,7 +137,7 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName as string
 				const command = createCommand(instance, '/togglePin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {

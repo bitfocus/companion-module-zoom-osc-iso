@@ -33,20 +33,53 @@ import {
 } from './upgradeInterfaces.js'
 import {
 	CompanionUpgradeContext,
-	CompanionStaticUpgradeProps,
-	CompanionStaticUpgradeResult,
 	CompanionMigrationAction,
 	CompanionMigrationFeedback,
+	CompanionMigrationOptionValues,
+	CompanionStaticUpgradeProps,
+	CompanionStaticUpgradeResult,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
+
+function getOptionString(options: CompanionMigrationOptionValues, key: string): string | undefined {
+	const option = options[key]
+	if (!option || option.isExpression || typeof option.value !== 'string') {
+		return undefined
+	}
+
+	return option.value
+}
+
+function incrementNumericOption(options: CompanionMigrationOptionValues, key: string): void {
+	const option = options[key]
+	if (!option) return
+
+	if (option.isExpression) {
+		option.value = `(${option.value}) + 1`
+	} else if (typeof option.value === 'number') {
+		option.value += 1
+	}
+}
+
+function replaceOptionValue(
+	options: CompanionMigrationOptionValues,
+	key: string,
+	value: string | number | boolean,
+): void {
+	const option = options[key]
+	if (!option || option.isExpression) return
+
+	option.value = value
+}
 
 export function UpgradeV2toV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	_props: CompanionStaticUpgradeProps<ZoomConfig>,
-): CompanionStaticUpgradeResult<ZoomConfig> {
-	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
+	_props: CompanionStaticUpgradeProps<ZoomConfig, undefined>,
+): CompanionStaticUpgradeResult<ZoomConfig, undefined> {
+	const result: CompanionStaticUpgradeResult<ZoomConfig, undefined> = {
 		updatedActions: [],
 		updatedConfig: null,
+		updatedSecrets: null,
 		updatedFeedbacks: [],
 	}
 
@@ -55,28 +88,29 @@ export function UpgradeV2toV3(
 
 export function UpgradeV2ToV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	props: CompanionStaticUpgradeProps<ZoomConfig>,
-): CompanionStaticUpgradeResult<ZoomConfig> {
+	props: CompanionStaticUpgradeProps<ZoomConfig, undefined>,
+): CompanionStaticUpgradeResult<ZoomConfig, undefined> {
 	// let config: ZoomConfig = props.config;
 	const actions: CompanionMigrationAction[] = props.actions
 	const feedbacks: CompanionMigrationFeedback[] = props.feedbacks
 
-	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
+	const result: CompanionStaticUpgradeResult<ZoomConfig, undefined> = {
 		updatedActions: [],
 		updatedConfig: null,
+		updatedSecrets: null,
 		updatedFeedbacks: [],
 	}
 
 	for (const action of actions) {
 		if (
-			(action.actionId === 'UserActions' ||
-				action.actionId === 'GlobalActions' ||
-				action.actionId === 'SpecialActions' ||
-				action.actionId === 'ISOActions') &&
-			action.options.actionID !== undefined &&
-			Object.prototype.hasOwnProperty.call(oldActionToNewActions, action.options.actionID as string)
+			action.actionId === 'UserActions' ||
+			action.actionId === 'GlobalActions' ||
+			action.actionId === 'SpecialActions' ||
+			action.actionId === 'ISOActions'
 		) {
-			const oldActionToNewAction = oldActionToNewActions[action.options.actionID as string]
+			const oldActionId = getOptionString(action.options, 'actionID')
+			if (!oldActionId || !Object.prototype.hasOwnProperty.call(oldActionToNewActions, oldActionId)) continue
+			const oldActionToNewAction = oldActionToNewActions[oldActionId]
 			action.actionId = oldActionToNewAction.newActionId
 			result.updatedActions.push(action)
 		} else if (Object.prototype.hasOwnProperty.call(oldActionToNewActions, action.actionId)) {
@@ -84,10 +118,10 @@ export function UpgradeV2ToV3(
 			action.actionId = oldActionToNewAction.newActionId
 
 			if (typeof oldActionToNewAction.isGroupBased !== 'undefined' && action.options.group !== undefined) {
-				action.options.group = (action.options.group as number) + 1
+				incrementNumericOption(action.options, 'group')
 
-				if (action.options.groupOption !== undefined && action.options.groupOption === 'set') {
-					action.options.groupOption = 'replace'
+				if (getOptionString(action.options, 'groupOption') === 'set') {
+					replaceOptionValue(action.options, 'groupOption', 'replace')
 				}
 			}
 			result.updatedActions.push(action)
@@ -100,15 +134,21 @@ export function UpgradeV2ToV3(
 			feedback.feedbackId = oldFeedbackToNewFeedback.newFeedbackId
 
 			if (typeof oldFeedbackToNewFeedback.isGroupBased !== 'undefined' && feedback.options.group !== undefined) {
-				feedback.options.group = (feedback.options.group as number) + 1
+				incrementNumericOption(feedback.options, 'group')
 			}
 
 			result.updatedFeedbacks.push(feedback)
-		} else if (
-			Object.prototype.hasOwnProperty.call(oldFeedbackTypeToNewFeedbackTypes, feedback.options.type as string)
-		) {
-			const oldFeedbackTypeToNewFeedbackType = oldFeedbackTypeToNewFeedbackTypes[feedback.options.type as string]
-			feedback.options.type = oldFeedbackTypeToNewFeedbackType.newFeedbackId
+		} else {
+			const oldFeedbackType = getOptionString(feedback.options, 'type')
+			if (
+				!oldFeedbackType ||
+				!Object.prototype.hasOwnProperty.call(oldFeedbackTypeToNewFeedbackTypes, oldFeedbackType)
+			) {
+				continue
+			}
+
+			const oldFeedbackTypeToNewFeedbackType = oldFeedbackTypeToNewFeedbackTypes[oldFeedbackType]
+			replaceOptionValue(feedback.options, 'type', oldFeedbackTypeToNewFeedbackType.newFeedbackId)
 			result.updatedFeedbacks.push(feedback)
 		}
 	}

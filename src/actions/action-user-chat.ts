@@ -16,8 +16,8 @@ export function GetActionsUserChat(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.userName, options.message],
 			callback: async (action): Promise<void> => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const message = await instance.parseVariablesInString(action.options.message as string)
+				const userName = action.options.userName as string
+				const message = action.options.message as string
 				const command = createCommand(instance, '/chat', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })

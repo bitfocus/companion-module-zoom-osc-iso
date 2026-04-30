@@ -1,6 +1,6 @@
-import { CompanionActionEvent, InputValue, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove } from '../utils.js'
+import type { CompanionActionEvent, SomeCompanionActionInputField } from '@companion-module/base'
+import type { ZoomConfig } from '../config.js'
+import { arrayAdd, arrayAddRemove, arrayRemove, type InstanceBaseExt } from '../utils.js'
 
 export const select = { single: true, multi: false }
 
@@ -47,7 +47,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 
 	switch (option) {
 		case 'toggle':
-			if (config.selectionMethod === (selectionMethod.SingleSelection as number)) {
+			if (Number(config.selectionMethod) === Number(selectionMethod.SingleSelection)) {
 				if (ZoomClientDataObj.selectedCallers.length !== 1 || !ZoomClientDataObj.selectedCallers.includes(zoomId)) {
 					ZoomClientDataObj.selectedCallers = [zoomId]
 				} else {
@@ -58,7 +58,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 			}
 			break
 		case 'select':
-			if (config.selectionMethod == (selectionMethod.SingleSelection as number)) {
+			if (Number(config.selectionMethod) === Number(selectionMethod.SingleSelection)) {
 				ZoomClientDataObj.selectedCallers = [zoomId]
 			} else {
 				ZoomClientDataObj.selectedCallers = arrayAdd(ZoomClientDataObj.selectedCallers, zoomId)
@@ -79,7 +79,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 export const createCommand = (
 	instance: InstanceBaseExt<ZoomConfig>,
 	OSCAction: string,
-	name?: InputValue | string,
+	name?: string | number | boolean,
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
 	shouldSavePreviousSelectedCallers = true,

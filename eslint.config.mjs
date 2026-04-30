@@ -5,6 +5,9 @@ const baseConfig = await generateEslintConfig({
 })
 
 const customConfig = [
+	{
+		ignores: ['.squad/**'],
+	},
 	...baseConfig,
 	{
 		files: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.mjs', 'tests/**/*.ts', 'jest.config.ts'],
@@ -16,6 +19,7 @@ const customConfig = [
 			'@typescript-eslint/unbound-method': 'off',
 			'@typescript-eslint/await-thenable': 'off',
 			'@typescript-eslint/no-unnecessary-type-assertion': 'off',
+			'n/no-unpublished-import': 'off',
 		},
 	},
 	// Config files: dev deps are valid imports

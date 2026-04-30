@@ -2,6 +2,7 @@ import type { Config } from 'jest'
 
 const config: Config = {
 	testEnvironment: 'node',
+	extensionsToTreatAsEsm: ['.ts'],
 	moduleNameMapper: {
 		// Stub feedback-state-machine (uses CJS require('./images') incompatible with ts-jest)
 		'.*/feedback-state-machine.*': '<rootDir>/tests/__mocks__/feedback-state-machine',
@@ -10,8 +11,12 @@ const config: Config = {
 		// Stub images module
 		'.*/src/images$': '<rootDir>/tests/__mocks__/images',
 	},
+	transformIgnorePatterns: ['/node_modules/(?!(?:@companion-module/base)/)'],
 	transform: {
-		'^.+\\.tsx?$': ['ts-jest', { diagnostics: { ignoreCodes: [151002] } }],
+		'^.+\\.tsx?$': [
+			'ts-jest',
+			{ useESM: true, tsconfig: '<rootDir>/tsconfig.json', diagnostics: { ignoreCodes: [151002] } },
+		],
 	},
 	testMatch: ['<rootDir>/tests/**/*.test.ts'],
 	setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],

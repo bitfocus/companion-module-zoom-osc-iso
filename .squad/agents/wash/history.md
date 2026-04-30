@@ -8,3 +8,4 @@
 ## Learnings
 
 <!-- Append new learnings below. Each entry is something lasting about the project. -->
+- `src/osc/handlers/session.ts`: when meeting status reports idle (`0`) or ended (`7`), clear `ZoomUserData` together with `ZoomVariableLink` and the other meeting-reset state so stale user context does not survive call teardown.

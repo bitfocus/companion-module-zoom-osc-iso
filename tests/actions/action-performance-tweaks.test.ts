@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { jest } from '@jest/globals'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsPerformanceTweaks, ActionIdPerformanceTweaks } from '../../src/actions/action-performance-tweaks.js'
 import type { InstanceBaseExt } from '../../src/utils.js'

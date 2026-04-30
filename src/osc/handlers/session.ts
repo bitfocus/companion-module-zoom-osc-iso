@@ -60,7 +60,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 				context.createZoomIsoPullerTimer()
 			}
 
-			if (context.instance.config.version !== (ZoomVersion.ZoomISO as number)) {
+			if (Number(context.instance.config.version) !== Number(ZoomVersion.ZoomISO)) {
 				context.instance.config.version = ZoomVersion.ZoomISO
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -69,7 +69,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 			if (context.hasZoomIsoPuller()) {
 				context.destroyZoomIsoPullerTimer()
 			}
-			if (context.instance.config.version !== (ZoomVersion.ZoomOSC as number)) {
+			if (Number(context.instance.config.version) !== Number(ZoomVersion.ZoomOSC)) {
 				context.instance.config.version = ZoomVersion.ZoomOSC
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -113,6 +113,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			isPro: context.instance.ZoomClientDataObj.isPro,
 		}
 		context.instance.ZoomVariableLink.length = 0
+		context.instance.ZoomUserData = {}
 
 		context.instance.ZoomGroupData = Array.from(
 			{ length: context.instance.ZoomClientDataObj.numberOfGroups + 2 },
@@ -122,12 +123,26 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			}),
 		)
 
-		context.instance.ZoomUserData = {}
 		setVariables(context.instance, (variables) => {
 			updateCallStatusVariables(context.instance, variables)
 			updateAllUserBasedVariables(context.instance, variables)
 		})
-		context.instance.checkFeedbacks()
+		context.instance.checkFeedbacks(
+			FeedbackId.selectionMethod,
+			FeedbackId.groupBased,
+			FeedbackId.groupBasedAdvanced,
+			FeedbackId.indexBased,
+			FeedbackId.indexBasedAdvanced,
+			FeedbackId.galleryBased,
+			FeedbackId.galleryBasedAdvanced,
+			FeedbackId.userNameBased,
+			FeedbackId.userNameBasedAdvanced,
+			FeedbackId.output,
+			FeedbackId.audioOutput,
+			FeedbackId.engineState,
+			FeedbackId.capturePermissionGranted,
+			FeedbackId.isPro,
+		)
 		return
 	}
 

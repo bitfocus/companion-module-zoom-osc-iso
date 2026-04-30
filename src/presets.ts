@@ -1,7 +1,12 @@
-import { CompanionPresetDefinitions } from '@companion-module/base'
+import type {
+	CompanionPresetDefinition,
+	CompanionPresetDefinitions,
+	CompanionPresetSection,
+} from '@companion-module/base'
 
-import { InstanceBaseExt } from './utils.js'
-import { CompanionPresetExt } from './presets/preset-utils.js'
+import type { ModuleSchema } from './main.js'
+import type { InstanceBaseExt } from './utils.js'
+import { type CompanionPresetDefinitionsExt, type CompanionPresetExt } from './presets/preset-utils.js'
 import { PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
 import { PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
 import { PresetIdManageSelections, GetPresetsManageSelections } from './presets/preset-manage-selections.js'
@@ -26,9 +31,18 @@ import { PresetIdSharing, GetPresetsSharing } from './presets/preset-sharing.js'
 import { PresetIdBreakout, GetPresetsBreakout } from './presets/preset-breakout.js'
 import { PresetIdRecording, GetPresetsRecording } from './presets/preset-recording.js'
 import { PresetIdDataCustom, GetPresetsDataCustom } from './presets/preset-data-custom.js'
-import { ZoomConfig } from './config.js'
+import type { ZoomConfig } from './config.js'
 
-export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitions {
+const createSectionId = (category: string): string =>
+	category
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '')
+
+export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): {
+	structure: CompanionPresetSection[]
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
 	const presetsParticipants: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } =
 		GetPresetsListParticipants(instance)
 
@@ -73,7 +87,7 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 
 	const presetDataCustom: { [id in PresetIdDataCustom]: CompanionPresetExt | undefined } = GetPresetsDataCustom()
 
-	const presets: {
+	const rawPresets: {
 		[id in
 			| PresetIdRecording
 			| PresetIdManageSelections
@@ -113,5 +127,40 @@ export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionP
 		...presetDataCustom,
 	}
 
-	return presets as CompanionPresetDefinitions
+	const presets: CompanionPresetDefinitions<ModuleSchema> = {}
+	const presetBuckets = new Map<string, string[]>()
+
+	for (const [presetId, preset] of Object.entries(rawPresets as CompanionPresetDefinitionsExt)) {
+		if (!preset) continue
+
+		const { category, ...rest } = preset
+		const normalizedCategory = category ?? 'Presets'
+		const normalizedPreset: CompanionPresetDefinition<ModuleSchema> = {
+			...rest,
+			type: 'simple',
+		}
+
+		presets[presetId] = normalizedPreset
+		const sectionPresets = presetBuckets.get(normalizedCategory) ?? []
+		sectionPresets.push(presetId)
+		presetBuckets.set(normalizedCategory, sectionPresets)
+	}
+
+	const structure: CompanionPresetSection[] = Array.from(presetBuckets.entries()).map(([category, presetIds]) => {
+		const sectionId = createSectionId(category)
+		return {
+			id: sectionId,
+			name: category,
+			definitions: [
+				{
+					id: `${sectionId}-presets`,
+					name: category,
+					type: 'simple',
+					presets: presetIds,
+				},
+			],
+		}
+	})
+
+	return { structure, presets }
 }
