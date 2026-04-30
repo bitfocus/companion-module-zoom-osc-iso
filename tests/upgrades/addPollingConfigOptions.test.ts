@@ -27,6 +27,7 @@ describe('addPollingConfigOptions', () => {
 
 		expect(result.updatedActions).toEqual([])
 		expect(result.updatedFeedbacks).toEqual([])
+		expect(result.updatedSecrets).toBeNull()
 		expect(result.updatedConfig).toMatchObject({
 			...currentConfig,
 			pollEngineState: true,

@@ -19,6 +19,7 @@ export function addPollingConfigOptions(
 			pollAudioRouting: true,
 		},
 		updatedFeedbacks: [],
+		updatedSecrets: null,
 	}
 
 	return result
