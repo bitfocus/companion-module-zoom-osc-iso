@@ -30,7 +30,7 @@
 		"node-osc": "^11.4.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^2.6.1",
+		"@companion-module/tools": "^2.8.0",
 		"@types/got": "^9.6.12",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^22.15.30",
