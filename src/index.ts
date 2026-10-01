@@ -152,7 +152,7 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	/**
 	 * @description close connections and stop timers/intervals
 	 */
-	async destroy() {
+	async destroy(): Promise<void> {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomGroupData = []

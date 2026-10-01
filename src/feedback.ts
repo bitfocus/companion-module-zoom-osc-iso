@@ -1,5 +1,6 @@
 import type ModuleInstance from './index.js'
 import type { CompanionFeedbackDefinitions } from '@companion-module/base'
+import type { selectionMethod } from './actions/action-utils.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
 import { userExist, colorRed, getUserFromName } from './utils.js'
 
@@ -42,7 +43,7 @@ export enum feedbackType {
 
 /** Every feedback id maps to its kind and typed options */
 export type FeedbacksSchema = {
-	[FeedbackId.selectionMethod]: { type: 'boolean'; options: { selectionMethod: number } }
+	[FeedbackId.selectionMethod]: { type: 'boolean'; options: { selectionMethod: selectionMethod } }
 	[FeedbackId.groupBased]: { type: 'boolean'; options: { group: string; position: number; type: feedbackType } }
 	[FeedbackId.groupBasedAdvanced]: { type: 'advanced'; options: { group: string; position: number } }
 	[FeedbackId.indexBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
@@ -51,8 +52,8 @@ export type FeedbacksSchema = {
 	[FeedbackId.userNameBasedAdvanced]: { type: 'advanced'; options: { name: string } }
 	[FeedbackId.galleryBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
 	[FeedbackId.galleryBasedAdvanced]: { type: 'advanced'; options: { position: number } }
-	[FeedbackId.engineState]: { type: 'boolean'; options: { state: engineState } }
-	[FeedbackId.capturePermissionGranted]: { type: 'boolean'; options: { state: engineState } }
+	[FeedbackId.engineState]: { type: 'boolean'; options: { state: number } }
+	[FeedbackId.capturePermissionGranted]: { type: 'boolean'; options: { state: number } }
 	[FeedbackId.isPro]: { type: 'boolean'; options: { isPro: number } }
 	[FeedbackId.output]: { type: 'boolean'; options: { output: number } }
 	[FeedbackId.audioOutput]: { type: 'boolean'; options: { output: number } }
@@ -410,7 +411,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			],
 			callback: (feedback) => {
 				const name = feedback.options.name
-				let zoomID = 0
+				let zoomID: number
 				if (name === 'me') {
 					zoomID = instance.ZoomMeData.zoomId
 					if (zoomID !== 0) {
@@ -561,7 +562,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			callback: (feedback) => {
 				// capturePermissionGranted is a boolean and the option an engineState number, so this never matched in
 				// v1 either; the comparison is kept unchanged so the migration does not alter behaviour.
-				const granted = instance.ZoomClientDataObj.capturePermissionGranted as boolean | engineState
+				const granted = instance.ZoomClientDataObj.capturePermissionGranted as boolean | number
 				if (granted === feedback.options.state) {
 					return true
 				} else {

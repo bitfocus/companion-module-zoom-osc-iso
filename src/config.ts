@@ -1,3 +1,5 @@
+import type { selectionMethod } from './actions/action-utils.js'
+import type { ZoomVersion } from './utils.js'
 import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
 export type ZoomConfig = {
@@ -5,8 +7,8 @@ export type ZoomConfig = {
 	host: string
 	tx_port: number
 	rx_port: number
-	version: number
-	selectionMethod: number
+	version: ZoomVersion
+	selectionMethod: selectionMethod
 	numberOfGroups: number
 	pulling: number
 	pollEngineState: boolean

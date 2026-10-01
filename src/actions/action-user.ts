@@ -27,7 +27,7 @@ export enum ActionIdUsers {
 }
 
 export type ActionsSchemaUsers = {
-	[ActionIdUsers.selectionMethod]: { options: { selectionMethod: number } }
+	[ActionIdUsers.selectionMethod]: { options: { selectionMethod: selectionMethod } }
 	[ActionIdUsers.selectUserByName]: { options: { name: string; option: string } }
 	[ActionIdUsers.selectFromIndexPosition]: { options: { position: string; option: string } }
 	[ActionIdUsers.clearParticipants]: { options: Record<string, never> }
@@ -76,9 +76,9 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 			callback: (action) => {
 				if (action.options.selectionMethod === selectionMethod.ToggleSelection) {
 					instance.config.selectionMethod =
-						instance.config.selectionMethod === (selectionMethod.SingleSelection as number)
-							? (selectionMethod.MultiSelection as number)
-							: (selectionMethod.SingleSelection as number)
+						instance.config.selectionMethod === selectionMethod.SingleSelection
+							? selectionMethod.MultiSelection
+							: selectionMethod.SingleSelection
 				} else {
 					instance.config.selectionMethod = action.options.selectionMethod
 				}

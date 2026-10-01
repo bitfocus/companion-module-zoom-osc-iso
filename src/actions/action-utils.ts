@@ -47,7 +47,7 @@ export const selectUser = (instance: ModuleInstance, zoomId: number, option: str
 
 	switch (option) {
 		case 'toggle':
-			if (config.selectionMethod === (selectionMethod.SingleSelection as number)) {
+			if (config.selectionMethod === selectionMethod.SingleSelection) {
 				if (ZoomClientDataObj.selectedCallers.length !== 1 || !ZoomClientDataObj.selectedCallers.includes(zoomId)) {
 					ZoomClientDataObj.selectedCallers = [zoomId]
 				} else {
@@ -58,7 +58,7 @@ export const selectUser = (instance: ModuleInstance, zoomId: number, option: str
 			}
 			break
 		case 'select':
-			if (config.selectionMethod == (selectionMethod.SingleSelection as number)) {
+			if (config.selectionMethod == selectionMethod.SingleSelection) {
 				ZoomClientDataObj.selectedCallers = [zoomId]
 			} else {
 				ZoomClientDataObj.selectedCallers = arrayAdd(ZoomClientDataObj.selectedCallers, zoomId)

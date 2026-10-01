@@ -95,7 +95,7 @@ export class OSC {
 	}
 
 	public readonly createZoomIsoPullerTimer = (): void => {
-		if (this.instance.config.version === (ZoomVersion.ZoomISO as number)) {
+		if (this.instance.config.version === ZoomVersion.ZoomISO) {
 			this.zoomISOPuller = setInterval(
 				() => {
 					if (this.instance.ZoomClientDataObj.engineState === -1) {
