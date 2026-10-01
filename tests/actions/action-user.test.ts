@@ -1,12 +1,10 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mock } from 'vitest'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUsers, ActionIdUsers } from '../../src/actions/action-user.js'
 import { selectionMethod } from '../../src/actions/action-utils.js'
 
 describe('GetActionsUsers', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsUsers>
 
 	beforeAll(() => {

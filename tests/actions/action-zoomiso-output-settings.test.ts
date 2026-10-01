@@ -4,11 +4,9 @@ import {
 	GetActionsZoomISOOutputSettings,
 	ActionIdZoomISOOutputSettings,
 } from '../../src/actions/action-zoomiso-output-settings.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISOOutputSettings', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISOOutputSettings>
 
 	beforeAll(() => {

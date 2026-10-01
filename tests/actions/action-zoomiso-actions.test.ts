@@ -1,7 +1,5 @@
 import { describe, it, expect, beforeAll, afterEach, vi, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 // vi.mock is hoisted before imports — feedback-state-machine is also
 // stubbed via moduleNameMapper in jest.config.ts, but this mock provides
@@ -28,7 +26,7 @@ vi.mock('../../src/feedback.js', () => ({
 import { GetActionsZoomISOActions, ActionIdZoomISOActions } from '../../src/actions/action-zoomiso-actions.js'
 
 describe('GetActionsZoomISOActions', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISOActions>
 
 	beforeAll(() => {

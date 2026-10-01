@@ -1,9 +1,7 @@
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type Mock, type MockInstance } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 // Mock got-cjs to prevent real HTTP calls from socialstream internals
 vi.mock('got-cjs', () => {
@@ -12,9 +10,9 @@ vi.mock('got-cjs', () => {
 })
 
 describe('GetActionsSocalSteam', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsSocalSteam>
-	let postMessageSpy: ReturnType<typeof vi.spyOn>
+	let postMessageSpy: MockInstance<typeof socialStreamApi.postMessage>
 
 	beforeAll(() => {
 		instance = createMockInstance()
@@ -57,13 +55,18 @@ describe('GetActionsSocalSteam', () => {
 			expect(instance.log).toHaveBeenCalledWith('warn', 'Social Stream is not enabled in config')
 		})
 
-		it('resolves variables in name and message before posting', async () => {
+		// v2: Companion parses variables before the callback runs, for fields with useVariables
+		it('lets Companion resolve variables in name and message', () => {
+			const definition = actions[ActionIdSocialStream.sendAChatToSocialStream] as any
+			const fields = definition.options.filter((o: any) => o.id === 'name' || o.id === 'message')
+			expect(fields).toHaveLength(2)
+			for (const field of fields) expect(field).toMatchObject({ type: 'textinput', useVariables: true })
+		})
+
+		it('posts the already-resolved name and message', async () => {
 			instance.config.enableSocialStream = true
-			// action resolves message first, then name
-			const parseVars = instance.parseVariablesInString as Mock
-			parseVars.mockResolvedValueOnce('Resolved Message' as never).mockResolvedValueOnce('Resolved Name' as never)
 			await (actions[ActionIdSocialStream.sendAChatToSocialStream] as any).callback(
-				{ options: { name: '$(var:name)', message: '$(var:msg)' } } as any,
+				{ options: { name: 'Resolved Name', message: 'Resolved Message' } } as any,
 				{} as any,
 			)
 			expect(postMessageSpy).toHaveBeenCalledWith('Resolved Name', 'Resolved Message', instance)

@@ -1,11 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsZoomISORouting, ActionIdZoomISORouting } from '../../src/actions/action-zoomiso-routing.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISORouting', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISORouting>
 
 	beforeEach(() => {

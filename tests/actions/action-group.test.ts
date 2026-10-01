@@ -1,11 +1,9 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsGroups, ActionIdGroups } from '../../src/actions/action-group.js'
 
 describe('GetActionsGroups', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsGroups>
 
 	beforeAll(() => {

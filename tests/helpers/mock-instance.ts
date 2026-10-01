@@ -1,6 +1,5 @@
-import { vi } from 'vitest'
-import type { ZoomConfig } from '../../src/config.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
+import { vi, type Mock } from 'vitest'
+import type ModuleInstance from '../../src/index.js'
 
 export interface MockInstanceOptions {
 	selectedCallers?: number[]
@@ -8,13 +7,16 @@ export interface MockInstanceOptions {
 }
 
 /**
- * Creates a minimal mock of InstanceBaseExt<ZoomConfig> for action tests.
+ * Creates a minimal mock of the module instance (ModuleInstance) for action tests.
  *
  * Key: `OSC.sendCommand` is a vitest spy — it captures (path, args) without
  * opening a UDP socket. Tests assert against this spy to verify OSC command
  * formatting.
  */
-export function createMockInstance(options: MockInstanceOptions = {}): InstanceBaseExt<ZoomConfig> {
+/** The real instance type, with the OSC transport replaced by a spy (never null in tests) */
+export type MockModuleInstance = ModuleInstance & { OSC: { sendCommand: Mock } }
+
+export function createMockInstance(options: MockInstanceOptions = {}): MockModuleInstance {
 	const { selectedCallers = [], selectionMethod = 1 } = options
 
 	return {
@@ -61,7 +63,6 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		},
 		log: vi.fn(),
 		OSC: { sendCommand: vi.fn() },
-		parseVariablesInString: vi.fn(async (s: string) => s),
 		ZoomVariableLink: [],
 		ZoomGroupData: [],
 		ZoomUserData: {},
@@ -72,6 +73,7 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		ZoomUserOffline: {},
 		// Companion base stubs (unused in action tests)
 		checkFeedbacks: vi.fn(),
+		checkAllFeedbacks: vi.fn(),
 		setVariableValues: vi.fn(),
 		setVariableDefinitions: vi.fn(),
 		setActionDefinitions: vi.fn(),
@@ -80,5 +82,5 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		updateStatus: vi.fn(),
 		saveConfig: vi.fn(),
 		updateDefinitionsForActionsFeedbacksAndPresets: vi.fn(),
-	} as unknown as InstanceBaseExt<ZoomConfig>
+	} as unknown as MockModuleInstance
 }
