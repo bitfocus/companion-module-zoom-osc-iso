@@ -1,5 +1,5 @@
 import type ModuleInstance from './index.js'
-import { type CompanionFeedbackDefinitions, type CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
+import type { CompanionFeedbackDefinitions } from '@companion-module/base'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
 import { userExist, colorRed, getUserFromName } from './utils.js'
 
@@ -40,13 +40,34 @@ export enum feedbackType {
 	offline,
 }
 
-export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinitions {
+/** Every feedback id maps to its kind and typed options */
+export type FeedbacksSchema = {
+	[FeedbackId.selectionMethod]: { type: 'boolean'; options: { selectionMethod: number } }
+	[FeedbackId.groupBased]: { type: 'boolean'; options: { group: string; position: number; type: feedbackType } }
+	[FeedbackId.groupBasedAdvanced]: { type: 'advanced'; options: { group: string; position: number } }
+	[FeedbackId.indexBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
+	[FeedbackId.indexBasedAdvanced]: { type: 'advanced'; options: { position: number } }
+	[FeedbackId.userNameBased]: { type: 'boolean'; options: { name: string; type: feedbackType } }
+	[FeedbackId.userNameBasedAdvanced]: { type: 'advanced'; options: { name: string } }
+	[FeedbackId.galleryBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
+	[FeedbackId.galleryBasedAdvanced]: { type: 'advanced'; options: { position: number } }
+	[FeedbackId.engineState]: { type: 'boolean'; options: { state: engineState } }
+	[FeedbackId.capturePermissionGranted]: { type: 'boolean'; options: { state: engineState } }
+	[FeedbackId.isPro]: { type: 'boolean'; options: { isPro: number } }
+	[FeedbackId.output]: { type: 'boolean'; options: { output: number } }
+	[FeedbackId.audioOutput]: { type: 'boolean'; options: { output: number } }
+}
+
+/** Union of every feedback id, for code that collects ids to re-check at runtime */
+export type AnyFeedbackId = FeedbackId
+
+export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinitions<FeedbacksSchema> {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
-	function feedbackResults(type: InputValue | undefined, zoomID: number) {
+	function feedbackResults(type: feedbackType | undefined, zoomID: number): boolean {
 		if (type === undefined) {
 			return false
 		}
@@ -128,7 +149,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 		}
 	}
 
-	const feedbacks: { [id in FeedbackId]: CompanionFeedbackDefinition | undefined } = {
+	const feedbacks: CompanionFeedbackDefinitions<FeedbacksSchema> = {
 		[FeedbackId.selectionMethod]: {
 			type: 'boolean',
 			name: 'selection method',
@@ -200,10 +221,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
+				if (instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1]) {
 					const zoomID =
-						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
-							.zoomID
+						instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1].zoomID
 					return feedbackResults(feedback.options.type, zoomID)
 				}
 				return false
@@ -213,6 +233,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			type: 'advanced',
 			name: 'Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Position 1 - 999',
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'dropdown',
@@ -231,10 +252,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
+				if (instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1]) {
 					const zoomID =
-						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
-							.zoomID
+						instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1].zoomID
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
@@ -280,9 +300,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+					instance.ZoomVariableLink[feedback.options.position - 1]
 				) {
-					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
+					const zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
 				}
@@ -293,6 +313,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			type: 'advanced',
 			name: 'Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Feedback based on index of the participant',
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'number',
@@ -306,9 +327,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+					instance.ZoomVariableLink[feedback.options.position - 1]
 				) {
-					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
+					const zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
@@ -352,8 +373,8 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 					],
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: (feedback) => {
+				const name = feedback.options.name
 				if (name === '') {
 					return false
 				}
@@ -376,6 +397,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			type: 'advanced',
 			name: 'Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'type in username',
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'textinput',
@@ -386,8 +408,8 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: (feedback) => {
+				const name = feedback.options.name
 				let zoomID = 0
 				if (name === 'me') {
 					zoomID = instance.ZoomMeData.zoomId
@@ -453,10 +475,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]) {
 					const zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
-							.zoomId
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
 				}
@@ -467,6 +488,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			type: 'advanced',
 			name: 'Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			description: 'Position 1 - 49',
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'number',
@@ -478,10 +500,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]) {
 					const zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
-							.zoomId
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
@@ -538,7 +559,10 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.capturePermissionGranted === feedback.options.state) {
+				// capturePermissionGranted is a boolean and the option an engineState number, so this never matched in
+				// v1 either; the comparison is kept unchanged so the migration does not alter behaviour.
+				const granted = instance.ZoomClientDataObj.capturePermissionGranted as boolean | engineState
+				if (granted === feedback.options.state) {
 					return true
 				} else {
 					return false
@@ -591,7 +615,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output as number)) {
+				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output)) {
 					return true
 				} else {
 					return false
@@ -616,7 +640,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output as number)) {
+				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output)) {
 					return true
 				} else {
 					return false
@@ -626,4 +650,12 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 	}
 
 	return feedbacks
+}
+
+/**
+ * Registers every feedback with Companion
+ * @param instance Give the instance so we can extract data
+ */
+export function UpdateFeedbacks(instance: ModuleInstance): void {
+	instance.setFeedbackDefinitions(GetFeedbacks(instance))
 }

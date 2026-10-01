@@ -1,7 +1,7 @@
 import { InstanceBase, type SomeCompanionConfigField } from '@companion-module/base'
 import { GetConfigFields, type ZoomConfig } from './config.js'
 import { UpdateActions, type ActionsSchema } from './actions.js'
-import { GetFeedbacks } from './feedback.js'
+import { UpdateFeedbacks, type FeedbacksSchema } from './feedback.js'
 import { GetPresetList } from './presets.js'
 import { OSC } from './osc.js'
 import type {
@@ -24,7 +24,7 @@ export type ModuleSchema = {
 	config: ZoomConfig
 	secrets: undefined
 	actions: ActionsSchema
-	feedbacks: Record<string, never>
+	feedbacks: FeedbacksSchema
 	variables: Record<string, never>
 }
 
@@ -173,13 +173,13 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 		updateVariableValues(this)
 
 		UpdateActions(this)
-		this.setFeedbackDefinitions(GetFeedbacks(this))
+		UpdateFeedbacks(this)
 		this.setPresetDefinitions(GetPresetList(this))
 	}
 
 	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
 		UpdateActions(this)
-		this.setFeedbackDefinitions(GetFeedbacks(this))
+		UpdateFeedbacks(this)
 		this.setPresetDefinitions(GetPresetList(this))
 	}
 }
