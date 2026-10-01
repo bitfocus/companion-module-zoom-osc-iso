@@ -181,7 +181,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Session Id for Social Stream',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
 		},
 		{
 			type: 'textinput',
@@ -189,7 +189,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Prefix for Zoom Q&A Questions',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
 		},
 		{
 			type: 'static-text',
@@ -213,14 +213,14 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			],
 			minChoicesForSearch: 0,
 			width: 10,
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
 		},
 		{
 			type: 'static-text',
 			width: 12,
 			value:
 				'<hr />Advanced - Optional Performance Tweaks<br /><b>IMPORTANT NOTE: The section below is for power users that would like to tweak the module performance. </b><br /><br />Depending on your usage of ZoomOSC and ZoomISO, there may be things going on behind the scenes that you may not be using and can disable to try to get even better performance from this module.',
-			id: 'socialStreamNote',
+			id: 'performanceTweaksNote', // static text: was a duplicate 'socialStreamNote' id
 			label: '',
 		},
 		{
@@ -243,7 +243,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			width: 12,
 			value:
 				'<hr /><b>Enable Variable For Participants (e.g. Participant001 to Participant999)</b><p>Enable Variable For Participants.  This impacts the participant presets, participant buttons, and participant variables. For many shows, these buttons are not used as it is the list of all participants in the order that they joined and for large meetings, it is typically quicker to find a person using the Zoom participant list and manually taking action on them.</p><p><b>Note:</b> Set to true keep the behavior of previous versions.</p>',
-			id: 'actionPresetAndFeedbackSyncNote',
+			id: 'enableVariablesForParticipantsNote', // static text: was a duplicate 'actionPresetAndFeedbackSyncNote' id
 			label: '',
 		},
 		{

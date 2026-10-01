@@ -1,9 +1,6 @@
+import type { VariableValues } from '../variables/variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import type {
-	CompanionActionDefinitions,
-	CompanionVariableValues,
-	CompanionInputFieldDropdown,
-} from '@companion-module/base'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
 import { options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import * as fs from 'fs'
@@ -114,7 +111,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 							selectUser(instance, user.zoomId, action.options.option)
 
 							// instance.UpdateVariablesValues()
-							const variables: CompanionVariableValues = {}
+							const variables: VariableValues = {}
 							updateSelectedCallersVariables(instance, variables)
 							instance.setVariableValues(variables)
 							instance.checkFeedbacks(
@@ -156,7 +153,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 
 					selectUser(instance, zoomId, action.options.option)
 
-					const variables: CompanionVariableValues = {}
+					const variables: VariableValues = {}
 					updateSelectedCallersVariables(instance, variables)
 					instance.setVariableValues(variables)
 					instance.checkFeedbacks(
@@ -178,7 +175,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 			callback: () => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -199,7 +196,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 			options: [],
 			callback: () => {
 				PreviousSelectedCallersRestore(instance)
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -234,7 +231,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 				instance.ZoomVariableLink.splice(0, numberToShift)
 				instance.ZoomVariableLink.push(...itemsToShift)
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -271,7 +268,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
 				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -300,7 +297,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 					}
 				}
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()

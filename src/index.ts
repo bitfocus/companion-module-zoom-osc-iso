@@ -17,7 +17,7 @@ import type {
 } from './utils.js'
 
 import { updateVariableValues } from './variables/variable-values.js'
-import { initVariableDefinitions } from './variables/variable-definitions.js'
+import { initVariableDefinitions, type VariablesSchema } from './variables/variable-definitions.js'
 import { UpgradeScripts } from './upgrades.js'
 
 export type ModuleSchema = {
@@ -25,7 +25,7 @@ export type ModuleSchema = {
 	secrets: undefined
 	actions: ActionsSchema
 	feedbacks: FeedbacksSchema
-	variables: Record<string, never>
+	variables: VariablesSchema
 }
 
 export { UpgradeScripts }

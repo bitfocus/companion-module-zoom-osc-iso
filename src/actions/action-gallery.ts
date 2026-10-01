@@ -1,5 +1,6 @@
+import type { VariableValues } from '../variables/variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import type { CompanionActionDefinitions, CompanionVariableValues } from '@companion-module/base'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { FeedbackId } from '../feedback.js'
 import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import { updateSelectedCallersVariables } from '../variables/variable-values.js'
@@ -36,7 +37,7 @@ export function GetActionsGallery(instance: ModuleInstance): CompanionActionDefi
 
 				selectUser(instance, zoomId, action.options.option)
 				// instance.UpdateVariablesValues()
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(

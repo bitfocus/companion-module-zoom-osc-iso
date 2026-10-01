@@ -1,9 +1,6 @@
+import type { VariableValues } from '../variables/variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import type {
-	CompanionActionDefinitions,
-	CompanionVariableValues,
-	CompanionInputFieldDropdown,
-} from '@companion-module/base'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
 import { options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
@@ -135,7 +132,7 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 							}
 
 							if (addedUsers) {
-								const variables: CompanionVariableValues = {}
+								const variables: VariableValues = {}
 								updateGroupVariables(instance, variables, group)
 								instance.setVariableValues(variables)
 								// instance.UpdateVariablesValues()
@@ -182,7 +179,7 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 				})
 
 				PreviousSelectedCallersSave(instance)
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateGroupVariables(instance, variables, group)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
@@ -202,7 +199,7 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 			options: [groupOptionNoHost],
 			callback: (action) => {
 				instance.ZoomGroupData[Number(action.options.group)].users.length = 0
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateGroupVariables(instance, variables, Number(action.options.group))
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -252,7 +249,7 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 					}
 
 					PreviousSelectedCallersSave(instance)
-					const variables: CompanionVariableValues = {}
+					const variables: VariableValues = {}
 					updateGroupVariables(instance, variables, group)
 					instance.setVariableValues(variables)
 					instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
@@ -268,8 +265,8 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 				const newName = action.options.name
 				instance.ZoomGroupData[Number(action.options.group)].groupName = newName
 
-				const variables: CompanionVariableValues = {}
-				variables[`Group${action.options.group}`] = newName
+				const variables: VariableValues = {}
+				variables[`Group${Number(action.options.group)}`] = newName
 				instance.setVariableValues(variables)
 			},
 		},
@@ -283,7 +280,7 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
 				// instance.UpdateVariablesValues()
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
@@ -316,12 +313,13 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 				},
 			],
 			callback: (action) => {
-				const zoomId = instance.ZoomGroupData[Number(action.options.group)].users[Number(action.options.position) - 1].zoomID
+				const zoomId =
+					instance.ZoomGroupData[Number(action.options.group)].users[Number(action.options.position) - 1].zoomID
 
 				selectUser(instance, zoomId, action.options.option)
 
 				// instance.UpdateVariablesValues()
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(

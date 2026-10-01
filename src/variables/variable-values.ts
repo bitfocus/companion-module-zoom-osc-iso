@@ -1,5 +1,5 @@
+import type { VariableValues } from './variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import type { CompanionVariableValues } from '@companion-module/base'
 import { padding, userExist } from '../utils.js'
 
 enum engineState {
@@ -8,57 +8,36 @@ enum engineState {
 	enabled = 'enabled',
 }
 
-export function updateHandRaisedCountVariable(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateHandRaisedCountVariable(instance: ModuleInstance, variables: VariableValues): void {
 	variables['handRaisedCount'] = Object.values(instance.ZoomUserData).filter((user) => user.handRaised).length
 }
 
-export function updateVideoOnCountVariable(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateVideoOnCountVariable(instance: ModuleInstance, variables: VariableValues): void {
 	variables['videoOnCount'] = Object.values(instance.ZoomUserData).filter((user) => user.videoOn).length
 }
 
-export function updateActiveSpeakerVariable(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateActiveSpeakerVariable(instance: ModuleInstance, variables: VariableValues): void {
 	variables['activeSpeaker'] = instance.ZoomClientDataObj.activeSpeaker
 	variables['activeSpeakerZoomId'] = instance.ZoomClientDataObj.activeSpeakerZoomId
 }
 
-export function updateIsSpeakingVariable(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateIsSpeakingVariable(instance: ModuleInstance, variables: VariableValues): void {
 	variables['isSpeaking'] = instance.ZoomClientDataObj.isSpeaking
 }
 
-export function updateHostGroupVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateHostGroupVariables(instance: ModuleInstance, variables: VariableValues): void {
 	updateGroupVariables(instance, variables, 0)
 }
 
-export function updateSpotlightGroupInitalizedVariable(variables: CompanionVariableValues): void {
+export function updateSpotlightGroupInitalizedVariable(variables: VariableValues): void {
 	variables['spotlightGroupTrackingInitalized'] = true
 }
 
-export function updateSpotlightGroupVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateSpotlightGroupVariables(instance: ModuleInstance, variables: VariableValues): void {
 	updateGroupVariables(instance, variables, 1)
 }
 
-export function updateZoomIsoEngineVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomIsoEngineVariables(instance: ModuleInstance, variables: VariableValues): void {
 	if (instance.ZoomClientDataObj.engineState === -1) {
 		variables['engineState'] = 'no engine found'
 		variables['engineStateNumber'] = -1
@@ -74,10 +53,7 @@ export function updateZoomIsoEngineVariables(
 	}
 }
 
-export function updateZoomIsoOutputVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomIsoOutputVariables(instance: ModuleInstance, variables: VariableValues): void {
 	for (const key in instance.ZoomOutputData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomOutputData, key)) {
 			const output = instance.ZoomOutputData[key]
@@ -131,10 +107,7 @@ export function updateZoomIsoOutputVariables(
 	}
 }
 
-export function updateZoomIsoAudioRoutingVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomIsoAudioRoutingVariables(instance: ModuleInstance, variables: VariableValues): void {
 	for (const key in instance.ZoomAudioRoutingData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioRoutingData, key)) {
 			const output = instance.ZoomAudioRoutingData[key]
@@ -144,10 +117,7 @@ export function updateZoomIsoAudioRoutingVariables(
 	}
 }
 
-export function updateZoomIsoAudioLevelVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomIsoAudioLevelVariables(instance: ModuleInstance, variables: VariableValues): void {
 	for (const key in instance.ZoomAudioLevelData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioLevelData, key)) {
 			const channel = instance.ZoomAudioLevelData[key]
@@ -156,10 +126,7 @@ export function updateZoomIsoAudioLevelVariables(
 	}
 }
 
-export function updateSelectedCallersVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateSelectedCallersVariables(instance: ModuleInstance, variables: VariableValues): void {
 	if (instance.ZoomClientDataObj.selectedCallers.length === 0) {
 		variables['selectedCallers'] = 'nothing selected'
 		variables['selectedNumberOfCallers'] = '0'
@@ -184,11 +151,7 @@ export function updateSelectedCallersVariables(
 	}
 }
 
-export function updateGroupVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-	index: number,
-): void {
+export function updateGroupVariables(instance: ModuleInstance, variables: VariableValues, index: number): void {
 	let allUsers = ''
 	const group: { users: any[]; groupName: string | number | undefined } = instance.ZoomGroupData[index]
 	variables[`CallersInGroup${index}`] = group.users?.length
@@ -209,17 +172,11 @@ export function updateGroupVariables(
 	variables[`InsideGroup${index}`] = allUsers
 }
 
-export function updateGalleryCountVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateGalleryCountVariables(instance: ModuleInstance, variables: VariableValues): void {
 	variables['galleryCount'] = instance.ZoomClientDataObj.galleryCount
 }
 
-export function updateGalleryVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateGalleryVariables(instance: ModuleInstance, variables: VariableValues): void {
 	for (let index = 1; index < 50; index++) {
 		const zoomID = instance.ZoomClientDataObj.galleryOrder[index - 1]
 		variables[`GalleryPosition${padding(index, 2)}`] = userExist(Number(zoomID), instance.ZoomUserData)
@@ -230,20 +187,14 @@ export function updateGalleryVariables(
 	updateGalleryCountVariables(instance, variables)
 }
 
-export function updateAllGroupVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateAllGroupVariables(instance: ModuleInstance, variables: VariableValues): void {
 	// This covers all groups including host (group 0) and spotlight (group 1)
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		updateGroupVariables(instance, variables, index)
 	}
 }
 
-export function updateZoomParticipantVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomParticipantVariables(instance: ModuleInstance, variables: VariableValues): void {
 	if (instance.config.enableVariablesForParticipants) {
 		// Use the participant selection
 		for (let index = 1; index <= 1000; index++) {
@@ -254,25 +205,19 @@ export function updateZoomParticipantVariables(
 	}
 }
 
-export function updateZoomUserVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateZoomUserVariables(instance: ModuleInstance, variables: VariableValues): void {
 	if (instance.config.enableVariablesForEachUser) {
 		// "normal" users
 		for (const key in instance.ZoomUserData) {
 			if (userExist(Number(key), instance.ZoomUserData)) {
 				const user = instance.ZoomUserData[key]
-				variables[user.zoomId.toString()] = user.userName
+				variables[`${user.zoomId}`] = user.userName
 			}
 		}
 	}
 }
 
-export function updateAllUserBasedVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateAllUserBasedVariables(instance: ModuleInstance, variables: VariableValues): void {
 	updateAllGroupVariables(instance, variables)
 	updateZoomParticipantVariables(instance, variables)
 	updateSelectedCallersVariables(instance, variables)
@@ -283,10 +228,7 @@ export function updateAllUserBasedVariables(
 	updateHandRaisedCountVariable(instance, variables)
 }
 
-export function updateCallStatusVariables(
-	instance: ModuleInstance,
-	variables: CompanionVariableValues,
-): void {
+export function updateCallStatusVariables(instance: ModuleInstance, variables: VariableValues): void {
 	variables['callStatusNumber'] = instance.ZoomClientDataObj.callStatus
 	variables['callStatus'] =
 		instance.ZoomClientDataObj.callStatus === 0 || instance.ZoomClientDataObj.callStatus === 7
@@ -294,21 +236,21 @@ export function updateCallStatusVariables(
 			: 'In meeting'
 }
 
-export function updateZoomOscVersion(instance: ModuleInstance, variables: CompanionVariableValues): void {
+export function updateZoomOscVersion(instance: ModuleInstance, variables: VariableValues): void {
 	variables['zoomVersion'] = instance.ZoomClientDataObj.zoomOSCVersion
 }
 
-export function updateIsProVariable(instance: ModuleInstance, variables: CompanionVariableValues): void {
+export function updateIsProVariable(instance: ModuleInstance, variables: VariableValues): void {
 	variables['isPro'] = instance.ZoomClientDataObj.isPro
 }
 
-export function updateNumberOfUsers(instance: ModuleInstance, variables: CompanionVariableValues): void {
+export function updateNumberOfUsers(instance: ModuleInstance, variables: VariableValues): void {
 	variables['numberOfUsers'] = Object.keys(instance.ZoomUserData).length
 }
 
 export function updateVariableValues(instance: ModuleInstance): void {
 	// instance.log('debug', `updateVariableValues ${new Date()}`)
-	const variables: CompanionVariableValues = {
+	const variables: VariableValues = {
 		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,
 		videoShareStatus: 'Off',
 		spotlightGroupTrackingInitalized: false,

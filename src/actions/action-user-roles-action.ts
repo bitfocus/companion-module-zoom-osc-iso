@@ -1,9 +1,6 @@
+import type { VariableValues } from '../variables/variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import type {
-	CompanionActionDefinitions,
-	CompanionInputFieldDropdown,
-	CompanionVariableValues,
-} from '@companion-module/base'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
 import { type ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
 import { sendActionCommand, createCommand, select, selectUser } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
@@ -133,7 +130,7 @@ export function GetActionsUserRolesAndAction(
 
 				selectUser(instance, zoomId, action.options.option)
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
@@ -186,7 +183,7 @@ export function GetActionsUserRolesAndAction(
 					})
 				})
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateAllGroupVariables(instance, variables)
 				updateZoomParticipantVariables(instance, variables)
 				updateSelectedCallersVariables(instance, variables)
@@ -251,7 +248,7 @@ export function GetActionsUserRolesAndAction(
 						})
 						.on('end', (rowCount: number) => {
 							if (rowCount > 0) {
-								const variables: CompanionVariableValues = {}
+								const variables: VariableValues = {}
 								updateAllGroupVariables(instance, variables)
 								updateZoomParticipantVariables(instance, variables)
 								updateSelectedCallersVariables(instance, variables)

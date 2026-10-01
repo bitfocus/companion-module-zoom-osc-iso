@@ -486,4 +486,3 @@ export const padding = (num: number, size: number): string => {
 	while (converted.length < size) converted = '0' + converted
 	return converted
 }
-
