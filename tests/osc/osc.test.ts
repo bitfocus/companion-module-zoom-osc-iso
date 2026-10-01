@@ -1,10 +1,12 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { OSC } from '../../src/osc.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
+import * as nodeOscModule from 'node-osc'
 
-const nodeOscMock = jest.requireMock('node-osc') as {
-	Client: jest.Mock
-	Server: jest.Mock
+// node-osc is mocked in tests/setup.ts (vi.mock), so this import resolves to that mock
+const nodeOscMock = nodeOscModule as unknown as {
+	Client: Mock
+	Server: Mock
 }
 
 describe('OSC destroy', () => {
@@ -24,15 +26,15 @@ describe('OSC destroy', () => {
 		})
 
 		nodeOscMock.Client.mockImplementation(() => ({
-			send: jest.fn(),
-			close: jest.fn(async () => clientClosePromise),
+			send: vi.fn(),
+			close: vi.fn(async () => clientClosePromise),
 		}))
 		nodeOscMock.Server.mockImplementation((...args: unknown[]) => {
 			const ready = args[2] as (() => void) | undefined
 			ready?.()
 			return {
-				on: jest.fn().mockReturnThis(),
-				close: jest.fn(async () => serverClosePromise),
+				on: vi.fn().mockReturnThis(),
+				close: vi.fn(async () => serverClosePromise),
 			}
 		})
 

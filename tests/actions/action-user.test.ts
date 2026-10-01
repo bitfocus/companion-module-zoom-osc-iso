@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mock } from 'vitest'
 import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
@@ -16,7 +16,7 @@ describe('GetActionsUsers', () => {
 
 	beforeEach(() => {
 		const anyInstance = instance as any
-		anyInstance.saveConfig = jest.fn()
+		anyInstance.saveConfig = vi.fn()
 		instance.ZoomUserData = {
 			1001: { zoomId: 1001, userName: 'Alice', videoOn: true },
 			1002: { zoomId: 1002, userName: 'Bob', videoOn: false },
@@ -30,7 +30,7 @@ describe('GetActionsUsers', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

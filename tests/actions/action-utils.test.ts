@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { createCommand, sendActionCommand } from '../../src/actions/action-utils.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
@@ -169,7 +169,7 @@ describe('sendActionCommand', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

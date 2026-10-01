@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from '@jest/globals'
+import { describe, expect, it, vi } from 'vitest'
 import type { OSCSomeArguments } from '@companion-module/base'
 import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from '../../src/osc/commands.js'
 import type { ZoomConfig } from '../../src/config.js'
@@ -31,7 +31,7 @@ function createConfig(overrides: Partial<ZoomConfig> = {}): ZoomConfig {
 
 describe('sendZoomIsoPullingCommands', () => {
 	it('only sends requests for enabled polling flags', () => {
-		const sendCommand = jest.fn()
+		const sendCommand = vi.fn()
 		const config = createConfig({
 			pollEngineState: true,
 			pollAudioLevels: false,
@@ -49,7 +49,7 @@ describe('sendZoomIsoPullingCommands', () => {
 
 describe('sendOscCommand', () => {
 	it('sends no arguments when args is undefined', () => {
-		const client = { send: jest.fn() }
+		const client = { send: vi.fn() }
 
 		sendOscCommand(client, '/zoom/ping')
 
@@ -57,7 +57,7 @@ describe('sendOscCommand', () => {
 	})
 
 	it('preserves empty arrays and scalar OSC arguments', () => {
-		const client = { send: jest.fn() }
+		const client = { send: vi.fn() }
 
 		sendOscCommand(client, '/zoom/empty', [])
 		sendOscCommand(client, '/zoom/scalar', { type: 'i', value: 7 })
@@ -67,7 +67,7 @@ describe('sendOscCommand', () => {
 	})
 
 	it('spreads OSC argument arrays into node-osc varargs', () => {
-		const client = { send: jest.fn() }
+		const client = { send: vi.fn() }
 		const args: OSCSomeArguments = [
 			{ type: 's', value: 'hello' },
 			{ type: 'i', value: 2 },

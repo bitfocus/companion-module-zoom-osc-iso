@@ -7,9 +7,9 @@ const baseConfig = await generateEslintConfig({
 const customConfig = [
 	...baseConfig,
 	{
-		files: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.mjs', 'tests/**/*.ts', 'jest.config.ts'],
+		files: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.mjs', 'tests/**/*.ts', 'vitest.config.ts'],
 	},
-	// Test files: relax rules that are noisy in Jest test contexts
+	// Test files: relax rules that are noisy in test contexts
 	{
 		files: ['tests/**/*.ts'],
 		rules: {
@@ -20,7 +20,7 @@ const customConfig = [
 	},
 	// Config files: dev deps are valid imports
 	{
-		files: ['jest.config.ts', '*.config.ts', '*.config.mjs'],
+		files: ['*.config.ts', '*.config.mjs'],
 		rules: {
 			'n/no-unpublished-import': 'off',
 		},

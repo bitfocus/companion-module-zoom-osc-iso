@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsZoomISORouting, ActionIdZoomISORouting } from '../../src/actions/action-zoomiso-routing.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
@@ -14,7 +14,7 @@ describe('GetActionsZoomISORouting', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

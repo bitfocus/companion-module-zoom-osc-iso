@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { describe, expect, it } from 'vitest'
 import { createZoomUser } from '../../src/osc/users.js'
 import type { ZoomOSCResponse } from '../../src/osc/types.js'
 import { createMockInstance } from '../helpers/mock-instance.js'

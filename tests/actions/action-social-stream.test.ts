@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'
@@ -6,14 +6,15 @@ import type { InstanceBaseExt } from '../../src/utils.js'
 import type { ZoomConfig } from '../../src/config.js'
 
 // Mock got-cjs to prevent real HTTP calls from socialstream internals
-jest.mock('got-cjs', () => ({
-	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
-}))
+vi.mock('got-cjs', () => {
+	const got = { post: vi.fn().mockResolvedValue({ body: 'ok' } as never) }
+	return { default: got, got }
+})
 
 describe('GetActionsSocalSteam', () => {
 	let instance: InstanceBaseExt<ZoomConfig>
 	let actions: ReturnType<typeof GetActionsSocalSteam>
-	let postMessageSpy: ReturnType<typeof jest.spyOn>
+	let postMessageSpy: ReturnType<typeof vi.spyOn>
 
 	beforeAll(() => {
 		instance = createMockInstance()
@@ -22,15 +23,15 @@ describe('GetActionsSocalSteam', () => {
 
 	beforeEach(() => {
 		const anyInstance = instance as any
-		anyInstance.saveConfig = jest.fn()
-		postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
-		jest.clearAllMocks()
+		anyInstance.saveConfig = vi.fn()
+		postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		vi.clearAllMocks()
 		// Re-spy after clearAllMocks since clearAllMocks resets mock state
-		postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -59,7 +60,7 @@ describe('GetActionsSocalSteam', () => {
 		it('resolves variables in name and message before posting', async () => {
 			instance.config.enableSocialStream = true
 			// action resolves message first, then name
-			const parseVars = instance.parseVariablesInString as jest.Mock
+			const parseVars = instance.parseVariablesInString as Mock
 			parseVars.mockResolvedValueOnce('Resolved Message' as never).mockResolvedValueOnce('Resolved Name' as never)
 			await (actions[ActionIdSocialStream.sendAChatToSocialStream] as any).callback(
 				{ options: { name: '$(var:name)', message: '$(var:msg)' } } as any,

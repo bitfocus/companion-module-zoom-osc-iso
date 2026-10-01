@@ -1,17 +1,18 @@
+import { vi } from 'vitest'
 /**
- * Global test setup — runs after Jest framework is installed.
+ * Global test setup — runs before each test file (vitest setupFiles).
  *
  * Safety-net Layer 2: prevents the OSC transport library from opening real sockets
  * if osc.ts is accidentally imported. Primary protection is the mock instance
- * (instance.OSC = { sendCommand: jest.fn() }) in mock-instance.ts.
+ * (instance.OSC = { sendCommand: vi.fn() }) in mock-instance.ts.
  */
-jest.mock('node-osc', () => ({
-	Client: jest.fn().mockImplementation(() => ({
-		send: jest.fn(),
-		close: jest.fn(),
+vi.mock('node-osc', () => ({
+	Client: vi.fn().mockImplementation(() => ({
+		send: vi.fn(),
+		close: vi.fn(),
 	})),
-	Server: jest.fn().mockImplementation(() => ({
-		on: jest.fn(),
-		close: jest.fn(),
+	Server: vi.fn().mockImplementation(() => ({
+		on: vi.fn(),
+		close: vi.fn(),
 	})),
 }))

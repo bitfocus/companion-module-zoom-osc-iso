@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, vi, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsGlobal, ActionIdGlobal } from '../../src/actions/action-global.js'
 
@@ -12,7 +12,7 @@ describe('GetActionsGlobal', () => {
 	})
 
 	beforeEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -131,7 +131,7 @@ describe('GetActionsGlobal', () => {
 
 	it('updateActionFeedbackPresets calls updateInstance and checkFeedbacks', async () => {
 		const anyInstance = instance as any
-		anyInstance.updateInstance = jest.fn()
+		anyInstance.updateInstance = vi.fn()
 		await (actions[ActionIdGlobal.updateActionFeedbackPresets] as any).callback({} as any, {} as any)
 		expect((instance as any).updateInstance).toHaveBeenCalled()
 		expect(instance.checkFeedbacks).toHaveBeenCalled()

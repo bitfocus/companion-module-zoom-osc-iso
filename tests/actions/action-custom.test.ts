@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsCustom, ActionIdCustom } from '../../src/actions/action-custom.js'
 
@@ -12,9 +12,9 @@ describe('GetActionsCustom', () => {
 	})
 
 	beforeEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
-		;(instance.log as jest.Mock).mockClear()
+		;(instance.log as Mock).mockClear()
 	})
 
 	// ── customCommand ──────────────────────────────────────────────────────────

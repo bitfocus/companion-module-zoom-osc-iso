@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUserWaitingRoom, ActionIdUserWaitingRoom } from '../../src/actions/action-user-waiting-room.js'
 
@@ -15,7 +15,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -40,7 +40,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -63,7 +63,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -92,7 +92,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -117,7 +117,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -142,7 +142,7 @@ describe('GetActionsUserWaitingRoom', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 

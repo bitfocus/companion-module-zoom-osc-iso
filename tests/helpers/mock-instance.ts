@@ -1,3 +1,4 @@
+import { vi } from 'vitest'
 import type { ZoomConfig } from '../../src/config.js'
 import type { InstanceBaseExt } from '../../src/utils.js'
 
@@ -9,7 +10,7 @@ export interface MockInstanceOptions {
 /**
  * Creates a minimal mock of InstanceBaseExt<ZoomConfig> for action tests.
  *
- * Key: `OSC.sendCommand` is a jest spy — it captures (path, args) without
+ * Key: `OSC.sendCommand` is a vitest spy — it captures (path, args) without
  * opening a UDP socket. Tests assert against this spy to verify OSC command
  * formatting.
  */
@@ -58,9 +59,9 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 			socialStreamQuestionPrefix: '',
 			socialStreamChatTypeToSend: [],
 		},
-		log: jest.fn(),
-		OSC: { sendCommand: jest.fn() },
-		parseVariablesInString: jest.fn(async (s: string) => s),
+		log: vi.fn(),
+		OSC: { sendCommand: vi.fn() },
+		parseVariablesInString: vi.fn(async (s: string) => s),
 		ZoomVariableLink: [],
 		ZoomGroupData: [],
 		ZoomUserData: {},
@@ -70,14 +71,14 @@ export function createMockInstance(options: MockInstanceOptions = {}): InstanceB
 		ZoomAudioRoutingData: {},
 		ZoomUserOffline: {},
 		// Companion base stubs (unused in action tests)
-		checkFeedbacks: jest.fn(),
-		setVariableValues: jest.fn(),
-		setVariableDefinitions: jest.fn(),
-		setActionDefinitions: jest.fn(),
-		setFeedbackDefinitions: jest.fn(),
-		setPresetDefinitions: jest.fn(),
-		updateStatus: jest.fn(),
-		saveConfig: jest.fn(),
-		updateDefinitionsForActionsFeedbacksAndPresets: jest.fn(),
+		checkFeedbacks: vi.fn(),
+		setVariableValues: vi.fn(),
+		setVariableDefinitions: vi.fn(),
+		setActionDefinitions: vi.fn(),
+		setFeedbackDefinitions: vi.fn(),
+		setPresetDefinitions: vi.fn(),
+		updateStatus: vi.fn(),
+		saveConfig: vi.fn(),
+		updateDefinitionsForActionsFeedbacksAndPresets: vi.fn(),
 	} as unknown as InstanceBaseExt<ZoomConfig>
 }

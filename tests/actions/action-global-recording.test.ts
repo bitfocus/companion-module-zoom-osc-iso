@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsGlobalRecording, ActionIdGlobalRecording } from '../../src/actions/action-global-recording.js'
 
@@ -12,7 +12,7 @@ describe('GetActionsGlobalRecording', () => {
 	})
 
 	beforeEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

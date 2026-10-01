@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUserVideoMic, ActionIdUserVideoMic } from '../../src/actions/action-user-video-mic.js'
 
@@ -12,7 +12,7 @@ describe('GetActionsUserVideoMic', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 		instance.ZoomClientDataObj.selectedCallers = []
 	})

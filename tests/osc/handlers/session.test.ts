@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from '@jest/globals'
+import { describe, expect, it, vi } from 'vitest'
 import { InstanceStatus } from '@companion-module/base'
 import { handleSessionMessage } from '../../../src/osc/handlers/session.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.js'
@@ -7,19 +7,19 @@ import { createMockInstance } from '../../helpers/mock-instance.js'
 function createContext(): OSCHandlerContext {
 	return {
 		instance: createMockInstance(),
-		createZoomUser: jest.fn(async () => undefined),
-		setUpdateLoop: jest.fn(),
-		setNeedToPingPong: jest.fn(),
-		isSpotlightGroupTrackingInitialized: jest.fn(() => false),
-		setSpotlightGroupTrackingInitialized: jest.fn(),
-		destroyTimers: jest.fn(),
-		createPingTimer: jest.fn(),
-		createUpdatePresetsTimer: jest.fn(),
-		createZoomIsoPullerTimer: jest.fn(),
-		destroyZoomIsoPullerTimer: jest.fn(),
-		hasZoomIsoPuller: jest.fn(() => false),
-		configureConnectedPingWatchdog: jest.fn(),
-		sendCommand: jest.fn(),
+		createZoomUser: vi.fn(async () => undefined),
+		setUpdateLoop: vi.fn(),
+		setNeedToPingPong: vi.fn(),
+		isSpotlightGroupTrackingInitialized: vi.fn(() => false),
+		setSpotlightGroupTrackingInitialized: vi.fn(),
+		destroyTimers: vi.fn(),
+		createPingTimer: vi.fn(),
+		createUpdatePresetsTimer: vi.fn(),
+		createZoomIsoPullerTimer: vi.fn(),
+		destroyZoomIsoPullerTimer: vi.fn(),
+		hasZoomIsoPuller: vi.fn(() => false),
+		configureConnectedPingWatchdog: vi.fn(),
+		sendCommand: vi.fn(),
 	}
 }
 
