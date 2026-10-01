@@ -6,6 +6,11 @@ This module gives you deep control of Zoom through controllers like the StreamDe
 
 ---
 
+## Companion Requirements
+
+- This version of the module (5.0.0 and later) requires **Companion 5.0 or newer** (module API 2.1). Use the 4.x releases of this module on older Companion versions.
+- Text fields that accept variables (names, messages, file paths) still accept `$(...)` variables, and any option can also be switched to an expression.
+
 ## ZoomOSC/ISO Requirements
 
 - Licensed versions recommended.
@@ -31,7 +36,7 @@ There are a number of configuration options for the module that allow you to con
 1. **Default Selection:** Select one participant at a time or Select multiple participants simultaneously.
 1. **Number of selectable groups:**
 
-   One of the most powerful features of this module is the ability to place participants into groups. Just like participants, groups are referenceable and selectable. You can index into groups with variables to display their members. Buttons with these properties are automatically available in the Presets area under _Manage Selections and Groups_, where new buttons are generated based on the number of groups specified during setup.
+   One of the most powerful features of this module is the ability to place participants into groups. Just like participants, groups are referenceable and selectable. You can index into groups with variables to display their members. Buttons with these properties are automatically available in the Presets area under the _Groups_ section: _Manage Selections of Groups_ holds the group management buttons, and there is one _Select (group name) participants_ group per group. New buttons are generated based on the number of groups specified during setup.
 
    - **Default Groups**
 
