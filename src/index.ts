@@ -1,4 +1,4 @@
-import { InstanceBase, runEntrypoint, type SomeCompanionConfigField } from '@companion-module/base'
+import { InstanceBase, type SomeCompanionConfigField } from '@companion-module/base'
 import { GetConfigFields, type ZoomConfig } from './config.js'
 import { GetActions } from './actions.js'
 import { GetFeedbacks } from './feedback.js'
@@ -18,16 +18,22 @@ import type {
 
 import { updateVariableValues } from './variables/variable-values.js'
 import { initVariableDefinitions } from './variables/variable-definitions.js'
-import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
-import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
-import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
-import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from './upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
-import { addPollingConfigOptions } from './upgrades/addPollingConfigOptions.js'
+import { UpgradeScripts } from './upgrades.js'
+
+export type ModuleSchema = {
+	config: ZoomConfig
+	secrets: undefined
+	actions: Record<string, never>
+	feedbacks: Record<string, never>
+	variables: Record<string, never>
+}
+
+export { UpgradeScripts }
 
 /**
  * @description Companion instance class for Zoom
  */
-class ZoomInstance extends InstanceBase<ZoomConfig> {
+export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	public config: ZoomConfig = {
 		label: '',
 		host: '',
@@ -177,12 +183,3 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		this.setPresetDefinitions(GetPresetList(this))
 	}
 }
-
-runEntrypoint(ZoomInstance, [
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
-	fixWrongPinCommands,
-	addNewConfigFieldsForSocialStreamChatMessagesToSend,
-	addPollingConfigOptions,
-])

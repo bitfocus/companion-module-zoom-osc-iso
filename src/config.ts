@@ -1,6 +1,6 @@
 import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
-export interface ZoomConfig {
+export type ZoomConfig = {
 	label: string
 	host: string
 	tx_port: number
