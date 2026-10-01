@@ -1,6 +1,6 @@
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdUserWebinar } from '../actions/action-user-webinars.js'
 import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room.js'
 import { ActionIdGlobal } from '../actions/action-global.js'

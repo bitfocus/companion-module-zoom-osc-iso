@@ -2,7 +2,7 @@ import { handleGalleryMessage } from './gallery.js'
 import { handleIsoMessage } from './iso.js'
 import { handleSessionMessage } from './session.js'
 import { handleUserMessage } from './user.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
 
 export async function dispatchOscMessage(context: OSCHandlerContext, data: ZoomOSCResponse): Promise<void> {
 	const recvMsg = data.address.toString().split('/')

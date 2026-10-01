@@ -1,8 +1,8 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
-import { InstanceBaseExt, padding } from '../utils.js'
+import { type InstanceBaseExt, padding } from '../utils.js'
 import {
-	CompanionPresetExt,
-	PresetFeedbackDefinition,
+	type CompanionPresetExt,
+	type PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
@@ -11,7 +11,7 @@ import {
 
 export type PresetIdListParticipants = `Caller_${number}`
 import { ActionIdUsers } from '../actions/action-user.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>): {
 	[id: PresetIdListParticipants]: CompanionPresetExt | undefined

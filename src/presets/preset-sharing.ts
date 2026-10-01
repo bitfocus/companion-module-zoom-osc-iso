@@ -1,6 +1,6 @@
 import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 
 export enum PresetIdSharing {
 	screenShare = 'Screen_Share',

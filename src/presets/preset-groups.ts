@@ -1,15 +1,15 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
-import { colorBlack, colorLightGray, InstanceBaseExt, ZoomGroupDataInterface } from '../utils.js'
+import { colorBlack, colorLightGray, type InstanceBaseExt, type ZoomGroupDataInterface } from '../utils.js'
 import {
-	CompanionPresetExt,
-	PresetFeedbackDefinition,
+	type CompanionPresetExt,
+	type PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils.js'
 import { ActionIdGroups } from '../actions/action-group.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdGroups {
 	replaceGroup = 'Replace_group_',

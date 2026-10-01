@@ -1,10 +1,10 @@
-import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
-import { GetConfigFields, ZoomConfig } from './config.js'
+import { InstanceBase, runEntrypoint, type SomeCompanionConfigField } from '@companion-module/base'
+import { GetConfigFields, type ZoomConfig } from './config.js'
 import { GetActions } from './actions.js'
 import { GetFeedbacks } from './feedback.js'
 import { GetPresetList } from './presets.js'
 import { OSC } from './osc.js'
-import {
+import type {
 	ZoomAudioLevelDataInterface,
 	ZoomAudioRoutingDataInterface,
 	ZoomClientDataObjInterface,

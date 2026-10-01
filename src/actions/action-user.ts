@@ -1,10 +1,10 @@
-import {
+import type {
 	CompanionActionDefinition,
 	CompanionVariableValues,
 	SomeCompanionActionInputField,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options, userExist } from '../utils.js'
+import type { ZoomConfig } from '../config.js'
+import { type InstanceBaseExt, options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import * as fs from 'fs'
 import * as os from 'os'

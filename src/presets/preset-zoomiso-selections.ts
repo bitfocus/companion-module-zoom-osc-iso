@@ -1,8 +1,8 @@
 import { FeedbackId } from '../feedback.js'
-import { InstanceBaseExt, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { type InstanceBaseExt, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdZoomISOSelections {
 	applyOutput = 'Apply_Output',

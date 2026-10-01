@@ -1,6 +1,6 @@
 import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
 
 export enum PresetIdBreakout {

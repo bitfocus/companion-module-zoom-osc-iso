@@ -1,6 +1,6 @@
 import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
 
 export enum PresetIdDeviceSettings {

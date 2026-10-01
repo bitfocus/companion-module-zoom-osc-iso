@@ -1,9 +1,9 @@
-import { CompanionPresetDefinitions } from '@companion-module/base'
+import type { CompanionPresetDefinitions } from '@companion-module/base'
 
-import { InstanceBaseExt } from './utils.js'
-import { CompanionPresetExt } from './presets/preset-utils.js'
-import { PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
-import { PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
+import type { InstanceBaseExt } from './utils.js'
+import type { CompanionPresetExt } from './presets/preset-utils.js'
+import { type PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
+import { type PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
 import { PresetIdManageSelections, GetPresetsManageSelections } from './presets/preset-manage-selections.js'
 import { PresetIdGroups, GetPresetsGroups } from './presets/preset-groups.js'
 import {
@@ -26,7 +26,7 @@ import { PresetIdSharing, GetPresetsSharing } from './presets/preset-sharing.js'
 import { PresetIdBreakout, GetPresetsBreakout } from './presets/preset-breakout.js'
 import { PresetIdRecording, GetPresetsRecording } from './presets/preset-recording.js'
 import { PresetIdDataCustom, GetPresetsDataCustom } from './presets/preset-data-custom.js'
-import { ZoomConfig } from './config.js'
+import type { ZoomConfig } from './config.js'
 
 export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitions {
 	const presetsParticipants: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } =

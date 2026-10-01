@@ -1,6 +1,6 @@
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobalRecording } from '../actions/action-global-recording.js'
 
 export enum PresetIdRecording {

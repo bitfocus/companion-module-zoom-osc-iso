@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type { CompanionActionDefinition } from '@companion-module/base'
+import type { ZoomConfig } from '../config.js'
+import type { InstanceBaseExt } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 import { ActionIdGlobalGalleryTrackingAndDataRequest } from './action-global-gallery-tracking-and-data-request.js'
 

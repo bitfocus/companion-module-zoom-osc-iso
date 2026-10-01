@@ -1,9 +1,9 @@
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
-import { InstanceBaseExt, ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { type InstanceBaseExt, type ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdReactionName {
 	raiseHand = 'Raise_Hand',

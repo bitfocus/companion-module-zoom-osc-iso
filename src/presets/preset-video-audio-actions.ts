@@ -1,6 +1,6 @@
 import { ActionIdUserVideoMic } from '../actions/action-user-video-mic.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdVideoAudioActions {

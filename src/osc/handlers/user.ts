@@ -1,5 +1,5 @@
 import { socialStreamApi } from '../../socialstream.js'
-import { arrayRemove, userExist, ZoomGroupDataInterface } from '../../utils.js'
+import { arrayRemove, userExist, type ZoomGroupDataInterface } from '../../utils.js'
 import {
 	updateActiveSpeakerVariable,
 	updateAllGroupVariables,
@@ -15,7 +15,7 @@ import {
 	updateZoomUserVariables,
 } from '../../variables/variable-values.js'
 import { checkGroupFeedbacks, checkUserRelatedFeedbacks } from '../feedbacks.js'
-import { OSCHandlerContext, UserRole, ZoomOSCResponse } from '../types.js'
+import { type OSCHandlerContext, UserRole, type ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
 async function ensureZoomUser(context: OSCHandlerContext, data: ZoomOSCResponse, zoomId: number): Promise<void> {

@@ -3,7 +3,7 @@ import {
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 } from '@companion-module/base/dist'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function addNewConfigFieldsForSocialStreamChatMessagesToSend(
 	_context: CompanionUpgradeContext<ZoomConfig>,

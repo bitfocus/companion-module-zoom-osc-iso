@@ -1,9 +1,9 @@
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
-import { colorBlack, colorGreenOlive, InstanceBaseExt } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { colorBlack, colorGreenOlive, type InstanceBaseExt } from '../utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdZoomISOActions {
 	addOutput = 'add_Output',

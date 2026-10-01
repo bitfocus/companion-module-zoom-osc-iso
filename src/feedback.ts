@@ -1,7 +1,7 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import { type CompanionFeedbackDefinitions, type CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
+import { type InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',

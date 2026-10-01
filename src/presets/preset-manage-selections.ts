@@ -1,5 +1,5 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
-import { CompanionPresetExt, alignmentTopLeft } from './preset-utils.js'
+import { type CompanionPresetExt, alignmentTopLeft } from './preset-utils.js'
 import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 

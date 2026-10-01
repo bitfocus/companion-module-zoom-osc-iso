@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type { CompanionActionDefinition } from '@companion-module/base'
+import type { ZoomConfig } from '../config.js'
+import { type InstanceBaseExt, options } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import {
 	createCommand,

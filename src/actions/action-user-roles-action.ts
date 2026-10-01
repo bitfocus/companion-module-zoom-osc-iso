@@ -1,6 +1,6 @@
-import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
+import type { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
+import type { ZoomConfig } from '../config.js'
+import { type InstanceBaseExt, type ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
 import { sendActionCommand, createCommand, select, selectUser } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
 import {

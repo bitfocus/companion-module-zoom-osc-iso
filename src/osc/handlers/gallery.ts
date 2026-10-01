@@ -6,7 +6,7 @@ import {
 	updateSpotlightGroupVariables,
 } from '../../variables/variable-values.js'
 import { checkGalleryFeedbacks, checkSpotlightFeedbacks } from '../feedbacks.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
 export function handleGalleryMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {

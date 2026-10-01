@@ -1,6 +1,6 @@
 import { ActionIdUserChat } from '../actions/action-user-chat.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdChat {

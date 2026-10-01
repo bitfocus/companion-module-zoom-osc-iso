@@ -1,4 +1,4 @@
-import { CompanionVariableValues } from '@companion-module/base'
+import type { CompanionVariableValues } from '@companion-module/base'
 import type { InstanceBaseExt } from '../utils.js'
 import type { ZoomConfig } from '../config.js'
 

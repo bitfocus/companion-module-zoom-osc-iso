@@ -1,7 +1,7 @@
 import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 
 export enum PresetIdJoinLeaveEnd {
 	joinMeeting = 'Join_Meeting',

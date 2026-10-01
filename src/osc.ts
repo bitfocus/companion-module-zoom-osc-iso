@@ -1,11 +1,12 @@
-import { InstanceBaseExt, ZoomVersion } from './utils.js'
-import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import { type InstanceBaseExt, ZoomVersion } from './utils.js'
+import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
+import type { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import type { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
+import * as nodeOscModule from 'node-osc'
 type NodeOscClient = {
 	close(): Promise<void>
 	send(address: string, ...args: unknown[]): void
@@ -19,7 +20,8 @@ type NodeOscModule = {
 	Client: new (host: string, port: number) => NodeOscClient
 	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
 }
-const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
+// node-osc ships ESM; keep the narrow local typing this module relies on
+const nodeOsc = nodeOscModule as unknown as NodeOscModule
 
 export class OSC {
 	private readonly instance: InstanceBaseExt<ZoomConfig>

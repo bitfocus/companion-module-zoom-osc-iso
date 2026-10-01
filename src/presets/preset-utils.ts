@@ -1,11 +1,11 @@
 import {
 	CompanionButtonPresetDefinition,
-	CompanionButtonStyleProps,
-	CompanionFeedbackButtonStyleResult,
+	type CompanionButtonStyleProps,
+	type CompanionFeedbackButtonStyleResult,
 } from '@companion-module/base'
 import { ActionIdZoomISORecordingConsent } from '../actions/action-zoomiso-recording-consent.js'
 import { FeedbackId } from '../feedback.js'
-import { InstanceBaseExt, colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils.js'
+import { type InstanceBaseExt, colorBlack, colorDarkGray, colorDarkRed, colorWhite } from '../utils.js'
 import { ActionIdGroups } from '../actions/action-group.js'
 import { ActionIdGallery } from '../actions/action-gallery.js'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
@@ -32,7 +32,7 @@ import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export type PresetFeedbackDefinition = Array<
 	{

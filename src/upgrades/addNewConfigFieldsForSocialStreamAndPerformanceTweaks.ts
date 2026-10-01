@@ -1,9 +1,9 @@
-import {
+import type {
 	CompanionUpgradeContext,
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function addNewConfigFieldsForSocialStreamAndPerformanceTweaks(
 	_context: CompanionUpgradeContext<ZoomConfig>,

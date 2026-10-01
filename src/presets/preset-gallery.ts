@@ -1,7 +1,7 @@
 import { FeedbackId, feedbackType } from '../feedback.js'
 import {
-	CompanionPresetExt,
-	PresetFeedbackDefinition,
+	type CompanionPresetExt,
+	type PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
@@ -10,8 +10,8 @@ import {
 
 export type PresetIdListGallery = `Gallery_position_${number}`
 import { ActionIdGallery } from '../actions/action-gallery.js'
-import { InstanceBaseExt, padding } from '../utils.js'
-import { ZoomConfig } from '../config.js'
+import { type InstanceBaseExt, padding } from '../utils.js'
+import type { ZoomConfig } from '../config.js'
 
 export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): {
 	[id: PresetIdListGallery]: CompanionPresetExt | undefined

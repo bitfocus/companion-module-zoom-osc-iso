@@ -26,19 +26,19 @@ import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
-import {
+import type {
 	oldActionToNewAction,
 	oldFeedbackToNewFeedback,
 	oldFeedbackTypeToNewFeedbackType,
 } from './upgradeInterfaces.js'
-import {
+import type {
 	CompanionUpgradeContext,
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 	CompanionMigrationAction,
 	CompanionMigrationFeedback,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function UpgradeV2toV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,

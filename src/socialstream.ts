@@ -1,6 +1,6 @@
-import got from 'got-cjs'
-import { InstanceBaseExt } from './utils.js'
-import { ZoomConfig } from './config.js'
+import { got } from 'got-cjs' // named import: under ESM the default import is the CommonJS exports object
+import type { InstanceBaseExt } from './utils.js'
+import type { ZoomConfig } from './config.js'
 
 export class socialStreamApi {
 	static postMessage = async (name: string, message: string, instance: InstanceBaseExt<ZoomConfig>): Promise<void> => {

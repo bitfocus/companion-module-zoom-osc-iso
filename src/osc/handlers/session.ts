@@ -9,7 +9,7 @@ import {
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
 import { sendZoomSubscriptions } from '../commands.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
 export function handleSessionMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {

@@ -1,12 +1,12 @@
 import { ActionIdUserPin } from '../actions/action-user-pin.js'
-import { oldActionToNewAction } from './upgradeInterfaces.js'
-import {
+import type { oldActionToNewAction } from './upgradeInterfaces.js'
+import type {
 	CompanionUpgradeContext,
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 	CompanionMigrationAction,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function fixWrongPinCommands(
 	_context: CompanionUpgradeContext<ZoomConfig>,

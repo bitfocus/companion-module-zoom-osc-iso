@@ -1,7 +1,7 @@
 import {
-	CompanionInputFieldDropdown,
-	CompanionInputFieldNumber,
-	CompanionInputFieldTextInput,
+	type CompanionInputFieldDropdown,
+	type CompanionInputFieldNumber,
+	type CompanionInputFieldTextInput,
 	InstanceBase,
 	combineRgb,
 } from '@companion-module/base'

@@ -1,7 +1,7 @@
 import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
 import { ActionIdGlobalMemoryManagement } from '../actions/action-global-memory-management.js'

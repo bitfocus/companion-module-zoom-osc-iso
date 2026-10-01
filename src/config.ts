@@ -1,4 +1,4 @@
-import { Regex, SomeCompanionConfigField } from '@companion-module/base'
+import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
 export interface ZoomConfig {
 	label: string

@@ -1,7 +1,7 @@
 import type { ZoomConfig } from '../config.js'
 import type { InstanceBaseExt } from '../utils.js'
 import { updateAllUserBasedVariables } from '../variables/variable-values.js'
-import { UserRole, ZoomOSCResponse } from './types.js'
+import { UserRole, type ZoomOSCResponse } from './types.js'
 import { setVariables } from './variables.js'
 
 export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data: ZoomOSCResponse): Promise<void> {
