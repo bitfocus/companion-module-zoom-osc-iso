@@ -1,8 +1,7 @@
-import type { ZoomConfig } from '../config.js'
+import type ModuleInstance from '../index.js'
 import { FeedbackId } from '../feedback.js'
-import type { InstanceBaseExt } from '../utils.js'
 
-type ZoomInstance = InstanceBaseExt<ZoomConfig>
+type ZoomInstance = ModuleInstance
 
 export function checkUserRelatedFeedbacks(instance: ZoomInstance): void {
 	instance.checkFeedbacks(

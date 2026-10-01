@@ -1,9 +1,9 @@
+import type ModuleInstance from '../index.js'
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
-import { colorBlack, colorGreenOlive, type InstanceBaseExt } from '../utils.js'
+import { colorBlack, colorGreenOlive } from '../utils.js'
 import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
-import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdZoomISOActions {
 	addOutput = 'add_Output',
@@ -21,7 +21,7 @@ export enum PresetIdZoomISOActions {
 	setAudioMode = 'set_audio_mode',
 }
 
-export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): {
+export function GetPresetsZoomISOActions(instance: ModuleInstance): {
 	[id in PresetIdZoomISOActions]: CompanionPresetExt | undefined
 } {
 	const presets: { [id in PresetIdZoomISOActions]: CompanionPresetExt | undefined } = {

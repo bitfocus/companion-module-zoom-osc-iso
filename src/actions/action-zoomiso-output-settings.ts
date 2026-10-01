@@ -1,6 +1,6 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdZoomISOOutputSettings {
@@ -15,10 +15,22 @@ export enum ActionIdZoomISOOutputSettings {
 	setAudioMode = 'set_Audio_Mode',
 }
 
-export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdZoomISOOutputSettings]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdZoomISOOutputSettings]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaZoomISOOutputSettings = {
+	[ActionIdZoomISOOutputSettings.setVideoLossMode]: { options: { videoLossMode: string } }
+	[ActionIdZoomISOOutputSettings.deleteOutput]: { options: { output: number } }
+	[ActionIdZoomISOOutputSettings.setOutputCount]: { options: { count: number } }
+	[ActionIdZoomISOOutputSettings.enableOutput]: { options: { output: number } }
+	[ActionIdZoomISOOutputSettings.setAudioMode]: { options: { number: number; audioChannelMode: string } }
+	[ActionIdZoomISOOutputSettings.addOutput]: { options: Record<string, never> }
+	[ActionIdZoomISOOutputSettings.disableOutput]: { options: { output: number } }
+	[ActionIdZoomISOOutputSettings.setOutputName]: { options: { output: number; name: string } }
+	[ActionIdZoomISOOutputSettings.setOutputMode]: { options: { output: number; outputMode: string } }
+}
+
+export function GetActionsZoomISOOutputSettings(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaZoomISOOutputSettings> {
+	const actions: CompanionActionDefinitions<ActionsSchemaZoomISOOutputSettings> = {
 		[ActionIdZoomISOOutputSettings.setVideoLossMode]: {
 			name: 'set Video Loss Mode',
 			options: [options.videoLossMode],
@@ -145,10 +157,10 @@ export function GetActionsZoomISOOutputSettings(instance: InstanceBaseExt<ZoomCo
 		[ActionIdZoomISOOutputSettings.setOutputName]: {
 			name: 'set Output Name',
 			options: [options.output, options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/setOutputName')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = action.options.name
 				command.args.push({ type: 'i', value: action.options.output })
 				command.args.push({ type: 's', value: newName })
 

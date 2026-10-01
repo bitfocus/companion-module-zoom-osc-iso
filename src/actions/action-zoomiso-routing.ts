@@ -1,6 +1,6 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdZoomISORouting {
@@ -11,10 +11,20 @@ export enum ActionIdZoomISORouting {
 	togglePollAudioRouting = 'toggle_poll_audio_routing',
 }
 
-export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdZoomISORouting]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdZoomISORouting]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaZoomISORouting = {
+	[ActionIdZoomISORouting.outputISO]: {
+		options: { userName: string; output: number; setToNoneIfNotUserSelected: boolean }
+	}
+	[ActionIdZoomISORouting.audioISO]: { options: { userName: string; output: number } }
+	[ActionIdZoomISORouting.outputISOSetToNone]: { options: { output: number } }
+	[ActionIdZoomISORouting.togglePollOutputRouting]: { options: Record<string, never> }
+	[ActionIdZoomISORouting.togglePollAudioRouting]: { options: Record<string, never> }
+}
+
+export function GetActionsZoomISORouting(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaZoomISORouting> {
+	const actions: CompanionActionDefinitions<ActionsSchemaZoomISORouting> = {
 		[ActionIdZoomISORouting.outputISO]: {
 			name: 'output ISO',
 			options: [
@@ -27,10 +37,10 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 					default: false,
 				},
 			],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'ISO'
-				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
-				const setToNoneIfNotUserSelected = (action.options.setToNoneIfNotUserSelected as boolean) ?? false
+				const variableValue = action.options.userName
+				const setToNoneIfNotUserSelected = action.options.setToNoneIfNotUserSelected ?? false
 				const command = createCommand(
 					instance,
 					'/outputISO',
@@ -58,9 +68,9 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 		[ActionIdZoomISORouting.audioISO]: {
 			name: 'audio ISO',
 			options: [options.userName, options.output],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'ISO'
-				const variableValue = await instance.parseVariablesInString(action.options.userName as string)
+				const variableValue = action.options.userName
 				const command = createCommand(instance, '/audioISO', variableValue, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.output })
@@ -79,7 +89,7 @@ export function GetActionsZoomISORouting(instance: InstanceBaseExt<ZoomConfig>):
 		[ActionIdZoomISORouting.outputISOSetToNone]: {
 			name: 'Set ISO Output to None',
 			options: [options.output],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'ISO'
 				const command = createCommand(instance, '/outputISO', '', select.single, null, true, true, true)
 				if (command.isValidCommand) {

@@ -1,10 +1,10 @@
+import type ModuleInstance from '../index.js'
 import type {
-	CompanionActionDefinition,
+	CompanionActionDefinitions,
 	CompanionVariableValues,
-	SomeCompanionActionInputField,
+	CompanionInputFieldDropdown,
 } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options, userExist } from '../utils.js'
+import { options, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import * as fs from 'fs'
@@ -22,9 +22,18 @@ export enum ActionIdGroups {
 	saveGroupToFile = 'saveGroupToFile',
 }
 
-export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGroups]: CompanionActionDefinition | undefined
-} {
+export type ActionsSchemaGroups = {
+	[ActionIdGroups.saveGroupToFile]: { options: { group: string; filepath: string } }
+	[ActionIdGroups.loadGroupFromFile]: { options: { group: string; filepath: string } }
+	[ActionIdGroups.addToGroup]: { options: { group: string; groupOption: string } }
+	[ActionIdGroups.clearGroup]: { options: { group: string } }
+	[ActionIdGroups.removeFromGroup]: { options: { userName: string; group: string } }
+	[ActionIdGroups.renameGroup]: { options: { group: string; name: string } }
+	[ActionIdGroups.selectGroup]: { options: { group: string } }
+	[ActionIdGroups.selectUserFromGroupPosition]: { options: { group: string; position: string; option: string } }
+}
+
+export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaGroups> {
 	const CHOICES_GROUPS: { id: string; label: string }[] = []
 	const CHOICES_GROUPS_NO_HOST: { id: string; label: string }[] = []
 	const CHOICES_GROUPS_DEFAULT = '1'
@@ -35,7 +44,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		if (index != 0 && index !== 1) CHOICES_GROUPS_NO_HOST.push({ id: index.toString(), label: group.groupName })
 	})
 
-	const groupOption: SomeCompanionActionInputField = {
+	const groupOption: CompanionInputFieldDropdown<'group', string> = {
 		type: 'dropdown',
 		label: 'Group',
 		id: 'group',
@@ -43,7 +52,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		choices: CHOICES_GROUPS,
 	}
 
-	const groupOptionNoHost: SomeCompanionActionInputField = {
+	const groupOptionNoHost: CompanionInputFieldDropdown<'group', string> = {
 		type: 'dropdown',
 		label: 'Group',
 		id: 'group',
@@ -51,7 +60,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		choices: CHOICES_GROUPS_NO_HOST,
 	}
 
-	const actions: { [id in ActionIdGroups]: CompanionActionDefinition | undefined } = {
+	const actions: CompanionActionDefinitions<ActionsSchemaGroups> = {
 		[ActionIdGroups.saveGroupToFile]: {
 			name: 'Save Group to File',
 			options: [
@@ -64,9 +73,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					default: '',
 				},
 			],
-			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
-				const group = action.options.group as number
+			callback: (action): void => {
+				const filepath = action.options.filepath.trim()
+				const group = Number(action.options.group) // dropdown ids are strings; ZoomGroupData is indexed by number
 				const users = instance.ZoomGroupData[group].users
 				let data = ''
 				for (const user of users) {
@@ -90,9 +99,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 					default: '',
 				},
 			],
-			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
-				const group = action.options.group as number
+			callback: (action): void => {
+				const filepath = action.options.filepath.trim()
+				const group = Number(action.options.group) // dropdown ids are strings; ZoomGroupData is indexed by number
 				try {
 					fs.readFile(filepath, 'utf8', (err, data) => {
 						if (err) {
@@ -156,7 +165,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				const group = action.options.group as number
+				const group = Number(action.options.group) // dropdown ids are strings; ZoomGroupData is indexed by number
 				if (action.options.groupOption === 'replace') {
 					instance.ZoomGroupData[group].users.length = 0
 				}
@@ -192,9 +201,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Clear group selection',
 			options: [groupOptionNoHost],
 			callback: (action) => {
-				instance.ZoomGroupData[action.options.group as number].users.length = 0
+				instance.ZoomGroupData[Number(action.options.group)].users.length = 0
 				const variables: CompanionVariableValues = {}
-				updateGroupVariables(instance, variables, action.options.group as number)
+				updateGroupVariables(instance, variables, Number(action.options.group))
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
 				instance.checkFeedbacks(FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
@@ -203,9 +212,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGroups.removeFromGroup]: {
 			name: 'Remove from group',
 			options: [options.userName, groupOptionNoHost],
-			callback: async (action) => {
-				const group = action.options.group as number
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+			callback: (action) => {
+				const group = Number(action.options.group) // dropdown ids are strings; ZoomGroupData is indexed by number
+				const userName = action.options.userName
 				if (instance.ZoomGroupData[group] !== undefined) {
 					// When someone overides the selection by entering a name
 					if (userName !== undefined && userName !== '') {
@@ -255,12 +264,12 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGroups.renameGroup]: {
 			name: 'Rename Group',
 			options: [groupOption, options.name],
-			callback: async (action) => {
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				instance.ZoomGroupData[action.options.group as number].groupName = newName
+			callback: (action) => {
+				const newName = action.options.name
+				instance.ZoomGroupData[Number(action.options.group)].groupName = newName
 
 				const variables: CompanionVariableValues = {}
-				variables[`Group${action.options.group as number}`] = newName
+				variables[`Group${action.options.group}`] = newName
 				instance.setVariableValues(variables)
 			},
 		},
@@ -270,7 +279,7 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: (action) => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				instance.ZoomGroupData[action.options.group as number].users?.forEach((user: { zoomID: any }) => {
+				instance.ZoomGroupData[Number(action.options.group)].users?.forEach((user: { zoomID: any }) => {
 					instance.ZoomClientDataObj.selectedCallers.push(user.zoomID)
 				})
 				// instance.UpdateVariablesValues()
@@ -307,10 +316,9 @@ export function GetActionsGroups(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				const zoomId =
-					instance.ZoomGroupData[action.options.group as number].users[(action.options.position as number) - 1].zoomID
+				const zoomId = instance.ZoomGroupData[Number(action.options.group)].users[Number(action.options.position) - 1].zoomID
 
-				selectUser(instance, zoomId, action.options.option as string)
+				selectUser(instance, zoomId, action.options.option)
 
 				// instance.UpdateVariablesValues()
 				const variables: CompanionVariableValues = {}

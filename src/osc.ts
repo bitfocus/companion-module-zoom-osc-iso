@@ -1,6 +1,6 @@
-import { type InstanceBaseExt, ZoomVersion } from './utils.js'
+import type ModuleInstance from './index.js'
+import { ZoomVersion } from './utils.js'
 import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
-import type { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
@@ -24,7 +24,7 @@ type NodeOscModule = {
 const nodeOsc = nodeOscModule as unknown as NodeOscModule
 
 export class OSC {
-	private readonly instance: InstanceBaseExt<ZoomConfig>
+	private readonly instance: ModuleInstance
 	private oscHost = ''
 	private oscTXPort = 9090
 	private oscRXPort = 1234
@@ -39,7 +39,7 @@ export class OSC {
 	private updatePresetsLoop: NodeJS.Timeout | undefined | null = null
 	private zoomISOPuller: NodeJS.Timeout | undefined | null = null
 
-	constructor(instance: InstanceBaseExt<ZoomConfig>) {
+	constructor(instance: ModuleInstance) {
 		this.instance = instance
 		// Connect to ZoomOSC
 		this.Connect()

@@ -1,6 +1,5 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalMemoryManagement {
@@ -13,10 +12,14 @@ export enum ActionIdGlobalMemoryManagement {
 	listUsers = 'listUsers',
 }
 
-export function GetActionsGlobalMemoryManagement(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobalMemoryManagement]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobalMemoryManagement]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobalMemoryManagement = {
+	[ActionIdGlobalMemoryManagement.listUsers]: { options: Record<string, never> }
+}
+
+export function GetActionsGlobalMemoryManagement(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaGlobalMemoryManagement> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobalMemoryManagement> = {
 		[ActionIdGlobalMemoryManagement.listUsers]: {
 			name: 'Request list of Participants (PRO)',
 			options: [],

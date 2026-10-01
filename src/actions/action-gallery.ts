@@ -1,6 +1,5 @@
-import type { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions, CompanionVariableValues } from '@companion-module/base'
 import { FeedbackId } from '../feedback.js'
 import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import { updateSelectedCallersVariables } from '../variables/variable-values.js'
@@ -9,10 +8,12 @@ export enum ActionIdGallery {
 	selectFromGalleryPosition = 'select_From_Gallery_Position',
 }
 
-export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGallery]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGallery]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGallery = {
+	[ActionIdGallery.selectFromGalleryPosition]: { options: { position: string; option: string } }
+}
+
+export function GetActionsGallery(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaGallery> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGallery> = {
 		[ActionIdGallery.selectFromGalleryPosition]: {
 			name: 'Preselect user by Gallery Position',
 			options: [
@@ -31,9 +32,9 @@ export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
 			],
 			callback: (action) => {
 				PreviousSelectedCallersSave(instance)
-				const zoomId = instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
+				const zoomId = instance.ZoomClientDataObj.galleryOrder[Number(action.options.position) - 1]
 
-				selectUser(instance, zoomId, action.options.option as string)
+				selectUser(instance, zoomId, action.options.option)
 				// instance.UpdateVariablesValues()
 				const variables: CompanionVariableValues = {}
 				updateSelectedCallersVariables(instance, variables)

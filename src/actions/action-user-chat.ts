@@ -1,23 +1,25 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserChat {
 	sendAChatViaDM = 'sendAChatViaDM',
 }
 
-export function GetActionsUserChat(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserChat]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserChat]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserChat = {
+	[ActionIdUserChat.sendAChatViaDM]: { options: { userName: string; message: string } }
+}
+
+export function GetActionsUserChat(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaUserChat> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserChat> = {
 		[ActionIdUserChat.sendAChatViaDM]: {
 			name: 'Chat Via DM',
-			options: [options.userName, options.message],
-			callback: async (action): Promise<void> => {
+			options: [options.userName, options.messageWithVariables],
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const message = await instance.parseVariablesInString(action.options.message as string)
+				const userName = action.options.userName
+				const message = action.options.message
 				const command = createCommand(instance, '/chat', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })

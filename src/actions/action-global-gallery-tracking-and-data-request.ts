@@ -1,6 +1,5 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalGalleryTrackingAndDataRequest {
@@ -11,10 +10,16 @@ export enum ActionIdGlobalGalleryTrackingAndDataRequest {
 	requestOrderOfSpotlights = 'requestOrderOfSpotlights',
 }
 
-export function GetActionsGlobalGalleryTrackingAndDataRequest(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobalGalleryTrackingAndDataRequest]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobalGalleryTrackingAndDataRequest]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobalGalleryTrackingAndDataRequest = {
+	[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView]: { options: Record<string, never> }
+	[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount]: { options: Record<string, never> }
+	[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights]: { options: Record<string, never> }
+}
+
+export function GetActionsGlobalGalleryTrackingAndDataRequest(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaGlobalGalleryTrackingAndDataRequest> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobalGalleryTrackingAndDataRequest> = {
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView]: {
 			name: 'Request Order Of GalleryView',
 			options: [],

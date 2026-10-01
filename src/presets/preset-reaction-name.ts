@@ -1,9 +1,9 @@
+import type ModuleInstance from '../index.js'
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
-import { type InstanceBaseExt, type ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
+import { type ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
 import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
-import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdReactionName {
 	raiseHand = 'Raise_Hand',
@@ -14,7 +14,7 @@ export enum PresetIdReactionName {
 
 export type DynamicReactionNamePresetId = `Rename_Participant_${number}`
 
-export function GetPresetsReactionName(instance: InstanceBaseExt<ZoomConfig>): {
+export function GetPresetsReactionName(instance: ModuleInstance): {
 	[id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined
 } {
 	const presets = {

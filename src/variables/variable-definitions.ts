@@ -1,8 +1,8 @@
+import type ModuleInstance from '../index.js'
 import type { CompanionVariableDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, padding, userExist } from '../utils.js'
+import { padding, userExist } from '../utils.js'
 
-export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): void {
+export function initVariableDefinitions(instance: ModuleInstance): void {
 	// instance.log('debug', `initVariableDefinitions ${new Date()}`)
 	const globalSettings: Set<CompanionVariableDefinition> = new Set([
 		// Status

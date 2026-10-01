@@ -1,5 +1,6 @@
+import type ModuleInstance from '../index.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
-import { colorBlack, colorLightGray, type InstanceBaseExt, type ZoomGroupDataInterface } from '../utils.js'
+import { colorBlack, colorLightGray, type ZoomGroupDataInterface } from '../utils.js'
 import {
 	type CompanionPresetExt,
 	type PresetFeedbackDefinition,
@@ -9,7 +10,6 @@ import {
 	getParticipantStyleDefault,
 } from './preset-utils.js'
 import { ActionIdGroups } from '../actions/action-group.js'
-import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdGroups {
 	replaceGroup = 'Replace_group_',
@@ -23,7 +23,7 @@ export enum PresetIdGroups {
 	groupPosition = 'Group',
 }
 
-export function GetPresetsGroups(instance: InstanceBaseExt<ZoomConfig>): {
+export function GetPresetsGroups(instance: ModuleInstance): {
 	[id in PresetIdGroups]: CompanionPresetExt | undefined
 } {
 	const presets = {} as { [id in PresetIdGroups]: CompanionPresetExt | undefined }

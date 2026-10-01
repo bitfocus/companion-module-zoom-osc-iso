@@ -1,6 +1,5 @@
+import type ModuleInstance from '../index.js'
 import type { OSCSomeArguments } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
 
 export interface ZoomOSCArgument {
 	type: string
@@ -27,7 +26,7 @@ export enum UserRole {
 }
 
 export interface OSCHandlerContext {
-	instance: InstanceBaseExt<ZoomConfig>
+	instance: ModuleInstance
 	createZoomUser(data: ZoomOSCResponse): Promise<void>
 	setUpdateLoop(value: boolean): void
 	setNeedToPingPong(value: boolean): void

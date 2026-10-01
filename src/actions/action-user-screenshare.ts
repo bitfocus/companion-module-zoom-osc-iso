@@ -1,6 +1,6 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserScreenshare {
@@ -21,10 +21,26 @@ export enum ActionIdUserScreenshare {
 	SetWindowPosition = 'SetWindowPosition',
 }
 
-export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserScreenshare]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserScreenshare]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserScreenshare = {
+	[ActionIdUserScreenshare.startScreenShare]: { options: { id: number } }
+	[ActionIdUserScreenshare.enableOptimizeVideoForSharing]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.disableOptimizeVideoForSharing]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.enableComputerSoundWhenSharing]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.disableComputerSoundWhenSharing]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.startScreenShareWithPrimaryScreen]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.cycleSharedCameraToNextAvailable]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.stopSharing]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.startCameraShare]: { options: Record<string, never> }
+	[ActionIdUserScreenshare.SetWindowPosition]: { options: { userName: string; intX: number; intY: number } }
+	[ActionIdUserScreenshare.SetWindowSize]: { options: { userName: string; intX: number; intY: number } }
+	[ActionIdUserScreenshare.startShareWithWindow]: { options: { id: number } }
+	[ActionIdUserScreenshare.startAudioShare]: { options: { id: number } }
+}
+
+export function GetActionsUserScreenshare(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserScreenshare> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserScreenshare> = {
 		[ActionIdUserScreenshare.startScreenShare]: {
 			name: 'Screen Share (PRO)',
 			options: [options.id],
@@ -173,9 +189,9 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 		[ActionIdUserScreenshare.SetWindowPosition]: {
 			name: 'Set Window Position  (PRO and MAC Only)',
 			options: [options.userName, options.intX, options.intY],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/setWindowPosition', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.intX })
@@ -194,9 +210,9 @@ export function GetActionsUserScreenshare(instance: InstanceBaseExt<ZoomConfig>)
 		[ActionIdUserScreenshare.SetWindowSize]: {
 			name: 'Set Window Size  (PRO and MAC Only)',
 			options: [options.userName, options.intX, options.intY],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/setWindowSize', userName, select.single)
 				if (command.isValidCommand) {
 					command.args.push({ type: 'i', value: action.options.intX })

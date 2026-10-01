@@ -1,7 +1,7 @@
+import type ModuleInstance from './index.js'
 import { type CompanionFeedbackDefinitions, type CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import type { ZoomConfig } from './config.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { type InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
+import { userExist, colorRed, getUserFromName } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -40,7 +40,7 @@ export enum feedbackType {
 	offline,
 }
 
-export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
+export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinitions {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })

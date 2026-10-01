@@ -1,6 +1,6 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 type OscArgument = {
@@ -34,16 +34,19 @@ export enum ActionIdCustom {
 	customCommandWithArguments = 'customCommandWithArguments',
 }
 
-export function GetActionsCustom(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdCustom]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdCustom]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaCustom = {
+	[ActionIdCustom.customCommand]: { options: { path: string } }
+	[ActionIdCustom.customCommandWithArguments]: { options: { path: string; customArgs: string } }
+}
+
+export function GetActionsCustom(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaCustom> {
+	const actions: CompanionActionDefinitions<ActionsSchemaCustom> = {
 		[ActionIdCustom.customCommand]: {
 			name: 'Custom command',
-			options: [options.path],
-			callback: async (action): Promise<void> => {
+			options: [options.pathWithVariables],
+			callback: (action): void => {
 				// type: 'Special'
-				const customPath = await instance.parseVariablesInString(action.options.path as string)
+				const customPath = action.options.path
 				// Did they try a JSON object?
 				if (customPath.startsWith('{')) {
 					try {
@@ -82,17 +85,17 @@ export function GetActionsCustom(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [options.path, options.customArgs],
 			callback: (action): void => {
 				// type: 'Special'
-				const command = createCommand(instance, action.options.path as string)
+				const command = createCommand(instance, action.options.path)
 				try {
-					const parsedArgument = JSON.parse(action.options.customArgs as string) as unknown
+					const parsedArgument = JSON.parse(action.options.customArgs) as unknown
 					if (!isOscArgument(parsedArgument)) {
-						instance.log('error', `Invalid custom argument shape: ${action.options.customArgs as string}`)
+						instance.log('error', `Invalid custom argument shape: ${action.options.customArgs}`)
 						return
 					}
 
 					command.args.push(parsedArgument)
 				} catch (error) {
-					instance.log('error', `Not a JSON value, ${action.options.customArgs as string}. Error: ${error}`)
+					instance.log('error', `Not a JSON value, ${action.options.customArgs}. Error: ${error}`)
 					return
 				}
 

@@ -1,8 +1,8 @@
+import type ModuleInstance from '../index.js'
 import { FeedbackId } from '../feedback.js'
-import { type InstanceBaseExt, colorBlack, colorGreenOlive, colorRed } from '../utils.js'
+import { colorBlack, colorGreenOlive, colorRed } from '../utils.js'
 import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
-import type { ZoomConfig } from '../config.js'
 
 export enum PresetIdZoomISOSelections {
 	applyOutput = 'Apply_Output',
@@ -11,7 +11,7 @@ export enum PresetIdZoomISOSelections {
 	selectChannel = 'Select_Channel',
 }
 
-export function GetPresetsZoomISOSelections(instance: InstanceBaseExt<ZoomConfig>): {
+export function GetPresetsZoomISOSelections(instance: ModuleInstance): {
 	[id in PresetIdZoomISOSelections]: CompanionPresetExt | undefined
 } {
 	/**

@@ -1,9 +1,8 @@
+import type ModuleInstance from './index.js'
 import { got } from 'got-cjs' // named import: under ESM the default import is the CommonJS exports object
-import type { InstanceBaseExt } from './utils.js'
-import type { ZoomConfig } from './config.js'
 
 export class socialStreamApi {
-	static postMessage = async (name: string, message: string, instance: InstanceBaseExt<ZoomConfig>): Promise<void> => {
+	static postMessage = async (name: string, message: string, instance: ModuleInstance): Promise<void> => {
 		if (
 			instance.config.enableSocialStream &&
 			instance.config.socialStreamId.length > 0 &&

@@ -1,6 +1,6 @@
+import type ModuleInstance from '../index.js'
 import type { CompanionVariableValues } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, padding, userExist } from '../utils.js'
+import { padding, userExist } from '../utils.js'
 
 enum engineState {
 	disabled = 'disabled',
@@ -9,21 +9,21 @@ enum engineState {
 }
 
 export function updateHandRaisedCountVariable(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['handRaisedCount'] = Object.values(instance.ZoomUserData).filter((user) => user.handRaised).length
 }
 
 export function updateVideoOnCountVariable(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['videoOnCount'] = Object.values(instance.ZoomUserData).filter((user) => user.videoOn).length
 }
 
 export function updateActiveSpeakerVariable(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['activeSpeaker'] = instance.ZoomClientDataObj.activeSpeaker
@@ -31,14 +31,14 @@ export function updateActiveSpeakerVariable(
 }
 
 export function updateIsSpeakingVariable(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['isSpeaking'] = instance.ZoomClientDataObj.isSpeaking
 }
 
 export function updateHostGroupVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	updateGroupVariables(instance, variables, 0)
@@ -49,14 +49,14 @@ export function updateSpotlightGroupInitalizedVariable(variables: CompanionVaria
 }
 
 export function updateSpotlightGroupVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	updateGroupVariables(instance, variables, 1)
 }
 
 export function updateZoomIsoEngineVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	if (instance.ZoomClientDataObj.engineState === -1) {
@@ -75,7 +75,7 @@ export function updateZoomIsoEngineVariables(
 }
 
 export function updateZoomIsoOutputVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	for (const key in instance.ZoomOutputData) {
@@ -132,7 +132,7 @@ export function updateZoomIsoOutputVariables(
 }
 
 export function updateZoomIsoAudioRoutingVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	for (const key in instance.ZoomAudioRoutingData) {
@@ -145,7 +145,7 @@ export function updateZoomIsoAudioRoutingVariables(
 }
 
 export function updateZoomIsoAudioLevelVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	for (const key in instance.ZoomAudioLevelData) {
@@ -157,7 +157,7 @@ export function updateZoomIsoAudioLevelVariables(
 }
 
 export function updateSelectedCallersVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	if (instance.ZoomClientDataObj.selectedCallers.length === 0) {
@@ -185,7 +185,7 @@ export function updateSelectedCallersVariables(
 }
 
 export function updateGroupVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 	index: number,
 ): void {
@@ -210,14 +210,14 @@ export function updateGroupVariables(
 }
 
 export function updateGalleryCountVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['galleryCount'] = instance.ZoomClientDataObj.galleryCount
 }
 
 export function updateGalleryVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	for (let index = 1; index < 50; index++) {
@@ -231,7 +231,7 @@ export function updateGalleryVariables(
 }
 
 export function updateAllGroupVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	// This covers all groups including host (group 0) and spotlight (group 1)
@@ -241,7 +241,7 @@ export function updateAllGroupVariables(
 }
 
 export function updateZoomParticipantVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	if (instance.config.enableVariablesForParticipants) {
@@ -255,7 +255,7 @@ export function updateZoomParticipantVariables(
 }
 
 export function updateZoomUserVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	if (instance.config.enableVariablesForEachUser) {
@@ -270,7 +270,7 @@ export function updateZoomUserVariables(
 }
 
 export function updateAllUserBasedVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	updateAllGroupVariables(instance, variables)
@@ -284,7 +284,7 @@ export function updateAllUserBasedVariables(
 }
 
 export function updateCallStatusVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	variables: CompanionVariableValues,
 ): void {
 	variables['callStatusNumber'] = instance.ZoomClientDataObj.callStatus
@@ -294,19 +294,19 @@ export function updateCallStatusVariables(
 			: 'In meeting'
 }
 
-export function updateZoomOscVersion(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
+export function updateZoomOscVersion(instance: ModuleInstance, variables: CompanionVariableValues): void {
 	variables['zoomVersion'] = instance.ZoomClientDataObj.zoomOSCVersion
 }
 
-export function updateIsProVariable(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
+export function updateIsProVariable(instance: ModuleInstance, variables: CompanionVariableValues): void {
 	variables['isPro'] = instance.ZoomClientDataObj.isPro
 }
 
-export function updateNumberOfUsers(instance: InstanceBaseExt<ZoomConfig>, variables: CompanionVariableValues): void {
+export function updateNumberOfUsers(instance: ModuleInstance, variables: CompanionVariableValues): void {
 	variables['numberOfUsers'] = Object.keys(instance.ZoomUserData).length
 }
 
-export function updateVariableValues(instance: InstanceBaseExt<ZoomConfig>): void {
+export function updateVariableValues(instance: ModuleInstance): void {
 	// instance.log('debug', `updateVariableValues ${new Date()}`)
 	const variables: CompanionVariableValues = {
 		numberOfGroups: instance.ZoomClientDataObj.numberOfGroups,

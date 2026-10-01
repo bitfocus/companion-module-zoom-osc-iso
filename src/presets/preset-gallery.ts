@@ -1,3 +1,4 @@
+import type ModuleInstance from '../index.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
 import {
 	type CompanionPresetExt,
@@ -10,10 +11,9 @@ import {
 
 export type PresetIdListGallery = `Gallery_position_${number}`
 import { ActionIdGallery } from '../actions/action-gallery.js'
-import { type InstanceBaseExt, padding } from '../utils.js'
-import type { ZoomConfig } from '../config.js'
+import { padding } from '../utils.js'
 
-export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): {
+export function GetPresetsListGallery(instance: ModuleInstance): {
 	[id: PresetIdListGallery]: CompanionPresetExt | undefined
 } {
 	const presets: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = {}

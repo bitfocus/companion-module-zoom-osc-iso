@@ -1,16 +1,19 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdZoomISORecordingConsent {
 	acceptRecordingConsent = 'accept_Recording_Consent',
 }
 
-export function GetActionsZoomISORecordingConsent(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdZoomISORecordingConsent]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdZoomISORecordingConsent]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaZoomISORecordingConsent = {
+	[ActionIdZoomISORecordingConsent.acceptRecordingConsent]: { options: Record<string, never> }
+}
+
+export function GetActionsZoomISORecordingConsent(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaZoomISORecordingConsent> {
+	const actions: CompanionActionDefinitions<ActionsSchemaZoomISORecordingConsent> = {
 		[ActionIdZoomISORecordingConsent.acceptRecordingConsent]: {
 			name: 'Accept Recording Consent',
 			options: [],

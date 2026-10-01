@@ -1,6 +1,6 @@
+import type ModuleInstance from './index.js'
 import type { CompanionPresetDefinitions } from '@companion-module/base'
 
-import type { InstanceBaseExt } from './utils.js'
 import type { CompanionPresetExt } from './presets/preset-utils.js'
 import { type PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
 import { type PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
@@ -26,9 +26,8 @@ import { PresetIdSharing, GetPresetsSharing } from './presets/preset-sharing.js'
 import { PresetIdBreakout, GetPresetsBreakout } from './presets/preset-breakout.js'
 import { PresetIdRecording, GetPresetsRecording } from './presets/preset-recording.js'
 import { PresetIdDataCustom, GetPresetsDataCustom } from './presets/preset-data-custom.js'
-import type { ZoomConfig } from './config.js'
 
-export function GetPresetList(instance: InstanceBaseExt<ZoomConfig>): CompanionPresetDefinitions {
+export function GetPresetList(instance: ModuleInstance): CompanionPresetDefinitions {
 	const presetsParticipants: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } =
 		GetPresetsListParticipants(instance)
 

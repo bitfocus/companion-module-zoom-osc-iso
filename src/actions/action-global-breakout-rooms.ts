@@ -1,6 +1,6 @@
-import type { CompanionActionDefinition } from '@companion-module/base'
-import type { ZoomConfig } from '../config.js'
-import { type InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalBreakoutRooms {
@@ -14,10 +14,31 @@ export enum ActionIdGlobalBreakoutRooms {
 	broadcastMessageToBreakoutRooms = 'broadcastMessageToBreakoutRooms',
 }
 
-export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobalBreakoutRooms]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobalBreakoutRooms = {
+	[ActionIdGlobalBreakoutRooms.openBreakoutRooms]: { options: Record<string, never> }
+	[ActionIdGlobalBreakoutRooms.closeBreakoutRooms]: { options: Record<string, never> }
+	[ActionIdGlobalBreakoutRooms.deleteAllBreakoutRooms]: { options: Record<string, never> }
+	[ActionIdGlobalBreakoutRooms.requestListOfBreakoutRooms]: { options: Record<string, never> }
+	[ActionIdGlobalBreakoutRooms.configureBreakoutRooms]: {
+		options: {
+			postCloseSeconds: number
+			allowChooseBreakout: number
+			allowReturnAtWill: number
+			autoMoveParticipants: number
+			useTimer: number
+			closeWithTimer: number
+			breakoutDurrationSeconds: number
+		}
+	}
+	[ActionIdGlobalBreakoutRooms.createBreakoutRoom]: { options: { name: string } }
+	[ActionIdGlobalBreakoutRooms.deleteBreakoutRoom]: { options: { name: string } }
+	[ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms]: { options: { message: string } }
+}
+
+export function GetActionsGlobalBreakoutRooms(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaGlobalBreakoutRooms> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobalBreakoutRooms> = {
 		[ActionIdGlobalBreakoutRooms.openBreakoutRooms]: {
 			name: 'Open Breakout Rooms (PRO)',
 			options: [],
@@ -116,10 +137,10 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 		[ActionIdGlobalBreakoutRooms.createBreakoutRoom]: {
 			name: 'Create Breakout Room (PRO)',
 			options: [options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Global'
 				const command = createCommand(instance, '/createBreakout')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = action.options.name
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalBreakoutRooms.createBreakoutRoom,
@@ -134,10 +155,10 @@ export function GetActionsGlobalBreakoutRooms(instance: InstanceBaseExt<ZoomConf
 		[ActionIdGlobalBreakoutRooms.deleteBreakoutRoom]: {
 			name: 'Delete Breakout Room (PRO)',
 			options: [options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Global'
 				const command = createCommand(instance, '/deleteBreakout')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
+				const newName = action.options.name
 				command.args.push({ type: 's', value: newName })
 				const sendToCommand = {
 					id: ActionIdGlobalBreakoutRooms.deleteBreakoutRoom,
