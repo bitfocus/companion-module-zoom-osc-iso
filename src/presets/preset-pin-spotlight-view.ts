@@ -1,6 +1,7 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserSpotlight } from '../actions/action-user-spotlight.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdUserPin } from '../actions/action-user-pin.js'
 import { ActionIdUserView } from '../actions/action-user-view.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
@@ -29,15 +30,15 @@ export enum PresetIdPinSpotlightViewActions {
 }
 
 export function GetPresetsPinSpotlightViewActions(): {
-	[id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined } = {
+	const presets: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Pin/Spotlight & View Actions
 		 */
 		[PresetIdPinSpotlightViewActions.pin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Pin',
 			style: {
 				text: 'Pin',
@@ -50,7 +51,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.pin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -59,8 +60,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.addPin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'add_Pin',
 			style: {
 				text: 'Add Pin',
@@ -73,7 +73,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.addPin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -82,8 +82,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unPin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'un_Pin',
 			style: {
 				text: 'Un Pin',
@@ -96,7 +95,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.unpin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -105,8 +104,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.togglePin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Pin',
 			style: {
 				text: 'Toggle Pin',
@@ -119,7 +117,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.togglePin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -128,8 +126,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.pinScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Pin_Screen_2',
 			style: {
 				text: 'Pin Screen 2',
@@ -142,7 +139,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.pin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -151,8 +148,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unPinScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'UnPin_Screen_2',
 			style: {
 				text: 'Un Pin Screen 2',
@@ -165,7 +161,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.unPin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -174,8 +170,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.toggleScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Screen_2',
 			style: {
 				text: 'Toggle Pin Screen 2',
@@ -188,7 +183,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserPin.togglePin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -197,8 +192,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.clearPins]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Clear_Pins',
 			style: {
 				text: 'Clear Pins',
@@ -220,8 +214,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.spotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Spotlight',
 			style: {
 				text: 'Single Spotlight',
@@ -234,7 +227,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.spotLight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -243,8 +236,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.addSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Add_Spotlight',
 			style: {
 				text: 'Add to Spotlight',
@@ -257,7 +249,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.addSpotlight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -266,8 +258,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Un_Spotlight',
 			style: {
 				text: 'Un Spotlight',
@@ -280,7 +271,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.unSpotLight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -289,8 +280,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.toggleSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Spotlight',
 			style: {
 				text: 'Toggle Spotlight',
@@ -303,7 +293,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.toggleSpotlight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -312,8 +302,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.clearSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Clear_Spotlight',
 			style: {
 				text: 'Clear Spotlight',
@@ -335,8 +324,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.setGalleryView]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Set_Gallery_View',
 			style: {
 				text: 'Set Gallery View',
@@ -358,8 +346,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.setSpeakerView]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Set_Speaker_View',
 			style: {
 				text: 'Set Speaker View',
@@ -381,8 +368,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.nextGalleryPage]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Next_Gallery_Page',
 			style: {
 				text: 'Next Gallery Page',
@@ -404,8 +390,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.previousGalleryPage]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Previous_Gallery_Page',
 			style: {
 				text: 'Previous Gallery Page',
@@ -427,8 +412,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.showNonVideoParticipants]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Show_Non_Video_Participants',
 			style: {
 				text: 'Show Non Video Participants',
@@ -450,8 +434,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.hideNonVideoParticipants]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Hide_Non_Video_Participants',
 			style: {
 				text: 'Hide Non Video Participants',
@@ -473,5 +456,18 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'pin_spotlight_view',
+		name: 'Pin/Spotlight & View Actions',
+		definitions: [
+			{
+				id: 'pin_spotlight_view_buttons',
+				type: 'simple',
+				name: 'Pin/Spotlight & View Actions',
+				presets: Object.values(PresetIdPinSpotlightViewActions),
+			},
+		],
+	}
+
+	return { section, presets }
 }

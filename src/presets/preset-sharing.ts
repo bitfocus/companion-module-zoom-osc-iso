@@ -1,6 +1,7 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import type { CompanionPresetExt } from './preset-utils.js'
 
 export enum PresetIdSharing {
 	screenShare = 'Screen_Share',
@@ -14,14 +15,16 @@ export enum PresetIdSharing {
 	disableOptimizeForVideo = 'Disable_Optimize_for_Video',
 }
 
-export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdSharing]: CompanionPresetExt | undefined } = {
+export function GetPresetsSharing(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdSharing]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Sharing Actions
 		 */
 		[PresetIdSharing.screenShare]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Screen_Share`,
 			style: {
 				text: `Screen Share`,
@@ -34,7 +37,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 					down: [
 						{
 							actionId: ActionIdUserScreenshare.startScreenShare,
-							options: {},
+							options: { id: 0 },
 						},
 					],
 					up: [],
@@ -43,8 +46,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.stopShare]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Stop_Share`,
 			style: {
 				text: `Stop Share`,
@@ -66,8 +68,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.screenSharePrimary]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Screen_Share_Primary`,
 			style: {
 				text: `Screen Share Primary`,
@@ -89,8 +90,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.shareWindow]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Share_Window`,
 			style: {
 				text: `Share Window`,
@@ -103,7 +103,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 					down: [
 						{
 							actionId: ActionIdUserScreenshare.startShareWithWindow,
-							options: {},
+							options: { id: 0 },
 						},
 					],
 					up: [],
@@ -112,8 +112,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.shareCamera]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Share_Camera`,
 			style: {
 				text: `Share Camera`,
@@ -135,8 +134,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.shareAudio]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Share_Audio`,
 			style: {
 				text: `Share Audio`,
@@ -149,7 +147,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 					down: [
 						{
 							actionId: ActionIdUserScreenshare.startAudioShare,
-							options: {},
+							options: { id: 0 },
 						},
 					],
 					up: [],
@@ -158,8 +156,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.cycleSharedCamera]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Cycle_Shared_Camera`,
 			style: {
 				text: `Cycle Shared Camera`,
@@ -181,8 +178,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.enableOptimizeForVideo]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Enable Optimize for Video`,
 			style: {
 				text: `Enable Optimize for Video`,
@@ -204,8 +200,7 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 		[PresetIdSharing.disableOptimizeForVideo]: {
-			type: 'button',
-			category: 'Sharing Actions',
+			type: 'simple',
 			name: `Disable_Optimize_for_Video`,
 			style: {
 				text: `Disable Optimize for Video`,
@@ -227,5 +222,13 @@ export function GetPresetsSharing(): { [id in PresetIdSharing]: CompanionPresetE
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'sharing',
+		name: 'Sharing Actions',
+		definitions: [
+			{ id: 'sharing_buttons', type: 'simple', name: 'Sharing Actions', presets: Object.values(PresetIdSharing) },
+		],
+	}
+
+	return { section, presets }
 }

@@ -1,9 +1,14 @@
+import type {
+	CompanionPresetDefinitions,
+	CompanionPresetGroup,
+	CompanionPresetSection,
+	SomePresetSimpleFeedbackEntry,
+} from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import type ModuleInstance from '../index.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
 import { colorBlack, colorLightGray, type ZoomGroupDataInterface } from '../utils.js'
 import {
-	type CompanionPresetExt,
-	type PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
@@ -23,19 +28,30 @@ export enum PresetIdGroups {
 	groupPosition = 'Group',
 }
 
+/**
+ * Group presets. The PresetIdGroups values are id prefixes; the ids themselves include the group name or index.
+ */
 export function GetPresetsGroups(instance: ModuleInstance): {
-	[id in PresetIdGroups]: CompanionPresetExt | undefined
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets = {} as { [id in PresetIdGroups]: CompanionPresetExt | undefined }
+	const presets: CompanionPresetDefinitions<ModuleSchema> = {}
+	// v1 category "Manage Selections of Groups"
+	const manageIds: string[] = []
+	// v1 categories "Select <group name> participants", one per group
+	const positionGroups: CompanionPresetGroup<ModuleSchema>[] = []
+	const listIn = (list: string[], id: string): string => {
+		list.push(id)
+		return id
+	}
 
 	const ZoomGroupData: ZoomGroupDataInterface[] = instance.ZoomGroupData
 
 	// Group presets
 	for (let index = 0; index < ZoomGroupData.length; index++) {
 		if (index !== 0 && index !== 1) {
-			presets[`Replace_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Replace_group_${ZoomGroupData[index].groupName}`)] = {
+				type: 'simple',
 				name: `Replace ${ZoomGroupData[index].groupName} participants`,
 				style: {
 					text: `Replace\\n$(zoomosc:Group${index})\\nparticip.`,
@@ -49,7 +65,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.addToGroup,
 								options: {
-									group: index,
+									group: String(index),
 									groupOption: 'replace',
 								},
 							},
@@ -59,9 +75,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Add_to_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Add_to_group_${ZoomGroupData[index].groupName}`)] = {
+				type: 'simple',
 				name: `Add to group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Add to group:\\n$(zoomosc:Group${index})`,
@@ -75,7 +90,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.addToGroup,
 								options: {
-									group: index,
+									group: String(index),
 									groupOption: 'add',
 								},
 							},
@@ -85,9 +100,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Clear_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Clear_group_${ZoomGroupData[index].groupName}`)] = {
+				type: 'simple',
 				name: `Clear group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Clear group:\\n$(zoomosc:Group${index})`,
@@ -101,7 +115,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.clearGroup,
 								options: {
-									group: index,
+									group: String(index),
 								},
 							},
 						],
@@ -110,9 +124,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Remove_from_group_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Remove_from_group_${ZoomGroupData[index].groupName}`)] = {
+				type: 'simple',
 				name: `Remove_from group: ${ZoomGroupData[index].groupName}`,
 				style: {
 					text: `Remove from\\n$(zoomosc:Group${index})`,
@@ -126,7 +139,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.removeFromGroup,
 								options: {
-									group: index,
+									group: String(index),
+									userName: '',
 								},
 							},
 						],
@@ -135,9 +149,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Save_${ZoomGroupData[index].groupName}_To_File` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Save_${ZoomGroupData[index].groupName}_To_File`)] = {
+				type: 'simple',
 				name: ZoomGroupData[index].groupName,
 				style: {
 					text: `Save\\n$(zoomosc:Group${index})`,
@@ -151,7 +164,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.saveGroupToFile,
 								options: {
-									group: index,
+									group: String(index),
 									filepath: '',
 								},
 							},
@@ -161,9 +174,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Load_${ZoomGroupData[index].groupName}_To_File` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Load_${ZoomGroupData[index].groupName}_To_File`)] = {
+				type: 'simple',
 				name: ZoomGroupData[index].groupName,
 				style: {
 					text: `Load\\n$(zoomosc:Group${index})`,
@@ -177,7 +189,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.loadGroupFromFile,
 								options: {
-									group: index,
+									group: String(index),
 									filepath: '',
 								},
 							},
@@ -187,9 +199,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				],
 				feedbacks: [],
 			}
-			presets[`Rename_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-				type: 'button',
-				category: 'Manage Selections of Groups',
+			presets[listIn(manageIds, `Rename_${ZoomGroupData[index].groupName}`)] = {
+				type: 'simple',
 				name: ZoomGroupData[index].groupName,
 				style: {
 					text: `Rename\\nGroup\\n$(zoomosc:Group${index})`,
@@ -203,7 +214,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 							{
 								actionId: ActionIdGroups.renameGroup,
 								options: {
-									group: index,
+									group: String(index),
 									name: ZoomGroupData[index].groupName,
 								},
 							},
@@ -215,9 +226,8 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 			}
 		}
 
-		presets[`Select_${ZoomGroupData[index].groupName}` as PresetIdGroups] = {
-			type: 'button',
-			category: `Manage Selections of Groups`,
+		presets[listIn(manageIds, `Select_${ZoomGroupData[index].groupName}`)] = {
+			type: 'simple',
 			name: ZoomGroupData[index].groupName,
 			style: {
 				text: `Select\\n$(zoomosc:Group${index}) ($(zoomosc:CallersInGroup${index}))`,
@@ -231,7 +241,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 						{
 							actionId: ActionIdGroups.selectGroup,
 							options: {
-								group: index,
+								group: String(index),
 							},
 						},
 					],
@@ -241,16 +251,17 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 			feedbacks: [],
 		}
 
+		const positionIds: string[] = []
 		for (let position = 1; position <= 1000; position++) {
 			if (index == 1 && position > 9) {
 				break
 			}
 
-			const groupFeedbacks: PresetFeedbackDefinition = [
+			const groupFeedbacks: SomePresetSimpleFeedbackEntry<ModuleSchema>[] = [
 				{
 					feedbackId: FeedbackId.groupBased,
 					options: {
-						group: index,
+						group: String(index),
 						position: position,
 						type: feedbackType.spotlightOn,
 					},
@@ -259,7 +270,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				{
 					feedbackId: FeedbackId.groupBased,
 					options: {
-						group: index,
+						group: String(index),
 						position: position,
 						type: feedbackType.selected,
 					},
@@ -271,7 +282,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				groupFeedbacks.push({
 					feedbackId: FeedbackId.groupBased,
 					options: {
-						group: index,
+						group: String(index),
 						position: position,
 						type: feedbackType.activeSpeaker,
 					},
@@ -282,14 +293,13 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 			groupFeedbacks.push({
 				feedbackId: FeedbackId.groupBasedAdvanced,
 				options: {
-					group: index,
+					group: String(index),
 					position: position,
 				},
 			})
 
-			presets[`Group${index}_Position${position}` as PresetIdGroups] = {
-				type: 'button',
-				category: `Select ${ZoomGroupData[index].groupName} participants`,
+			presets[listIn(positionIds, `Group${index}_Position${position}`)] = {
+				type: 'simple',
 				name: 'Group selection',
 				style: getParticipantStyleDefault(instance, `$(zoomosc:Group${index}Position${position})`, position),
 				steps: [
@@ -297,7 +307,7 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 						down: [
 							{
 								actionId: ActionIdGroups.selectUserFromGroupPosition,
-								options: { group: index, position: position, option: 'toggle' },
+								options: { group: String(index), position: String(position), option: 'toggle' },
 							},
 						],
 						up: [],
@@ -306,6 +316,26 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 				feedbacks: groupFeedbacks,
 			}
 		}
+		if (positionIds.length > 0) {
+			positionGroups.push({
+				id: `groups_group${index}_positions`,
+				type: 'simple',
+				name: `Select ${ZoomGroupData[index].groupName} participants`,
+				presets: positionIds,
+			})
+		}
 	}
-	return presets
+
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'groups',
+		name: 'Groups',
+		definitions: [
+			...(manageIds.length > 0
+				? [{ id: 'groups_manage', type: 'simple' as const, name: 'Manage Selections of Groups', presets: manageIds }]
+				: []),
+			...positionGroups,
+		],
+	}
+
+	return { section, presets }
 }

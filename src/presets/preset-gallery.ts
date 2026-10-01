@@ -1,25 +1,36 @@
+import type {
+	CompanionPresetDefinitions,
+	CompanionPresetSection,
+	SomePresetSimpleFeedbackEntry,
+} from '@companion-module/base'
 import type ModuleInstance from '../index.js'
+import type { ModuleSchema } from '../index.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
 import {
-	type CompanionPresetExt,
-	type PresetFeedbackDefinition,
 	getFeedbackStyleSelected,
 	getFeedbackStyleSpotlight,
 	getParticipantStyleActiveSpeaker,
 	getParticipantStyleDefault,
 } from './preset-utils.js'
-
-export type PresetIdListGallery = `Gallery_position_${number}`
 import { ActionIdGallery } from '../actions/action-gallery.js'
 import { padding } from '../utils.js'
 
+export type PresetIdListGallery = `Gallery_position_${number}`
+
+/**
+ * Select from Gallery: one preset per gallery position.
+ * The style text builds a variable name from the position, so this stays a loop of simple presets
+ * rather than a template group.
+ */
 export function GetPresetsListGallery(instance: ModuleInstance): {
-	[id: PresetIdListGallery]: CompanionPresetExt | undefined
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = {}
+	const presets: { [id: PresetIdListGallery]: CompanionPresetDefinitions<ModuleSchema>[string] } = {}
+	const ids: PresetIdListGallery[] = []
 
 	for (let index = 1; index < 50; index++) {
-		const galleryFeedbacks: PresetFeedbackDefinition = [
+		const galleryFeedbacks: SomePresetSimpleFeedbackEntry<ModuleSchema>[] = [
 			{
 				feedbackId: FeedbackId.galleryBased,
 				options: {
@@ -56,9 +67,10 @@ export function GetPresetsListGallery(instance: ModuleInstance): {
 			},
 		})
 
-		presets[`Gallery_position_${index}`] = {
-			type: 'button',
-			category: 'Select from Gallery',
+		const id: PresetIdListGallery = `Gallery_position_${index}`
+		ids.push(id)
+		presets[id] = {
+			type: 'simple',
 			name: `$(zoomosc:Gallery position ${index})`,
 			style: getParticipantStyleDefault(instance, `$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
 			steps: [
@@ -67,7 +79,8 @@ export function GetPresetsListGallery(instance: ModuleInstance): {
 						{
 							actionId: ActionIdGallery.selectFromGalleryPosition,
 							options: {
-								position: index,
+								// the position dropdown uses string ids
+								position: String(index),
 								option: 'toggle',
 							},
 						},
@@ -79,5 +92,11 @@ export function GetPresetsListGallery(instance: ModuleInstance): {
 		}
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'gallery',
+		name: 'Select from Gallery',
+		definitions: [{ id: 'gallery_positions', type: 'simple', name: 'Select from Gallery', presets: ids }],
+	}
+
+	return { section, presets }
 }

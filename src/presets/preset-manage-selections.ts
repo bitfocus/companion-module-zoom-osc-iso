@@ -1,5 +1,7 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { FeedbackId, feedbackType } from '../feedback.js'
-import { type CompanionPresetExt, alignmentTopLeft } from './preset-utils.js'
+import { alignmentTopLeft } from './preset-utils.js'
 import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 
@@ -15,14 +17,16 @@ export enum PresetIdManageSelections {
 	saveParticipants = 'save_participants',
 }
 
-export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } = {
+export function GetPresetsManageSelections(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdManageSelections]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Manage Selections & Groups
 		 */
 		[PresetIdManageSelections.restorePreviousSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Restore Previous Selection`,
 			style: {
 				text: `Restore Previous Selection`,
@@ -40,8 +44,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		//clear selection
 		[PresetIdManageSelections.clearParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Clear Selections`,
 			style: {
 				text: `Clear Selections ($(zoomosc:selectedNumberOfCallers))`,
@@ -59,8 +62,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Selection method
 		[PresetIdManageSelections.toggleSelectionMethod]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Selection Method`,
 			style: {
 				text: `Toggle Selection Method`,
@@ -92,8 +94,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Single selection
 		[PresetIdManageSelections.singleSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Single selection`,
 			style: {
 				text: `Single selection`,
@@ -106,8 +107,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Select by name
 		[PresetIdManageSelections.selectByName]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Select by name`,
 			style: {
 				text: `Select by name`,
@@ -116,7 +116,9 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 				bgcolor: colorBlack,
 				alignment: alignmentTopLeft,
 			},
-			steps: [{ down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle' } }], up: [] }],
+			steps: [
+				{ down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: '' } }], up: [] },
+			],
 			feedbacks: [
 				{
 					feedbackId: FeedbackId.userNameBased,
@@ -130,21 +132,17 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 					},
 				},
 				{
+					// advanced feedback: v2 presets cannot carry a style for it (v1 ignored it)
 					feedbackId: FeedbackId.userNameBasedAdvanced,
 					options: {
 						name: '',
-					},
-					style: {
-						color: colorBlack,
-						bgcolor: colorLightGray,
 					},
 				},
 			],
 		},
 		// Multiple selection
 		[PresetIdManageSelections.multipleSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Multiple selection`,
 			style: {
 				text: `Multiple selection`,
@@ -169,8 +167,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Next participants
 		[PresetIdManageSelections.nextParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Next participants`,
 			style: {
 				text: `Next participants`,
@@ -195,8 +192,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Previous participants
 		[PresetIdManageSelections.previousParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Previous participants`,
 			style: {
 				text: `Previous participants`,
@@ -220,8 +216,7 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 			feedbacks: [],
 		},
 		[PresetIdManageSelections.saveParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Save Participant List`,
 			style: {
 				text: `Save Participants`,
@@ -247,5 +242,18 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'manage_selections',
+		name: 'Manage Selections of Participants',
+		definitions: [
+			{
+				id: 'manage_selections_buttons',
+				type: 'simple',
+				name: 'Manage Selections of Participants',
+				presets: Object.values(PresetIdManageSelections),
+			},
+		],
+	}
+
+	return { section, presets }
 }

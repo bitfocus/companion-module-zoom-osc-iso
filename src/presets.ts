@@ -1,116 +1,55 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
 import type ModuleInstance from './index.js'
-import type { CompanionPresetDefinitions } from '@companion-module/base'
+import type { ModuleSchema } from './index.js'
+import { GetPresetsListParticipants } from './presets/preset-participants.js'
+import { GetPresetsListGallery } from './presets/preset-gallery.js'
+import { GetPresetsManageSelections } from './presets/preset-manage-selections.js'
+import { GetPresetsGroups } from './presets/preset-groups.js'
+import { GetPresetsPinSpotlightViewActions } from './presets/preset-pin-spotlight-view.js'
+import { GetPresetsVideoAudioActions } from './presets/preset-video-audio-actions.js'
+import { GetPresetsZoomISOSelections } from './presets/preset-zoomiso-selections.js'
+import { GetPresetsZoomISOActions } from './presets/preset-zoomiso-actions.js'
+import { GetPresetsReactionName } from './presets/preset-reaction-name.js'
+import { GetPresetsRoleManagement } from './presets/preset-role-management.js'
+import { GetPresetsJoinLeaveEnd } from './presets/preset-join-leave-end.js'
+import { GetPresetsDeviceSettings } from './presets/preset-devices-settings.js'
+import { GetPresetsChat } from './presets/preset-chat.js'
+import { GetPresetsSharing } from './presets/preset-sharing.js'
+import { GetPresetsBreakout } from './presets/preset-breakout.js'
+import { GetPresetsRecording } from './presets/preset-recording.js'
+import { GetPresetsDataCustom } from './presets/preset-data-custom.js'
 
-import type { CompanionPresetExt } from './presets/preset-utils.js'
-import { type PresetIdListParticipants, GetPresetsListParticipants } from './presets/preset-participants.js'
-import { type PresetIdListGallery, GetPresetsListGallery } from './presets/preset-gallery.js'
-import { PresetIdManageSelections, GetPresetsManageSelections } from './presets/preset-manage-selections.js'
-import { PresetIdGroups, GetPresetsGroups } from './presets/preset-groups.js'
-import {
-	PresetIdPinSpotlightViewActions,
-	GetPresetsPinSpotlightViewActions,
-} from './presets/preset-pin-spotlight-view.js'
-import { PresetIdVideoAudioActions, GetPresetsVideoAudioActions } from './presets/preset-video-audio-actions.js'
-import { PresetIdZoomISOSelections, GetPresetsZoomISOSelections } from './presets/preset-zoomiso-selections.js'
-import { PresetIdZoomISOActions, GetPresetsZoomISOActions } from './presets/preset-zoomiso-actions.js'
-import {
-	PresetIdReactionName,
-	type DynamicReactionNamePresetId,
-	GetPresetsReactionName,
-} from './presets/preset-reaction-name.js'
-import { PresetIdRoleManagement, GetPresetsRoleManagement } from './presets/preset-role-management.js'
-import { PresetIdJoinLeaveEnd, GetPresetsJoinLeaveEnd } from './presets/preset-join-leave-end.js'
-import { PresetIdDeviceSettings, GetPresetsDeviceSettings } from './presets/preset-devices-settings.js'
-import { PresetIdChat, GetPresetsChat } from './presets/preset-chat.js'
-import { PresetIdSharing, GetPresetsSharing } from './presets/preset-sharing.js'
-import { PresetIdBreakout, GetPresetsBreakout } from './presets/preset-breakout.js'
-import { PresetIdRecording, GetPresetsRecording } from './presets/preset-recording.js'
-import { PresetIdDataCustom, GetPresetsDataCustom } from './presets/preset-data-custom.js'
+/**
+ * Registers every preset with Companion. Each category file returns one section and its presets;
+ * the order below is the order the sections appear in the Companion UI (the v1 category order).
+ * Call this after the action and feedback definitions are set.
+ */
+export function UpdatePresets(instance: ModuleInstance): void {
+	const categories = [
+		GetPresetsListParticipants(instance),
+		GetPresetsListGallery(instance),
+		GetPresetsManageSelections(),
+		GetPresetsGroups(instance),
+		GetPresetsPinSpotlightViewActions(),
+		GetPresetsVideoAudioActions(),
+		GetPresetsZoomISOSelections(instance),
+		GetPresetsZoomISOActions(instance),
+		GetPresetsReactionName(),
+		GetPresetsRoleManagement(),
+		GetPresetsJoinLeaveEnd(),
+		GetPresetsDeviceSettings(),
+		GetPresetsChat(),
+		GetPresetsSharing(),
+		GetPresetsBreakout(),
+		GetPresetsRecording(),
+		GetPresetsDataCustom(),
+	]
 
-export function GetPresetList(instance: ModuleInstance): CompanionPresetDefinitions {
-	const presetsParticipants: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } =
-		GetPresetsListParticipants(instance)
+	// a section whose groups would all be empty (e.g. no groups configured yet) is left out
+	const structure: CompanionPresetSection<ModuleSchema>[] = categories
+		.map((c) => c.section)
+		.filter((section) => section.definitions.length > 0)
+	const presets: CompanionPresetDefinitions<ModuleSchema> = Object.assign({}, ...categories.map((c) => c.presets))
 
-	const presetsGallery: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = GetPresetsListGallery(instance)
-
-	const presetsManageSelections: { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } =
-		GetPresetsManageSelections()
-
-	const presetsGroups: { [id in PresetIdGroups]: CompanionPresetExt | undefined } = GetPresetsGroups(instance)
-
-	const presetsPinSpotlightViewActions: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined } =
-		GetPresetsPinSpotlightViewActions()
-
-	const presetsVideoAudioActions: { [id in PresetIdVideoAudioActions]: CompanionPresetExt | undefined } =
-		GetPresetsVideoAudioActions()
-
-	const presetsZoomISOSelections: { [id in PresetIdZoomISOSelections]: CompanionPresetExt | undefined } =
-		GetPresetsZoomISOSelections(instance)
-
-	const presetsZoomISOActions: { [id in PresetIdZoomISOActions]: CompanionPresetExt | undefined } =
-		GetPresetsZoomISOActions(instance)
-
-	const presetsReactionNames: {
-		[id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined
-	} = GetPresetsReactionName(instance)
-
-	const presetsRoleManagement: { [id in PresetIdRoleManagement]: CompanionPresetExt | undefined } =
-		GetPresetsRoleManagement()
-
-	const presetsJoinLeaveEnd: { [id in PresetIdJoinLeaveEnd]: CompanionPresetExt | undefined } = GetPresetsJoinLeaveEnd()
-
-	const presetsDeviceSettings: { [id in PresetIdDeviceSettings]: CompanionPresetExt | undefined } =
-		GetPresetsDeviceSettings()
-
-	const presetChat: { [id in PresetIdChat]: CompanionPresetExt | undefined } = GetPresetsChat()
-
-	const presetSharing: { [id in PresetIdSharing]: CompanionPresetExt | undefined } = GetPresetsSharing()
-
-	const presetBreakout: { [id in PresetIdBreakout]: CompanionPresetExt | undefined } = GetPresetsBreakout()
-
-	const presetRecording: { [id in PresetIdRecording]: CompanionPresetExt | undefined } = GetPresetsRecording()
-
-	const presetDataCustom: { [id in PresetIdDataCustom]: CompanionPresetExt | undefined } = GetPresetsDataCustom()
-
-	const presets: {
-		[id in
-			| PresetIdRecording
-			| PresetIdManageSelections
-			| PresetIdGroups
-			| PresetIdPinSpotlightViewActions
-			| PresetIdVideoAudioActions
-			| PresetIdZoomISOSelections
-			| PresetIdZoomISOActions
-			| PresetIdReactionName
-			| DynamicReactionNamePresetId
-			| PresetIdRoleManagement
-			| PresetIdJoinLeaveEnd
-			| PresetIdDeviceSettings
-			| PresetIdChat
-			| PresetIdSharing
-			| PresetIdBreakout
-			| PresetIdDataCustom
-			| PresetIdListParticipants
-			| PresetIdListGallery]: CompanionPresetExt | undefined
-	} = {
-		...presetsParticipants,
-		...presetsGallery,
-		...presetsManageSelections,
-		...presetsGroups,
-		...presetsPinSpotlightViewActions,
-		...presetsVideoAudioActions,
-		...presetsZoomISOSelections,
-		...presetsZoomISOActions,
-		...presetsReactionNames,
-		...presetsRoleManagement,
-		...presetsJoinLeaveEnd,
-		...presetsDeviceSettings,
-		...presetChat,
-		...presetSharing,
-		...presetBreakout,
-		...presetRecording,
-		...presetDataCustom,
-	}
-
-	return presets as CompanionPresetDefinitions
+	instance.setPresetDefinitions(structure, presets)
 }

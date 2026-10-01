@@ -1,8 +1,7 @@
-import type ModuleInstance from '../index.js'
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
-import { type ZoomUserDataInterface, colorBlack, colorLightGray, colorTeal, userExist } from '../utils.js'
-import type { CompanionPresetExt } from './preset-utils.js'
-import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
+import { colorBlack, colorLightGray } from '../utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdReactionName {
@@ -12,15 +11,16 @@ export enum PresetIdReactionName {
 	lowerAllHands = 'Lower_All_Hands',
 }
 
-export type DynamicReactionNamePresetId = `Rename_Participant_${number}`
-
-export function GetPresetsReactionName(instance: ModuleInstance): {
-	[id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined
+// v1 also had a loop here that was meant to add one `Rename_Participant_<zoomId>` preset per participant,
+// but it read `instance.zoomUserData` (lower-case z), which never existed, so it never produced a preset.
+// It is left out of the v2 port so behaviour stays the same; see the migration report.
+export function GetPresetsReactionName(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets = {
+	const presets: { [id in PresetIdReactionName]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		[PresetIdReactionName.raiseHand]: {
-			type: 'button',
-			category: 'Reaction & Name Actions',
+			type: 'simple',
 			name: `Raise_Hand`,
 			style: {
 				text: `Raise Hand`,
@@ -33,7 +33,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 					down: [
 						{
 							actionId: ActionIdUserHandRaised.raiseHand,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -42,8 +42,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 			feedbacks: [],
 		},
 		[PresetIdReactionName.lowerHand]: {
-			type: 'button',
-			category: 'Reaction & Name Actions',
+			type: 'simple',
 			name: `Lower_Hand`,
 			style: {
 				text: `Lower Hand`,
@@ -56,7 +55,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 					down: [
 						{
 							actionId: ActionIdUserHandRaised.lowerHand,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -65,8 +64,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 			feedbacks: [],
 		},
 		[PresetIdReactionName.toggleHand]: {
-			type: 'button',
-			category: 'Reaction & Name Actions',
+			type: 'simple',
 			name: `Toggle_Hand`,
 			style: {
 				text: `Toggle Hand`,
@@ -79,7 +77,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 					down: [
 						{
 							actionId: ActionIdUserHandRaised.toggleHand,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -88,8 +86,7 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 			feedbacks: [],
 		},
 		[PresetIdReactionName.lowerAllHands]: {
-			type: 'button',
-			category: 'Reaction & Name Actions',
+			type: 'simple',
 			name: `Lower_All_Hands`,
 			style: {
 				text: `Lower All Hands`,
@@ -110,42 +107,19 @@ export function GetPresetsReactionName(instance: ModuleInstance): {
 			],
 			feedbacks: [],
 		},
-	} as { [id in PresetIdReactionName | DynamicReactionNamePresetId]: CompanionPresetExt | undefined }
-	const zoomUserData: ZoomUserDataInterface = instance.zoomUserData
-
-	// User selection
-	for (const key in zoomUserData) {
-		if (userExist(Number(key), zoomUserData)) {
-			const user = zoomUserData[key]
-			const dynamicPresetId: DynamicReactionNamePresetId = `Rename_Participant_${user.zoomId}`
-			presets[dynamicPresetId] = {
-				type: 'button',
-				category: 'Reaction & Name Actions',
-				name: user.userName,
-				style: {
-					text: `Rename\\n$(zoomosc:${user.zoomId})`,
-					size: '7',
-					color: colorBlack,
-					bgcolor: colorTeal,
-				},
-				steps: [
-					{
-						down: [
-							{
-								actionId: ActionIdUserRolesAndAction.rename,
-								options: {
-									user: user.zoomId,
-									name: user.userName,
-								},
-							},
-						],
-						up: [],
-					},
-				],
-				feedbacks: [],
-			}
-		}
+	}
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'reaction_name',
+		name: 'Reaction & Name Actions',
+		definitions: [
+			{
+				id: 'reaction_name_buttons',
+				type: 'simple',
+				name: 'Reaction & Name Actions',
+				presets: Object.values(PresetIdReactionName),
+			},
+		],
 	}
 
-	return presets
+	return { section, presets }
 }

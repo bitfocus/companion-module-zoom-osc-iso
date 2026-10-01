@@ -1,7 +1,8 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdGlobalWaitingRoomsAndZak } from '../actions/action-global-waitingrooms-and-zak.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import type { CompanionPresetExt } from './preset-utils.js'
 
 export enum PresetIdJoinLeaveEnd {
 	joinMeeting = 'Join_Meeting',
@@ -11,14 +12,16 @@ export enum PresetIdJoinLeaveEnd {
 	zakStartMeeting = 'ZAK_Start_Meeting',
 }
 
-export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdJoinLeaveEnd]: CompanionPresetExt | undefined } = {
+export function GetPresetsJoinLeaveEnd(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdJoinLeaveEnd]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Join/Leave/End Actions
 		 */
 		[PresetIdJoinLeaveEnd.joinMeeting]: {
-			type: 'button',
-			category: 'Join/Leave/End Actions',
+			type: 'simple',
 			name: `Join_Meeting`,
 			style: {
 				text: `Join Meeting`,
@@ -31,7 +34,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 					down: [
 						{
 							actionId: ActionIdGlobal.joinMeeting,
-							options: {},
+							options: { meetingID: '', password: '', name: '' },
 						},
 					],
 					up: [],
@@ -40,8 +43,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 			feedbacks: [],
 		},
 		[PresetIdJoinLeaveEnd.leaveMeeting]: {
-			type: 'button',
-			category: 'Join/Leave/End Actions',
+			type: 'simple',
 			name: `Leave_Meeting`,
 			style: {
 				text: `Leave Meeting`,
@@ -63,8 +65,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 			feedbacks: [],
 		},
 		[PresetIdJoinLeaveEnd.endMeeting]: {
-			type: 'button',
-			category: 'Join/Leave/End Actions',
+			type: 'simple',
 			name: `End_Meeting`,
 			style: {
 				text: `End Meeting`,
@@ -86,8 +87,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 			feedbacks: [],
 		},
 		[PresetIdJoinLeaveEnd.zakJoinMeeting]: {
-			type: 'button',
-			category: 'Join/Leave/End Actions',
+			type: 'simple',
 			name: `ZAK_Join_Meeting`,
 			style: {
 				text: `ZAK Join Meeting`,
@@ -100,7 +100,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 					down: [
 						{
 							actionId: ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting,
-							options: {},
+							options: { zak: '', meetingID: '', name: '' },
 						},
 					],
 					up: [],
@@ -109,8 +109,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 			feedbacks: [],
 		},
 		[PresetIdJoinLeaveEnd.zakStartMeeting]: {
-			type: 'button',
-			category: 'Join/Leave/End Actions',
+			type: 'simple',
 			name: `ZAK_Start_Meeting`,
 			style: {
 				text: `ZAK Start Meeting`,
@@ -123,7 +122,7 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 					down: [
 						{
 							actionId: ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting,
-							options: {},
+							options: { zak: '', meetingID: '', name: '' },
 						},
 					],
 					up: [],
@@ -133,5 +132,18 @@ export function GetPresetsJoinLeaveEnd(): { [id in PresetIdJoinLeaveEnd]: Compan
 		},
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'join_leave_end',
+		name: 'Join/Leave/End Actions',
+		definitions: [
+			{
+				id: 'join_leave_end_buttons',
+				type: 'simple',
+				name: 'Join/Leave/End Actions',
+				presets: Object.values(PresetIdJoinLeaveEnd),
+			},
+		],
+	}
+
+	return { section, presets }
 }

@@ -1,6 +1,7 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserVideoMic } from '../actions/action-user-video-mic.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import type { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdVideoAudioActions {
@@ -17,14 +18,16 @@ export enum PresetIdVideoAudioActions {
 	toggleMute = 'Toggle_mute',
 }
 
-export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioActions]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdVideoAudioActions]: CompanionPresetExt | undefined } = {
+export function GetPresetsVideoAudioActions(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdVideoAudioActions]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Video/Audio Actions
 		 */
 		[PresetIdVideoAudioActions.videoOn]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Video_On',
 			style: {
 				text: 'Turn Video On',
@@ -37,7 +40,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.turnVideoOn,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -46,8 +49,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.videoOff]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Video_Off',
 			style: {
 				text: 'Turn Video Off',
@@ -60,7 +62,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.turnVideoOff,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -69,8 +71,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.toggleVideo]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Toggle_Video',
 			style: {
 				text: 'Toggle Video State',
@@ -83,7 +84,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.toggleVideoState,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -92,8 +93,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.mute]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Mute',
 			style: {
 				text: 'Mute',
@@ -106,7 +106,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.mute,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -115,8 +115,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.unmute]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Mute_All',
 			style: {
 				text: 'Unmute',
@@ -129,7 +128,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.unmute,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -138,8 +137,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.muteAll]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Mute_All',
 			style: {
 				text: 'Mute all Except The Host',
@@ -161,8 +159,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.unmuteAll]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Unmute_All',
 			style: {
 				text: 'Unmute all',
@@ -184,8 +181,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.muteAllExcept]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'mute_all_except',
 			style: {
 				text: 'Mute All Except Selected',
@@ -198,7 +194,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdGlobal.muteAllExcept,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -207,8 +203,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.muteAllExceptHosts]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Mute all except Hosts',
 			style: {
 				text: 'Mute All Except All Hosts',
@@ -230,8 +225,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.muteAllExceptSpotlight]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Mute all except Spotlights',
 			style: {
 				text: 'Mute All Except Spotlight',
@@ -253,8 +247,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 		[PresetIdVideoAudioActions.toggleMute]: {
-			type: 'button',
-			category: 'Video/Audio Actions',
+			type: 'simple',
 			name: 'Toggle_mute',
 			style: {
 				text: 'Toggle mute',
@@ -267,7 +260,7 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 					down: [
 						{
 							actionId: ActionIdUserVideoMic.toggleMuteState,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -276,5 +269,18 @@ export function GetPresetsVideoAudioActions(): { [id in PresetIdVideoAudioAction
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'video_audio_actions',
+		name: 'Video/Audio Actions',
+		definitions: [
+			{
+				id: 'video_audio_actions_buttons',
+				type: 'simple',
+				name: 'Video/Audio Actions',
+				presets: Object.values(PresetIdVideoAudioActions),
+			},
+		],
+	}
+
+	return { section, presets }
 }

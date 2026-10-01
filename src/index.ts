@@ -2,7 +2,7 @@ import { InstanceBase, type SomeCompanionConfigField } from '@companion-module/b
 import { GetConfigFields, type ZoomConfig } from './config.js'
 import { UpdateActions, type ActionsSchema } from './actions.js'
 import { UpdateFeedbacks, type FeedbacksSchema } from './feedback.js'
-import { GetPresetList } from './presets.js'
+import { UpdatePresets } from './presets.js'
 import { OSC } from './osc.js'
 import type {
 	ZoomAudioLevelDataInterface,
@@ -174,12 +174,12 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 
 		UpdateActions(this)
 		UpdateFeedbacks(this)
-		this.setPresetDefinitions(GetPresetList(this))
+		UpdatePresets(this)
 	}
 
 	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
 		UpdateActions(this)
 		UpdateFeedbacks(this)
-		this.setPresetDefinitions(GetPresetList(this))
+		UpdatePresets(this)
 	}
 }
