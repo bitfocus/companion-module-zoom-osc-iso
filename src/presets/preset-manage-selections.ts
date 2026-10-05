@@ -1,8 +1,8 @@
 import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
 import type { ModuleSchema } from '../index.js'
-import { FeedbackId, feedbackType } from '../feedback.js'
-import { alignmentTopLeft } from './preset-utils.js'
-import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils.js'
+import { FeedbackId } from '../feedback.js'
+import { buildParticipantLayeredPreset } from './preset-utils.js'
+import { colorBlack, colorLightGray } from '../utils.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 
 export enum PresetIdManageSelections {
@@ -11,11 +11,17 @@ export enum PresetIdManageSelections {
 	toggleSelectionMethod = 'Toggle_Selection_Method',
 	singleSelection = 'Single_selection',
 	selectByName = 'Select_by_name',
+	activeSpeaker = 'Active_Speaker',
 	multipleSelection = 'Multiple_selection',
 	nextParticipants = 'Next_participants',
 	previousParticipants = 'Previous _participants',
 	saveParticipants = 'save_participants',
 }
+
+/** The Select by name button stores the participant name in this local variable */
+const localName = '$(local:name)'
+/** The name of whoever is currently speaking, kept up to date by the module */
+const activeSpeakerName = '$(zoomosc:activeSpeaker)'
 
 export function GetPresetsManageSelections(): {
 	section: CompanionPresetSection<ModuleSchema>
@@ -105,41 +111,31 @@ export function GetPresetsManageSelections(): {
 			steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
 			feedbacks: [],
 		},
-		// Select by name
-		[PresetIdManageSelections.selectByName]: {
-			type: 'simple',
-			name: `Select by name`,
-			style: {
-				text: `Select by name`,
-				size: '7',
-				color: colorWhite,
-				bgcolor: colorBlack,
-				alignment: alignmentTopLeft,
-			},
+		// Select by name: a layered participant button for the participant named in the button's `name` local variable
+		[PresetIdManageSelections.selectByName]: buildParticipantLayeredPreset({
+			name: 'Select by name',
+			nameExpression: `${localName} || 'Select by name'`,
+			target: { feedbackId: FeedbackId.userNameBased, options: { name: localName } },
 			steps: [
-				{ down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: '' } }], up: [] },
-			],
-			feedbacks: [
 				{
-					feedbackId: FeedbackId.userNameBased,
-					options: {
-						name: '',
-						type: feedbackType.selected,
-					},
-					style: {
-						color: colorBlack,
-						bgcolor: colorDarkGray,
-					},
-				},
-				{
-					// advanced feedback: v2 presets cannot carry a style for it (v1 ignored it)
-					feedbackId: FeedbackId.userNameBasedAdvanced,
-					options: {
-						name: '',
-					},
+					down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: localName } }],
+					up: [],
 				},
 			],
-		},
+			localVariables: [{ variableType: 'simple', variableName: 'name', startupValue: '' }],
+		}),
+		// Active Speaker: the same layered participant button for whoever is currently speaking
+		[PresetIdManageSelections.activeSpeaker]: buildParticipantLayeredPreset({
+			name: 'Active Speaker',
+			nameExpression: activeSpeakerName,
+			target: { feedbackId: FeedbackId.userNameBased, options: { name: activeSpeakerName } },
+			steps: [
+				{
+					down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: activeSpeakerName } }],
+					up: [],
+				},
+			],
+		}),
 		// Multiple selection
 		[PresetIdManageSelections.multipleSelection]: {
 			type: 'simple',
@@ -245,14 +241,7 @@ export function GetPresetsManageSelections(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'manage_selections',
 		name: 'Manage Selections of Participants',
-		definitions: [
-			{
-				id: 'manage_selections_buttons',
-				type: 'simple',
-				name: 'Manage Selections of Participants',
-				presets: Object.values(PresetIdManageSelections),
-			},
-		],
+		definitions: Object.values(PresetIdManageSelections),
 	}
 
 	return { section, presets }

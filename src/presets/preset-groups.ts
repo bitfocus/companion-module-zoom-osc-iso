@@ -1,20 +1,14 @@
-import type {
-	CompanionPresetDefinitions,
-	CompanionPresetGroup,
-	CompanionPresetSection,
-	SomePresetSimpleFeedbackEntry,
-} from '@companion-module/base'
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
 import type { ModuleSchema } from '../index.js'
 import type ModuleInstance from '../index.js'
-import { FeedbackId, feedbackType } from '../feedback.js'
+import { FeedbackId } from '../feedback.js'
 import { colorBlack, colorLightGray, type ZoomGroupDataInterface } from '../utils.js'
-import {
-	getFeedbackStyleSelected,
-	getFeedbackStyleSpotlight,
-	getParticipantStyleActiveSpeaker,
-	getParticipantStyleDefault,
-} from './preset-utils.js'
+import { buildParticipantTemplateSection, positionVariableExpression } from './preset-utils.js'
 import { ActionIdGroups } from '../actions/action-group.js'
+
+/** Positions listed per group; the Spotlights group (index 1) has always offered 9 */
+const groupPositions = 49
+const spotlightGroupPositions = 9
 
 export enum PresetIdGroups {
 	replaceGroup = 'Replace_group_',
@@ -30,16 +24,17 @@ export enum PresetIdGroups {
 
 /**
  * Group presets. The PresetIdGroups values are id prefixes; the ids themselves include the group name or index.
+ * Each v1 category is its own top-level section (no nested groups), since sections can be collapsed in Companion.
  */
 export function GetPresetsGroups(instance: ModuleInstance): {
-	section: CompanionPresetSection<ModuleSchema>
+	sections: CompanionPresetSection<ModuleSchema>[]
 	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
 	const presets: CompanionPresetDefinitions<ModuleSchema> = {}
 	// v1 category "Manage Selections of Groups"
 	const manageIds: string[] = []
 	// v1 categories "Select <group name> participants", one per group
-	const positionGroups: CompanionPresetGroup<ModuleSchema>[] = []
+	const positionSections: CompanionPresetSection<ModuleSchema>[] = []
 	const listIn = (list: string[], id: string): string => {
 		list.push(id)
 		return id
@@ -251,91 +246,31 @@ export function GetPresetsGroups(instance: ModuleInstance): {
 			feedbacks: [],
 		}
 
-		const positionIds: string[] = []
-		for (let position = 1; position <= 1000; position++) {
-			if (index == 1 && position > 9) {
-				break
-			}
-
-			const groupFeedbacks: SomePresetSimpleFeedbackEntry<ModuleSchema>[] = [
-				{
-					feedbackId: FeedbackId.groupBased,
-					options: {
-						group: String(index),
-						position: position,
-						type: feedbackType.spotlightOn,
-					},
-					style: getFeedbackStyleSpotlight(),
-				},
-				{
-					feedbackId: FeedbackId.groupBased,
-					options: {
-						group: String(index),
-						position: position,
-						type: feedbackType.selected,
-					},
-					style: getFeedbackStyleSelected(),
-				},
-			]
-
-			if (instance.config.feedbackImagesWithIcons !== 4) {
-				groupFeedbacks.push({
-					feedbackId: FeedbackId.groupBased,
-					options: {
-						group: String(index),
-						position: position,
-						type: feedbackType.activeSpeaker,
-					},
-					style: getParticipantStyleActiveSpeaker(`$(zoomosc:Group${index}Position${position})`, position),
-				})
-			}
-
-			groupFeedbacks.push({
-				feedbackId: FeedbackId.groupBasedAdvanced,
-				options: {
-					group: String(index),
-					position: position,
-				},
-			})
-
-			presets[listIn(positionIds, `Group${index}_Position${position}`)] = {
-				type: 'simple',
-				name: 'Group selection',
-				style: getParticipantStyleDefault(instance, `$(zoomosc:Group${index}Position${position})`, position),
-				steps: [
-					{
-						down: [
-							{
-								actionId: ActionIdGroups.selectUserFromGroupPosition,
-								options: { group: String(index), position: String(position), option: 'toggle' },
-							},
-						],
-						up: [],
-					},
-				],
-				feedbacks: groupFeedbacks,
-			}
-		}
-		if (positionIds.length > 0) {
-			positionGroups.push({
-				id: `groups_group${index}_positions`,
-				type: 'simple',
-				name: `Select ${ZoomGroupData[index].groupName} participants`,
-				presets: positionIds,
-			})
-		}
+		// One layered template per group; further positions are reached by changing a button's position local variable
+		const groupSection = buildParticipantTemplateSection({
+			sectionId: `groups_group${index}`,
+			sectionName: `Select ${ZoomGroupData[index].groupName} participants`,
+			presetId: `Group${index}_Position`,
+			presetName: 'Group selection',
+			positions: index === 1 ? spotlightGroupPositions : groupPositions,
+			positionName: (position) => `${ZoomGroupData[index].groupName} ${position}`,
+			nameExpression: positionVariableExpression(`Group${index}Position`),
+			target: (position) => ({ feedbackId: FeedbackId.groupBased, options: { group: String(index), position } }),
+			action: (position) => ({
+				actionId: ActionIdGroups.selectUserFromGroupPosition,
+				options: { group: String(index), position, option: 'toggle' },
+			}),
+		})
+		positionSections.push(groupSection.section)
+		Object.assign(presets, groupSection.presets)
 	}
 
-	const section: CompanionPresetSection<ModuleSchema> = {
-		id: 'groups',
-		name: 'Groups',
-		definitions: [
-			...(manageIds.length > 0
-				? [{ id: 'groups_manage', type: 'simple' as const, name: 'Manage Selections of Groups', presets: manageIds }]
-				: []),
-			...positionGroups,
-		],
-	}
+	const sections: CompanionPresetSection<ModuleSchema>[] = [
+		...(manageIds.length > 0
+			? [{ id: 'groups_manage', name: 'Manage Selections of Groups', definitions: manageIds }]
+			: []),
+		...positionSections,
+	]
 
-	return { section, presets }
+	return { sections, presets }
 }
