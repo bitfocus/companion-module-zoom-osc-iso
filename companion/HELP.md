@@ -89,6 +89,44 @@ There are a number of configuration options for the module that allow you to con
 
    These configurations provide flexibility to tailor feedback based on your needs. The default presets use multi-state feedback to ensure a seamless experience, but advanced users can adjust settings as required.
 
+   **Layered participant presets (Companion 5.0+)**
+
+   The participant, gallery and group position presets are layered buttons. Each status is its own layer, driven by the regular boolean feedbacks (Mic Live / Mic Off, Camera On / Camera Off, Hand Raised, Active Speaker, Selected, Spotlight On / Off):
+
+   - The name is always shown in white, including when the participant is selected.
+   - Spotlighted participants get a red background, selected participants a gray background, and participants who are both get a gray background with a red circle in the top-left corner.
+   - The active speaker gets a blue **SPEAKER** bar across the top, and their name moves down a line.
+   - The mic, camera and hand icons each change independently.
+
+   The "Select from Participants" and "Select from Gallery" sections, and the "Select <group> participants" section for each group, list positions 1 to 49 (the Spotlights group lists 1 to 9). Every button stores its position in a local variable called `position`. To use a button for a participant beyond 49, drag any of the presets onto a button and change its `position` local variable.
+
+   The **Select by name** preset (in "Manage Selections") is the same layered button for a participant chosen by name. Set the participant's name in the button's `name` local variable; the select action, all of its feedbacks and the button text use it. The button shows "Select by name" until a name is set.
+
+   The **Active Speaker** preset (also in "Manage Selections of Participants") is the same layered button for whoever is currently speaking. It uses the module's `$(zoomosc:activeSpeaker)` variable as the name, so pressing it toggles the active speaker in the selection, and its name, icons and highlights follow the active speaker.
+
+   **Using your own icons**
+
+   You can replace any of the status icons for every layered participant, gallery and group button at once by adding an image to Companion's **Image Library** with one of these exact names:
+
+   | Icon         | Image library name  |
+   | ------------ | ------------------- |
+   | Mic On       | `zoom_mic_on`       |
+   | Mic Off      | `zoom_mic_off`      |
+   | Camera On    | `zoom_camera_on`    |
+   | Camera Off   | `zoom_camera_off`   |
+   | Hand Raised  | `zoom_hand_raised`  |
+   | Hand Lowered | `zoom_hand_lowered` |
+
+   Each icon is drawn over the whole button, so use a transparent PNG (72×72 works well) with the icon placed where it should appear, as in the built-in icons in the module's `assets/layers` folder. Delete the image from the library to go back to the built-in icon. Buttons added from presets before this version use the built-in icons only; re-add them from the presets to pick up your images.
+
+   The built-in icons are also available as module variables (`icon_mic_on`, `icon_mic_off`, `icon_camera_on`, `icon_camera_off`, `icon_hand_raised` and `icon_hand_lowered`). To build a button by hand, add an image element for each icon, then add the matching boolean feedback with a style override that sets the element's image to an expression such as `getVariable('image', 'zoom_mic_on') || $(zoomosc:icon_mic_on)`.
+
+   The layered presets always show mic on/off, camera on/off and hand raised. When the hand is lowered, the hand icon disappears. To show the hand-lowered icon on a button, add the participant's **Hand Lowered** feedback to it with a style override that sets the hand image to `getVariable('image', 'zoom_hand_lowered') || $(zoomosc:icon_hand_lowered)`. The setting above only affects the "(Deprecated) ... showing multi-state" feedbacks.
+
+   The "Select from Participants" presets read the participant position variables, so **Enable Variable For Participants** must be turned on in the module configuration for their names and feedbacks to work.
+
+   The "(Deprecated) ... showing multi-state" feedbacks still work on existing buttons, but they will be removed in a future version. New buttons should use the layered presets.
+
 1. **Send Zoom Chat to Social Stream Ninja**
 
    One of the configuration options, is to send chat messages to Social Stream Ninja. In order for this to work, you need to provide your social stream ninja session id in the module configuration.
