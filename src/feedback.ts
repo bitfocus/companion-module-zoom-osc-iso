@@ -82,7 +82,8 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				return false
 			case feedbackType.spotlightOff:
 				if (userExist(zoomID, instance.ZoomUserData)) {
-					return instance.ZoomUserData[zoomID].spotlighted === false
+					// not yet reported as spotlighted counts as off
+					return instance.ZoomUserData[zoomID].spotlighted !== true
 				}
 
 				return false

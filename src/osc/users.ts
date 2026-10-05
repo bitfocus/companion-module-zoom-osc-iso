@@ -22,6 +22,7 @@ export async function createZoomUser(instance: ModuleInstance, data: ZoomOSCResp
 			targetIndex: data.args[0].value,
 			userName,
 			galleryIndex: data.args[2].value,
+			spotlighted: false,
 			users: [],
 		}
 	} else if (data.args.length >= 11) {
@@ -45,6 +46,7 @@ export async function createZoomUser(instance: ModuleInstance, data: ZoomOSCResp
 			videoOn: data.args[8].value === 1,
 			mute: data.args[9].value === 0,
 			handRaised: data.args[10].value === 1,
+			spotlighted: false,
 			users: [],
 		}
 		if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {

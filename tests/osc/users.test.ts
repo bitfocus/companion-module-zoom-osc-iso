@@ -21,6 +21,8 @@ describe('createZoomUser', () => {
 		expect(instance.ZoomUserData[101]).toMatchObject({
 			zoomId: 101,
 			userName: 'Alice',
+			// a new participant is not spotlighted until ZoomOSC says so, so "Spotlight Off" applies straight away
+			spotlighted: false,
 		})
 		expect(instance.ZoomVariableLink).toEqual([{ zoomId: 101, userName: 'Alice' }])
 	})
