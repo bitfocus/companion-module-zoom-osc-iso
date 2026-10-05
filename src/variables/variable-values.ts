@@ -1,6 +1,7 @@
 import type { VariableValues } from './variable-definitions.js'
 import type ModuleInstance from '../index.js'
 import { padding, userExist } from '../utils.js'
+import { participantIcons } from '../participant-icons.js'
 
 enum engineState {
 	disabled = 'disabled',
@@ -248,6 +249,10 @@ export function updateNumberOfUsers(instance: ModuleInstance, variables: Variabl
 	variables['numberOfUsers'] = Object.keys(instance.ZoomUserData).length
 }
 
+export function updateIconVariables(variables: VariableValues): void {
+	for (const icon of Object.values(participantIcons)) variables[icon.variable] = icon.image
+}
+
 export function updateVariableValues(instance: ModuleInstance): void {
 	// instance.log('debug', `updateVariableValues ${new Date()}`)
 	const variables: VariableValues = {
@@ -274,6 +279,7 @@ export function updateVariableValues(instance: ModuleInstance): void {
 	updateZoomUserVariables(instance, variables)
 
 	updateZoomParticipantVariables(instance, variables)
+	updateIconVariables(variables)
 
 	instance.setVariableValues(variables)
 }

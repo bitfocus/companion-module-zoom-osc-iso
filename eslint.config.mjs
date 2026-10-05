@@ -20,9 +20,9 @@ const customConfig = [
 			'n/no-unpublished-import': 'off',
 		},
 	},
-	// Config files: dev deps are valid imports
+	// Config files and dev scripts: dev deps are valid imports
 	{
-		files: ['*.config.ts', '*.config.mjs'],
+		files: ['*.config.ts', '*.config.mjs', 'scripts/**/*.mjs'],
 		rules: {
 			'n/no-unpublished-import': 'off',
 		},

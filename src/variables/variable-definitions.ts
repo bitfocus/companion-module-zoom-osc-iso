@@ -1,6 +1,7 @@
 import type ModuleInstance from '../index.js'
 import type { CompanionVariableDefinitions } from '@companion-module/base'
 import { padding, userExist } from '../utils.js'
+import { participantIcons } from '../participant-icons.js'
 
 /** One value type for every variable, because most writes go through computed (template-literal) ids */
 export type VariableValue = string | number | boolean | undefined
@@ -30,6 +31,13 @@ export type VariablesSchema = {
 	spotlightGroupTrackingInitalized?: VariableValue
 	isPro?: VariableValue
 	galleryCount?: VariableValue
+	// participant status icons (data URIs) used by the layered participant presets
+	icon_mic_on?: VariableValue
+	icon_mic_off?: VariableValue
+	icon_camera_on?: VariableValue
+	icon_camera_off?: VariableValue
+	icon_hand_raised?: VariableValue
+	icon_hand_lowered?: VariableValue
 	// groups
 	[group: `Group${number}`]: VariableValue
 	[groupPosition: `Group${number}Position${number}`]: VariableValue
@@ -148,6 +156,15 @@ export function initVariableDefinitions(instance: ModuleInstance): void {
 
 	const gallery: CompanionVariableDefinitions<VariablesSchema> = { galleryCount: { name: 'gallery count' } }
 
+	const iconVariables: CompanionVariableDefinitions<VariablesSchema> = Object.fromEntries(
+		Object.values(participantIcons).map((icon) => [
+			icon.variable,
+			{
+				name: `Default icon: ${icon.label} (override by adding a "${icon.libraryImage}" image to the image library)`,
+			},
+		]),
+	)
+
 	const definitions: CompanionVariableDefinitions<VariablesSchema> = {
 		...outputVariables,
 		...audioLevelVariables,
@@ -157,6 +174,7 @@ export function initVariableDefinitions(instance: ModuleInstance): void {
 		...galleryVariables,
 		...selectUsersVariables,
 		...groupPositionVariables,
+		...iconVariables,
 	}
 
 	instance.setVariableDefinitions(definitions)
