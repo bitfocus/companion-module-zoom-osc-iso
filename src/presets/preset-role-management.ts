@@ -413,14 +413,7 @@ export function GetPresetsRoleManagement(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'role_management',
 		name: 'Role & Management Actions',
-		definitions: [
-			{
-				id: 'role_management_buttons',
-				type: 'simple',
-				name: 'Role & Management Actions',
-				presets: Object.values(PresetIdRoleManagement),
-			},
-		],
+		definitions: Object.values(PresetIdRoleManagement),
 	}
 
 	return { section, presets }

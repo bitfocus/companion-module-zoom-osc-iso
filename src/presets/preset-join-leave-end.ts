@@ -135,14 +135,7 @@ export function GetPresetsJoinLeaveEnd(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'join_leave_end',
 		name: 'Join/Leave/End Actions',
-		definitions: [
-			{
-				id: 'join_leave_end_buttons',
-				type: 'simple',
-				name: 'Join/Leave/End Actions',
-				presets: Object.values(PresetIdJoinLeaveEnd),
-			},
-		],
+		definitions: Object.values(PresetIdJoinLeaveEnd),
 	}
 
 	return { section, presets }

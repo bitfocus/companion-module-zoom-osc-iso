@@ -234,9 +234,7 @@ export function GetPresetsBreakout(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'breakout',
 		name: 'Breakout Actions',
-		definitions: [
-			{ id: 'breakout_buttons', type: 'simple', name: 'Breakout Actions', presets: Object.values(PresetIdBreakout) },
-		],
+		definitions: Object.values(PresetIdBreakout),
 	}
 
 	return { section, presets }

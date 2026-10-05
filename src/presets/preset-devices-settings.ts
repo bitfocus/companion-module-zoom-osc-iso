@@ -341,14 +341,7 @@ export function GetPresetsDeviceSettings(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'devices_settings',
 		name: 'Devices & Settings Actions',
-		definitions: [
-			{
-				id: 'devices_settings_buttons',
-				type: 'simple',
-				name: 'Devices & Settings Actions',
-				presets: Object.values(PresetIdDeviceSettings),
-			},
-		],
+		definitions: Object.values(PresetIdDeviceSettings),
 	}
 
 	return { section, presets }

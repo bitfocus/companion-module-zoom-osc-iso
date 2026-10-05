@@ -459,14 +459,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'pin_spotlight_view',
 		name: 'Pin/Spotlight & View Actions',
-		definitions: [
-			{
-				id: 'pin_spotlight_view_buttons',
-				type: 'simple',
-				name: 'Pin/Spotlight & View Actions',
-				presets: Object.values(PresetIdPinSpotlightViewActions),
-			},
-		],
+		definitions: Object.values(PresetIdPinSpotlightViewActions),
 	}
 
 	return { section, presets }

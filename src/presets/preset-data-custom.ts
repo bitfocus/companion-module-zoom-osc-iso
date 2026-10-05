@@ -190,14 +190,7 @@ export function GetPresetsDataCustom(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'data_custom',
 		name: 'Data and Custom Actions',
-		definitions: [
-			{
-				id: 'data_custom_buttons',
-				type: 'simple',
-				name: 'Data and Custom Actions',
-				presets: Object.values(PresetIdDataCustom),
-			},
-		],
+		definitions: Object.values(PresetIdDataCustom),
 	}
 
 	return { section, presets }

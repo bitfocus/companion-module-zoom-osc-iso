@@ -272,14 +272,7 @@ export function GetPresetsVideoAudioActions(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'video_audio_actions',
 		name: 'Video/Audio Actions',
-		definitions: [
-			{
-				id: 'video_audio_actions_buttons',
-				type: 'simple',
-				name: 'Video/Audio Actions',
-				presets: Object.values(PresetIdVideoAudioActions),
-			},
-		],
+		definitions: Object.values(PresetIdVideoAudioActions),
 	}
 
 	return { section, presets }

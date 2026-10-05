@@ -65,7 +65,7 @@ export function GetPresetsChat(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'chat',
 		name: 'Chat Actions',
-		definitions: [{ id: 'chat_buttons', type: 'simple', name: 'Chat Actions', presets: Object.values(PresetIdChat) }],
+		definitions: Object.values(PresetIdChat),
 	}
 
 	return { section, presets }

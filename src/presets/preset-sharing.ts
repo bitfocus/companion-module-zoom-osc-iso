@@ -225,9 +225,7 @@ export function GetPresetsSharing(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'sharing',
 		name: 'Sharing Actions',
-		definitions: [
-			{ id: 'sharing_buttons', type: 'simple', name: 'Sharing Actions', presets: Object.values(PresetIdSharing) },
-		],
+		definitions: Object.values(PresetIdSharing),
 	}
 
 	return { section, presets }

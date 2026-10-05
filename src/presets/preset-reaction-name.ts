@@ -111,14 +111,7 @@ export function GetPresetsReactionName(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'reaction_name',
 		name: 'Reaction & Name Actions',
-		definitions: [
-			{
-				id: 'reaction_name_buttons',
-				type: 'simple',
-				name: 'Reaction & Name Actions',
-				presets: Object.values(PresetIdReactionName),
-			},
-		],
+		definitions: Object.values(PresetIdReactionName),
 	}
 
 	return { section, presets }

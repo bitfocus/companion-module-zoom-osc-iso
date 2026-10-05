@@ -259,9 +259,7 @@ export function GetPresetsRecording(): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'recording',
 		name: 'Recording Actions',
-		definitions: [
-			{ id: 'recording_buttons', type: 'simple', name: 'Recording Actions', presets: Object.values(PresetIdRecording) },
-		],
+		definitions: Object.values(PresetIdRecording),
 	}
 
 	return { section, presets }

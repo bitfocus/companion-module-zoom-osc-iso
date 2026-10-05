@@ -204,14 +204,7 @@ export function GetPresetsZoomISOSelections(instance: ModuleInstance): {
 	const section: CompanionPresetSection<ModuleSchema> = {
 		id: 'zoomiso_selections',
 		name: 'ZoomISO Selections',
-		definitions: [
-			{
-				id: 'zoomiso_selections_buttons',
-				type: 'simple',
-				name: 'ZoomISO Selections',
-				presets: [...Object.values(PresetIdZoomISOSelections), ...dynamicIds],
-			},
-		],
+		definitions: [...Object.values(PresetIdZoomISOSelections), ...dynamicIds],
 	}
 
 	return { section, presets }
