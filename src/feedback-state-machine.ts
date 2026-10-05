@@ -183,7 +183,7 @@ function getImageForState(state: FeedbackMultiState, feedbackImageType: number, 
 
 function getParticipantState(instance: ModuleInstance, zoomID: number): FeedbackMultiState {
 	return [
-		instance.ZoomUserData[zoomID].mute || false, // false = muted, true = unmuted
+		instance.ZoomUserData[zoomID].mute || false, // false = mic live (unmuted), true = muted
 		instance.ZoomUserData[zoomID].videoOn || false, // false = camera off, true = camera on
 		instance.ZoomUserData[zoomID].handRaised || false, // false = hand lowered, true = hand raised
 		instance.ZoomUserData[zoomID].userName !== undefined &&

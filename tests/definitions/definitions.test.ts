@@ -121,6 +121,18 @@ describe('action and feedback definitions (v2)', () => {
 		}
 	})
 
+	it('keeps the deprecated multi-state advanced feedbacks for existing buttons', () => {
+		for (const id of [
+			'group_Based_Advanced',
+			'index_Based_Advanced',
+			'user_Name_Based_Advanced',
+			'gallery_Based_Advanced',
+		]) {
+			expect(defs[id]?.type, id).toBe('advanced')
+			expect(defs[id].name, id).toMatch(/^\(Deprecated\) /)
+		}
+	})
+
 	it('declares affectedProperties on every advanced feedback', () => {
 		for (const def of Object.values(defs)) {
 			if (def.type === 'advanced') expect(def.affectedProperties).toEqual(['png64'])

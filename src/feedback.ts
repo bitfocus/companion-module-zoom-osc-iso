@@ -233,8 +233,10 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 		},
 		[FeedbackId.groupBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Position 1 - 999',
+			name: '(Deprecated) Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Group based feedback showing multi-state',
+			description:
+				'Position 1 - 999. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -313,8 +315,10 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 		},
 		[FeedbackId.indexBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Feedback based on index of the participant',
+			name: '(Deprecated) Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Participant position based feedback showing multi-state',
+			description:
+				'Feedback based on index of the participant. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -397,8 +401,10 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 		},
 		[FeedbackId.userNameBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'type in username',
+			name: '(Deprecated) Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Username based feedback showing multi-state',
+			description:
+				'type in username. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -488,8 +494,10 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 		},
 		[FeedbackId.galleryBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Position 1 - 49',
+			name: '(Deprecated) Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Gallery based feedback showing multi-state',
+			description:
+				'Position 1 - 49. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
 			affectedProperties: ['png64'],
 			options: [
 				{
