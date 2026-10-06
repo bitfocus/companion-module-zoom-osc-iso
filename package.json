@@ -10,6 +10,7 @@
 		"build": "rimraf dist && run build:main",
 		"build:main": "tsc -p tsconfig.build.json",
 		"build:icons": "node scripts/extract-layer-icons.mjs",
+		"build:preset-icons": "node scripts/build-preset-icons.mjs",
 		"dev": "tsc -p tsconfig.build.json --watch",
 		"test": "vitest run",
 		"lint:raw": "eslint",

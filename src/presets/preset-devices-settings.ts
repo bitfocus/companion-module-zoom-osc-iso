@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
 
 export enum PresetIdDeviceSettings {
@@ -121,10 +122,11 @@ export function GetPresetsDeviceSettings(): {
 			type: 'simple',
 			name: `Enable_Original_Sound`,
 			style: {
-				text: `Enable Original Sound`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.enableOriginalSound,
 			},
 			steps: [
 				{
@@ -143,10 +145,11 @@ export function GetPresetsDeviceSettings(): {
 			type: 'simple',
 			name: `Disable_Original_Sound`,
 			style: {
-				text: `Disable Original Sound`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disableOriginalSound,
 			},
 			steps: [
 				{

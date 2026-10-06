@@ -104,6 +104,10 @@ There are a number of configuration options for the module that allow you to con
 
    The **Active Speaker** preset (also in "Manage Selections of Participants") is the same layered button for whoever is currently speaking. It uses the module's `$(zoomosc:activeSpeaker)` variable as the name, so pressing it toggles the active speaker in the selection, and its name, icons and highlights follow the active speaker.
 
+   **Preset icons**
+
+   Most action presets (selecting, pinning, spotlighting, muting, hands, roles, waiting room, sharing, recording, chat, join/leave, groups and ZoomISO outputs) come with an icon, so no images need to be added to Companion. Group presets use each group's own colour set (Host, Spotlights and groups 2 to 9) and show the group name in the space the icon leaves for it. The ZoomISO "Select output" and "Select audio channel" presets keep their plain style so their red "selected" feedback stays visible.
+
    **Using your own icons**
 
    You can replace any of the status icons for every layered participant, gallery and group button at once by adding an image to Companion's **Image Library** with one of these exact names:

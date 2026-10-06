@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserChat } from '../actions/action-user-chat.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdChat {
@@ -21,10 +22,11 @@ export function GetPresetsChat(): {
 			type: 'simple',
 			name: `Send_Chat_Everyone`,
 			style: {
-				text: `Send Chat Everyone`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.chatEveryone,
 			},
 			steps: [
 				{
@@ -43,10 +45,11 @@ export function GetPresetsChat(): {
 			type: 'simple',
 			name: `Send_Chat_DM`,
 			style: {
-				text: `Send Chat DM`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.chatSelected,
 			},
 			steps: [
 				{

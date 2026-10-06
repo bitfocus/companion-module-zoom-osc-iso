@@ -3,6 +3,7 @@ import type { ModuleSchema } from '../index.js'
 import type ModuleInstance from '../index.js'
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
 import { colorBlack, colorGreenOlive } from '../utils.js'
+import { presetImages, presetTextColors } from '../images-presets.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
 
@@ -276,8 +277,10 @@ export function GetPresetsZoomISOActions(instance: ModuleInstance): {
 			style: {
 				text: `Set User to Audio Channel`,
 				size: '14',
-				color: colorBlack,
+				color: presetTextColors.audioTemplate,
 				bgcolor: colorGreenOlive,
+				alignment: 'center:top',
+				png64: presetImages.audioTemplate,
 			},
 			steps: [
 				{
@@ -324,6 +327,16 @@ export function GetPresetsZoomISOActions(instance: ModuleInstance): {
 	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
 		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : index
 		const id = `set_user_to_output_${index}`
+		// the "OUTPUT n" icon leaves its top half for the text; there are icons for outputs 1 to 16
+		const icon = `output${String(index).padStart(2, '0')}`
+		const iconStyle =
+			icon in presetTextColors
+				? {
+						color: presetTextColors[icon as keyof typeof presetTextColors],
+						alignment: 'center:top',
+						png64: presetImages[icon as keyof typeof presetImages],
+					}
+				: {}
 		dynamicIds.push(id)
 		presets[id] = {
 			type: 'simple',
@@ -333,6 +346,7 @@ export function GetPresetsZoomISOActions(instance: ModuleInstance): {
 				size: '10',
 				color: colorBlack,
 				bgcolor: colorGreenOlive,
+				...iconStyle,
 			} as any,
 			steps: [
 				{

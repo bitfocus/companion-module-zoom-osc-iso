@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserSpotlight } from '../actions/action-user-spotlight.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserPin } from '../actions/action-user-pin.js'
 import { ActionIdUserView } from '../actions/action-user-view.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
@@ -41,10 +42,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Pin',
 			style: {
-				text: 'Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pin,
 			},
 			steps: [
 				{
@@ -63,10 +65,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'add_Pin',
 			style: {
-				text: 'Add Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinAdd,
 			},
 			steps: [
 				{
@@ -85,10 +88,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'un_Pin',
 			style: {
-				text: 'Un Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unPin,
 			},
 			steps: [
 				{
@@ -107,10 +111,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Toggle_Pin',
 			style: {
-				text: 'Toggle Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinToggle,
 			},
 			steps: [
 				{
@@ -129,10 +134,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Pin_Screen_2',
 			style: {
-				text: 'Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pin2ndScreen,
 			},
 			steps: [
 				{
@@ -151,10 +157,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'UnPin_Screen_2',
 			style: {
-				text: 'Un Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unPin2ndScreen,
 			},
 			steps: [
 				{
@@ -173,10 +180,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Toggle_Screen_2',
 			style: {
-				text: 'Toggle Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinToggle2ndScreen,
 			},
 			steps: [
 				{
@@ -195,10 +203,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Clear_Pins',
 			style: {
-				text: 'Clear Pins',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearPins,
 			},
 			steps: [
 				{
@@ -217,10 +226,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Spotlight',
 			style: {
-				text: 'Single Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.spotSingle,
 			},
 			steps: [
 				{
@@ -239,10 +249,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Add_Spotlight',
 			style: {
-				text: 'Add to Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.spotAdd,
 			},
 			steps: [
 				{
@@ -261,10 +272,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Un_Spotlight',
 			style: {
-				text: 'Un Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unSpot,
 			},
 			steps: [
 				{
@@ -305,10 +317,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Clear_Spotlight',
 			style: {
-				text: 'Clear Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearSpotlights,
 			},
 			steps: [
 				{
@@ -327,10 +340,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Set_Gallery_View',
 			style: {
-				text: 'Set Gallery View',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryView,
 			},
 			steps: [
 				{
@@ -349,10 +363,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Set_Speaker_View',
 			style: {
-				text: 'Set Speaker View',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.speakerView,
 			},
 			steps: [
 				{
@@ -371,10 +386,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Next_Gallery_Page',
 			style: {
-				text: 'Next Gallery Page',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryNext,
 			},
 			steps: [
 				{
@@ -393,10 +409,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Previous_Gallery_Page',
 			style: {
-				text: 'Previous Gallery Page',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryPrevious,
 			},
 			steps: [
 				{
@@ -415,10 +432,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Show_Non_Video_Participants',
 			style: {
-				text: 'Show Non Video Participants',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.showNonVideo,
 			},
 			steps: [
 				{
@@ -437,10 +455,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			type: 'simple',
 			name: 'Hide_Non_Video_Participants',
 			style: {
-				text: 'Hide Non Video Participants',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.hideNonVideo,
 			},
 			steps: [
 				{

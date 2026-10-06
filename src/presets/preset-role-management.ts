@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserWebinar } from '../actions/action-user-webinars.js'
 import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
@@ -61,10 +62,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Make_CoHost`,
 			style: {
-				text: `Make Co Host`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makeCoHost,
 			},
 			steps: [
 				{
@@ -83,10 +85,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Revoke_CoHost`,
 			style: {
-				text: `Revoke CoHost`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.revokeCoHost,
 			},
 			steps: [
 				{
@@ -105,10 +108,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Reclaim_Host`,
 			style: {
-				text: `Reclaim Host`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.reclaimHost,
 			},
 			steps: [
 				{
@@ -127,10 +131,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Make_Panelist`,
 			style: {
-				text: `Make Panelist`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makePanelist,
 			},
 			steps: [
 				{
@@ -149,10 +154,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Make_Attendee`,
 			style: {
-				text: `Make Attendee`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makeAttendee,
 			},
 			steps: [
 				{
@@ -171,10 +177,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Eject_Participant`,
 			style: {
-				text: `Eject Participant`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.eject,
 			},
 			steps: [
 				{
@@ -215,10 +222,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Admit_Participant`,
 			style: {
-				text: `Admit Participant`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.admitSelected,
 			},
 			steps: [
 				{
@@ -237,10 +245,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Admit_All_Participant`,
 			style: {
-				text: `Admit All`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.admitAll,
 			},
 			steps: [
 				{
@@ -259,10 +268,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Send_to_Waiting_Room`,
 			style: {
-				text: `Send to Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.sendToWaitingRoom,
 			},
 			steps: [
 				{
@@ -281,10 +291,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Enable_Waiting_Room`,
 			style: {
-				text: `Enable Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.enableWaitingRoom,
 			},
 			steps: [
 				{
@@ -303,10 +314,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Disable_Waiting_Room`,
 			style: {
-				text: `Disable Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disableWaitingRoom,
 			},
 			steps: [
 				{
@@ -325,10 +337,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Allow_To_speak`,
 			style: {
-				text: `Allow to Speak`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.allowToSpeak,
 			},
 			steps: [
 				{
@@ -347,10 +360,11 @@ export function GetPresetsRoleManagement(): {
 			type: 'simple',
 			name: `Disallow_To_speak`,
 			style: {
-				text: `Disallow to Speak`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disallowToSpeak,
 			},
 			steps: [
 				{

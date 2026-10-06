@@ -3,6 +3,7 @@ import type { ModuleSchema } from '../index.js'
 import { FeedbackId } from '../feedback.js'
 import { buildParticipantLayeredPreset } from './preset-utils.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 
 export enum PresetIdManageSelections {
@@ -35,10 +36,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Restore Previous Selection`,
 			style: {
-				text: `Restore Previous Selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.restorePreviousSelections,
 			},
 			steps: [
 				{
@@ -53,10 +55,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Clear Selections`,
 			style: {
-				text: `Clear Selections ($(zoomosc:selectedNumberOfCallers))`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearSelections,
 			},
 			steps: [
 				{
@@ -69,12 +72,14 @@ export function GetPresetsManageSelections(): {
 		// Selection method
 		[PresetIdManageSelections.toggleSelectionMethod]: {
 			type: 'simple',
-			name: `Selection Method`,
+			name: `Toggle Selection Method`,
+			// shows the icon of the selection method currently in use
 			style: {
-				text: `Toggle Selection Method`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectSingle,
 			},
 			steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 2 } }], up: [] }],
 			feedbacks: [
@@ -84,7 +89,8 @@ export function GetPresetsManageSelections(): {
 						selectionMethod: 1,
 					},
 					style: {
-						text: 'Single selection',
+						text: '',
+						png64: presetImages.selectSingle,
 					},
 				},
 				{
@@ -93,7 +99,8 @@ export function GetPresetsManageSelections(): {
 						selectionMethod: 0,
 					},
 					style: {
-						text: 'Multiple selection',
+						text: '',
+						png64: presetImages.selectMulti,
 					},
 				},
 			],
@@ -103,10 +110,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Single selection`,
 			style: {
-				text: `Single selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectSingle,
 			},
 			steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
 			feedbacks: [],
@@ -141,10 +149,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Multiple selection`,
 			style: {
-				text: `Multiple selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectMulti,
 			},
 			steps: [
 				{
@@ -166,10 +175,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Next participants`,
 			style: {
-				text: `Next participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.viewNext,
 			},
 			steps: [
 				{
@@ -191,10 +201,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Previous participants`,
 			style: {
-				text: `Previous participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.viewPrevious,
 			},
 			steps: [
 				{
@@ -215,10 +226,11 @@ export function GetPresetsManageSelections(): {
 			type: 'simple',
 			name: `Save Participant List`,
 			style: {
-				text: `Save Participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.saveNamesWithCameraStatus,
 			},
 			steps: [
 				{

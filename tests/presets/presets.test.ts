@@ -4,6 +4,7 @@ import { capturePresets, type CapturedPresets } from '../helpers/presets.js'
 import { UpdatePresets } from '../../src/presets.js'
 import { UpdateActions } from '../../src/actions.js'
 import { GetFeedbacks } from '../../src/feedback.js'
+import { presetImages, presetTextColors, type PresetImage } from '../../src/images-presets.js'
 
 function setupInstance(): MockModuleInstance {
 	const instance = createMockInstance()
@@ -68,8 +69,11 @@ describe('presets (v2 structure)', () => {
 			'Select_by_name',
 			'Active_Speaker',
 		]
+		// group presets with an icon set (every group here) are layered, so the group name can sit in the icon's empty area
 		for (const [id, preset] of Object.entries(captured.presets)) {
-			expect(preset?.type, id).toBe(layered.includes(id) ? 'layered' : 'simple')
+			const groupIcon = captured.placement.get(id)?.sectionName === 'Manage Selections of Groups'
+			const expected = layered.includes(id) || groupIcon ? 'layered' : 'simple'
+			expect(preset?.type, id).toBe(expected)
 		}
 	})
 
@@ -84,6 +88,67 @@ describe('presets (v2 structure)', () => {
 			const feedbacks = (preset.feedbacks as any[]).flatMap((f) => (f.children ? f.children.default : [f]))
 			for (const f of feedbacks) expect(deprecated, `${id} uses ${f.feedbackId}`).not.toContain(f.feedbackId)
 		}
+	})
+
+	it('shows its icon, without text, on every preset that has a complete icon', () => {
+		const iconPresets: Record<string, PresetImage> = {
+			Spotlight: 'spotSingle',
+			Add_Spotlight: 'spotAdd',
+			Toggle_mute: 'toggleMute',
+			Lower_Hand: 'lowerHand',
+			Mute: 'mute',
+			Clear_Pins: 'clearPins',
+			Leave_Meeting: 'leaveMeeting',
+			Start_Cloud_Recording: 'startCloudRecording',
+			Send_Chat_DM: 'chatSelected',
+			Restore_Previous_Selection: 'restorePreviousSelections',
+		}
+		for (const [id, image] of Object.entries(iconPresets)) {
+			const style = (captured.presets[id] as any).style
+			expect(style.png64, id).toBe(presetImages[image])
+			expect(style.text, id).toBe('')
+		}
+		for (const image of Object.values(presetImages)) {
+			expect(Buffer.from(image, 'base64').subarray(1, 4).toString()).toBe('PNG')
+		}
+	})
+
+	it("puts each group's own icon on its presets, with the group name in the area the icon leaves for it", () => {
+		const elements = (id: string) =>
+			Object.fromEntries((captured.presets[id] as any).elements.map((e: any) => [e.id, e]))
+		const add = elements('Add_to_group_Group 2')
+		expect(add.icon.base64Image).toBe(`data:image/png;base64,${presetImages.group2Add}`)
+		// the top bar is the top 25% of the icon
+		expect(add.groupName).toMatchObject({
+			text: '$(zoomosc:Group2)',
+			color: presetTextColors.group2Add,
+			fontsizeAllowShrink: true,
+		})
+		expect(add.groupName.y + add.groupName.height).toBeLessThanOrEqual(25)
+		const select = elements('Select_Hosts')
+		expect(select.icon.base64Image).toBe(`data:image/png;base64,${presetImages.groupHostSelect}`)
+		expect(select.groupName.text).toBe('$(zoomosc:Group0)\\n($(zoomosc:CallersInGroup0))')
+		expect(elements('Rename_Group 2').icon.base64Image).toBe(`data:image/png;base64,${presetImages.group2}`)
+	})
+
+	it('shows the icon of the selection method in use on the toggle selection method preset', () => {
+		const preset = captured.presets['Toggle_Selection_Method'] as any
+		const iconFor = (method: number) =>
+			preset.feedbacks.find((f: any) => f.options.selectionMethod === method).style.png64
+		expect(iconFor(1)).toBe(presetImages.selectSingle)
+		expect(iconFor(0)).toBe(presetImages.selectMulti)
+	})
+
+	it('keeps the join text below the JOIN bar', () => {
+		for (const id of ['Join_Meeting', 'ZAK_Join_Meeting', 'ZAK_Start_Meeting']) {
+			expect((captured.presets[id] as any).style.alignment, id).toBe('center:bottom')
+		}
+	})
+
+	it('keeps the selected-output feedback visible by leaving the output select presets without an icon', () => {
+		expect((captured.presets['Select_Output_1'] as any).style.png64).toBeUndefined()
+		expect((captured.presets['Select_Audio_Channel_1'] as any).style.png64).toBeUndefined()
+		expect((captured.presets['set_user_to_output_1'] as any).style.png64).toBe(presetImages.output01)
 	})
 
 	it('keeps the v1 preset ids and their former categories', () => {

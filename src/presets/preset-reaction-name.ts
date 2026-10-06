@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserHandRaised } from '../actions/action-user-hand-raised.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdReactionName {
@@ -45,10 +46,11 @@ export function GetPresetsReactionName(): {
 			type: 'simple',
 			name: `Lower_Hand`,
 			style: {
-				text: `Lower Hand`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.lowerHand,
 			},
 			steps: [
 				{
@@ -89,10 +91,11 @@ export function GetPresetsReactionName(): {
 			type: 'simple',
 			name: `Lower_All_Hands`,
 			style: {
-				text: `Lower All Hands`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.lowerAllHands,
 			},
 			steps: [
 				{

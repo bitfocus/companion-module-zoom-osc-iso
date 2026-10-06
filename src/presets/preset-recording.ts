@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdGlobalRecording } from '../actions/action-global-recording.js'
 
 export enum PresetIdRecording {
@@ -29,10 +30,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Start_Local_Recording`,
 			style: {
-				text: `Start Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.startLocalRecording,
 			},
 			steps: [
 				{
@@ -52,10 +54,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Pause_Local_Recording`,
 			style: {
-				text: `Pause Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pauseLocalRecording,
 			},
 			steps: [
 				{
@@ -98,10 +101,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Stop_Local_Recording`,
 			style: {
-				text: `Stop Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.stopLocalRecording,
 			},
 			steps: [
 				{
@@ -121,10 +125,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Start_Cloud_Recording`,
 			style: {
-				text: `Start Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.startCloudRecording,
 			},
 			steps: [
 				{
@@ -144,10 +149,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Pause_Cloud_Recording`,
 			style: {
-				text: `Pause Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pauseCloudRecording,
 			},
 			steps: [
 				{
@@ -190,10 +196,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Stop_Cloud_Recording`,
 			style: {
-				text: `Stop Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.stopCloudRecording,
 			},
 			steps: [
 				{
@@ -213,10 +220,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Allow_to_Local_Record`,
 			style: {
-				text: `Allow to Local Record`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.allowToRecord,
 			},
 			steps: [
 				{
@@ -236,10 +244,11 @@ export function GetPresetsRecording(): {
 			type: 'simple',
 			name: `Disallow_to_Local_Record`,
 			style: {
-				text: `Disallow to Local Record`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disallowToRecord,
 			},
 			steps: [
 				{

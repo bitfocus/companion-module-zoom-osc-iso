@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 
 export enum PresetIdSharing {
 	screenShare = 'Screen_Share',
@@ -27,10 +28,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Screen_Share`,
 			style: {
-				text: `Screen Share`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareScreen,
 			},
 			steps: [
 				{
@@ -49,10 +51,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Stop_Share`,
 			style: {
-				text: `Stop Share`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareStop,
 			},
 			steps: [
 				{
@@ -71,10 +74,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Screen_Share_Primary`,
 			style: {
-				text: `Screen Share Primary`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareScreen,
 			},
 			steps: [
 				{
@@ -93,10 +97,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Share_Window`,
 			style: {
-				text: `Share Window`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareWindow,
 			},
 			steps: [
 				{
@@ -137,10 +142,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Share_Audio`,
 			style: {
-				text: `Share Audio`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareAudioOnly,
 			},
 			steps: [
 				{
@@ -181,10 +187,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Enable Optimize for Video`,
 			style: {
-				text: `Enable Optimize for Video`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareEnableOptimize,
 			},
 			steps: [
 				{
@@ -203,10 +210,11 @@ export function GetPresetsSharing(): {
 			type: 'simple',
 			name: `Disable_Optimize_for_Video`,
 			style: {
-				text: `Disable Optimize for Video`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.shareDisableOptimize,
 			},
 			steps: [
 				{

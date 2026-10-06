@@ -2,6 +2,7 @@ import type { CompanionPresetDefinitions, CompanionPresetSection } from '@compan
 import type { ModuleSchema } from '../index.js'
 import { ActionIdUserVideoMic } from '../actions/action-user-video-mic.js'
 import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 
 export enum PresetIdVideoAudioActions {
@@ -30,10 +31,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Video_On',
 			style: {
-				text: 'Turn Video On',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.videoOnRequest,
 			},
 			steps: [
 				{
@@ -52,10 +54,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Video_Off',
 			style: {
-				text: 'Turn Video Off',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.videoOff,
 			},
 			steps: [
 				{
@@ -74,10 +77,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Toggle_Video',
 			style: {
-				text: 'Toggle Video State',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.toggleVideo,
 			},
 			steps: [
 				{
@@ -96,10 +100,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Mute',
 			style: {
-				text: 'Mute',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.mute,
 			},
 			steps: [
 				{
@@ -118,10 +123,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Mute_All',
 			style: {
-				text: 'Unmute',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unmute,
 			},
 			steps: [
 				{
@@ -140,10 +146,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Mute_All',
 			style: {
-				text: 'Mute all Except The Host',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.muteAllExceptHost,
 			},
 			steps: [
 				{
@@ -184,10 +191,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'mute_all_except',
 			style: {
-				text: 'Mute All Except Selected',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.muteAllExceptSelected,
 			},
 			steps: [
 				{
@@ -206,10 +214,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Mute all except Hosts',
 			style: {
-				text: 'Mute All Except All Hosts',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.muteAllExceptHostGroup,
 			},
 			steps: [
 				{
@@ -228,10 +237,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Mute all except Spotlights',
 			style: {
-				text: 'Mute All Except Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.muteAllExceptSpotlightGroup,
 			},
 			steps: [
 				{
@@ -250,10 +260,11 @@ export function GetPresetsVideoAudioActions(): {
 			type: 'simple',
 			name: 'Toggle_mute',
 			style: {
-				text: 'Toggle mute',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.toggleMute,
 			},
 			steps: [
 				{
