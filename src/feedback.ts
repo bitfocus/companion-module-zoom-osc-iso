@@ -2,7 +2,7 @@ import type ModuleInstance from './index.js'
 import type { CompanionFeedbackDefinitions } from '@companion-module/base'
 import type { selectionMethod } from './actions/action-utils.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { userExist, colorRed, getUserFromName } from './utils.js'
+import { userExist, colorRed, getUserFromName, participantAtPosition } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -304,9 +304,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[feedback.options.position - 1]
+					participantAtPosition(instance, feedback.options.position)
 				) {
-					const zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
+					const zoomID = participantAtPosition(instance, feedback.options.position)!.zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
 				}
@@ -333,9 +333,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[feedback.options.position - 1]
+					participantAtPosition(instance, feedback.options.position)
 				) {
-					const zoomID = instance.ZoomVariableLink[feedback.options.position - 1].zoomId
+					const zoomID = participantAtPosition(instance, feedback.options.position)!.zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}

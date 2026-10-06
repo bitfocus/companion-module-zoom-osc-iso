@@ -13,6 +13,7 @@ import type {
 	ZoomUserDataInterface,
 	ZoomUserOfflineInterface,
 	ZoomVariableLinkInterface,
+	ZoomParticipantPageInterface,
 	ZoomMeDataInterface,
 } from './utils.js'
 
@@ -97,6 +98,8 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 
 	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
+	public ZoomParticipantPage: ZoomParticipantPageInterface = { start: 0, size: 30 }
+
 	public OSC: OSC | null = null
 
 	/**
@@ -155,6 +158,7 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	async destroy(): Promise<void> {
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
+		this.ZoomParticipantPage.start = 0
 		this.ZoomGroupData = []
 		this.ZoomUserOffline = []
 		this.ZoomMeData = { zoomId: 0, userName: '' }

@@ -64,6 +64,7 @@ export function createMockInstance(options: MockInstanceOptions = {}): MockModul
 		log: vi.fn(),
 		OSC: { sendCommand: vi.fn() },
 		ZoomVariableLink: [],
+		ZoomParticipantPage: { start: 0, size: 30 },
 		ZoomGroupData: [],
 		ZoomUserData: {},
 		ZoomMeData: { zoomId: 0, userName: '' },

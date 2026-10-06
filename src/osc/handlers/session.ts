@@ -113,6 +113,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			isPro: context.instance.ZoomClientDataObj.isPro,
 		}
 		context.instance.ZoomVariableLink.length = 0
+		context.instance.ZoomParticipantPage.start = 0
 
 		context.instance.ZoomGroupData = Array.from(
 			{ length: context.instance.ZoomClientDataObj.numberOfGroups + 2 },
@@ -147,6 +148,7 @@ function handleListCleared(context: OSCHandlerContext): void {
 	PreviousSelectedCallersSave(context.instance)
 	context.instance.ZoomClientDataObj.selectedCallers.length = 0
 	context.instance.ZoomVariableLink.length = 0
+	context.instance.ZoomParticipantPage.start = 0
 	context.instance.ZoomUserData = {}
 
 	setVariables(context.instance, (variables) => updateAllUserBasedVariables(context.instance, variables))

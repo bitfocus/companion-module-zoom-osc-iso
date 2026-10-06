@@ -1,5 +1,5 @@
 import { socialStreamApi } from '../../socialstream.js'
-import { arrayRemove, userExist, type ZoomGroupDataInterface } from '../../utils.js'
+import { arrayRemove, keepParticipantPageInList, userExist, type ZoomGroupDataInterface } from '../../utils.js'
 import {
 	updateActiveSpeakerVariable,
 	updateAllGroupVariables,
@@ -118,6 +118,7 @@ function handleOffline(context: OSCHandlerContext, zoomId: number): void {
 	const index = context.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 	if (index > -1) {
 		context.instance.log('debug', `Removed ${JSON.stringify(context.instance.ZoomVariableLink.splice(index, 1))}`)
+		keepParticipantPageInList(context.instance)
 	}
 
 	setVariables(context.instance, (variables) => updateAllUserBasedVariables(context.instance, variables))

@@ -1,7 +1,7 @@
 import type { VariableValues } from '../variables/variable-definitions.js'
 import type ModuleInstance from '../index.js'
 import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
-import { options, userExist } from '../utils.js'
+import { options, participantAtPosition, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -149,9 +149,10 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 			],
 			callback: (action) => {
 				if (instance.config.enableVariablesForParticipants) {
-					const zoomId = instance.ZoomVariableLink[Number(action.options.position) - 1].zoomId
+					const participant = participantAtPosition(instance, Number(action.options.position))
+					if (!participant) return
 
-					selectUser(instance, zoomId, action.options.option)
+					selectUser(instance, participant.zoomId, action.options.option)
 
 					const variables: VariableValues = {}
 					updateSelectedCallersVariables(instance, variables)
@@ -214,6 +215,8 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 		},
 		[ActionIdUsers.nextParticipants]: {
 			name: 'nextParticipants',
+			description:
+				'Show the next page of participants on the participant position buttons. Stops on the last page, where positions past the last participant are empty.',
 			options: [
 				{
 					type: 'number',
@@ -225,11 +228,10 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 				},
 			],
 			callback: (action) => {
-				// Grap the items you want to see
-				const numberToShift = action.options.shift
-				const itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(0, numberToShift)
-				instance.ZoomVariableLink.splice(0, numberToShift)
-				instance.ZoomVariableLink.push(...itemsToShift)
+				// Page forward through the participant list, stopping on the last page
+				const page = instance.ZoomParticipantPage
+				page.size = action.options.shift
+				if (page.start + page.size < instance.ZoomVariableLink.length) page.start += page.size
 
 				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
@@ -249,6 +251,8 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 		},
 		[ActionIdUsers.previousParticipants]: {
 			name: 'previousParticipants',
+			description:
+				'Show the previous page of participants on the participant position buttons. Stops on the first page.',
 			options: [
 				{
 					type: 'number',
@@ -260,13 +264,10 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 				},
 			],
 			callback: (action) => {
-				// Grap the items you want to see
-				const numberToShift = action.options.shift
-				// Be carefull for below/invallid index
-				const itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(-numberToShift)
-
-				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
-				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
+				// Page back through the participant list, stopping on the first page
+				const page = instance.ZoomParticipantPage
+				page.size = action.options.shift
+				page.start = Math.max(0, page.start - page.size)
 
 				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
@@ -290,6 +291,7 @@ export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefini
 			options: [],
 			callback: () => {
 				instance.ZoomVariableLink.length = 0
+				instance.ZoomParticipantPage.start = 0
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]

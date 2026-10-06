@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mock }
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUsers, ActionIdUsers } from '../../src/actions/action-user.js'
 import { selectionMethod } from '../../src/actions/action-utils.js'
+import { keepParticipantPageInList, participantAtPosition } from '../../src/utils.js'
 
 describe('GetActionsUsers', () => {
 	let instance: ReturnType<typeof createMockInstance>
@@ -25,6 +26,7 @@ describe('GetActionsUsers', () => {
 			{ zoomId: 1003, userName: 'Charlie' },
 		]
 		instance.ZoomClientDataObj.selectedCallers = [1001]
+		instance.ZoomParticipantPage = { start: 0, size: 30 }
 	})
 
 	afterEach(() => {
@@ -152,35 +154,62 @@ describe('GetActionsUsers', () => {
 		})
 	})
 
-	describe('nextParticipants', () => {
-		it('rotates ZoomVariableLink forward by the given shift amount', () => {
-			const callback = (actions[ActionIdUsers.nextParticipants] as any).callback
-			callback({ options: { shift: 2 } } as any, {} as any)
-			expect(instance.ZoomVariableLink[0]).toEqual({ zoomId: 1003, userName: 'Charlie' })
-			expect(instance.ZoomVariableLink[1]).toEqual({ zoomId: 1001, userName: 'Alice' })
-			expect(instance.ZoomVariableLink[2]).toEqual({ zoomId: 1002, userName: 'Bob' })
+	describe('nextParticipants / previousParticipants', () => {
+		const next = (shift: number) =>
+			(actions[ActionIdUsers.nextParticipants] as any).callback({ options: { shift } }, {})
+		const previous = (shift: number) =>
+			(actions[ActionIdUsers.previousParticipants] as any).callback({ options: { shift } }, {})
+		const shown = () => {
+			const variables = (instance.setVariableValues as Mock).mock.lastCall![0]
+			return [variables.Participant001, variables.Participant002]
+		}
+
+		beforeEach(() => {
+			instance.config.enableVariablesForParticipants = true
 		})
 
-		it('calls setVariableValues after shifting', () => {
-			const callback = (actions[ActionIdUsers.nextParticipants] as any).callback
-			callback({ options: { shift: 1 } } as any, {} as any)
-			expect(instance.setVariableValues).toHaveBeenCalled()
+		it('pages forward until nobody is left, showing only the participants on a short last page', () => {
+			next(2)
+			expect(instance.ZoomParticipantPage.start).toBe(2)
+			expect(shown()).toEqual(['Charlie', '-'])
+			// already on the last page
+			next(2)
+			expect(instance.ZoomParticipantPage.start).toBe(2)
+			expect(shown()).toEqual(['Charlie', '-'])
+		})
+
+		it('pages back to the start and no further', () => {
+			next(2)
+			previous(2)
+			expect(instance.ZoomParticipantPage.start).toBe(0)
+			expect(shown()).toEqual(['Alice', 'Bob'])
+			previous(2)
+			expect(instance.ZoomParticipantPage.start).toBe(0)
+		})
+
+		it('keeps the participant list in its original order', () => {
+			next(2)
+			expect(instance.ZoomVariableLink.map((u) => u.userName)).toEqual(['Alice', 'Bob', 'Charlie'])
+		})
+
+		it('calls checkFeedbacks after paging', () => {
+			next(1)
+			expect(instance.checkFeedbacks).toHaveBeenCalled()
 		})
 	})
 
-	describe('previousParticipants', () => {
-		it('rotates ZoomVariableLink backward by the given shift amount', () => {
-			const callback = (actions[ActionIdUsers.previousParticipants] as any).callback
-			callback({ options: { shift: 1 } } as any, {} as any)
-			expect(instance.ZoomVariableLink[0]).toEqual({ zoomId: 1003, userName: 'Charlie' })
-			expect(instance.ZoomVariableLink[1]).toEqual({ zoomId: 1001, userName: 'Alice' })
-			expect(instance.ZoomVariableLink[2]).toEqual({ zoomId: 1002, userName: 'Bob' })
+	describe('participant page', () => {
+		it('reads positions from the start of the current page', () => {
+			instance.ZoomParticipantPage.start = 2
+			expect(participantAtPosition(instance, 1)?.userName).toBe('Charlie')
+			expect(participantAtPosition(instance, 2)).toBeUndefined()
 		})
 
-		it('calls checkFeedbacks after shifting', () => {
-			const callback = (actions[ActionIdUsers.previousParticipants] as any).callback
-			callback({ options: { shift: 1 } } as any, {} as any)
-			expect(instance.checkFeedbacks).toHaveBeenCalled()
+		it('steps back a page when everyone on the current page has left', () => {
+			instance.ZoomParticipantPage = { start: 2, size: 2 }
+			instance.ZoomVariableLink.pop()
+			keepParticipantPageInList(instance)
+			expect(instance.ZoomParticipantPage.start).toBe(0)
 		})
 	})
 

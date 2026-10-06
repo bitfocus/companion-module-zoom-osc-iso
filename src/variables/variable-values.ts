@@ -1,6 +1,6 @@
 import type { VariableValues } from './variable-definitions.js'
 import type ModuleInstance from '../index.js'
-import { padding, userExist } from '../utils.js'
+import { padding, participantAtPosition, userExist } from '../utils.js'
 import { participantIcons } from '../participant-icons.js'
 
 enum engineState {
@@ -199,9 +199,7 @@ export function updateZoomParticipantVariables(instance: ModuleInstance, variabl
 	if (instance.config.enableVariablesForParticipants) {
 		// Use the participant selection
 		for (let index = 1; index <= 1000; index++) {
-			variables[`Participant${padding(index, 3)}`] = instance.ZoomVariableLink[index - 1]
-				? instance.ZoomVariableLink[index - 1].userName
-				: '-'
+			variables[`Participant${padding(index, 3)}`] = participantAtPosition(instance, index)?.userName ?? '-'
 		}
 	}
 }

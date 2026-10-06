@@ -125,6 +125,29 @@ export interface ZoomVariableLinkInterface {
 	zoomId: number
 	userName: string
 }
+
+/** The page of the participant list the Participant variables show: where it starts, and the last page size asked for */
+export interface ZoomParticipantPageInterface {
+	start: number
+	size: number
+}
+
+/** The participant at a (1-based) position of the current participant page */
+export const participantAtPosition = (
+	instance: { ZoomVariableLink: ZoomVariableLinkInterface[]; ZoomParticipantPage: ZoomParticipantPageInterface },
+	position: number,
+): ZoomVariableLinkInterface | undefined => instance.ZoomVariableLink[instance.ZoomParticipantPage.start + position - 1]
+
+/** After participants leave, steps back a page at a time until the current page shows someone again */
+export const keepParticipantPageInList = (instance: {
+	ZoomVariableLink: ZoomVariableLinkInterface[]
+	ZoomParticipantPage: ZoomParticipantPageInterface
+}): void => {
+	const page = instance.ZoomParticipantPage
+	while (page.start > 0 && page.start >= instance.ZoomVariableLink.length) {
+		page.start = Math.max(0, page.start - page.size)
+	}
+}
 /**
  * @param red 0-255
  * @param green 0-255
