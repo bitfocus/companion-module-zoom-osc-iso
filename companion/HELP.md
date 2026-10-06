@@ -95,7 +95,7 @@ There are a number of configuration options for the module that allow you to con
 
    - The name is always shown in white, including when the participant is selected.
    - Spotlighted participants get a red background, selected participants a gray background, and participants who are both get a gray background with a red circle in the top-left corner.
-   - The active speaker gets a blue **SPEAKER** bar across the top, and their name moves down a line.
+   - The active speaker gets a blue **SPEAKER** bar across the top, and their name moves down a line. The bar and its label sit in one layer group, "Active Speaker Group", which the Active Speaker feedback turns on.
    - The mic, camera and hand icons each change independently.
 
    The "Select from Participants" and "Select from Gallery" sections, and the "Select <group> participants" section for each group, list positions 1 to 49 (the Spotlights group lists 1 to 9). Every button stores its position in a local variable called `position`. To use a button for a participant beyond 49, drag any of the presets onto a button and change its `position` local variable.

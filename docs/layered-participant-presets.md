@@ -64,9 +64,11 @@ A v1 "simple" button had one `style` (text, colour, background image). A v2 **la
 elements: [
 	{ id: 'background', type: 'box', color: 0x000000 /* … */ }, // drawn first (bottom)
 	{ id: 'name', type: 'text', text: 'Jane' /* … */ },
-	{ id: 'speakerBar', type: 'box', enabled: false /* … */ }, // drawn last (top)
+	{ id: 'speakerGroup', type: 'group', enabled: false, children: [/* … */] }, // drawn last (top)
 ]
 ```
+
+A **group** element holds other elements as `children`, drawn in the group's place. Disabling the group hides all of its children, whatever their own `enabled` says.
 
 ### 2.2 Feedbacks change one property of one element
 
@@ -320,6 +322,7 @@ export const ParticipantElement = {
 	mic: 'mic',
 	hand: 'hand',
 	name: 'name',
+	speakerGroup: 'speakerGroup',
 	speakerBar: 'speakerBar',
 	speakerText: 'speakerText',
 	spotlightCircle: 'spotlightCircle',
@@ -337,22 +340,31 @@ const elements: SomeButtonGraphicsElement[] = [
 	iconImage(e.mic, 'Mic Status'),
 	iconImage(e.hand, 'Hand Raised Status'),
 	{ id: e.name, name: 'Attendee Name', type: 'text' /* … */ },
-	box(e.speakerBar, 'Active Speaker', colorSpeakerBlue, false, 15),
-	{ id: e.speakerText, name: 'Active Speaker Text', type: 'text' /* … */ },
+	{
+		id: e.speakerGroup,
+		name: 'Active Speaker Group',
+		type: 'group',
+		enabled: false,
+		children: [
+			box(e.speakerBar, 'Active Speaker', colorSpeakerBlue, true, 15),
+			{ id: e.speakerText, name: 'Active Speaker Text', type: 'text', enabled: true /* … */ },
+		],
+	},
 	{ id: e.spotlightCircle, name: 'Spotlight Circle', type: 'circle' /* … */ },
 ]
 ```
 
-| #   | Id (name in Companion editor)        | Type   | Starts | Notes                                                                                   |
-| --- | ------------------------------------ | ------ | ------ | --------------------------------------------------------------------------------------- |
-| 1   | `background` (Background)            | box    | on     | Black, full button                                                                      |
-| 2   | `spotlight` (Spotlight)              | box    | off    | Dark red, full button: the "spotlighted" background                                     |
-| 3   | `selected` (Selected)                | box    | off    | Dark gray, full button. It sits above `spotlight`, so selected wins when both are on    |
-| 4–6 | `camera`, `mic`, `hand` (… Status)   | image  | empty  | Full-button transparent images; each icon is already drawn in its slot along the bottom |
-| 7   | `name` (Attendee Name)               | text   | on     | White, top centre, size 16.7                                                            |
-| 8   | `speakerBar` (Active Speaker)        | box    | off    | Blue (`colorSpeakerBlue` = 0,0,204), top 15% of the button                              |
-| 9   | `speakerText` (Active Speaker Text)  | text   | off    | "SPEAKER" in bold white on the bar                                                      |
-| 10  | `spotlightCircle` (Spotlight Circle) | circle | off    | Dark red dot with a white border, top left                                              |
+| #   | Id (name in Companion editor)         | Type   | Starts | Notes                                                                                   |
+| --- | ------------------------------------- | ------ | ------ | --------------------------------------------------------------------------------------- |
+| 1   | `background` (Background)             | box    | on     | Black, full button                                                                      |
+| 2   | `spotlight` (Spotlight)               | box    | off    | Dark red, full button: the "spotlighted" background                                     |
+| 3   | `selected` (Selected)                 | box    | off    | Dark gray, full button. It sits above `spotlight`, so selected wins when both are on    |
+| 4–6 | `camera`, `mic`, `hand` (… Status)    | image  | empty  | Full-button transparent images; each icon is already drawn in its slot along the bottom |
+| 7   | `name` (Attendee Name)                | text   | on     | White, top centre, size 16.7                                                            |
+| 8   | `speakerGroup` (Active Speaker Group) | group  | off    | Holds the speaker bar and its label, so one override shows or hides both                |
+| 8a  | ↳ `speakerBar` (Active Speaker)       | box    | on     | Blue (`colorSpeakerBlue` = 0,0,204), top 15% of the button                              |
+| 8b  | ↳ `speakerText` (Active Speaker Text) | text   | on     | "SPEAKER" in bold white on the bar                                                      |
+| 9   | `spotlightCircle` (Spotlight Circle)  | circle | off    | Dark red dot with a white border, top left                                              |
 
 Positions and sizes (`x`, `y`, `width`, `height`) are **percentages of the button**. Most layers cover the whole button (`fullBounds = { x: 0, y: 0, width: 100, height: 100 }`).
 
@@ -495,8 +507,7 @@ Here's what Companion receives for the "Selected and Spotlighted" group:
 	...feedback(feedbackType.activeSpeaker),
 	headline: 'Active Speaker',
 	styleOverrides: [
-		override(e.speakerBar, 'enabled', true),
-		override(e.speakerText, 'enabled', true),
+		override(e.speakerGroup, 'enabled', true),
 		override(e.name, 'text', expression(nameText('\\n', buttonTextActiveSpeakerLength))),
 		override(e.name, 'halign', 'left'),
 		override(e.name, 'valign', 'top'),
@@ -506,7 +517,7 @@ Here's what Companion receives for the "Selected and Spotlighted" group:
 
 When the participant is the active speaker:
 
-- The blue bar and its "SPEAKER" label appear.
+- The Active Speaker group is enabled, so the blue bar and its "SPEAKER" label appear. Both stay enabled inside the group; only the group is switched.
 - The name moves down one line (`\n`) so it isn't under the bar, aligns left, and is cut to 40 characters.
 
 #### Mic, camera and hand icons
@@ -678,7 +689,7 @@ Each icon is copied onto its own transparent 72×72 canvas, keeping its original
 
 ## 9. Gotchas
 
-- **Draw order is array order.** An element later in `elements` is drawn on top. `selected` must stay after `spotlight`, and the speaker bar after the name.
+- **Draw order is array order.** An element later in `elements` is drawn on top. `selected` must stay after `spotlight`, and the Active Speaker group after the name.
 - **Overrides only apply while the feedback is true.** "Off" states come from the element's own starting values, not from a feedback.
 - **The position option is an expression everywhere.** Feedbacks get `$(local:position)` (a number), and the select actions get `concat($(local:position))` (a string, because those dropdowns use string ids).
 - **Every `$(label:…)` in a preset is rewritten to the connection label** when the preset is used, even inside expression text. The only exceptions are `$(local:…)` and `$(this:…)`. Write this module's variables as `$(zoomosc:…)`. For anything outside the module, such as image library images or custom variables, use `getVariable('label', 'name')` in an expression instead.

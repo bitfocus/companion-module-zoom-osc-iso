@@ -40,9 +40,17 @@ describe('layered participant preset', () => {
 			E.mic,
 			E.hand,
 			E.name,
-			E.speakerBar,
-			E.speakerText,
+			E.speakerGroup,
 			E.spotlightCircle,
+		])
+	})
+
+	it('keeps the speaker bar and label enabled inside a disabled Active Speaker group', () => {
+		const group = build().elements.find((el: any) => el.id === E.speakerGroup)
+		expect(group).toMatchObject({ type: 'group', name: 'Active Speaker Group', enabled: false })
+		expect(group.children.map((c: any) => [c.id, c.enabled])).toEqual([
+			[E.speakerBar, true],
+			[E.speakerText, true],
 		])
 	})
 
@@ -114,14 +122,15 @@ describe('layered participant preset', () => {
 		}
 	})
 
-	it('shows the speaker bar and label, and moves the name down for the active speaker', () => {
+	it('enables the Active Speaker group, and moves the name down for the active speaker', () => {
 		const speaker = topLevel(build(), feedbackType.activeSpeaker)[0]
 		const text = speaker.styleOverrides.find((o: any) => o.elementProperty === 'text')
 		expect(text.override).toEqual({ isExpression: true, value: '`\\n3. ${substr($(zoomosc:GalleryPosition03),0,40)}`' })
-		expect(overrides(speaker)).toMatchObject({
-			[`${E.speakerBar}.enabled`]: true,
-			[`${E.speakerText}.enabled`]: true,
+		expect(overrides(speaker)).toEqual({
+			[`${E.speakerGroup}.enabled`]: true,
+			[`${E.name}.text`]: '`\\n3. ${substr($(zoomosc:GalleryPosition03),0,40)}`',
 			[`${E.name}.halign`]: 'left',
+			[`${E.name}.valign`]: 'top',
 		})
 	})
 
