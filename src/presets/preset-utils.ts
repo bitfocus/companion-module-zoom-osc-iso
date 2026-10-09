@@ -124,10 +124,15 @@ export function buildParticipantLayeredPreset(params: {
 	 */
 	positionText?: string
 	target: ParticipantFeedbackTarget
+	/**
+	 * Show the speaker bar all the time, with the name laid out below it, instead of only while the Active Speaker
+	 * feedback is on. For a button that always follows the active speaker; it then has no Active Speaker feedback.
+	 */
+	alwaysSpeaking?: boolean
 	steps: CompanionButtonStepActions<ModuleSchema>[]
 	localVariables?: CompanionLayeredButtonPresetDefinition<ModuleSchema>['localVariables']
 }): CompanionLayeredButtonPresetDefinition<ModuleSchema> {
-	const { nameExpression, positionText, target } = params
+	const { nameExpression, positionText, target, alwaysSpeaking = false } = params
 	const e = ParticipantElement
 
 	// The typed preset format has no feedback-specific options union for the three targets, so they are built loosely
@@ -193,16 +198,20 @@ export function buildParticipantLayeredPreset(params: {
 			[spotlightOnChild(), selectedChild()],
 			[override(e.spotlightCircle, 'enabled', true), override(e.selected, 'enabled', true)],
 		),
-		{
-			...feedback(feedbackType.activeSpeaker),
-			headline: 'Active Speaker',
-			styleOverrides: [
-				override(e.speakerGroup, 'enabled', true),
-				override(e.name, 'text', expression(nameText('\\n', buttonTextActiveSpeakerLength))),
-				override(e.name, 'halign', 'left'),
-				override(e.name, 'valign', 'top'),
-			],
-		},
+		...(alwaysSpeaking
+			? []
+			: [
+					{
+						...feedback(feedbackType.activeSpeaker),
+						headline: 'Active Speaker',
+						styleOverrides: [
+							override(e.speakerGroup, 'enabled', true),
+							override(e.name, 'text', expression(nameText('\\n', buttonTextActiveSpeakerLength))),
+							override(e.name, 'halign', 'left'),
+							override(e.name, 'valign', 'top'),
+						],
+					},
+				]),
 		...iconFeedbacks.map(({ type, elementId, headline, icon }) => ({
 			...feedback(type),
 			headline,
@@ -223,9 +232,12 @@ export function buildParticipantLayeredPreset(params: {
 			type: 'text',
 			enabled: true,
 			...fullBounds,
-			text: expression(nameText('', buttonTextDefaultLength)),
+			// Laid out as the Active Speaker feedback would, when the speaker bar is always on
+			text: expression(
+				alwaysSpeaking ? nameText('\\n', buttonTextActiveSpeakerLength) : nameText('', buttonTextDefaultLength),
+			),
 			color: colorWhite,
-			halign: 'center',
+			halign: alwaysSpeaking ? 'left' : 'center',
 			valign: 'top',
 			fontsize: 16.7,
 			fontsizeAllowShrink: false,
@@ -237,7 +249,7 @@ export function buildParticipantLayeredPreset(params: {
 			id: e.speakerGroup,
 			name: 'Active Speaker Group',
 			type: 'group',
-			enabled: false,
+			enabled: alwaysSpeaking,
 			...fullBounds,
 			rotation: 0,
 			squareCoords: false,

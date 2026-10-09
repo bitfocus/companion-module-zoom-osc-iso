@@ -102,7 +102,7 @@ There are a number of configuration options for the module that allow you to con
 
    The **Select by name** preset (in "Manage Selections") is the same layered button for a participant chosen by name. Set the participant's name in the button's `name` local variable; the select action, all of its feedbacks and the button text use it. The button shows "Select by name" until a name is set.
 
-   The **Active Speaker** preset (also in "Manage Selections of Participants") is the same layered button for whoever is currently speaking. It uses the module's `$(zoomosc:activeSpeaker)` variable as the name, so pressing it toggles the active speaker in the selection, and its name, icons and highlights follow the active speaker.
+   The **Active Speaker** preset (also in "Manage Selections of Participants") is the same layered button for whoever is currently speaking. It uses the module's `$(zoomosc:activeSpeaker)` variable as the name, so pressing it toggles the active speaker in the selection, and its name, icons and highlights follow the active speaker. Its blue **SPEAKER** bar is always on.
 
    **Preset icons**
 

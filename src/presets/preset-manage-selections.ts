@@ -132,11 +132,13 @@ export function GetPresetsManageSelections(): {
 			],
 			localVariables: [{ variableType: 'simple', variableName: 'name', startupValue: '' }],
 		}),
-		// Active Speaker: the same layered participant button for whoever is currently speaking
+		// Active Speaker: the same layered participant button for whoever is currently speaking, so its speaker bar is
+		// always on
 		[PresetIdManageSelections.activeSpeaker]: buildParticipantLayeredPreset({
 			name: 'Active Speaker',
 			nameExpression: activeSpeakerName,
 			target: { feedbackId: FeedbackId.userNameBased, options: { name: activeSpeakerName } },
+			alwaysSpeaking: true,
 			steps: [
 				{
 					down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: activeSpeakerName } }],

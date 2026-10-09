@@ -342,7 +342,11 @@ describe('active speaker preset', () => {
 		const gallery = build()
 		expect(preset).toMatchObject({ type: 'layered', name: 'Active Speaker' })
 		expect(ids(preset)).toEqual(ids(gallery))
-		expect(preset.feedbacks.map((f: any) => f.headline)).toEqual(gallery.feedbacks.map((f: any) => f.headline))
+		// Everything but the Active Speaker feedback, since its speaker bar is always on
+		expect(preset.feedbacks.map((f: any) => f.headline)).toEqual(
+			gallery.feedbacks.map((f: any) => f.headline).filter((h: string) => h !== 'Active Speaker'),
+		)
+		expect(topLevel(preset, feedbackType.activeSpeaker)).toEqual([])
 		const all = preset.feedbacks.flatMap((f: any) => (f.children ? f.children.default : [f]))
 		for (const f of all) {
 			expect(f.feedbackId).toBe(FeedbackId.userNameBased)
@@ -356,6 +360,12 @@ describe('active speaker preset', () => {
 			{ actionId: 'select_User_By_Name', options: { option: 'toggle', name: '$(zoomosc:activeSpeaker)' } },
 		])
 		const name = preset.elements.find((e: any) => e.id === E.name)
-		expect(name.text).toEqual({ isExpression: true, value: '`${substr($(zoomosc:activeSpeaker),0,50)}`' })
+		expect(name.text).toEqual({ isExpression: true, value: '`\\n${substr($(zoomosc:activeSpeaker),0,40)}`' })
+	})
+
+	it('always shows the speaker bar, with the name below it as for an active speaker', () => {
+		const preset = activeSpeaker()
+		expect(preset.elements.find((e: any) => e.id === E.speakerGroup)).toMatchObject({ enabled: true })
+		expect(preset.elements.find((e: any) => e.id === E.name)).toMatchObject({ halign: 'left', valign: 'top' })
 	})
 })

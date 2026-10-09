@@ -171,7 +171,7 @@ The three sections side by side:
 - The action's and feedbacks' `name` fields resolve variables, so a plain `$(local:name)` works there.
 - `positionText` is left out, so the button text has no "N." prefix. It shows the name, or "Select by name" while it's empty.
 
-**Active Speaker** (same file) is built the same way, with the module's `$(zoomosc:activeSpeaker)` variable in place of the local variable. That variable always holds the name of whoever is speaking, so the button, its feedbacks and its "Preselect user by name" action (option Toggle) follow the active speaker. There's no local variable on this one.
+**Active Speaker** (same file) is built the same way, with the module's `$(zoomosc:activeSpeaker)` variable in place of the local variable. That variable always holds the name of whoever is speaking, so the button, its feedbacks and its "Preselect user by name" action (option Toggle) follow the active speaker. There's no local variable on this one. It's built with `alwaysSpeaking: true`, so the Active Speaker group starts enabled and the name starts laid out below the bar (see [Active speaker](#active-speaker)), and the button has no Active Speaker feedback.
 
 The participant section needs **Enable Variable For Participants** turned on in the module config. Both the `Participant007` variables and the `index_Based` feedback depend on it.
 
@@ -519,6 +519,8 @@ When the participant is the active speaker:
 
 - The Active Speaker group is enabled, so the blue bar and its "SPEAKER" label appear. Both stay enabled inside the group; only the group is switched.
 - The name moves down one line (`\n`) so it isn't under the bar, aligns left, and is cut to 40 characters.
+
+With `alwaysSpeaking: true` (the Active Speaker preset), that is the button's starting layout instead: the group is enabled, the name element already has the `\n` text and left alignment, and this feedback is left out.
 
 #### Mic, camera and hand icons
 
