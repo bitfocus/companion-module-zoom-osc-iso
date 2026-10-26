@@ -247,7 +247,6 @@ function handleVideoShareStopped(context: OSCHandlerContext): void {
 	})
 }
 
-// for ZoomOSC/ISO v3
 export async function handleUserMessage(
 	context: OSCHandlerContext,
 	data: ZoomOSCResponse,
