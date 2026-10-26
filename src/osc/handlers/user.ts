@@ -225,6 +225,7 @@ function handleIsSpeaking(context: OSCHandlerContext, data: ZoomOSCResponse): vo
 	setVariables(context.instance, (variables) => updateIsSpeakingVariable(context.instance, variables))
 }
 
+// for ZoomOSC/ISO v2
 function handleShareStatus(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 	const shareType = data.args[4].value
 	setVariables(context.instance, (variables) => {
@@ -232,7 +233,7 @@ function handleShareStatus(context: OSCHandlerContext, data: ZoomOSCResponse): v
 	})
 }
 
-// for ZoomOSC/ISO v2
+// for ZoomOSC/ISO v3
 function handleVideoShareStarted(context: OSCHandlerContext): void {
 	setVariables(context.instance, (variables) => {
 		variables.videoShareStatus = 'On'
