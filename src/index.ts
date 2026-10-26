@@ -156,16 +156,19 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	 * @description close connections and stop timers/intervals
 	 */
 	async destroy(): Promise<void> {
+		// stop everything that can still touch the data (timers, incoming OSC) before clearing it
+		await this.OSC?.destroy()
+
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
 		this.ZoomParticipantPage.start = 0
-		this.ZoomGroupData = []
+		// keep the groups themselves: feedback checks can still arrive while Companion stops the connection
+		this.ZoomGroupData.forEach((group) => (group.users = []))
 		this.ZoomUserOffline = []
 		this.ZoomMeData = { zoomId: 0, userName: '' }
 		this.ZoomAudioLevelData = []
 		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
-		await this.OSC?.destroy()
 	}
 
 	/**

@@ -223,12 +223,9 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1]) {
-					const zoomID =
-						instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1].zoomID
-					return feedbackResults(feedback.options.type, zoomID)
-				}
-				return false
+				// the group may not exist (removed, or the connection is stopping)
+				const user = instance.ZoomGroupData[Number(feedback.options.group)]?.users[feedback.options.position - 1]
+				return user ? feedbackResults(feedback.options.type, user.zoomID) : false
 			},
 		},
 		[FeedbackId.groupBasedAdvanced]: {
@@ -256,14 +253,15 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1]) {
-					const zoomID =
-						instance.ZoomGroupData[Number(feedback.options.group)].users[feedback.options.position - 1].zoomID
+				// the group may not exist (removed, or the connection is stopping)
+				const user = instance.ZoomGroupData[Number(feedback.options.group)]?.users[feedback.options.position - 1]
+				if (!user) return {}
 
-					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
-				}
-
-				return {}
+				return feedbackResultsMultiState(
+					instance,
+					user.zoomID,
+					feedback.image === undefined ? 72 : feedback.image.height,
+				)
 			},
 		},
 		[FeedbackId.indexBased]: {
