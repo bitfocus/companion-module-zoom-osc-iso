@@ -232,6 +232,21 @@ function handleShareStatus(context: OSCHandlerContext, data: ZoomOSCResponse): v
 	})
 }
 
+// for ZoomOSC/ISO v2
+function handleVideoShareStarted(context: OSCHandlerContext): void {
+	setVariables(context.instance, (variables) => {
+		variables.videoShareStatus = 'On'
+	})
+}
+
+// for ZoomOSC/ISO v3
+function handleVideoShareStopped(context: OSCHandlerContext): void {
+	setVariables(context.instance, (variables) => {
+		variables.videoShareStatus = 'Off'
+	})
+}
+
+// for ZoomOSC/ISO v3
 export async function handleUserMessage(
 	context: OSCHandlerContext,
 	data: ZoomOSCResponse,
@@ -303,8 +318,17 @@ export async function handleUserMessage(
 		case 'isSpeaking':
 			handleIsSpeaking(context, data)
 			break
+		// for ZoomOSC/ISO v2
 		case 'shareStatus':
 			handleShareStatus(context, data)
+			break
+		// for ZoomOSC/ISO v3
+		case 'videoShareStopped':
+			handleVideoShareStopped(context)
+			break
+		// for ZoomOSC/ISO v3
+		case 'videoShareStarted':
+			handleVideoShareStarted(context)
 			break
 		default:
 			break
