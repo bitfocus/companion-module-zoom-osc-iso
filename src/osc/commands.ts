@@ -5,7 +5,7 @@ import type { NodeOscArgument, NodeOscMessage, ZoomOSCResponse } from './types.j
 
 type SendCommand = (path: string, args?: OSCSomeArguments) => void
 type OSCClientSender = {
-	send(address: string, ...args: Array<OSCArgument | OSCMetaArgument>): void
+	send(address: string, ...args: Array<OSCArgument | OSCMetaArgument>): unknown
 }
 
 type OscArgumentArray = Array<OSCArgument | OSCMetaArgument>
@@ -18,8 +18,9 @@ function toArgumentArray(args?: OSCSomeArguments): OscArgumentArray {
 	return Array.isArray(args) ? args : [args]
 }
 
-export function sendOscCommand(client: OSCClientSender, path: string, args?: OSCSomeArguments): void {
-	client.send(path, ...toArgumentArray(args))
+/** Returns what the client's send returns: node-osc gives a Promise that rejects when the message can't be sent */
+export function sendOscCommand(client: OSCClientSender, path: string, args?: OSCSomeArguments): unknown {
+	return client.send(path, ...toArgumentArray(args))
 }
 
 export function sendZoomSubscriptions(sendCommand: SendCommand): void {

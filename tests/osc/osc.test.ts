@@ -57,3 +57,30 @@ describe('OSC destroy', () => {
 		expect(resolved).toBe(true)
 	})
 })
+
+describe('OSC sendCommand', () => {
+	beforeEach(() => {
+		nodeOscMock.Client.mockReset()
+		nodeOscMock.Server.mockReset()
+		nodeOscMock.Server.mockImplementation(() => ({ on: vi.fn().mockReturnThis(), close: vi.fn(async () => {}) }))
+	})
+
+	it('logs a send that node-osc rejects instead of leaving the rejection unhandled', async () => {
+		nodeOscMock.Client.mockImplementation(() => ({
+			send: vi.fn(async () => Promise.reject(new Error("Don't know how to encode argument: [object Object]"))),
+			close: vi.fn(async () => {}),
+		}))
+		const instance = createMockInstance()
+		const osc = new OSC(instance)
+
+		osc.sendCommand('/zoom/zoomID/outputISO', [{ type: 'i', value: undefined as unknown as number }])
+		await new Promise((resolve) => setTimeout(resolve, 0))
+
+		expect(instance.log).toHaveBeenCalledWith(
+			'error',
+			expect.stringContaining(
+				'/zoom/zoomID/outputISO and args: [{"type":"i"}]. Error: Don\'t know how to encode argument',
+			),
+		)
+	})
+})

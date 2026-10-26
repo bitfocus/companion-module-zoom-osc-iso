@@ -247,16 +247,20 @@ export class OSC {
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
 		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
+		const logError = (error: unknown) =>
+			this.instance.log(
+				'error',
+				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`,
+			)
 		try {
 			if (!this.client) {
 				throw new Error('OSC client is not connected')
 			}
-			sendOscCommand(this.client, path, args)
+			// node-osc reports encoding and socket errors by rejecting; left unhandled, that would crash the module
+			const sent = sendOscCommand(this.client, path, args)
+			if (sent instanceof Promise) sent.catch(logError)
 		} catch (error) {
-			this.instance.log(
-				'error',
-				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${JSON.stringify(error)}`,
-			)
+			logError(error)
 		}
 	}
 

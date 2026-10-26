@@ -42,6 +42,8 @@ export const PreviousSelectedCallersRestore = (instance: ModuleInstance): void =
 
 export const selectUser = (instance: ModuleInstance, zoomId: number, option: string): void => {
 	const { ZoomClientDataObj, config } = instance
+	// a missing participant must never end up in the selection: it would be sent to Zoom as an invalid id
+	if (typeof zoomId !== 'number') return
 
 	PreviousSelectedCallersSave(instance)
 

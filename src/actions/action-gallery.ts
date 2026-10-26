@@ -32,9 +32,11 @@ export function GetActionsGallery(instance: ModuleInstance): CompanionActionDefi
 				},
 			],
 			callback: (action) => {
-				PreviousSelectedCallersSave(instance)
 				const zoomId = instance.ZoomClientDataObj.galleryOrder[Number(action.options.position) - 1]
+				// nobody in that gallery position
+				if (zoomId === undefined) return
 
+				PreviousSelectedCallersSave(instance)
 				selectUser(instance, zoomId, action.options.option)
 				// instance.UpdateVariablesValues()
 				const variables: VariableValues = {}

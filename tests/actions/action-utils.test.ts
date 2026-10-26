@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
-import { createCommand, sendActionCommand } from '../../src/actions/action-utils.js'
+import { createCommand, selectUser, sendActionCommand } from '../../src/actions/action-utils.js'
 
 describe('createCommand', () => {
 	let instance: ReturnType<typeof createMockInstance>
@@ -194,5 +194,15 @@ describe('sendActionCommand', () => {
 		const anyInstance = instance as any
 		anyInstance.OSC = null
 		expect(() => sendActionCommand(instance, { options: { command: '/zoom/test', args: [] } })).not.toThrow()
+	})
+})
+
+describe('selectUser', () => {
+	it.each(['toggle', 'select', 'remove'])('never adds a missing participant to the selection (%s)', (option) => {
+		const instance = createMockInstance({ selectedCallers: [1001] })
+		instance.ZoomClientDataObj.PreviousSelectedCallers = [1003]
+		selectUser(instance, undefined as unknown as number, option)
+		expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1001])
+		expect(instance.ZoomClientDataObj.PreviousSelectedCallers).toEqual([1003])
 	})
 })

@@ -314,7 +314,9 @@ export function GetActionsGroups(instance: ModuleInstance): CompanionActionDefin
 			],
 			callback: (action) => {
 				const zoomId =
-					instance.ZoomGroupData[Number(action.options.group)].users[Number(action.options.position) - 1].zoomID
+					instance.ZoomGroupData[Number(action.options.group)]?.users[Number(action.options.position) - 1]?.zoomID
+				// nobody in that group position
+				if (zoomId === undefined) return
 
 				selectUser(instance, zoomId, action.options.option)
 
