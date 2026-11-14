@@ -3,12 +3,6 @@ import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'
 
-// Mock got-cjs to prevent real HTTP calls from socialstream internals
-vi.mock('got-cjs', () => {
-	const got = { post: vi.fn().mockResolvedValue({ body: 'ok' } as never) }
-	return { default: got, got }
-})
-
 describe('GetActionsSocalSteam', () => {
 	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsSocalSteam>
@@ -20,6 +14,11 @@ describe('GetActionsSocalSteam', () => {
 	})
 
 	beforeEach(() => {
+		// Safety net: no real HTTP calls if postMessage is ever reached unmocked
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response('ok')),
+		)
 		const anyInstance = instance as any
 		anyInstance.saveConfig = vi.fn()
 		postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
@@ -31,6 +30,7 @@ describe('GetActionsSocalSteam', () => {
 	afterEach(() => {
 		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
+		vi.unstubAllGlobals()
 	})
 
 	// ── sendAChatToSocialStream ───────────────────────────────────────────────

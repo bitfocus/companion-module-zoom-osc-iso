@@ -1,13 +1,8 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { handleUserMessage } from '../../../src/osc/handlers/user.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.js'
 import { createMockInstance } from '../../helpers/mock-instance.js'
 import { socialStreamApi } from '../../../src/socialstream.js'
-
-vi.mock('got-cjs', () => {
-	const got = { post: vi.fn().mockResolvedValue({ body: 'ok' } as never) }
-	return { default: got, got }
-})
 
 function createContext(): OSCHandlerContext {
 	const instance = createMockInstance()
@@ -37,6 +32,15 @@ function createContext(): OSCHandlerContext {
 describe('handleUserMessage chat handling', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks()
+		// Safety net: no real HTTP calls if postMessage is ever reached unmocked
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response('ok')),
+		)
+	})
+
+	afterEach(() => {
+		vi.unstubAllGlobals()
 	})
 
 	it('ignores short chat payloads without throwing or posting', async () => {
