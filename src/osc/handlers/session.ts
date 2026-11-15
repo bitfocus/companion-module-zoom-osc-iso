@@ -9,6 +9,7 @@ import {
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
 import { sendZoomSubscriptions } from '../commands.js'
+import { checkGroupFeedbacks } from '../feedbacks.js'
 import { MeetingStatus, type OSCHandlerContext, type ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
@@ -158,7 +159,12 @@ function handleListCleared(context: OSCHandlerContext): void {
 	context.instance.ZoomVariableLink.length = 0
 	context.instance.ZoomParticipantPage.start = 0
 	context.instance.ZoomUserData = {}
+	// Hosts and Spotlights are rebuilt from the participant list and the spot order when they come again. The custom
+	// groups are left as they are: they're built by hand, and the end of a meeting already clears them.
+	context.instance.ZoomGroupData[0]?.users.splice(0)
+	context.instance.ZoomGroupData[1]?.users.splice(0)
 
 	setVariables(context.instance, (variables) => updateAllUserBasedVariables(context.instance, variables))
+	checkGroupFeedbacks(context.instance)
 	PreviousSelectedCallersRestore(context.instance)
 }

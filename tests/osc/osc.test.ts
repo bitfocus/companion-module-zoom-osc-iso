@@ -215,3 +215,40 @@ describe('OSC starting or joining a meeting', () => {
 		expect(sentCount(port, '/zoom/getEngineState')).toBe(1)
 	})
 })
+
+describe('OSC when a meeting ends', () => {
+	it('leaves no USER OFFLINE entry on the Host button (the sequence ZoomOSC 5.0.1 sent on 2026-11-14)', async () => {
+		vi.useFakeTimers()
+		try {
+			const instance = createMockInstance()
+			instance.ZoomGroupData = [
+				{ groupName: 'Hosts', users: [] },
+				{ groupName: 'Spotlights', users: [] },
+			]
+			new OSC(instance)
+			const port = lastPort()
+			const typed = (value: number | string) => ({ type: typeof value === 'string' ? 's' : 'i', value })
+			const receive = async (address: string, ...args: Array<number | string>) => {
+				port.emit('message', { address, args: args.map(typed) })
+				await vi.advanceTimersByTimeAsync(0)
+			}
+
+			await receive('/zoomosc/user/list', 0, 'Alice', 1, 101, 2, 2, 1, 1, 1, 0, 0)
+			expect(instance.ZoomGroupData[0].users).toEqual([{ zoomID: 101, userName: 'Alice' }])
+
+			await receive('/zoomosc/meetingStatusChanged', 4, 0, 0)
+			await receive('/zoomosc/meetingStatusChanged', 7, 0, 0)
+			// every former participant, listed with Zoom ID -1, the host among them
+			await receive('/zoomosc/me/list', '246150FF', 'USER OFFLINE', -1, -1, 0, 0, 3, 1, 1, 0, 0)
+			await receive('/zoomosc/me/list', '90E59E53', 'USER OFFLINE', -1, -1, 0, 0, 1, 1, 1, 0, 0)
+			await receive('/zoomosc/me/list', 'D991CE13', 'USER OFFLINE', -1, -1, 0, 0, 2, 1, 0, 0, 0)
+			await receive('/zoomosc/listCleared')
+
+			expect(instance.ZoomGroupData[0].users).toEqual([])
+			expect(instance.ZoomUserData).toEqual({})
+			expect(instance.ZoomVariableLink).toEqual([])
+		} finally {
+			vi.useRealTimers()
+		}
+	})
+})

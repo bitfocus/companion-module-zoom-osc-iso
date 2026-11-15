@@ -131,4 +131,21 @@ describe('handleSessionMessage', () => {
 			expect(context.sendCommand).not.toHaveBeenCalledWith('/zoom/list', [])
 		})
 	})
+
+	it('empties Hosts and Spotlights when ZoomOSC/ISO clears its list, and keeps the custom groups', () => {
+		const context = createContext()
+		context.instance.ZoomUserData = { 101: { zoomId: 101, userName: 'Alice', users: [] } as never }
+		context.instance.ZoomGroupData = [
+			{ groupName: 'Hosts', users: [{ zoomID: -1, userName: 'USER OFFLINE' }] },
+			{ groupName: 'Spotlights', users: [{ zoomID: 101, userName: 'Alice' }] },
+			{ groupName: 'Speakers', users: [{ zoomID: 101, userName: 'Alice' }] },
+		]
+
+		handleSessionMessage(context, { address: '/zoomosc/listCleared', args: [] }, 'listCleared')
+
+		expect(context.instance.ZoomUserData).toEqual({})
+		expect(context.instance.ZoomGroupData[0].users).toEqual([])
+		expect(context.instance.ZoomGroupData[1].users).toEqual([])
+		expect(context.instance.ZoomGroupData[2].users).toEqual([{ zoomID: 101, userName: 'Alice' }])
+	})
 })

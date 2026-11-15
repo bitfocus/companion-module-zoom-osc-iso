@@ -7,6 +7,13 @@ export async function createZoomUser(instance: ModuleInstance, data: ZoomOSCResp
 	const zoomId = parseInt(data.args[3].value)
 	const userName = data.args[1].value
 
+	// When a meeting ends, ZoomOSC/ISO lists every former participant with Zoom ID -1, named USER OFFLINE (seen on
+	// ZoomOSC 5.0.1, as /zoomosc/me/list, just before listCleared). Those aren't participants: one with the host role
+	// would otherwise land in the Hosts group and stay on the Host button.
+	if (!Number.isInteger(zoomId) || zoomId < 0) {
+		return
+	}
+
 	if (instance.ZoomUserOffline[zoomId]) {
 		return
 	}
