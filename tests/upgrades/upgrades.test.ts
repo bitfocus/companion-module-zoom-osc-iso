@@ -4,7 +4,6 @@ import { UpgradeScripts } from '../../src/upgrades.js'
 import { UpgradeV2ToV3 } from '../../src/upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from '../../src/upgrades/fixWrongPinCommands.js'
 import { addPollingConfigOptions } from '../../src/upgrades/addPollingConfigOptions.js'
-import { addOscForwardingConfigFields } from '../../src/upgrades/addOscForwardingConfigFields.js'
 import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from '../../src/upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
 import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from '../../src/upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
 import { ActionIdGroups } from '../../src/actions/action-group.js'
@@ -36,7 +35,6 @@ describe('UpgradeScripts array', () => {
 			fixWrongPinCommands,
 			addNewConfigFieldsForSocialStreamChatMessagesToSend,
 			addPollingConfigOptions,
-			addOscForwardingConfigFields,
 		])
 	})
 })
@@ -112,27 +110,5 @@ describe('config-only upgrade scripts', () => {
 	it('addNewConfigFieldsForSocialStreamChatMessagesToSend sets the default chat types', () => {
 		const out = addNewConfigFieldsForSocialStreamChatMessagesToSend(context, props([]))
 		expect(out.updatedConfig).toMatchObject({ host: '1.2.3.4', socialStreamChatTypeToSend: [0, 1, 2] })
-	})
-
-	it('addOscForwardingConfigFields adds forwarding turned off, pointed at the default address', () => {
-		const out = addOscForwardingConfigFields(context, props([]))
-		expect(out.updatedConfig).toMatchObject({
-			host: '1.2.3.4',
-			enableOscForwarding: false,
-			oscForwardHost: '127.0.0.1',
-			oscForwardPort: 1235,
-		})
-	})
-
-	it('addOscForwardingConfigFields keeps forwarding settings that are already saved', () => {
-		const saved = {
-			currentConfig: { host: '1.2.3.4', enableOscForwarding: true, oscForwardHost: '10.0.0.5', oscForwardPort: 8000 },
-		} as unknown as typeof context
-		const out = addOscForwardingConfigFields(saved, props([]))
-		expect(out.updatedConfig).toMatchObject({
-			enableOscForwarding: true,
-			oscForwardHost: '10.0.0.5',
-			oscForwardPort: 8000,
-		})
 	})
 })

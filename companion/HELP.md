@@ -28,7 +28,7 @@ You will need to configure these settings in ZoomOSC/ZoomISO UI
 
 ## Companion Module Configuration
 
-There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, OSC forwarding, and advanced performance tweaks.
+There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, and advanced performance tweaks.
 
 1. **ZoomISO/ZoomOSC Transmission IP (e.g. Target Host):** Match ZoomISO/ZoomOSC Transmission IP.
 1. **ZoomISO/ZoomOSC Receiving Port:** Match ZoomISO/ZoomOSC Recieving Port.
@@ -173,16 +173,6 @@ There are a number of configuration options for the module that allow you to con
      - Width: 1200
      - Height: 300
      - Shutdown source when not visible
-
-1. **OSC Forwarding**
-
-   ZoomOSC/ZoomISO can only send its messages to one place, which is this module. To let another application see the same messages, enable OSC Forwarding and enter that application's IP and port. The module sends a copy of every OSC message it receives from ZoomOSC/ZoomISO to that address, exactly as it arrived. Nothing is filtered or changed, and the module keeps working as usual.
-
-   - Only the messages received from ZoomOSC/ZoomISO are forwarded, not the commands this module sends.
-   - A message is forwarded only when it comes from ZoomOSC/ZoomISO's Transmission IP, or from any address of this computer when ZoomOSC/ZoomISO runs on it. This stops anyone else on the network from reaching the other application through this module. Messages from other senders are handled as before but not forwarded, and the module logs this at most once a minute.
-   - The other application sends its own commands straight to ZoomOSC/ZoomISO's receiving port. ZoomOSC/ZoomISO replies to this module, which forwards those replies too and also acts on them as usual.
-   - Messages go to one IP and port. The module refuses an address that would loop: its own receiving port, or ZoomOSC/ZoomISO's receiving port. It logs a warning and leaves forwarding off.
-   - If the other application isn't running, the module keeps working and logs a failed send at most once a minute.
 
 1. **Advanced - Optional Performance Tweaks**
 
