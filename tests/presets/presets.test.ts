@@ -176,6 +176,13 @@ describe('presets (v2 structure)', () => {
 		expect(placement.get('set_user_to_output_1')?.sectionName).toBe('ZoomISO Actions')
 	})
 
+	it('offers a Request Spotlight Order button with the other data requests', () => {
+		expect(captured.placement.get('Request_Spotlight_Order')?.sectionName).toBe('Data and Custom Actions')
+		const preset = captured.presets['Request_Spotlight_Order'] as any
+		expect(preset.style.text).toBe('Request Spotlight Order')
+		expect(preset.steps[0].down).toEqual([{ actionId: 'requestOrderOfSpotlights', options: {} }])
+	})
+
 	it('references only existing actions and feedbacks, giving every option they define', () => {
 		instance.setActionDefinitions = vi.fn()
 		UpdateActions(instance)

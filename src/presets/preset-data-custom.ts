@@ -13,6 +13,7 @@ export enum PresetIdDataCustom {
 	requestListOfBreakoutRooms = 'Request_List_of_Breakout_Rooms',
 	requestGalleryOrder = 'Request_Gallery_Order',
 	requestGalleryCount = 'Request_Gallery_Count',
+	requestSpotlightOrder = 'Request_Spotlight_Order',
 	customCommand = 'Custom_Command',
 	customCommandWithArguments = 'Custom_Command_with_Arguments',
 }
@@ -131,6 +132,29 @@ export function GetPresetsDataCustom(): {
 					down: [
 						{
 							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew,
+							options: {},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
+		},
+
+		[PresetIdDataCustom.requestSpotlightOrder]: {
+			type: 'simple',
+			name: `Request_Spotlight_Order`,
+			style: {
+				text: `Request Spotlight Order`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorLightGray,
+			},
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights,
 							options: {},
 						},
 					],
