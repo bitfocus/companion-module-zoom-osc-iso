@@ -7,6 +7,9 @@ import { dispatchOscMessage } from './osc/handlers/index.js'
 import { closeOscPort, createOscPort, toOutgoingMessage, toZoomOSCResponse, type OscPort } from './osc/transport.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
+import { checkForwardTarget, forwardTargetFromConfig, OscForwarder } from './osc/forwarder.js'
+import { setVariables } from './osc/variables.js'
+import { updateOscForwardingVariables } from './variables/variable-values.js'
 
 export class OSC {
 	private readonly instance: ModuleInstance
@@ -15,6 +18,8 @@ export class OSC {
 	private oscRXPort = 1234
 	/** Receives from ZoomOSC/ISO and sends commands to it, on the receiving port, as in 4.11 */
 	private udpPort: OscPort | null = null
+	/** Sends a copy of every packet from ZoomOSC/ISO to one other application, while OSC forwarding is on */
+	private forwarder: OscForwarder | null = null
 	/** Whether ZoomOSC/ISO has answered a ping since this connection started */
 	private hadFirstPong = false
 	private updateLoop = true
@@ -43,6 +48,9 @@ export class OSC {
 		if (udpPort) {
 			await closeOscPort(udpPort)
 		}
+		const forwarder = this.forwarder
+		this.forwarder = null
+		await forwarder?.close()
 	}
 
 	public readonly destroyTimers = (): void => {
@@ -146,6 +154,11 @@ export class OSC {
 		this.hadFirstPong = false
 		const udpPort = createOscPort(this.oscRXPort, this.oscHost, this.oscTXPort)
 		this.udpPort = udpPort
+		this.updateForwarding()
+
+		// each packet's bytes, before osc decodes them: forwarded exactly as they arrived, even one osc can't read.
+		// Only packets that arrive on the receiving port come in here, never the commands this module sends.
+		udpPort.on('raw', (data) => this.forwarder?.forward(data))
 
 		// every message, including each one inside a bundle
 		udpPort.on('message', (oscMsg) => {
@@ -174,6 +187,37 @@ export class OSC {
 
 		return
 	}
+
+	/**
+	 * Starts, stops or re-targets OSC forwarding to match the config, without touching the connection to ZoomOSC/ISO.
+	 * Runs when the connection starts, and when the forwarding actions or settings change.
+	 */
+	public readonly updateForwarding = (): void => {
+		const previous = this.forwarder
+		this.forwarder = null
+		void previous?.close()
+
+		const config = this.instance.config
+		// a connection that has stopped forwards nothing
+		if (this.udpPort && config.enableOscForwarding) {
+			const target = forwardTargetFromConfig(config)
+			const problem = checkForwardTarget(target, this.oscRXPort, this.oscHost, this.oscTXPort)
+			if (problem) {
+				this.instance.log('error', `OSC forwarding can't start: ${problem}`)
+			} else {
+				this.forwarder = new OscForwarder(target, (level, message) => this.instance.log(level, message))
+				this.instance.log('info', `Forwarding all OSC from ZoomOSC/ISO to ${target.host}:${target.port}`)
+			}
+		} else if (previous) {
+			this.instance.log('info', 'OSC forwarding is off')
+		}
+
+		setVariables(this.instance, (variables) => updateOscForwardingVariables(this.instance, variables))
+		this.instance.checkFeedbacks(FeedbackId.oscForwarding)
+	}
+
+	/** Whether every packet from ZoomOSC/ISO is being forwarded right now */
+	public readonly isForwarding = (): boolean => this.forwarder !== null
 
 	/**
 	 * Create a new user when none existing was found

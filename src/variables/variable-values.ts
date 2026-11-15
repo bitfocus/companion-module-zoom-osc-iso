@@ -2,6 +2,7 @@ import type { VariableValues } from './variable-definitions.js'
 import type ModuleInstance from '../index.js'
 import { padding, participantAtPosition, userExist } from '../utils.js'
 import { participantIcons } from '../participant-icons.js'
+import { forwardTargetFromConfig } from '../osc/forwarder.js'
 
 enum engineState {
 	disabled = 'disabled',
@@ -36,6 +37,13 @@ export function updateSpotlightGroupInitalizedVariable(variables: VariableValues
 
 export function updateSpotlightGroupVariables(instance: ModuleInstance, variables: VariableValues): void {
 	updateGroupVariables(instance, variables, 1)
+}
+
+/** The saved OSC forwarding target, shown whether forwarding is on or off */
+export function updateOscForwardingVariables(instance: ModuleInstance, variables: VariableValues): void {
+	const target = forwardTargetFromConfig(instance.config)
+	variables['oscForwardHost'] = target.host
+	variables['oscForwardPort'] = target.port
 }
 
 export function updateZoomIsoEngineVariables(instance: ModuleInstance, variables: VariableValues): void {
@@ -278,6 +286,7 @@ export function updateVariableValues(instance: ModuleInstance): void {
 
 	updateZoomParticipantVariables(instance, variables)
 	updateIconVariables(variables)
+	updateOscForwardingVariables(instance, variables)
 
 	instance.setVariableValues(variables)
 }

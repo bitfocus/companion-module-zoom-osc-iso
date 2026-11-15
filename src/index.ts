@@ -4,6 +4,7 @@ import { UpdateActions, type ActionsSchema } from './actions.js'
 import { UpdateFeedbacks, type FeedbacksSchema } from './feedback.js'
 import { UpdatePresets } from './presets.js'
 import { OSC } from './osc.js'
+import { onlyForwardingSettingsChanged } from './osc/forwarder.js'
 import type {
 	ZoomAudioLevelDataInterface,
 	ZoomAudioRoutingDataInterface,
@@ -56,6 +57,9 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 		socialStreamId: '',
 		socialStreamQuestionPrefix: '',
 		socialStreamChatTypeToSend: [],
+		enableOscForwarding: false,
+		oscForwardHost: '',
+		oscForwardPort: 0,
 	}
 
 	// Global call settings
@@ -116,6 +120,15 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	 * @param config
 	 */
 	public async configUpdated(config: ZoomConfig): Promise<void> {
+		// only the OSC forwarding settings changed: apply them to the forwarder alone, without reconnecting to
+		// ZoomOSC/ISO or resetting the groups, so changing them mid-event disrupts nothing
+		if (this.OSC && onlyForwardingSettingsChanged(this.config, config)) {
+			this.config = config
+			this.saveConfig(config)
+			this.log('info', 'changing OSC forwarding settings')
+			this.OSC.updateForwarding()
+			return
+		}
 		this.config = config
 		this.saveConfig(config)
 		this.log('info', 'changing config!')

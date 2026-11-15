@@ -5,6 +5,7 @@ import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
 import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
 import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from './upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
 import { addPollingConfigOptions } from './upgrades/addPollingConfigOptions.js'
+import { addOscForwardingConfigFields } from './upgrades/addOscForwardingConfigFields.js'
 
 /**
  * Upgrade scripts are positional: Companion stores how many of them a connection has already run.
@@ -17,4 +18,5 @@ export const UpgradeScripts: CompanionStaticUpgradeScript<ZoomConfig>[] = [
 	fixWrongPinCommands,
 	addNewConfigFieldsForSocialStreamChatMessagesToSend,
 	addPollingConfigOptions,
+	addOscForwardingConfigFields,
 ]

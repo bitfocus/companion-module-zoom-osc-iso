@@ -2,7 +2,7 @@ import type ModuleInstance from './index.js'
 import type { CompanionFeedbackDefinitions } from '@companion-module/base'
 import type { selectionMethod } from './actions/action-utils.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { userExist, colorRed, getUserFromName, participantAtPosition } from './utils.js'
+import { userExist, colorRed, getUserFromName, participantAtPosition, colorBlack, colorGreenOlive } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -19,6 +19,7 @@ export enum FeedbackId {
 	engineState = 'engine_State',
 	capturePermissionGranted = 'capture_permission_granted',
 	isPro = 'is_pro',
+	oscForwarding = 'osc_forwarding',
 }
 enum engineState {
 	disabled = 0,
@@ -57,6 +58,7 @@ export type FeedbacksSchema = {
 	[FeedbackId.isPro]: { type: 'boolean'; options: { isPro: number } }
 	[FeedbackId.output]: { type: 'boolean'; options: { output: number } }
 	[FeedbackId.audioOutput]: { type: 'boolean'; options: { output: number } }
+	[FeedbackId.oscForwarding]: { type: 'boolean'; options: Record<string, never> }
 }
 
 /** Union of every feedback id, for code that collects ids to re-check at runtime */
@@ -654,6 +656,17 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 					return false
 				}
 			},
+		},
+		[FeedbackId.oscForwarding]: {
+			type: 'boolean',
+			name: 'OSC Forwarding On',
+			description: 'On while every OSC message from ZoomOSC/ISO is being forwarded',
+			defaultStyle: {
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
+			},
+			options: [],
+			callback: () => instance.OSC?.isForwarding() ?? false,
 		},
 	}
 

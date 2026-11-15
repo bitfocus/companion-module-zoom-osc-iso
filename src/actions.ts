@@ -51,6 +51,7 @@ import {
 	GetActionsZoomISORecordingConsent,
 	type ActionsSchemaZoomISORecordingConsent,
 } from './actions/action-zoomiso-recording-consent.js'
+import { GetActionsOscForwarding, type ActionsSchemaOscForwarding } from './actions/action-osc-forwarding.js'
 
 /** Every action id maps to its typed options. Composed from the per-category schemas. */
 export type ActionsSchema = ActionsSchemaGroups &
@@ -80,7 +81,8 @@ export type ActionsSchema = ActionsSchemaGroups &
 	ActionsSchemaUsers &
 	ActionsSchemaSocialStream &
 	ActionsSchemaCustom &
-	ActionsSchemaZoomISORecordingConsent
+	ActionsSchemaZoomISORecordingConsent &
+	ActionsSchemaOscForwarding
 
 /**
  * Registers every action with Companion
@@ -116,5 +118,6 @@ export function UpdateActions(instance: ModuleInstance): void {
 		...GetActionsSocalSteam(instance),
 		...GetActionsCustom(instance),
 		...GetActionsZoomISORecordingConsent(instance),
+		...GetActionsOscForwarding(instance),
 	})
 }

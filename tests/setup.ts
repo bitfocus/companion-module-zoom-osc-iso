@@ -6,8 +6,9 @@ import { vi } from 'vitest'
  * if osc.ts is accidentally imported. Primary protection is the mock instance
  * (instance.OSC = { sendCommand: vi.fn() }) in mock-instance.ts.
  *
- * The fake UDPPort behaves like osc's: tests emit 'ready', 'message' ({ address, args: [{ type, value }] }) and
- * 'error' on it, and close() emits 'close'. Instances are listed on UDPPort.instances.
+ * The fake UDPPort behaves like osc's: tests emit 'ready', 'message' ({ address, args: [{ type, value }] }),
+ * 'raw' (a packet's bytes, as forwarding gets them) and 'error' on it, and close() emits 'close'. Instances are listed
+ * on UDPPort.instances.
  */
 vi.mock('osc', async () => {
 	const { EventEmitter } = await import('node:events')

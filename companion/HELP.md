@@ -28,7 +28,7 @@ You will need to configure these settings in ZoomOSC/ZoomISO UI
 
 ## Companion Module Configuration
 
-There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, and advanced performance tweaks.
+There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, OSC forwarding, and advanced performance tweaks.
 
 1. **ZoomISO/ZoomOSC Transmission IP (e.g. Target Host):** Match ZoomISO/ZoomOSC Transmission IP.
 1. **ZoomISO/ZoomOSC Receiving Port:** Match ZoomISO/ZoomOSC Recieving Port.
@@ -173,6 +173,35 @@ There are a number of configuration options for the module that allow you to con
      - Width: 1200
      - Height: 300
      - Shutdown source when not visible
+
+1. **OSC Forwarding**
+
+   ZoomOSC/ZoomISO can only send its messages to one place, which is this module. To let another application see the same messages, enable OSC Forwarding and enter that application's IP and port. The module sends a copy of every OSC message it receives to that address, exactly as it arrived. Nothing is filtered or changed, and the module keeps working as usual.
+
+   - Only the messages the module receives are forwarded, never the commands this module sends.
+   - The other application sends its own commands straight to ZoomOSC/ZoomISO's receiving port. ZoomOSC/ZoomISO replies to this module, which forwards those replies too and also acts on them as usual.
+   - Messages go to one IP and port. The module refuses an address that would loop, its own receiving port or ZoomOSC/ZoomISO's receiving port, logs why, and leaves forwarding off.
+   - When forwarding starts, the log says `Forwarding all OSC from ZoomOSC/ISO to <IP>:<port>`. Every failed send is logged as an error. A UDP send to an application that isn't running doesn't fail, so if the other application gets nothing, check that it's running and listening on that port.
+   - Changing only the OSC Forwarding settings doesn't reconnect to ZoomOSC/ZoomISO or reset the groups.
+
+   **Actions**
+
+   - **OSC Forwarding: On / Off / Toggle:** turns forwarding on or off.
+   - **Set OSC Forwarding Target:** sets the IP and port to forward to. Both accept variables. If forwarding is on, it switches right away. An IP or port that isn't valid is logged and nothing changes.
+
+   Both save the change, so it's remembered after a restart, and neither reconnects to ZoomOSC/ZoomISO.
+
+   **Feedback**
+
+   - **OSC Forwarding On:** lit while messages are being forwarded.
+
+   **Variables**
+
+   - `$(zoomosc:oscForwardHost)` and `$(zoomosc:oscForwardPort)`: the IP and port messages are forwarded to (shown even while forwarding is off).
+
+   **Presets**
+
+   The **Forward OSC Messages** section has a toggle button that shows the IP and port, On and Off buttons, and a Set Forward OSC Target button to edit.
 
 1. **Advanced - Optional Performance Tweaks**
 

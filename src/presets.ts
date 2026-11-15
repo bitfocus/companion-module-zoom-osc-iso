@@ -18,6 +18,7 @@ import { GetPresetsSharing } from './presets/preset-sharing.js'
 import { GetPresetsBreakout } from './presets/preset-breakout.js'
 import { GetPresetsRecording } from './presets/preset-recording.js'
 import { GetPresetsDataCustom } from './presets/preset-data-custom.js'
+import { GetPresetsOscForwarding } from './presets/preset-osc-forwarding.js'
 
 /**
  * Registers every preset with Companion. Each category file returns its section(s) and presets; sections list
@@ -44,6 +45,7 @@ export function UpdatePresets(instance: ModuleInstance): void {
 		GetPresetsBreakout(),
 		GetPresetsRecording(),
 		GetPresetsDataCustom(),
+		GetPresetsOscForwarding(),
 	]
 
 	// a section whose groups would all be empty (e.g. no groups configured yet) is left out

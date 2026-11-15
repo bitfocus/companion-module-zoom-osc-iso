@@ -151,6 +151,19 @@ describe('presets (v2 structure)', () => {
 		expect((captured.presets['set_user_to_output_1'] as any).style.png64).toBe(presetImages.output01)
 	})
 
+	it('offers the OSC forwarding buttons in a Forward OSC Messages section, lit while forwarding runs', () => {
+		const ids = ['OSC_Forwarding_Toggle', 'OSC_Forwarding_On', 'OSC_Forwarding_Off', 'OSC_Forwarding_Set_Target']
+		for (const id of ids) expect(captured.placement.get(id)?.sectionName, id).toBe('Forward OSC Messages')
+
+		const toggle = captured.presets['OSC_Forwarding_Toggle'] as any
+		expect(toggle.style.text).toBe('FWD OSC\\n$(zoomosc:oscForwardHost)\\n$(zoomosc:oscForwardPort)')
+		expect(toggle.feedbacks.map((f: any) => f.feedbackId)).toEqual(['osc_forwarding'])
+		expect(toggle.steps[0].down).toEqual([{ actionId: 'set_osc_forwarding', options: { state: 2 } }])
+		expect((captured.presets['OSC_Forwarding_Set_Target'] as any).steps[0].down).toEqual([
+			{ actionId: 'set_osc_forward_target', options: { host: '127.0.0.1', port: '1235' } },
+		])
+	})
+
 	it('keeps the v1 preset ids and their former categories', () => {
 		const { placement } = captured
 		expect(placement.get('Caller')?.sectionName).toBe('Select from Participants')

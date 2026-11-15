@@ -31,6 +31,8 @@ export type VariablesSchema = {
 	spotlightGroupTrackingInitalized?: VariableValue
 	isPro?: VariableValue
 	galleryCount?: VariableValue
+	oscForwardHost?: VariableValue
+	oscForwardPort?: VariableValue
 	// participant status icons (data URIs) used by the layered participant presets
 	icon_mic_on?: VariableValue
 	icon_mic_off?: VariableValue
@@ -88,6 +90,8 @@ export function initVariableDefinitions(instance: ModuleInstance): void {
 		videoShareStatus: { name: 'Share Screen On/Off' },
 		spotlightGroupTrackingInitalized: { name: 'Spotlight Group Tracking Initalized' },
 		isPro: { name: 'Is Pro License' },
+		oscForwardHost: { name: 'OSC forwarding IP' },
+		oscForwardPort: { name: 'OSC forwarding port' },
 	}
 	// Groups
 	const groupPositionVariables: CompanionVariableDefinitions<VariablesSchema> = {}
