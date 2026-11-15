@@ -1,4 +1,5 @@
 import type { OSCSomeArguments, OSCArgument, OSCMetaArgument } from '@companion-module/base'
+import { decode } from 'node-osc'
 import type { ZoomConfig } from '../config.js'
 import { SubscribeMode } from '../utils.js'
 import type { NodeOscArgument, NodeOscMessage, ZoomOSCResponse } from './types.js'
@@ -34,6 +35,20 @@ export function sendZoomIsoPullingCommands(sendCommand: SendCommand, config: Zoo
 	if (config.pollAudioLevels) sendCommand('/zoom/getAudioLevels', [])
 	if (config.pollOutputRouting) sendCommand('/zoom/getOutputRouting', [])
 	if (config.pollAudioRouting) sendCommand('/zoom/getAudioRouting', [])
+}
+
+/**
+ * Decodes one received OSC packet into the [address, ...values] form node-osc's Server emitted.
+ * Returns null for a bundle or a packet that can't be decoded: the module never handled either.
+ */
+export function decodeOscPacket(packet: Buffer): NodeOscMessage | null {
+	try {
+		const decoded = decode(packet) as { oscType?: string; address: string; args?: { value: NodeOscArgument }[] }
+		if (decoded.oscType !== 'message') return null
+		return [decoded.address, ...(decoded.args ?? []).map((arg) => arg.value)]
+	} catch {
+		return null
+	}
 }
 
 export function normalizeNodeOscMessage(message: NodeOscMessage): ZoomOSCResponse {

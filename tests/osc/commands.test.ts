@@ -25,6 +25,9 @@ function createConfig(overrides: Partial<ZoomConfig> = {}): ZoomConfig {
 		socialStreamId: '',
 		socialStreamQuestionPrefix: '',
 		socialStreamChatTypeToSend: [],
+		enableOscForwarding: false,
+		oscForwardHost: '127.0.0.1',
+		oscForwardPort: 1235,
 		...overrides,
 	}
 }

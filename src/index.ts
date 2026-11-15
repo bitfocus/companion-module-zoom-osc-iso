@@ -56,6 +56,9 @@ export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 		socialStreamId: '',
 		socialStreamQuestionPrefix: '',
 		socialStreamChatTypeToSend: [],
+		enableOscForwarding: false,
+		oscForwardHost: '',
+		oscForwardPort: 0,
 	}
 
 	// Global call settings

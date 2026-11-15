@@ -2,23 +2,19 @@ import type ModuleInstance from './index.js'
 import { ZoomVersion } from './utils.js'
 import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
 import { FeedbackId } from './feedback.js'
-import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
+import { decodeOscPacket, normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
+import { checkForwardTarget, DEFAULT_FORWARD_HOST, DEFAULT_FORWARD_PORT, OscForwarder } from './osc/forwarder.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import type { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
+import { createSocket, type Socket } from 'node:dgram'
 import * as nodeOscModule from 'node-osc'
 type NodeOscClient = {
 	close(): Promise<void>
 	send(address: string, ...args: unknown[]): void
 }
-type NodeOscServer = {
-	close(): Promise<void>
-	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
-	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
-}
 type NodeOscModule = {
 	Client: new (host: string, port: number) => NodeOscClient
-	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
 }
 // node-osc ships ESM; keep the narrow local typing this module relies on
 const nodeOsc = nodeOscModule as unknown as NodeOscModule
@@ -29,7 +25,9 @@ export class OSC {
 	private oscTXPort = 9090
 	private oscRXPort = 1234
 	private client: NodeOscClient | null = null
-	private server: NodeOscServer | null = null
+	/** Receives from ZoomOSC/ZoomISO: a plain UDP socket, so each packet can be forwarded exactly as it arrived */
+	private server: Socket | null = null
+	private forwarder: OscForwarder | null = null
 	private updateLoop = true
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
@@ -52,7 +50,19 @@ export class OSC {
 		this.destroyTimers()
 
 		if (this.server) {
-			await this.server.close()
+			const server = this.server
+			await new Promise<void>((resolve) => {
+				try {
+					server.close(() => resolve())
+				} catch {
+					// already closed
+					resolve()
+				}
+			})
+		}
+
+		if (this.forwarder) {
+			await this.forwarder.close()
 		}
 
 		if (this.client) {
@@ -60,6 +70,7 @@ export class OSC {
 		}
 
 		this.server = null
+		this.forwarder = null
 		this.client = null
 	}
 
@@ -162,7 +173,11 @@ export class OSC {
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
 		this.client = new nodeOsc.Client(this.oscHost, this.oscTXPort)
-		this.server = new nodeOsc.Server(this.oscRXPort, '0.0.0.0', () => {
+		this.forwarder = this.createForwarder()
+		// the same socket options node-osc's Server used
+		this.server = createSocket({ type: 'udp4', reuseAddr: true })
+
+		this.server.on('listening', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			this.needToPingPong = true
@@ -170,18 +185,42 @@ export class OSC {
 			this.createUpdatePresetsTimer()
 		})
 
-		this.server.on('message', (oscMsg) => {
-			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(normalizeNodeOscMessage(oscMsg))
-		})
+		this.server.on('message', this.receivePacket)
 
-		this.server.on('error', (err: { code?: string; message: string }) => {
+		this.server.on('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === 'EADDRINUSE') {
 				this.instance.log('error', 'Error: Selected port in use.' + err.message)
 			}
 		})
 
+		this.server.bind(this.oscRXPort, '0.0.0.0')
+
 		return
+	}
+
+	private readonly receivePacket = (packet: Buffer): void => {
+		// forward before decoding, so the other application gets every packet, even one this module can't decode
+		this.forwarder?.forward(packet)
+		const message = decodeOscPacket(packet)
+		if (message) void this.processData(normalizeNodeOscMessage(message))
+	}
+
+	/** The OSC Forwarding target from the config, or null when forwarding is off or the target would loop */
+	private readonly createForwarder = (): OscForwarder | null => {
+		const config = this.instance.config
+		if (!config.enableOscForwarding) return null
+		// connections that skipped the upgrade script have no forward host or port saved yet
+		const target = {
+			host: config.oscForwardHost || DEFAULT_FORWARD_HOST,
+			port: Number(config.oscForwardPort) || DEFAULT_FORWARD_PORT,
+		}
+		const problem = checkForwardTarget(target, this.oscRXPort, this.oscHost, this.oscTXPort)
+		if (problem) {
+			this.instance.log('warn', `OSC forwarding is off: ${problem}`)
+			return null
+		}
+		this.instance.log('info', `Forwarding OSC from ZoomOSC/ZoomISO to ${target.host}:${target.port}`)
+		return new OscForwarder(target, (level, message) => this.instance.log(level, message))
 	}
 
 	/**

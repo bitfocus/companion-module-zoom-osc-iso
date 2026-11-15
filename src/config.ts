@@ -23,6 +23,9 @@ export type ZoomConfig = {
 	socialStreamId: string
 	socialStreamQuestionPrefix: string
 	socialStreamChatTypeToSend: number[]
+	enableOscForwarding: boolean
+	oscForwardHost: string
+	oscForwardPort: number
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -216,6 +219,40 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			minChoicesForSearch: 0,
 			width: 10,
 			isVisibleExpression: '$(options:enableSocialStream)',
+		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'<hr />ZoomOSC/ZoomISO can only send its messages to one place. To let another application see them too, enable forwarding below: every OSC message received from ZoomOSC/ZoomISO is sent, unchanged, to that IP and port. The other application sends its own commands straight to ZoomOSC/ZoomISO.',
+			id: 'oscForwardingNote',
+			label: 'OSC Forwarding',
+		},
+		{
+			type: 'checkbox',
+			id: 'enableOscForwarding',
+			width: 2,
+			default: false,
+			label: 'Enable',
+		},
+		{
+			type: 'textinput',
+			id: 'oscForwardHost',
+			label: 'Forward to IP',
+			width: 5,
+			default: '127.0.0.1',
+			regex: Regex.IP,
+			isVisibleExpression: '$(options:enableOscForwarding)',
+		},
+		{
+			type: 'number',
+			id: 'oscForwardPort',
+			label: 'Forward to port',
+			width: 5,
+			default: 1235,
+			min: 1,
+			max: 65535,
+			isVisibleExpression: '$(options:enableOscForwarding)',
 		},
 		{
 			type: 'static-text',

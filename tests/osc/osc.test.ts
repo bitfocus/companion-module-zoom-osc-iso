@@ -2,43 +2,37 @@ import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { OSC } from '../../src/osc.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import * as nodeOscModule from 'node-osc'
+import { createSocket } from 'node:dgram'
 
-// node-osc is mocked in tests/setup.ts (vi.mock), so this import resolves to that mock
+// node-osc and node:dgram are mocked in tests/setup.ts (vi.mock), so these imports resolve to those mocks
 const nodeOscMock = nodeOscModule as unknown as {
 	Client: Mock
-	Server: Mock
 }
+const createSocketMock = createSocket as unknown as Mock
 
 describe('OSC destroy', () => {
 	beforeEach(() => {
 		nodeOscMock.Client.mockReset()
-		nodeOscMock.Server.mockReset()
+		createSocketMock.mockClear()
 	})
 
-	it('waits for node-osc close promises before resolving destroy', async () => {
-		let resolveServerClose!: () => void
+	it('waits for the receiving socket and the node-osc client to close before resolving destroy', async () => {
 		let resolveClientClose!: () => void
-		const serverClosePromise = new Promise<void>((resolve) => {
-			resolveServerClose = resolve
-		})
 		const clientClosePromise = new Promise<void>((resolve) => {
 			resolveClientClose = resolve
 		})
-
 		nodeOscMock.Client.mockImplementation(() => ({
 			send: vi.fn(),
 			close: vi.fn(async () => clientClosePromise),
 		}))
-		nodeOscMock.Server.mockImplementation((...args: unknown[]) => {
-			const ready = args[2] as (() => void) | undefined
-			ready?.()
-			return {
-				on: vi.fn().mockReturnThis(),
-				close: vi.fn(async () => serverClosePromise),
-			}
-		})
 
 		const osc = new OSC(createMockInstance())
+		const server = createSocketMock.mock.results[0].value as { close: Mock }
+		let closeServer!: () => void
+		server.close.mockImplementation((callback: () => void) => {
+			closeServer = callback
+		})
+
 		const destroyPromise = osc.destroy()
 		let resolved = false
 		void destroyPromise.then(() => {
@@ -48,7 +42,7 @@ describe('OSC destroy', () => {
 		await Promise.resolve()
 		expect(resolved).toBe(false)
 
-		resolveServerClose()
+		closeServer()
 		await Promise.resolve()
 		expect(resolved).toBe(false)
 
@@ -61,8 +55,6 @@ describe('OSC destroy', () => {
 describe('OSC sendCommand', () => {
 	beforeEach(() => {
 		nodeOscMock.Client.mockReset()
-		nodeOscMock.Server.mockReset()
-		nodeOscMock.Server.mockImplementation(() => ({ on: vi.fn().mockReturnThis(), close: vi.fn(async () => {}) }))
 	})
 
 	it('logs a send that node-osc rejects instead of leaving the rejection unhandled', async () => {
