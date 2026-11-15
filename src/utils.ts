@@ -216,6 +216,7 @@ export const options = {
 			{ id: 'Mix of all unassigned participants', label: 'Mix of all unassigned participants' },
 			{ id: 'Active Share', label: 'Active Share' },
 			{ id: 'Unique Speaker', label: 'Unique Speaker' },
+			{ id: 'Interpretation', label: 'Interpretation' },
 		],
 	} satisfies CompanionInputFieldDropdown<'audioChannelMode', string>,
 	breakoutName: {
