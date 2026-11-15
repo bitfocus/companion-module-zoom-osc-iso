@@ -48,28 +48,23 @@ describe('OSC connection', () => {
 		expect(instance.ZoomVariableLink).toEqual([{ zoomId: 101, userName: 'Alice' }])
 	})
 
-	it('reports a port already in use as an error, and any other receive error as a warning, once a minute', () => {
-		vi.useFakeTimers()
-		try {
-			const instance = createMockInstance()
-			new OSC(instance)
-			const port = lastPort()
+	it('reports a port already in use as an error, and every other receive error as a warning', () => {
+		const instance = createMockInstance()
+		new OSC(instance)
+		const port = lastPort()
 
-			port.emit('error', Object.assign(new Error('bind EADDRINUSE 0.0.0.0:1234'), { code: 'EADDRINUSE' }))
-			expect(instance.log).toHaveBeenCalledWith('error', expect.stringContaining('Selected port in use.'))
+		port.emit('error', Object.assign(new Error('bind EADDRINUSE 0.0.0.0:1234'), { code: 'EADDRINUSE' }))
+		expect(instance.log).toHaveBeenCalledWith('error', expect.stringContaining('Selected port in use.'))
 
-			const unreadable = new Error("'x' is not a valid OSC type tag")
-			port.emit('error', unreadable)
-			port.emit('error', unreadable)
-			const warnings = () => vi.mocked(instance.log).mock.calls.filter(([level]) => level === 'warn')
-			expect(warnings()).toEqual([['warn', "OSC error from ZoomOSC/ISO: 'x' is not a valid OSC type tag"]])
-
-			vi.advanceTimersByTime(61000)
-			port.emit('error', unreadable)
-			expect(warnings()).toHaveLength(2)
-		} finally {
-			vi.useRealTimers()
-		}
+		// each one is logged, even the same error twice in a row: nothing is held back
+		const unreadable = new Error("'x' is not a valid OSC type tag")
+		port.emit('error', unreadable)
+		port.emit('error', unreadable)
+		const warnings = vi.mocked(instance.log).mock.calls.filter(([level]) => level === 'warn')
+		expect(warnings).toEqual([
+			['warn', "OSC error from ZoomOSC/ISO: 'x' is not a valid OSC type tag"],
+			['warn', "OSC error from ZoomOSC/ISO: 'x' is not a valid OSC type tag"],
+		])
 	})
 })
 

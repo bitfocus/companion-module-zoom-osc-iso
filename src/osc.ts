@@ -8,9 +8,6 @@ import { closeOscPort, createOscPort, toOutgoingMessage, toZoomOSCResponse, type
 import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
 
-/** The same receive error (a packet that can't be read, say) is logged at most this often */
-const RECEIVE_ERROR_LOG_INTERVAL = 60000
-
 export class OSC {
 	private readonly instance: ModuleInstance
 	private oscHost = ''
@@ -18,7 +15,6 @@ export class OSC {
 	private oscRXPort = 1234
 	/** Receives from ZoomOSC/ISO and sends commands to it, on the receiving port, as in 4.11 */
 	private udpPort: OscPort | null = null
-	private lastReceiveError = { message: '', at: 0 }
 	/** Whether ZoomOSC/ISO has answered a ping since this connection started */
 	private hadFirstPong = false
 	private updateLoop = true
@@ -162,8 +158,8 @@ export class OSC {
 				this.instance.log('error', 'Error: Selected port in use.' + err.message)
 				return
 			}
-			// anything else, such as a packet osc can't read: say so, rather than drop it without a trace
-			this.reportReceiveError(err.message)
+			// anything else, such as a packet osc can't read: log every one, rather than drop it without a trace
+			this.instance.log('warn', `OSC error from ZoomOSC/ISO: ${err.message}`)
 		})
 
 		udpPort.on('ready', () => {
@@ -177,13 +173,6 @@ export class OSC {
 		udpPort.open()
 
 		return
-	}
-
-	private readonly reportReceiveError = (message: string): void => {
-		const now = Date.now()
-		if (message === this.lastReceiveError.message && now - this.lastReceiveError.at < RECEIVE_ERROR_LOG_INTERVAL) return
-		this.lastReceiveError = { message, at: now }
-		this.instance.log('warn', `OSC error from ZoomOSC/ISO: ${message}`)
 	}
 
 	/**
