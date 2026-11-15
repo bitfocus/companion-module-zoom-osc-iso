@@ -7,12 +7,14 @@ export enum ActionIdGlobalGalleryTrackingAndDataRequest {
 	// subscription level
 	requestOrderOfGalleryView = 'requestOrderOfGalleryView',
 	requestGalleryCount = 'requestGalleryCount',
+	requestGalleryCountNew = 'requestGalleryCountNew',
 	requestOrderOfSpotlights = 'requestOrderOfSpotlights',
 }
 
 export type ActionsSchemaGlobalGalleryTrackingAndDataRequest = {
 	[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView]: { options: Record<string, never> }
 	[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount]: { options: Record<string, never> }
+	[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew]: { options: Record<string, never> }
 	[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights]: { options: Record<string, never> }
 }
 
@@ -36,8 +38,24 @@ export function GetActionsGlobalGalleryTrackingAndDataRequest(
 				sendActionCommand(instance, sendToCommand)
 			},
 		},
+		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew]: {
+			name: 'Request GalleryCount (New)',
+			options: [],
+			callback: (): void => {
+				// type: 'Global'
+				const command = createCommand(instance, '/galleryCount')
+				const sendToCommand = {
+					id: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew,
+					options: {
+						command: command.oscPath,
+						args: command.args,
+					},
+				}
+				sendActionCommand(instance, sendToCommand)
+			},
+		},
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount]: {
-			name: 'Request GalleryCount',
+			name: 'Request GalleryCount (Deprecated.  Use New Gallery Count)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'

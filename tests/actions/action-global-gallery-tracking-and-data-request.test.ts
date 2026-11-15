@@ -22,6 +22,7 @@ describe('GetActionsGlobalGalleryTrackingAndDataRequest', () => {
 	const cases: [ActionIdGlobalGalleryTrackingAndDataRequest, string][] = [
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView, '/zoom/getGalleryOrder'],
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount, '/zoom/galCount'],
+		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew, '/zoom/galleryCount'],
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights, '/zoom/getSpotOrder'],
 	]
 

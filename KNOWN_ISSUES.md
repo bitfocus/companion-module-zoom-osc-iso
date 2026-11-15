@@ -5,7 +5,7 @@ Known issues in ZoomOSC, ZoomISO and the Zoom SDK they use that affect this modu
 | #   | Issue                                                                                                                                         | Affected                                 | Module status                |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------- |
 | 1   | [getSpotOrder returns no one after joining a meeting](#1-getspotorder-returns-no-one-after-joining-a-meeting-with-people-already-spotlighted) | ZoomOSC 5, 5.0.1; ZoomISO 3              | No workaround                |
-| 2   | [galCount renamed to galleryCount](#2-galcount-renamed-to-gallerycount)                                                                       | ZoomOSC 5; ZoomISO 3                     | Not handled yet              |
+| 2   | [galCount renamed to galleryCount](#2-galcount-renamed-to-gallerycount)                                                                       | ZoomOSC 5; ZoomISO 3                     | Handled                      |
 | 3   | [64-bit Zoom IDs in gallery and spot order](#3-gallery-and-spot-order-send-zoom-ids-as-64-bit-integers)                                       | ZoomOSC 5.0.1; ZoomISO 3.0.7             | Worked around                |
 | 4   | [No chat emojis or threaded replies](#4-chat-has-no-emojis-or-threaded-replies)                                                               | The Zoom SDK used by ZoomOSC and ZoomISO | Can't be fixed in the module |
 | 5   | [NDI stops capturing after video off and on](#5-ndi-stops-capturing-after-a-participant-turns-their-video-off-and-on)                         | ZoomISO 3                                | Can't be fixed in the module |
@@ -27,7 +27,7 @@ When ZoomOSC or ZoomISO joins a meeting where participants are already spotlight
 
 The gallery count command was renamed from `galCount` to `galleryCount`.
 
-**Module status:** not handled yet. Receiving `/zoomosc/galleryCount` is handled, but the **Request GalleryCount** action still sends the old `/zoom/galCount` ([src/actions/action-global-gallery-tracking-and-data-request.ts:44](src/actions/action-global-gallery-tracking-and-data-request.ts)).
+**Module status:** handled. The **Request GalleryCount (New)** action sends `/zoom/galleryCount`. The old **Request GalleryCount** action still sends `/zoom/galCount` for older versions and is marked deprecated ([src/actions/action-global-gallery-tracking-and-data-request.ts](src/actions/action-global-gallery-tracking-and-data-request.ts)). Receiving `/zoomosc/galleryCount` was already handled.
 
 ## 3. Gallery and spot order send Zoom IDs as 64-bit integers
 
