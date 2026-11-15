@@ -3,6 +3,7 @@ import type ModuleInstance from '../index.js'
 import { padding, participantAtPosition, userExist } from '../utils.js'
 import { participantIcons } from '../participant-icons.js'
 import { forwardTargetFromConfig } from '../osc/forwarder.js'
+import { MeetingStatus } from '../osc/types.js'
 
 enum engineState {
 	disabled = 'disabled',
@@ -237,8 +238,10 @@ export function updateAllUserBasedVariables(instance: ModuleInstance, variables:
 
 export function updateCallStatusVariables(instance: ModuleInstance, variables: VariableValues): void {
 	variables['callStatusNumber'] = instance.ZoomClientDataObj.callStatus
+	// a pong's callStatus (0 or 1) lands here too: its 0 is not in a meeting either
 	variables['callStatus'] =
-		instance.ZoomClientDataObj.callStatus === 0 || instance.ZoomClientDataObj.callStatus === 7
+		instance.ZoomClientDataObj.callStatus === MeetingStatus.Idle ||
+		instance.ZoomClientDataObj.callStatus === MeetingStatus.Ended
 			? 'offline'
 			: 'In meeting'
 }

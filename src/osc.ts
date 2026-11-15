@@ -11,6 +11,11 @@ import { checkForwardTarget, forwardTargetFromConfig, OscForwarder } from './osc
 import { setVariables } from './osc/variables.js'
 import { updateOscForwardingVariables } from './variables/variable-values.js'
 
+/** How often to ping while waiting for ZoomOSC/ISO to answer */
+const CONNECTION_CHECK_INTERVAL = 2000
+/** Once ZoomOSC/ISO has answered and is in a meeting: ping only when it has been quiet for this long */
+const CONNECTED_WATCHDOG_INTERVAL = 60000
+
 export class OSC {
 	private readonly instance: ModuleInstance
 	private oscHost = ''
@@ -27,7 +32,8 @@ export class OSC {
 	private spotlightGroupTrackingInitalized = false
 	private needToPingPong = true
 	private pingInterval: NodeJS.Timeout | undefined | null = null
-	private pingIntervalTime = 2000
+	/** Changes to CONNECTED_WATCHDOG_INTERVAL on the first pong and stays there, for every ping timer after it */
+	private pingIntervalTime = CONNECTION_CHECK_INTERVAL
 	private updatePresetsLoop: NodeJS.Timeout | undefined | null = null
 	private zoomISOPuller: NodeJS.Timeout | undefined | null = null
 
@@ -257,10 +263,10 @@ export class OSC {
 			this.needToPingPong = false
 			if (this.pingInterval) {
 				this.destroyPingTimer()
-				this.pingIntervalTime = 60000
+				this.pingIntervalTime = CONNECTED_WATCHDOG_INTERVAL
 				if (callStatus === 1) {
 					this.pingInterval = setInterval(() => {
-						if (Date.now() - this.instance.ZoomClientDataObj.last_response > 60000) {
+						if (Date.now() - this.instance.ZoomClientDataObj.last_response > CONNECTED_WATCHDOG_INTERVAL) {
 							this.sendCommand('/zoom/ping')
 						}
 					}, this.pingIntervalTime)
