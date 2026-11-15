@@ -42,6 +42,11 @@ export interface OSCHandlerContext {
 	instance: ModuleInstance
 	createZoomUser(data: ZoomOSCResponse): Promise<void>
 	setUpdateLoop(value: boolean): void
+	/**
+	 * Makes the next pass of the presets loop a full one, as its first pass is: actions, feedbacks and presets
+	 * updated and every button's feedbacks checked, even with Sync Action/Presets/Feedbacks off
+	 */
+	refreshAllOnNextLoop(): void
 	setNeedToPingPong(value: boolean): void
 	isSpotlightGroupTrackingInitialized(): boolean
 	setSpotlightGroupTrackingInitialized(value: boolean): void

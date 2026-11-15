@@ -3,6 +3,7 @@ import type { EventEmitter } from 'node:events'
 import osc from 'osc'
 import { OSC } from '../../src/osc.js'
 import { createMockInstance } from '../helpers/mock-instance.js'
+import { FeedbackId } from '../../src/feedback.js'
 
 // osc is mocked in tests/setup.ts (vi.mock), so this import resolves to that mock
 type FakePort = EventEmitter & { options: Record<string, unknown>; open: Mock; send: Mock; close: Mock }
@@ -208,6 +209,82 @@ describe('OSC starting or joining a meeting', () => {
 		// the engine state is unknown, so each polling timer asks for it once per 5 seconds
 		await vi.advanceTimersByTimeAsync(5000)
 		expect(sentCount(port, '/zoom/getEngineState')).toBe(1)
+	})
+
+	describe('refreshing every button, with Sync Action/Presets/Feedbacks off', () => {
+		const listEntry = (zoomId: number, name: string) => ({
+			address: '/zoomosc/user/list',
+			args: [0, name, 1, zoomId, 2, 2, 3, 1, 1, 1, 0].map(typed),
+		})
+		const fullRefreshes = (instance: ReturnType<typeof createMockInstance>) =>
+			(instance.updateDefinitionsForActionsFeedbacksAndPresets as Mock).mock.calls.length
+
+		it('refreshes once the participant list arrives, after a first pass that came before it (a restart mid-meeting)', async () => {
+			const instance = createMockInstance()
+			new OSC(instance)
+			const port = lastPort()
+			port.emit('ready')
+
+			// the first pass runs 2 seconds in, before ZoomOSC/ISO has answered the first ping
+			await vi.advanceTimersByTimeAsync(2000)
+			expect(fullRefreshes(instance)).toBe(1)
+
+			await receive(port, pong(1))
+			await receive(port, listEntry(101, 'Alice'))
+			await receive(port, listEntry(102, 'Bob'))
+			;(instance.checkFeedbacks as Mock).mockClear()
+
+			await vi.advanceTimersByTimeAsync(2000)
+			expect(fullRefreshes(instance)).toBe(2)
+			expect(instance.checkFeedbacks).toHaveBeenCalledWith(
+				FeedbackId.userNameBased,
+				FeedbackId.userNameBasedAdvanced,
+				FeedbackId.indexBased,
+				FeedbackId.indexBasedAdvanced,
+				FeedbackId.galleryBased,
+				FeedbackId.galleryBasedAdvanced,
+				FeedbackId.groupBased,
+				FeedbackId.groupBasedAdvanced,
+				FeedbackId.selectionMethod,
+				FeedbackId.audioOutput,
+				FeedbackId.output,
+			)
+
+			// nothing new: no more full refreshes
+			await vi.advanceTimersByTimeAsync(4000)
+			expect(fullRefreshes(instance)).toBe(2)
+		})
+
+		it('does not refresh everything for someone joining mid-meeting', async () => {
+			const instance = createMockInstance()
+			new OSC(instance)
+			const port = lastPort()
+			port.emit('ready')
+			await vi.advanceTimersByTimeAsync(2000)
+
+			await receive(port, { address: '/zoomosc/user/online', args: [0, 'Carol', 1, 103].map(typed) })
+			await vi.advanceTimersByTimeAsync(2000)
+			expect(fullRefreshes(instance)).toBe(1)
+		})
+
+		it('refreshes the next meeting once something arrives from it, after the last meeting ended', async () => {
+			const instance = createMockInstance()
+			new OSC(instance)
+			const port = lastPort()
+			const status = (value: number) => ({ address: '/zoomosc/meetingStatusChanged', args: [value, 0, 0].map(typed) })
+			port.emit('ready')
+			await vi.advanceTimersByTimeAsync(2000)
+
+			await receive(port, status(7))
+			await receive(port, status(3))
+			// the first pass of the new meeting waits until something arrives from it
+			await vi.advanceTimersByTimeAsync(4000)
+			expect(fullRefreshes(instance)).toBe(1)
+
+			await receive(port, { address: '/zoomosc/user/online', args: [0, 'Carol', 1, 103].map(typed) })
+			await vi.advanceTimersByTimeAsync(2000)
+			expect(fullRefreshes(instance)).toBe(2)
+		})
 	})
 })
 

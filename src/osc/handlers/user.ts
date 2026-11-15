@@ -272,6 +272,11 @@ export async function handleUserMessage(
 			handleSpotlightState(context, data, zoomId, false)
 			break
 		case 'list':
+			await context.createZoomUser(data)
+			// A participant list comes on joining, after the first pong of a connection that starts mid-meeting, or
+			// when asked for. The loop's first pass may have run before it arrived, so refresh everything once it's in.
+			context.refreshAllOnNextLoop()
+			break
 		case 'online':
 			await context.createZoomUser(data)
 			context.setUpdateLoop(true)
