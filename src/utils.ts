@@ -30,6 +30,17 @@ export enum ZoomVersion {
 	ZoomISO = 1,
 }
 
+/**
+ * Whether the version a pong reports is ZoomOSC 5 or later (ZOSC_5.0.1_MAC) or ZoomISO 3 or later (ZISO_3.0.7_MAC),
+ * rather than ZoomOSC 4 (ZOSC_4.6.1_MAC) or ZoomISO 2 (ZISO_2.4.1_pro_MAC). False before the first pong.
+ */
+export function isZoomOSC5OrZoomISO3OrLater(version: unknown): boolean {
+	const match = /^(ZOSC|ZISO)_(\d+)\./.exec(String(version))
+	if (!match) return false
+	const major = Number(match[2])
+	return match[1] === 'ZOSC' ? major >= 5 : major >= 3
+}
+
 export interface ZoomClientDataObjInterface {
 	last_response: number
 	subscribeMode: number

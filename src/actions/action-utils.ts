@@ -1,6 +1,6 @@
 import type ModuleInstance from '../index.js'
 import type { CompanionActionEvent, CompanionInputFieldDropdown } from '@companion-module/base'
-import { arrayAdd, arrayAddRemove, arrayRemove } from '../utils.js'
+import { arrayAdd, arrayAddRemove, arrayRemove, isZoomOSC5OrZoomISO3OrLater } from '../utils.js'
 
 export const select = { single: true, multi: false }
 
@@ -145,7 +145,10 @@ export const createCommand = (
 			// When command is for one user only send first caller
 			else if (singleUser) {
 				if ((isoAllowSetUserToNone && selectedCallers.length === 0) || isoForceSetToNone) {
-					command.args.push({ type: 'i', value: emptyUser }) // Set to none
+					// Set to none. ZoomOSC 5+ and ZoomISO 3+ no longer clear an output with -2: Zoom ID 1 puts it back to
+					// "Select Participant" (found by testing, not documented; known issue 7)
+					const noneValue = isZoomOSC5OrZoomISO3OrLater(instance.ZoomClientDataObj.zoomOSCVersion) ? 1 : emptyUser
+					command.args.push({ type: 'i', value: noneValue })
 				} else {
 					command.args.push({ type: 'i', value: selectedCallers[0] })
 					if (selectedCallers.length > 1) {

@@ -246,6 +246,7 @@ Select user(s), then apply action(s).
 ## ZoomISO Control
 
 - Route participants to video/audio outputs.
+- **Set ISO Output to None** puts a Participant output back to "Select Participant", on ZoomISO 2 and ZoomISO 3. So does **output ISO** with "If No User Selected, Set Output to None" ticked when no participant is selected.
 - Configure outputs and engine settings directly from the module.
 
 ## Selections

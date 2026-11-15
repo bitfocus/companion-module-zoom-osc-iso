@@ -10,7 +10,7 @@ Known issues in ZoomOSC, ZoomISO and the Zoom SDK they use that affect this modu
 | 4   | [No chat emojis or threaded replies](#4-chat-has-no-emojis-or-threaded-replies)                                                               | The Zoom SDK used by ZoomOSC and ZoomISO | Can't be fixed in the module |
 | 5   | [NDI stops capturing after video off and on](#5-ndi-stops-capturing-after-a-participant-turns-their-video-off-and-on)                         | ZoomISO 3                                | Can't be fixed in the module |
 | 6   | [Duplicated participants](#6-duplicated-participants)                                                                                         | ZoomISO 3.0.6                            | Can't be fixed in the module |
-| 7   | [Clearing an output selection no longer uses -2](#7-clearing-an-output-selection-no-longer-uses--2)                                           | ZoomISO 3                                | Not handled yet              |
+| 7   | [Clearing an output selection no longer uses -2](#7-clearing-an-output-selection-no-longer-uses--2)                                           | ZoomISO 3                                | Handled                      |
 | 8   | [Emojis in participant names arrive as ??](#8-emojis-in-participant-names-arrive-as-)                                                         | ZoomOSC 5; ZoomISO 3                     | No workaround                |
 
 ## 1. getSpotOrder returns no one after joining a meeting with people already spotlighted
@@ -78,7 +78,9 @@ At one event, ZoomISO duplicated many of the people in the meeting, and only som
 
 The way to unselect a ZoomISO output selection changed. It used to be `-2`; it now depends on the picker, through `/zoom/setOutputSelection`.
 
-**Module status:** not handled yet. The **Set ISO Output to None** action still sends `-2` with `/zoom/zoomID/outputISO` ([src/actions/action-zoomiso-routing.ts:94](src/actions/action-zoomiso-routing.ts), using the default set in [src/actions/action-utils.ts:90](src/actions/action-utils.ts)).
+**Module status:** handled. **Set ISO Output to None**, and **output ISO** with "If No User Selected, Set Output to None" ticked, send `/zoom/zoomID/outputISO` with Zoom ID `1` when the pong reports ZoomOSC 5 or later (`ZOSC_5.x.x`) or ZoomISO 3 or later (`ZISO_3.x.x`). That puts a Participant output back to "Select Participant". With older versions, or before the first pong, they still send `-2` ([src/actions/action-utils.ts](src/actions/action-utils.ts), using `isZoomOSC5OrZoomISO3OrLater` in [src/utils.ts](src/utils.ts)).
+
+Zoom ID `1` was found by testing and isn't in ZoomISO's documentation, so a later version could change it. The documented way to clear an output is `/zoom/setOutputSelection {output} 0`, described below.
 
 The note from Zoom on the new behaviour:
 
