@@ -130,7 +130,7 @@ export function GetPresetsDataCustom(): {
 				{
 					down: [
 						{
-							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount,
+							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew,
 							options: {},
 						},
 					],
