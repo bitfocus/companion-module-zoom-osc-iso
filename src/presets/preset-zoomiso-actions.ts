@@ -15,7 +15,6 @@ export enum PresetIdZoomISOActions {
 	setOutputCount = 'set_output_count',
 	setOutputName = 'set_output_name',
 	setOutputMode = 'set_output_mode',
-	standbyIsoEngine = 'standby_iso_engine',
 	startIsoEngine = 'start_iso_engine',
 	stopIsoEngine = 'stop_iso_engine',
 	setVideoLossMode = 'set_video_loss_mode',
@@ -176,28 +175,6 @@ export function GetPresetsZoomISOActions(instance: ModuleInstance): {
 						{
 							actionId: ActionIdZoomISOOutputSettings.setOutputMode,
 							options: { output: 1, outputMode: 'Spotlight' },
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
-		[PresetIdZoomISOActions.standbyIsoEngine]: {
-			type: 'simple',
-			name: `standby_iso_engine`,
-			style: {
-				text: `Standby ISO Engine`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorGreenOlive,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdZoomISOEngine.standbyISOEngine,
-							options: {},
 						},
 					],
 					up: [],

@@ -1,6 +1,5 @@
 import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
 import type { ModuleSchema } from '../index.js'
-import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
 import { colorBlack, colorLightGray } from '../utils.js'
 import { presetImages } from '../images-presets.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
@@ -16,8 +15,6 @@ export enum PresetIdDeviceSettings {
 	disableMirror = 'Disable_Mirror',
 	enableHD = 'Enable_HD',
 	disableHD = 'Disable_HD',
-	setWindowXY = 'Set_Window_XY',
-	setWindowSize = 'Set_Window_Size',
 	hideSelfView = 'Hide_Self_View',
 	showSelfView = 'Show_Self_View',
 }
@@ -245,50 +242,6 @@ export function GetPresetsDeviceSettings(): {
 						{
 							actionId: ActionIdUserSettings.disableHDVideo,
 							options: {},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
-		[PresetIdDeviceSettings.setWindowXY]: {
-			type: 'simple',
-			name: `Set_Window_XY`,
-			style: {
-				text: `Set Window XY`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorLightGray,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdUserScreenshare.SetWindowPosition,
-							options: { userName: '', intX: 0, intY: 0 },
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
-		[PresetIdDeviceSettings.setWindowSize]: {
-			type: 'simple',
-			name: `Set_Window_Size`,
-			style: {
-				text: `Set Window Size`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorLightGray,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdUserScreenshare.SetWindowSize,
-							options: { userName: '', intX: 0, intY: 0 },
 						},
 					],
 					up: [],
