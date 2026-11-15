@@ -4,6 +4,7 @@ import { ZoomConfig } from './config.js'
 import { FeedbackId } from './feedback.js'
 import { sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
+import { convertInt64Args } from './osc/int64.js'
 import { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
 const osc = require('osc') // eslint-disable-line
@@ -147,7 +148,7 @@ export class OSC {
 		this.udpPort.on('message', (oscMsg: ZoomOSCResponse) => {
 			// this.instance.log('info', JSON.stringify(oscMsg))
 			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(oscMsg)
+			this.processData(convertInt64Args(oscMsg))
 		})
 
 		this.udpPort.on('error', (err: { code: string; message: string }) => {
