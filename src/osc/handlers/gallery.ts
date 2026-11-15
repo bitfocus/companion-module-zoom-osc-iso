@@ -29,6 +29,8 @@ function handleGalleryOrder(context: OSCHandlerContext, data: ZoomOSCResponse): 
 		(order: { type: string; value: number }) => order.value,
 	)
 
+	context.instance.ZoomClientDataObj.galleryCount = context.instance.ZoomClientDataObj.galleryOrder.length
+
 	setVariables(context.instance, (variables) => updateGalleryVariables(context.instance, variables))
 	checkGalleryFeedbacks(context.instance)
 }
