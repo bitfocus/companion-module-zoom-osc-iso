@@ -62,8 +62,7 @@ export class OSC {
 	public readonly destroyTimers = (): void => {
 		this.instance.log('debug', 'destroyTimers')
 		this.updateLoop = false
-		// the next meeting gets a full refresh, once something arrives from it (its participant list)
-		this.firstLoop = true
+		this.firstLoop = false
 		this.needToPingPong = false
 		this.destroyPingTimer()
 		this.destroyUpdatePresetsTimer()
@@ -241,10 +240,6 @@ export class OSC {
 		createZoomUser: this.createZoomUser,
 		setUpdateLoop: (value) => {
 			this.updateLoop = value
-		},
-		refreshAllOnNextLoop: () => {
-			this.firstLoop = true
-			this.updateLoop = true
 		},
 		setNeedToPingPong: (value) => {
 			this.needToPingPong = value

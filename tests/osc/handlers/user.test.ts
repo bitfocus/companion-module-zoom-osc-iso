@@ -15,7 +15,6 @@ function createContext(): OSCHandlerContext {
 		instance,
 		createZoomUser: vi.fn(async () => undefined),
 		setUpdateLoop: vi.fn(),
-		refreshAllOnNextLoop: vi.fn(),
 		setNeedToPingPong: vi.fn(),
 		isSpotlightGroupTrackingInitialized: vi.fn(() => false),
 		setSpotlightGroupTrackingInitialized: vi.fn(),
