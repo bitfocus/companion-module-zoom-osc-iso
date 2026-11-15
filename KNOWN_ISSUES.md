@@ -78,7 +78,7 @@ At one event, ZoomISO duplicated many of the people in the meeting, and only som
 
 The way to unselect a ZoomISO output selection changed. It used to be `-2`; it now depends on the picker, through `/zoom/setOutputSelection`.
 
-**Module status:** handled. **Set ISO Output to None**, and **output ISO** with "If No User Selected, Set Output to None" ticked, send `/zoom/zoomID/outputISO` with Zoom ID `1` when the pong reports ZoomOSC 5 or later (`ZOSC_5.x.x`) or ZoomISO 3 or later (`ZISO_3.x.x`). That puts a Participant output back to "Select Participant". With older versions, or before the first pong, they still send `-2` ([src/actions/action-utils.ts](src/actions/action-utils.ts), using `isZoomOSC5OrZoomISO3OrLater` in [src/utils.ts](src/utils.ts)).
+**Module status:** handled. **Set ISO Output to None**, and **output ISO** with "If No User Selected, Set Output to None" ticked, send `/zoom/zoomID/outputISO` with Zoom ID `1` when the pong reports ZoomISO 3 or later (`ZISO_3.x.x`). That puts a Participant output back to "Select Participant". With ZoomISO 2, ZoomOSC, or before the first pong, they still send `-2` ([src/actions/action-utils.ts](src/actions/action-utils.ts), using `isZoomISO3OrLater` in [src/utils.ts](src/utils.ts)).
 
 Zoom ID `1` was found by testing and isn't in ZoomISO's documentation, so a later version could change it. The documented way to clear an output is `/zoom/setOutputSelection {output} 0`, described below.
 
