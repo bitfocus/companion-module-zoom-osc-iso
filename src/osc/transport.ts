@@ -6,9 +6,8 @@ import type { ZoomOSCArgument, ZoomOSCResponse } from './types.js'
  * The OSC transport: the one place that uses the `osc` package (osc.js, CommonJS). The rest of the module only sees
  * this ESM wrapper and the types in src/types/osc.d.ts.
  *
- * osc.js is what the module used up to 4.11. Unlike node-osc it reads 64-bit integers (ZoomOSC 5 and ZoomISO 3.0.7
- * send Zoom IDs that way), fires a 'message' event for every message inside a bundle, and keeps each argument's type
- * tag, so 1.0 stays a decimal.
+ * osc.js reads 64-bit integers (ZoomOSC 5 and ZoomISO 3.0.7 send Zoom IDs that way), fires a 'message' event for
+ * every message inside a bundle, and keeps each argument's type tag, so 1.0 stays a decimal.
  */
 export type OscPort = osc.UDPPort
 
@@ -52,7 +51,8 @@ export async function closeOscPort(port: OscPort): Promise<void> {
  * - A 64-bit integer (type tag h) becomes a plain number. ZoomOSC 5.0.1 and ZoomISO 3.0.7 send the Zoom IDs in
  *   gallery order and spot order that way, where ZoomOSC 4 and ZoomISO 3.0.6 send 32-bit integers (type tag i).
  *   Going by each argument's type tag, rather than by the app's version, handles old and new alike.
- * - True/false (type tags T and F) become the integers 1 and 0, as the handlers have expected since 4.12.
+ * - True/false (type tags T and F) become the integers 1 and 0, because the handlers check flags such as video on,
+ *   mute and hand raised against 1 and 0.
  * - Everything else keeps its type tag and value, so a decimal stays a decimal.
  */
 export function toZoomOSCResponse(message: osc.Message): ZoomOSCResponse {
@@ -81,8 +81,8 @@ function int64ToNumber(value: unknown): number {
 }
 
 /**
- * A command in the form osc sends. Typed arguments are written exactly as given; a bare value gets the type node-osc
- * gave it (text a string, a whole number an integer, any other number a decimal, bytes a blob).
+ * A command in the form osc sends. Typed arguments are written exactly as given; a bare value gets its type from its
+ * value: text a string, a whole number an integer, any other number a decimal, bytes a blob.
  */
 export function toOutgoingMessage(path: string, args?: OSCSomeArguments): osc.OutgoingMessage {
 	const list = args === undefined ? [] : Array.isArray(args) ? args : [args]
