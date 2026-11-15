@@ -185,11 +185,12 @@ export function GetActionsZoomISOOutputSettings(
 					default: 'Spotlight',
 					choices: [
 						{ id: 'Participant', label: 'Participant' },
+						{ id: 'Screen Share', label: 'Screen Share' },
 						{ id: 'Participant Share', label: 'Participant Share' },
 						{ id: 'Active Speaker', label: 'Active Speaker' },
 						{ id: 'Spotlight', label: 'Spotlight' },
 						{ id: 'Active Screenshare', label: 'Active Screenshare' },
-						{ id: 'Gallery Position', label: 'Gallery Position' },
+						{ id: 'Gallery Position', label: 'Gallery Position (only for ZoomISO v2)' },
 						{ id: 'Unique Speaker', label: 'Unique Speaker' },
 					],
 				},
