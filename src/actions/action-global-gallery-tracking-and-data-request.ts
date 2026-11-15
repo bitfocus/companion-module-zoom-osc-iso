@@ -39,7 +39,7 @@ export function GetActionsGlobalGalleryTrackingAndDataRequest(
 			},
 		},
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew]: {
-			name: 'Request GalleryCount (New)',
+			name: 'Request GalleryCount (New for OSC v5+ and ISO v3+)',
 			options: [],
 			callback: (): void => {
 				// type: 'Global'

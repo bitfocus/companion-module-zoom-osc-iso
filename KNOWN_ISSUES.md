@@ -28,7 +28,7 @@ When ZoomOSC or ZoomISO joins a meeting where participants are already spotlight
 
 The gallery count command was renamed from `galCount` to `galleryCount`.
 
-**Module status:** handled. The **Request GalleryCount (New)** action sends `/zoom/galleryCount`. The old **Request GalleryCount** action still sends `/zoom/galCount` for older versions and is marked deprecated ([src/actions/action-global-gallery-tracking-and-data-request.ts](src/actions/action-global-gallery-tracking-and-data-request.ts)). Receiving `/zoomosc/galleryCount` was already handled.
+**Module status:** handled. The **Request GalleryCount (New for OSC v5+ and ISO v3+)** action sends `/zoom/galleryCount`. The old **Request GalleryCount** action still sends `/zoom/galCount` for older versions and is marked deprecated ([src/actions/action-global-gallery-tracking-and-data-request.ts](src/actions/action-global-gallery-tracking-and-data-request.ts)). Receiving `/zoomosc/galleryCount` was already handled.
 
 ## 3. Gallery and spot order send Zoom IDs as 64-bit integers
 
