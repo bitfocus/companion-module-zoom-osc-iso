@@ -300,6 +300,8 @@ export const options = {
 			{ id: 'Transparent', label: 'Transparent' },
 			{ id: 'Image', label: 'Image' },
 			{ id: 'Testcard', label: 'Testcard' },
+			{ id: 'Color Bars', label: 'Color Bars' },
+			{ id: 'Profile Picture', label: 'Profile Picture' },
 		],
 		default: 'Black',
 	} satisfies CompanionInputFieldDropdown<'videoLossMode', string>,
