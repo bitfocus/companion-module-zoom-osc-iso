@@ -11,6 +11,7 @@ Known issues in ZoomOSC, ZoomISO and the Zoom SDK they use that affect this modu
 | 5   | [NDI stops capturing after video off and on](#5-ndi-stops-capturing-after-a-participant-turns-their-video-off-and-on)                         | ZoomISO 3                                | Can't be fixed in the module |
 | 6   | [Duplicated participants](#6-duplicated-participants)                                                                                         | ZoomISO 3.0.6                            | Can't be fixed in the module |
 | 7   | [Clearing an output selection no longer uses -2](#7-clearing-an-output-selection-no-longer-uses--2)                                           | ZoomISO 3                                | Not handled yet              |
+| 8   | [Emojis in participant names arrive as ??](#8-emojis-in-participant-names-arrive-as-)                                                         | ZoomOSC 5; ZoomISO 3                     | No workaround                |
 
 ## 1. getSpotOrder returns no one after joining a meeting with people already spotlighted
 
@@ -130,3 +131,12 @@ The note from Zoom on the new behaviour:
 > /zoom/outputRouting (output)
 >
 > - Send 0. This is a new change, currently sends the "index" of the selected active screenshare, even if the UI doesn't provide an option for selection.
+
+## 8. Emojis in participant names arrive as ??
+
+- **Affected:** ZoomOSC 5 and ZoomISO 3.
+- **Works as expected:** ZoomOSC 4 and ZoomISO 2.
+
+ZoomOSC 5 and ZoomISO 3 send `??` in place of each emoji in a participant's name, instead of the emoji itself. ZoomOSC 4 and ZoomISO 2 send the emoji, and it renders on the buttons and in the variables.
+
+**Module status:** no workaround. The `??` is already in the name when it reaches the module, so the emoji can't be recovered. The module decodes OSC strings as UTF-8, so it shows the emojis once ZoomOSC and ZoomISO send them again.
