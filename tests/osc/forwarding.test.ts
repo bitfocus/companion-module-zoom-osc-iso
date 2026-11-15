@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 import { EventEmitter } from 'node:events'
+import { networkInterfaces } from 'node:os'
 import { createSocket } from 'node:dgram'
 import { Bundle, Message, encode } from 'node-osc'
 import { OSC } from '../../src/osc.js'
@@ -12,6 +13,8 @@ const createSocketMock = createSocket as unknown as Mock
 
 const pong = () => encode(new Message('/zoomosc/pong', 'ZISO 3.0', 'ZISO 3.0', 2, 1, 1, 0, 5, 1))
 const flush = async () => new Promise((resolve) => setTimeout(resolve, 0))
+/** ZoomISO on this computer, as the receiving socket reports the sender */
+const fromZoom = { address: '127.0.0.1', port: 9090 }
 
 function start(config: Partial<MockModuleInstance['config']>): {
 	instance: MockModuleInstance
@@ -51,7 +54,7 @@ describe('OSC forwarding', () => {
 		osc = started.osc
 		const packet = pong()
 
-		started.server.emit('message', packet, { address: '127.0.0.1', port: 9090 })
+		started.server.emit('message', packet, fromZoom)
 		await flush()
 
 		expect(started.forwarder!.send).toHaveBeenCalledTimes(1)
@@ -69,8 +72,8 @@ describe('OSC forwarding', () => {
 		const garbage = Buffer.from('not an OSC packet')
 		const bundle = encode(new Bundle(['/zoomosc/pong', 'ZISO 3.0', 'ZISO 3.0', 2, 1, 1, 0, 5, 1]))
 
-		started.server.emit('message', garbage, { address: '127.0.0.1', port: 9090 })
-		started.server.emit('message', bundle, { address: '127.0.0.1', port: 9090 })
+		started.server.emit('message', garbage, fromZoom)
+		started.server.emit('message', bundle, fromZoom)
 		await flush()
 
 		expect(started.forwarder!.send.mock.calls.map((call) => call[0])).toEqual([garbage, bundle])
@@ -85,7 +88,7 @@ describe('OSC forwarding', () => {
 			oscForwardPort: undefined as unknown as number,
 		})
 		osc = started.osc
-		started.server.emit('message', pong(), {})
+		started.server.emit('message', pong(), fromZoom)
 		expect(started.forwarder!.send.mock.calls[0].slice(1, 3)).toEqual([1235, '127.0.0.1'])
 	})
 
@@ -113,14 +116,57 @@ describe('OSC forwarding', () => {
 		const failures = () =>
 			vi.mocked(started.instance.log).mock.calls.filter((call) => String(call[1]).includes('OSC forwarding to')).length
 
-		started.server.emit('message', pong(), {})
-		started.server.emit('message', pong(), {})
+		started.server.emit('message', pong(), fromZoom)
+		started.server.emit('message', pong(), fromZoom)
 		expect(failures()).toBe(1)
 
 		vi.advanceTimersByTime(61_000)
-		started.server.emit('message', pong(), {})
+		started.server.emit('message', pong(), fromZoom)
 		expect(failures()).toBe(2)
 		expect(started.forwarder!.send).toHaveBeenCalledTimes(3)
+	})
+
+	it('does not forward packets from other senders, but still handles them as before', async () => {
+		vi.useFakeTimers()
+		const started = start({ enableOscForwarding: true, oscForwardHost: '127.0.0.1', oscForwardPort: 1235 })
+		osc = started.osc
+		const skipped = () =>
+			vi.mocked(started.instance.log).mock.calls.filter((call) => String(call[1]).includes('skipped a packet'))
+
+		started.server.emit('message', pong(), { address: '192.0.2.50', port: 5000 })
+		started.server.emit('message', pong(), { address: '192.0.2.51', port: 5000 })
+		await vi.advanceTimersByTimeAsync(0)
+
+		expect(started.forwarder!.send).not.toHaveBeenCalled()
+		// logged once a minute at most, naming the sender
+		expect(skipped()).toHaveLength(1)
+		expect(skipped()[0][1]).toContain('192.0.2.50')
+		// the module's own handling is unchanged
+		expect(started.instance.ZoomClientDataObj.zoomOSCVersion).toBe('ZISO 3.0')
+	})
+
+	it('forwards from the configured ZoomOSC/ZoomISO IP only, when it runs on another computer', () => {
+		const started = start({
+			host: '192.0.2.20',
+			enableOscForwarding: true,
+			oscForwardHost: '127.0.0.1',
+			oscForwardPort: 1235,
+		})
+		osc = started.osc
+		started.server.emit('message', pong(), { address: '192.0.2.20', port: 9090 })
+		started.server.emit('message', pong(), { address: '127.0.0.1', port: 9090 })
+		expect(started.forwarder!.send).toHaveBeenCalledTimes(1)
+	})
+
+	it("forwards from any of this computer's addresses when ZoomOSC/ZoomISO runs here", () => {
+		const lanAddress = Object.values(networkInterfaces())
+			.flat()
+			.find((a) => a && a.family === 'IPv4' && !a.internal)?.address
+		const started = start({ enableOscForwarding: true, oscForwardHost: '127.0.0.1', oscForwardPort: 1235 })
+		osc = started.osc
+		started.server.emit('message', pong(), { address: '127.0.0.2', port: 9090 })
+		if (lanAddress) started.server.emit('message', pong(), { address: lanAddress, port: 9090 })
+		expect(started.forwarder!.send).toHaveBeenCalledTimes(lanAddress ? 2 : 1)
 	})
 
 	it('closes the forwarding socket on destroy and forwards nothing afterwards', async () => {
@@ -128,7 +174,7 @@ describe('OSC forwarding', () => {
 		await started.osc.destroy()
 		expect(started.forwarder!.close).toHaveBeenCalled()
 		expect(started.server.close).toHaveBeenCalled()
-		started.server.emit('message', pong(), {})
+		started.server.emit('message', pong(), fromZoom)
 		expect(started.forwarder!.send).not.toHaveBeenCalled()
 	})
 })

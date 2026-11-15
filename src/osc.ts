@@ -7,7 +7,7 @@ import { checkForwardTarget, DEFAULT_FORWARD_HOST, DEFAULT_FORWARD_PORT, OscForw
 import { dispatchOscMessage } from './osc/handlers/index.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
-import { createSocket, type Socket } from 'node:dgram'
+import { createSocket, type RemoteInfo, type Socket } from 'node:dgram'
 import * as nodeOscModule from 'node-osc'
 type NodeOscClient = {
 	close(): Promise<void>
@@ -198,9 +198,9 @@ export class OSC {
 		return
 	}
 
-	private readonly receivePacket = (packet: Buffer): void => {
+	private readonly receivePacket = (packet: Buffer, sender: RemoteInfo): void => {
 		// forward before decoding, so the other application gets every packet, even one this module can't decode
-		this.forwarder?.forward(packet)
+		this.forwarder?.forward(packet, sender.address)
 		const message = decodeOscPacket(packet)
 		if (message) void this.processData(normalizeNodeOscMessage(message))
 	}
@@ -220,7 +220,7 @@ export class OSC {
 			return null
 		}
 		this.instance.log('info', `Forwarding OSC from ZoomOSC/ZoomISO to ${target.host}:${target.port}`)
-		return new OscForwarder(target, (level, message) => this.instance.log(level, message))
+		return new OscForwarder(target, this.oscHost, (level, message) => this.instance.log(level, message))
 	}
 
 	/**

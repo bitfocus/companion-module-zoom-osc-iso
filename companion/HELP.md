@@ -179,6 +179,7 @@ There are a number of configuration options for the module that allow you to con
    ZoomOSC/ZoomISO can only send its messages to one place, which is this module. To let another application see the same messages, enable OSC Forwarding and enter that application's IP and port. The module sends a copy of every OSC message it receives from ZoomOSC/ZoomISO to that address, exactly as it arrived. Nothing is filtered or changed, and the module keeps working as usual.
 
    - Only the messages received from ZoomOSC/ZoomISO are forwarded, not the commands this module sends.
+   - A message is forwarded only when it comes from ZoomOSC/ZoomISO's Transmission IP, or from any address of this computer when ZoomOSC/ZoomISO runs on it. This stops anyone else on the network from reaching the other application through this module. Messages from other senders are handled as before but not forwarded, and the module logs this at most once a minute.
    - The other application sends its own commands straight to ZoomOSC/ZoomISO's receiving port. ZoomOSC/ZoomISO replies to this module, which forwards those replies too and also acts on them as usual.
    - Messages go to one IP and port. The module refuses an address that would loop: its own receiving port, or ZoomOSC/ZoomISO's receiving port. It logs a warning and leaves forwarding off.
    - If the other application isn't running, the module keeps working and logs a failed send at most once a minute.
