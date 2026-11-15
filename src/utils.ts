@@ -32,7 +32,7 @@ export enum ZoomVersion {
 
 /**
  * Whether the version a pong reports is ZoomISO 3 or later (ZISO_3.0.7_MAC), rather than ZoomISO 2
- * (ZISO_2.4.1_pro_MAC) or ZoomOSC (ZOSC_5.0.1_MAC). False before the first pong.
+ * (ZISO_2.4.1_pro_MAC). False before the first pong.
  */
 export function isZoomISO3OrLater(version: unknown): boolean {
 	const match = /^ZISO_(\d+)\./.exec(String(version))
