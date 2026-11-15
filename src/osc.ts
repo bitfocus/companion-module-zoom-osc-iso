@@ -19,6 +19,8 @@ export class OSC {
 	/** Receives from ZoomOSC/ISO and sends commands to it, on the receiving port, as in 4.11 */
 	private udpPort: OscPort | null = null
 	private lastReceiveError = { message: '', at: 0 }
+	/** Whether ZoomOSC/ISO has answered a ping since this connection started */
+	private hadFirstPong = false
 	private updateLoop = true
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
@@ -79,6 +81,8 @@ export class OSC {
 	}
 
 	public readonly createZoomIsoPullerTimer = (): void => {
+		// a join can report Audio Ready and then In Meeting: replace the timer rather than leave one running untracked
+		this.destroyZoomIsoPullerTimer()
 		if (this.instance.config.version === ZoomVersion.ZoomISO) {
 			this.zoomISOPuller = setInterval(
 				() => {
@@ -90,8 +94,6 @@ export class OSC {
 				},
 				this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
 			)
-		} else {
-			this.destroyZoomIsoPullerTimer()
 		}
 	}
 
@@ -145,6 +147,7 @@ export class OSC {
 		this.oscRXPort = this.instance.config.rx_port || 1234
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
+		this.hadFirstPong = false
 		const udpPort = createOscPort(this.oscRXPort, this.oscHost, this.oscTXPort)
 		this.udpPort = udpPort
 
@@ -212,6 +215,11 @@ export class OSC {
 		createZoomIsoPullerTimer: this.createZoomIsoPullerTimer,
 		destroyZoomIsoPullerTimer: this.destroyZoomIsoPullerTimer,
 		hasZoomIsoPuller: () => Boolean(this.zoomISOPuller),
+		isFirstPong: () => {
+			const first = !this.hadFirstPong
+			this.hadFirstPong = true
+			return first
+		},
 		configureConnectedPingWatchdog: (callStatus) => {
 			this.needToPingPong = false
 			if (this.pingInterval) {

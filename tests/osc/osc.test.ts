@@ -149,3 +149,69 @@ describe('OSC sendCommand', () => {
 		expect(instance.log).toHaveBeenCalledWith('error', expect.stringContaining('OSC port is not open'))
 	})
 })
+
+describe('OSC starting or joining a meeting', () => {
+	const typed = (value: number | string) => ({ type: typeof value === 'string' ? 's' : 'i', value })
+	/** ZoomOSC/ISO's answer to /zoom/ping: {version} {subscribeMode} {galTrackMode} {callStatus} ... {isPro} */
+	const pong = (callStatus: number) => ({
+		address: '/zoomosc/pong',
+		args: [0, 'ZOSC_5.0.1_MAC', 2, 1, callStatus, 0, 45, 1].map(typed),
+	})
+	const sentCount = (port: FakePort, address: string) =>
+		port.send.mock.calls.filter(([message]) => (message as { address: string }).address === address).length
+
+	async function receive(port: FakePort, message: { address: string; args: unknown[] }): Promise<void> {
+		port.emit('message', message)
+		await vi.advanceTimersByTimeAsync(0)
+	}
+
+	beforeEach(() => {
+		vi.useFakeTimers()
+		return () => vi.useRealTimers()
+	})
+
+	it('asks for everyone in the meeting once, when it starts while ZoomOSC/ISO is already in one', async () => {
+		const instance = createMockInstance()
+		const connection = new OSC(instance)
+		const port = lastPort()
+		port.emit('ready')
+
+		await receive(port, pong(1))
+		expect(sentCount(port, '/zoom/list')).toBe(1)
+
+		// the watchdog's later pongs don't ask again
+		await receive(port, pong(1))
+		expect(sentCount(port, '/zoom/list')).toBe(1)
+
+		// a new connection (the module restarting, a config change) asks again
+		const stopped = connection.destroy()
+		await vi.advanceTimersByTimeAsync(0)
+		await stopped
+		new OSC(instance)
+		await receive(lastPort(), pong(1))
+		expect(sentCount(lastPort(), '/zoom/list')).toBe(1)
+	})
+
+	it('does not ask for the list when ZoomOSC/ISO is not in a meeting', async () => {
+		new OSC(createMockInstance())
+		const port = lastPort()
+		await receive(port, pong(0))
+		expect(sentCount(port, '/zoom/list')).toBe(0)
+	})
+
+	it('keeps one ZoomISO polling timer when a join reports Audio Ready and then In Meeting', async () => {
+		const instance = createMockInstance()
+		instance.config.version = 1 // ZoomISO
+		new OSC(instance)
+		const port = lastPort()
+		const status = (value: number) => ({ address: '/zoomosc/meetingStatusChanged', args: [value, 0, 0].map(typed) })
+
+		await receive(port, status(8))
+		await receive(port, status(3))
+		port.send.mockClear()
+
+		// the engine state is unknown, so each polling timer asks for it once per 5 seconds
+		await vi.advanceTimersByTimeAsync(5000)
+		expect(sentCount(port, '/zoom/getEngineState')).toBe(1)
+	})
+})

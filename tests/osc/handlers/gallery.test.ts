@@ -32,6 +32,7 @@ function createContext(): OSCHandlerContext {
 		createZoomIsoPullerTimer: vi.fn(),
 		destroyZoomIsoPullerTimer: vi.fn(),
 		hasZoomIsoPuller: vi.fn(() => false),
+		isFirstPong: vi.fn(() => false),
 		configureConnectedPingWatchdog: vi.fn(),
 		sendCommand: vi.fn(),
 	}

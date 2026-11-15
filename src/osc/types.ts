@@ -17,6 +17,27 @@ export enum UserRole {
 	Participant = 3,
 }
 
+/** The status_code in meetingStatusChanged: the Zoom SDK's ZoomSDKMeetingStatus values (there is no 11) */
+export enum MeetingStatus {
+	Idle = 0,
+	Connecting = 1,
+	WaitingForHost = 2,
+	InMeeting = 3,
+	Disconnecting = 4,
+	Reconnecting = 5,
+	Failed = 6,
+	Ended = 7,
+	AudioReady = 8,
+	OtherMeetingInProgress = 9,
+	InWaitingRoom = 10,
+	WebinarPromote = 12,
+	WebinarDepromote = 13,
+	JoinBreakoutRoom = 14,
+	LeaveBreakoutRoom = 15,
+	JoinBackstage = 16,
+	LeaveBackstage = 17,
+}
+
 export interface OSCHandlerContext {
 	instance: ModuleInstance
 	createZoomUser(data: ZoomOSCResponse): Promise<void>
@@ -30,6 +51,8 @@ export interface OSCHandlerContext {
 	createZoomIsoPullerTimer(): void
 	destroyZoomIsoPullerTimer(): void
 	hasZoomIsoPuller(): boolean
+	/** True for the first pong since the connection started, false for every pong after it */
+	isFirstPong(): boolean
 	configureConnectedPingWatchdog(callStatus: number): void
 	sendCommand(path: string, args?: OSCSomeArguments): void
 }

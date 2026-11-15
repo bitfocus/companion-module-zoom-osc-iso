@@ -9,8 +9,14 @@ import {
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
 import { sendZoomSubscriptions } from '../commands.js'
-import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import { MeetingStatus, type OSCHandlerContext, type ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
+
+/**
+ * Meeting statuses that mean ZoomOSC/ISO has joined the meeting. A join usually sends Connecting, Audio Ready, then
+ * In Meeting, but sometimes stops at Audio Ready.
+ */
+const JOINED_MEETING_STATUSES = new Set<number>([MeetingStatus.InMeeting, MeetingStatus.AudioReady])
 
 export function handleSessionMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {
 	switch (zoomPart2) {
@@ -79,8 +85,14 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 			break
 	}
 
+	const firstPong = context.isFirstPong()
 	context.configureConnectedPingWatchdog(data.args[4].value)
 	sendZoomSubscriptions((path, args) => context.sendCommand(path, args))
+	// ZoomOSC/ISO sends everyone in the meeting when it joins, and not again when asked to subscribe. A connection that
+	// starts while it's already in a meeting (Companion starting, the module restarting, a config change) has to ask.
+	if (firstPong && data.args[4].value === 1) {
+		context.sendCommand('/zoom/list', [])
+	}
 	context.setUpdateLoop(true)
 }
 
@@ -88,10 +100,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 	context.instance.log('info', `meetingStatus receiving: ${JSON.stringify(data.args[0].value)}`)
 	context.instance.ZoomClientDataObj.callStatus = data.args[0].value
 
-	// Meeting status ended
-	// 0 = Meeting Status Idle
-	// 7 = Meeting Status Ended
-	if (data.args[0].value === 0 || data.args[0].value === 7) {
+	if (data.args[0].value === MeetingStatus.Idle || data.args[0].value === MeetingStatus.Ended) {
 		context.destroyTimers()
 		context.instance.ZoomClientDataObj = {
 			last_response: context.instance.ZoomClientDataObj.last_response,
@@ -132,8 +141,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 		return
 	}
 
-	// 3 = In Meeting
-	if (context.instance.ZoomClientDataObj.callStatus === 3) {
+	if (JOINED_MEETING_STATUSES.has(Number(data.args[0].value))) {
 		context.setNeedToPingPong(true)
 		context.createPingTimer()
 		context.createUpdatePresetsTimer()
