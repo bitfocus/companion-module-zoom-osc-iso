@@ -15,7 +15,7 @@ export function GetActionsZoomISORecordingConsent(
 ): CompanionActionDefinitions<ActionsSchemaZoomISORecordingConsent> {
 	const actions: CompanionActionDefinitions<ActionsSchemaZoomISORecordingConsent> = {
 		[ActionIdZoomISORecordingConsent.acceptRecordingConsent]: {
-			name: 'Accept Recording Consent',
+			name: 'Accept Recording Consent (Deprecated)',
 			options: [],
 			callback: (): void => {
 				// type: 'ISO'

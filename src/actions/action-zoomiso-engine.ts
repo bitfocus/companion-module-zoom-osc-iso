@@ -57,7 +57,7 @@ export function GetActionsZoomISOEngine(
 			},
 		},
 		[ActionIdZoomISOEngine.standbyISOEngine]: {
-			name: 'Standby ISO Engine',
+			name: 'Standby ISO Engine (Deprecated)',
 			options: [],
 			callback: (): void => {
 				// type: 'ISO'

@@ -187,7 +187,7 @@ export function GetActionsUserScreenshare(
 			},
 		},
 		[ActionIdUserScreenshare.SetWindowPosition]: {
-			name: 'Set Window Position  (PRO and MAC Only)',
+			name: 'Set Window Position  (PRO and MAC Only) (Deprecated)',
 			options: [options.userName, options.intX, options.intY],
 			callback: (action): void => {
 				// type: 'User'
@@ -208,7 +208,7 @@ export function GetActionsUserScreenshare(
 			},
 		},
 		[ActionIdUserScreenshare.SetWindowSize]: {
-			name: 'Set Window Size  (PRO and MAC Only)',
+			name: 'Set Window Size  (PRO and MAC Only) (Deprecated)',
 			options: [options.userName, options.intX, options.intY],
 			callback: (action): void => {
 				// type: 'User'

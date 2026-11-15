@@ -536,7 +536,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 					choices: [
 						{ id: engineState.disabled, label: 'Disabled' },
 						{ id: engineState.enabled, label: 'Enabled' },
-						{ id: engineState.standby, label: 'Standby' },
+						{ id: engineState.standby, label: 'Standby (Deprecated)' },
 					],
 				},
 			],
