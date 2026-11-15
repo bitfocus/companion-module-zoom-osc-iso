@@ -2,34 +2,23 @@ import type ModuleInstance from './index.js'
 import { ZoomVersion } from './utils.js'
 import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
 import { FeedbackId } from './feedback.js'
-import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
+import { sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import type { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import { closeOscPort, createOscPort, toOutgoingMessage, toZoomOSCResponse, type OscPort } from './osc/transport.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
-import * as nodeOscModule from 'node-osc'
-type NodeOscClient = {
-	close(): Promise<void>
-	send(address: string, ...args: unknown[]): void
-}
-type NodeOscServer = {
-	close(): Promise<void>
-	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
-	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
-}
-type NodeOscModule = {
-	Client: new (host: string, port: number) => NodeOscClient
-	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
-}
-// node-osc ships ESM; keep the narrow local typing this module relies on
-const nodeOsc = nodeOscModule as unknown as NodeOscModule
+
+/** The same receive error (a packet that can't be read, say) is logged at most this often */
+const RECEIVE_ERROR_LOG_INTERVAL = 60000
 
 export class OSC {
 	private readonly instance: ModuleInstance
 	private oscHost = ''
 	private oscTXPort = 9090
 	private oscRXPort = 1234
-	private client: NodeOscClient | null = null
-	private server: NodeOscServer | null = null
+	/** Receives from ZoomOSC/ISO and sends commands to it, on the receiving port, as in 4.11 */
+	private udpPort: OscPort | null = null
+	private lastReceiveError = { message: '', at: 0 }
 	private updateLoop = true
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
@@ -51,16 +40,11 @@ export class OSC {
 	public readonly destroy = async (): Promise<void> => {
 		this.destroyTimers()
 
-		if (this.server) {
-			await this.server.close()
+		const udpPort = this.udpPort
+		this.udpPort = null
+		if (udpPort) {
+			await closeOscPort(udpPort)
 		}
-
-		if (this.client) {
-			await this.client.close()
-		}
-
-		this.server = null
-		this.client = null
 	}
 
 	public readonly destroyTimers = (): void => {
@@ -161,8 +145,25 @@ export class OSC {
 		this.oscRXPort = this.instance.config.rx_port || 1234
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
-		this.client = new nodeOsc.Client(this.oscHost, this.oscTXPort)
-		this.server = new nodeOsc.Server(this.oscRXPort, '0.0.0.0', () => {
+		const udpPort = createOscPort(this.oscRXPort, this.oscHost, this.oscTXPort)
+		this.udpPort = udpPort
+
+		// every message, including each one inside a bundle
+		udpPort.on('message', (oscMsg) => {
+			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
+			this.processData(toZoomOSCResponse(oscMsg))
+		})
+
+		udpPort.on('error', (err) => {
+			if (err.code === 'EADDRINUSE') {
+				this.instance.log('error', 'Error: Selected port in use.' + err.message)
+				return
+			}
+			// anything else, such as a packet osc can't read: say so, rather than drop it without a trace
+			this.reportReceiveError(err.message)
+		})
+
+		udpPort.on('ready', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			this.needToPingPong = true
@@ -170,18 +171,16 @@ export class OSC {
 			this.createUpdatePresetsTimer()
 		})
 
-		this.server.on('message', (oscMsg) => {
-			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(normalizeNodeOscMessage(oscMsg))
-		})
-
-		this.server.on('error', (err: { code?: string; message: string }) => {
-			if (err.code === 'EADDRINUSE') {
-				this.instance.log('error', 'Error: Selected port in use.' + err.message)
-			}
-		})
+		udpPort.open()
 
 		return
+	}
+
+	private readonly reportReceiveError = (message: string): void => {
+		const now = Date.now()
+		if (message === this.lastReceiveError.message && now - this.lastReceiveError.at < RECEIVE_ERROR_LOG_INTERVAL) return
+		this.lastReceiveError = { message, at: now }
+		this.instance.log('warn', `OSC error from ZoomOSC/ISO: ${message}`)
 	}
 
 	/**
@@ -237,7 +236,9 @@ export class OSC {
 		try {
 			await dispatchOscMessage(this.createHandlerContext(), data)
 		} catch (error) {
-			this.instance.log('error', `unable to process data for ${JSON.stringify(data)}. Error: ${JSON.stringify(error)}`)
+			// an Error has no enumerable fields: JSON.stringify gives {}, which hid the cause in the log
+			const reason = error instanceof Error ? error.message : JSON.stringify(error)
+			this.instance.log('error', `unable to process data for ${JSON.stringify(data)}. Error: ${reason}`)
 		}
 	}
 
@@ -253,12 +254,11 @@ export class OSC {
 				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`,
 			)
 		try {
-			if (!this.client) {
-				throw new Error('OSC client is not connected')
+			if (!this.udpPort) {
+				throw new Error('OSC port is not open')
 			}
-			// node-osc reports encoding and socket errors by rejecting; left unhandled, that would crash the module
-			const sent = sendOscCommand(this.client, path, args)
-			if (sent instanceof Promise) sent.catch(logError)
+			// to ZoomOSC/ISO's IP and receiving port; osc reports socket errors through 'error'
+			this.udpPort.send(toOutgoingMessage(path, args))
 		} catch (error) {
 			logError(error)
 		}
