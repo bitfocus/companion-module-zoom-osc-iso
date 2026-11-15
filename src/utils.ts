@@ -342,7 +342,7 @@ export const options = {
 		label: 'count',
 		id: 'count',
 		min: 0,
-		max: 512,
+		max: 16,
 		default: 1,
 	} satisfies CompanionInputFieldNumber<'count'>,
 	mode: {
