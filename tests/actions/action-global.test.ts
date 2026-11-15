@@ -26,11 +26,11 @@ describe('GetActionsGlobal', () => {
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/disableUsersUnmute', [])
 	})
 
-	it('muteAll sends /zoom/allExcept/ZoomID/Mute with the host zoomId', async () => {
+	it('muteAll sends /zoom/allExcept/zoomID/mute with the host zoomId', async () => {
 		instance.ZoomUserData = { '1': { zoomId: 42, userName: 'Host', userRole: 1 } } as any
 		await (actions[ActionIdGlobal.muteAll] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith(
-			expect.stringContaining('/Mute'),
+			expect.stringContaining('/mute'),
 			expect.arrayContaining([{ type: 'i', value: 42 }]),
 		)
 	})
@@ -102,29 +102,29 @@ describe('GetActionsGlobal', () => {
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/ejectAttendees', [])
 	})
 
-	it('muteAllExcept sends /zoom/allExcept/userName/Mute with name arg when user found', async () => {
+	it('muteAllExcept sends /zoom/allExcept/userName/mute with name arg when user found', async () => {
 		instance.ZoomUserData = { '1': { zoomId: 99, userName: 'Alice', userRole: 0 } } as any
 		await (actions[ActionIdGlobal.muteAllExcept] as any).callback({ options: { userName: 'Alice' } } as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith(
-			expect.stringContaining('/Mute'),
+			expect.stringContaining('/mute'),
 			expect.arrayContaining([{ type: 's', value: 'Alice' }]),
 		)
 	})
 
-	it('muteAllExceptHost sends /zoom/.../Mute for users in group 0', async () => {
+	it('muteAllExceptHost sends /zoom/.../mute for users in group 0', async () => {
 		instance.ZoomGroupData = [{ users: [{ zoomID: 10 }, { zoomID: 11 }] }, { users: [] }] as any
 		await (actions[ActionIdGlobal.muteAllExceptHost] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith(
-			expect.stringContaining('/Mute'),
+			expect.stringContaining('/mute'),
 			expect.arrayContaining([{ type: 'i', value: 10 }]),
 		)
 	})
 
-	it('muteAllExceptSpot sends /zoom/.../Mute for users in group 1', async () => {
+	it('muteAllExceptSpot sends /zoom/.../mute for users in group 1', async () => {
 		instance.ZoomGroupData = [{ users: [] }, { users: [{ zoomID: 20 }, { zoomID: 21 }] }] as any
 		await (actions[ActionIdGlobal.muteAllExceptSpot] as any).callback({} as any, {} as any)
 		expect(instance.OSC.sendCommand).toHaveBeenCalledWith(
-			expect.stringContaining('/Mute'),
+			expect.stringContaining('/mute'),
 			expect.arrayContaining([{ type: 'i', value: 20 }]),
 		)
 	})

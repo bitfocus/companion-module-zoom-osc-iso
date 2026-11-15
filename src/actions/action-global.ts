@@ -94,13 +94,13 @@ export function GetActionsGlobal(instance: ModuleInstance): CompanionActionDefin
 
 				// hack because the /all/mute command mutes everyone except the
 				// ZoomISO host even when they are the co-host
-				// so we find the host and pass that to the /Mute command
+				// so we find the host and pass that to the /mute command
 				const host = Object.values(instance.ZoomUserData).find((user) => user.userRole === 1)
 
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomClientDataObj.selectedCallers.push(host.zoomId)
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 
 				const sendToCommand = {
 					id: ActionIdGlobal.muteAll,
@@ -292,7 +292,7 @@ export function GetActionsGlobal(instance: ModuleInstance): CompanionActionDefin
 			callback: (action): void => {
 				// type: 'User'
 				const userName = action.options.userName
-				const command = createCommand(instance, '/Mute', userName, select.multi, true)
+				const command = createCommand(instance, '/mute', userName, select.multi, true)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExcept,
@@ -317,7 +317,7 @@ export function GetActionsGlobal(instance: ModuleInstance): CompanionActionDefin
 				})
 
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExceptHost,
@@ -344,7 +344,7 @@ export function GetActionsGlobal(instance: ModuleInstance): CompanionActionDefin
 				})
 
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExceptSpot,

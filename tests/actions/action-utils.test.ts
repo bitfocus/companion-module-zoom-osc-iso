@@ -128,10 +128,10 @@ describe('createCommand', () => {
 			expect(result.oscPath).toBe('/zoom/allExcept/users/zoomID/videoOn')
 		})
 
-		it('uses /zoom/allExcept/ZoomID for /Mute with multiple callers and allExcept=true', () => {
+		it('uses /zoom/allExcept/zoomID for /mute with multiple callers and allExcept=true', () => {
 			instance = createMockInstance({ selectedCallers: [1001, 1002] })
-			const result = createCommand(instance, '/Mute', '', false, true)
-			expect(result.oscPath).toBe('/zoom/allExcept/ZoomID/Mute')
+			const result = createCommand(instance, '/mute', '', false, true)
+			expect(result.oscPath).toBe('/zoom/allExcept/zoomID/mute')
 		})
 	})
 

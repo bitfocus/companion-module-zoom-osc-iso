@@ -161,8 +161,8 @@ export const createCommand = (
 			if (allExcept) {
 				command.oscPath =
 					(command.args.length > 1
-						? OSCAction === '/Mute'
-							? '/zoom/allExcept/ZoomID'
+						? OSCAction === '/mute'
+							? '/zoom/allExcept/zoomID'
 							: `/zoom/allExcept/users/zoomID`
 						: `/zoom/allExcept/zoomID`) + OSCAction
 			} else {
