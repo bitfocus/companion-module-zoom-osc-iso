@@ -44,6 +44,9 @@
 		"typescript-eslint": "^8.56.1",
 		"vitest": "^3.2.4"
 	},
+	"resolutions": {
+		"osc/ws": "^8.22.2"
+	},
 	"prettier": "@companion-module/tools/.prettierrc.json",
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
