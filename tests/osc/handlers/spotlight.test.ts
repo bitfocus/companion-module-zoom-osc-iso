@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { handleGalleryMessage } from '../../../src/osc/handlers/gallery.js'
+import { handleSpotOrder } from '../../../src/osc/handlers/spotlight.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.js'
 import { createMockInstance } from '../../helpers/mock-instance.js'
 
@@ -46,7 +46,7 @@ const spotOrder = (...zoomIds: number[]): ZoomOSCResponse => ({
 describe('spot order', () => {
 	it('marks the listed participants as spotlighted', () => {
 		const context = createContext()
-		handleGalleryMessage(context, spotOrder(101, 102), 'spotOrder')
+		handleSpotOrder(context, spotOrder(101, 102))
 
 		expect(context.instance.ZoomUserData[101].spotlighted).toBe(true)
 		expect(context.instance.ZoomUserData[102].spotlighted).toBe(true)
@@ -55,8 +55,8 @@ describe('spot order', () => {
 
 	it('clears participants who dropped out of the spot order', () => {
 		const context = createContext()
-		handleGalleryMessage(context, spotOrder(101, 102), 'spotOrder')
-		handleGalleryMessage(context, spotOrder(102), 'spotOrder')
+		handleSpotOrder(context, spotOrder(101, 102))
+		handleSpotOrder(context, spotOrder(102))
 
 		expect(context.instance.ZoomUserData[101].spotlighted).toBe(false)
 		expect(context.instance.ZoomUserData[102].spotlighted).toBe(true)
@@ -64,8 +64,8 @@ describe('spot order', () => {
 
 	it('only touches participants who were in the Spotlights group, not the whole meeting', () => {
 		const context = createContext()
-		handleGalleryMessage(context, spotOrder(101), 'spotOrder')
-		handleGalleryMessage(context, spotOrder(102), 'spotOrder')
+		handleSpotOrder(context, spotOrder(101))
+		handleSpotOrder(context, spotOrder(102))
 
 		// Carol was never spotlighted, so the update leaves her untouched
 		expect(context.instance.ZoomUserData[103].spotlighted).toBeUndefined()
@@ -73,10 +73,10 @@ describe('spot order', () => {
 
 	it('updates the buttons when the spot order only removes people', () => {
 		const context = createContext()
-		handleGalleryMessage(context, spotOrder(101), 'spotOrder')
+		handleSpotOrder(context, spotOrder(101))
 		vi.mocked(context.instance.checkFeedbacks).mockClear()
 
-		handleGalleryMessage(context, spotOrder(), 'spotOrder')
+		handleSpotOrder(context, spotOrder())
 
 		expect(context.instance.ZoomUserData[101].spotlighted).toBe(false)
 		expect(context.instance.ZoomGroupData[1].users).toEqual([])
