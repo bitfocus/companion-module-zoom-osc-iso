@@ -28,7 +28,7 @@ You will need to configure these settings in ZoomOSC/ZoomISO UI
 
 ## Companion Module Configuration
 
-There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, OSC forwarding, and advanced performance tweaks.
+There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback (deprecated), Social Stream Ninja integration, OSC forwarding, and advanced performance tweaks.
 
 1. **ZoomISO/ZoomOSC Transmission IP (e.g. Target Host):** Match ZoomISO/ZoomOSC Transmission IP.
 1. **ZoomISO/ZoomOSC Receiving Port:** Match ZoomISO/ZoomOSC Recieving Port.
@@ -61,9 +61,11 @@ There are a number of configuration options for the module that allow you to con
 
 1. **Sync iso configuration time in sections (only for ZoomISO):** How often to update the ZoomISO audioLevels, outputRouting, audioRouting, and engineState. The default is 1 second.
 
-1. _Participant Multi-State Feedback_
+1. _Participant Multi-State Feedback (Deprecated)_
 
-   This module supports various _dynamic feedback options_ to enhance your workflow and button functionality. One key feature is _multi-state feedback_ for participants, providing real-time status updates for their camera, mic, and hand raise. Each status has an icon with both "on" and "off" states for easy visualization.
+   **Deprecated.** Companion's graphics layers (layered buttons, Companion 5.0+) replace the multi-state feedbacks. The presets for participants, gallery, host, spotlights and groups have been updated to use layers (see **Layered participant presets** below). Update your buttons to use them: existing buttons aren't converted automatically, so add each one again from the presets. This setting only affects the four "(Deprecated) ... showing multi-state" feedbacks, which still work on existing buttons until then but will be removed in a future version.
+
+   The multi-state feedbacks show a participant's camera, mic and hand raise status as icons along the bottom of the button. Each status has an icon with both "on" and "off" states.
 
    1. **Disable (Not recommended unless you don’t need feedback indicators.)**
 
@@ -86,8 +88,6 @@ There are a number of configuration options for the module that allow you to con
       - Always displays icons:
       - Bright for active states (e.g., camera on).
       - Dim for inactive states (e.g., mic muted).
-
-   These configurations provide flexibility to tailor feedback based on your needs. The default presets use multi-state feedback to ensure a seamless experience, but advanced users can adjust settings as required.
 
    **Layered participant presets (Companion 5.0+)**
 
@@ -129,7 +129,7 @@ There are a number of configuration options for the module that allow you to con
 
    The "Select from Participants" presets read the participant position variables, so **Enable Variable For Participants** must be turned on in the module configuration for their names and feedbacks to work.
 
-   The "(Deprecated) ... showing multi-state" feedbacks still work on existing buttons, but they will be removed in a future version. New buttons should use the layered presets.
+   The "(Deprecated) ... showing multi-state" feedbacks still work on existing buttons, but they will be removed in a future version. Update your participant, gallery, host, spotlight and group buttons to the layered presets: existing buttons aren't converted automatically, so add each one again from the presets.
 
 1. **Send Zoom Chat to Social Stream Ninja**
 

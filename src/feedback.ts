@@ -235,7 +235,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			name: '(Deprecated) Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			sortName: 'zz Deprecated Group based feedback showing multi-state',
 			description:
-				'Position 1 - 999. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
+				"Position 1 - 999. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -318,7 +318,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			name: '(Deprecated) Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			sortName: 'zz Deprecated Participant position based feedback showing multi-state',
 			description:
-				'Feedback based on index of the participant. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
+				"Feedback based on index of the participant. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -404,7 +404,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			name: '(Deprecated) Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			sortName: 'zz Deprecated Username based feedback showing multi-state',
 			description:
-				'type in username. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
+				"type in username. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
 			affectedProperties: ['png64'],
 			options: [
 				{
@@ -497,7 +497,7 @@ export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinit
 			name: '(Deprecated) Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
 			sortName: 'zz Deprecated Gallery based feedback showing multi-state',
 			description:
-				'Position 1 - 49. Kept for existing buttons. New buttons should use the layered participant presets, which build this from the separate Mic, Camera and Hand boolean feedbacks.',
+				"Position 1 - 49. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
 			affectedProperties: ['png64'],
 			options: [
 				{

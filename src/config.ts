@@ -148,8 +148,9 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'dropdown',
 			id: 'feedbackImagesWithIcons',
-			label: 'Participant Multi-State Feedback',
-			tooltip: 'If enabled, adds icons to bottom of button for camera, mic, and hand raised state',
+			label: 'Participant Multi-State Feedback (Deprecated)',
+			tooltip:
+				"Only for the deprecated multi-state feedbacks on existing buttons: adds icons to the bottom of the button for camera, mic, and hand raised state. Companion's graphics layers replace them: the participant, gallery, host, spotlight and group presets have been updated, so update your buttons to use them.",
 			choices: [
 				{ id: 0, label: 'Bottom (On and Off For Mic/Camera, Only on for Hand Raise) - Recommended' },
 				{ id: 2, label: 'Bottom (Only Active States)' },
