@@ -35,6 +35,7 @@ export function GetActionsOscForwarding(
 					label: 'OSC Forwarding',
 					id: 'state',
 					default: OscForwardingState.toggle,
+					disableAutoExpression: true,
 					choices: [
 						{ id: OscForwardingState.on, label: 'On' },
 						{ id: OscForwardingState.off, label: 'Off' },
