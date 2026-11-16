@@ -23,7 +23,7 @@
 		"url": "git+https://github.com/bitfocus/companion-module-zoom-osc-iso.git"
 	},
 	"engines": {
-		"node": "^22.20",
+		"node": "^26",
 		"yarn": "^4"
 	},
 	"dependencies": {
@@ -33,7 +33,7 @@
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^3.1.0",
-		"@types/node": "^22.19.17",
+		"@types/node": "^26.6.4",
 		"eslint": "^10.2.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.5.2",
