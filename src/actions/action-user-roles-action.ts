@@ -124,9 +124,10 @@ export function GetActionsUserRolesAndAction(
 				},
 			],
 			callback: (action) => {
-				// v1 passed the dropdown's string id through unchanged (the `as number` cast did not convert it);
-				// kept as-is so selection behaviour does not change in this migration.
-				const zoomId = action.options.user as unknown as number
+				// the dropdown ids are zoomId strings; selectUser only accepts numbers, so convert here.
+				// '0' is the "no users" placeholder, not a participant.
+				const zoomId = Number(action.options.user)
+				if (!Number.isFinite(zoomId) || zoomId === 0) return
 
 				selectUser(instance, zoomId, action.options.option)
 

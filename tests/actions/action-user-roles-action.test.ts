@@ -17,6 +17,29 @@ describe('GetActionsUserRolesAndAction', () => {
 		instance.ZoomClientDataObj.selectedCallers = []
 	})
 
+	// ── selectUser (Preselect user) ─────────────────────────────────────────
+	describe('selectUser', () => {
+		// the User dropdown's choice ids are zoomId strings, so the callback receives a string
+		it('selects the participant from the dropdown string id', () => {
+			const callback = (actions[ActionIdUserRolesAndAction.selectUser] as any).callback
+			callback({ options: { user: '1001', option: 'select' } } as any, {} as any)
+			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1001])
+		})
+
+		it('removes the participant from the dropdown string id', () => {
+			instance.ZoomClientDataObj.selectedCallers = [1001]
+			const callback = (actions[ActionIdUserRolesAndAction.selectUser] as any).callback
+			callback({ options: { user: '1001', option: 'remove' } } as any, {} as any)
+			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([])
+		})
+
+		it('ignores the "no users" placeholder', () => {
+			const callback = (actions[ActionIdUserRolesAndAction.selectUser] as any).callback
+			callback({ options: { user: '0', option: 'select' } } as any, {} as any)
+			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([])
+		})
+	})
+
 	// ── makeHost ────────────────────────────────────────────────────────────
 	describe('makeHost', () => {
 		it('sends /zoom/userName/makeHost with string arg when userName is provided', async () => {
