@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import {
 	createCommand,
@@ -32,10 +32,28 @@ export enum ActionIdGlobal {
 	muteAllExceptSpot = 'muteAllExceptSpotlight',
 }
 
-export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobal]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobal]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobal = {
+	[ActionIdGlobal.enableUsersToUnmute]: { options: Record<string, never> }
+	[ActionIdGlobal.disableUsersToUnmute]: { options: Record<string, never> }
+	[ActionIdGlobal.muteAll]: { options: Record<string, never> }
+	[ActionIdGlobal.unmuteAll]: { options: Record<string, never> }
+	[ActionIdGlobal.lowerAllHands]: { options: Record<string, never> }
+	[ActionIdGlobal.clearSpotlight]: { options: Record<string, never> }
+	[ActionIdGlobal.pingZoomOSC]: { options: Record<string, never> }
+	[ActionIdGlobal.startMeetng]: { options: { meetingID: string; password: string; name: string } }
+	[ActionIdGlobal.joinMeeting]: { options: { meetingID: string; password: string; name: string } }
+	[ActionIdGlobal.leaveMeeting]: { options: Record<string, never> }
+	[ActionIdGlobal.endMeeting]: { options: Record<string, never> }
+	[ActionIdGlobal.sendAChatToEveryone]: { options: { message: string } }
+	[ActionIdGlobal.ejectAll]: { options: Record<string, never> }
+	[ActionIdGlobal.muteAllExcept]: { options: { userName: string } }
+	[ActionIdGlobal.muteAllExceptHost]: { options: Record<string, never> }
+	[ActionIdGlobal.muteAllExceptSpot]: { options: Record<string, never> }
+	[ActionIdGlobal.updateActionFeedbackPresets]: { options: Record<string, never> }
+}
+
+export function GetActionsGlobal(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaGlobal> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobal> = {
 		[ActionIdGlobal.enableUsersToUnmute]: {
 			name: 'Enable Users To Unmute',
 			options: [],
@@ -76,13 +94,13 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 
 				// hack because the /all/mute command mutes everyone except the
 				// ZoomISO host even when they are the co-host
-				// so we find the host and pass that to the /Mute command
+				// so we find the host and pass that to the /mute command
 				const host = Object.values(instance.ZoomUserData).find((user) => user.userRole === 1)
 
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomClientDataObj.selectedCallers.push(host.zoomId)
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 
 				const sendToCommand = {
 					id: ActionIdGlobal.muteAll,
@@ -161,12 +179,12 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGlobal.startMeetng]: {
 			name: 'Start Meeting (PRO)',
 			options: [options.meetingID, options.password, options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Special'
 				const command = createCommand(instance, '/startMeeting')
-				const name = await instance.parseVariablesInString(action.options.name as string)
-				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
-				const password = await instance.parseVariablesInString(action.options.password as string)
+				const name = action.options.name
+				const meetingId = action.options.meetingID
+				const password = action.options.password
 				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: password })
 				command.args.push({ type: 's', value: name })
@@ -183,12 +201,12 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGlobal.joinMeeting]: {
 			name: 'Join Meeting (PRO)',
 			options: [options.meetingID, options.password, options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Special'
 				const command = createCommand(instance, '/joinMeeting')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				const newNMeetingId = await instance.parseVariablesInString(action.options.meetingID as string)
-				const newNPassword = await instance.parseVariablesInString(action.options.password as string)
+				const newName = action.options.name
+				const newNMeetingId = action.options.meetingID
+				const newNPassword = action.options.password
 				command.args.push({ type: 's', value: newNMeetingId })
 				command.args.push({ type: 's', value: newNPassword })
 				command.args.push({ type: 's', value: newName })
@@ -236,11 +254,11 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 		},
 		[ActionIdGlobal.sendAChatToEveryone]: {
 			name: 'Send A Chat To Everyone',
-			options: [options.message],
-			callback: async (action): Promise<void> => {
+			options: [options.messageWithVariables],
+			callback: (action): void => {
 				// type: 'Global'
 				const command = createCommand(instance, '/chatAll')
-				const message = await instance.parseVariablesInString(action.options.message as string)
+				const message = action.options.message
 				command.args.push({ type: 's', value: message.replaceAll('\\n', '\n') })
 				const sendToCommand = {
 					id: ActionIdGlobal.sendAChatToEveryone,
@@ -271,10 +289,10 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdGlobal.muteAllExcept]: {
 			name: 'Mute All Except',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const command = createCommand(instance, '/Mute', userName, select.multi, true)
+				const userName = action.options.userName
+				const command = createCommand(instance, '/mute', userName, select.multi, true)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExcept,
@@ -291,7 +309,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Mute All Except Host Group',
 			description: 'This will mute all but the ones in Group Hosts',
 			options: [],
-			callback: async (): Promise<void> => {
+			callback: (): void => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[0].users.forEach((ZoomID) => {
@@ -299,7 +317,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				})
 
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExceptHost,
@@ -318,7 +336,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 			name: 'Mute All Except Spotlight Group',
 			description: 'This will mute all but the ones in Group Spotlights',
 			options: [],
-			callback: async (): Promise<void> => {
+			callback: (): void => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
 				instance.ZoomGroupData[1].users.forEach((ZoomID) => {
@@ -326,7 +344,7 @@ export function GetActionsGlobal(instance: InstanceBaseExt<ZoomConfig>): {
 				})
 
 				const shouldSavePreviousCaller = false
-				const command = createCommand(instance, '/Mute', undefined, select.multi, true, shouldSavePreviousCaller)
+				const command = createCommand(instance, '/mute', undefined, select.multi, true, shouldSavePreviousCaller)
 				if (command.isValidCommand) {
 					const sendToCommand = {
 						id: ActionIdGlobal.muteAllExceptSpot,

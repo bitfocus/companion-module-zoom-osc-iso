@@ -1,7 +1,7 @@
-import { CompanionAdvancedFeedbackResult } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
-import { InstanceBaseExt, userExist } from './utils.js'
-const { images } = require('./images') // eslint-disable-line
+import type ModuleInstance from './index.js'
+import type { CompanionAdvancedFeedbackResult } from '@companion-module/base'
+import { userExist } from './utils.js'
+import { images } from './images.js'
 
 type FeedbackMultiState = [boolean, boolean, boolean, boolean]
 interface FeedbackMultiStateMachine {
@@ -181,9 +181,9 @@ function getImageForState(state: FeedbackMultiState, feedbackImageType: number, 
 	}
 }
 
-function getParticipantState(instance: InstanceBaseExt<ZoomConfig>, zoomID: number): FeedbackMultiState {
+function getParticipantState(instance: ModuleInstance, zoomID: number): FeedbackMultiState {
 	return [
-		instance.ZoomUserData[zoomID].mute || false, // false = muted, true = unmuted
+		instance.ZoomUserData[zoomID].mute || false, // false = mic live (unmuted), true = muted
 		instance.ZoomUserData[zoomID].videoOn || false, // false = camera off, true = camera on
 		instance.ZoomUserData[zoomID].handRaised || false, // false = hand lowered, true = hand raised
 		instance.ZoomUserData[zoomID].userName !== undefined &&
@@ -193,7 +193,7 @@ function getParticipantState(instance: InstanceBaseExt<ZoomConfig>, zoomID: numb
 }
 
 export function feedbackResultsMultiState(
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	zoomID: number,
 	imageSize: number,
 ): CompanionAdvancedFeedbackResult {

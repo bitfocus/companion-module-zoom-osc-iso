@@ -6,6 +6,11 @@ This module gives you deep control of Zoom through controllers like the StreamDe
 
 ---
 
+## Companion Requirements
+
+- This version of the module (5.0.0 and later) requires **Companion 5.0 or newer** (module API 2.1). Use the 4.x releases of this module on older Companion versions.
+- Text fields that accept variables (names, messages, file paths) still accept `$(...)` variables, and any option can also be switched to an expression.
+
 ## ZoomOSC/ISO Requirements
 
 - Licensed versions recommended.
@@ -23,7 +28,7 @@ You will need to configure these settings in ZoomOSC/ZoomISO UI
 
 ## Companion Module Configuration
 
-There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback, Social Stream Ninja integration, and advanced performance tweaks.
+There are a number of configuration options for the module that allow you to configure how to communicate with ZoomISO/ZoomOSC, how many internal groups to track, Participant Multi-State feedback (deprecated), Social Stream Ninja integration, OSC forwarding, and advanced performance tweaks.
 
 1. **ZoomISO/ZoomOSC Transmission IP (e.g. Target Host):** Match ZoomISO/ZoomOSC Transmission IP.
 1. **ZoomISO/ZoomOSC Receiving Port:** Match ZoomISO/ZoomOSC Recieving Port.
@@ -31,7 +36,7 @@ There are a number of configuration options for the module that allow you to con
 1. **Default Selection:** Select one participant at a time or Select multiple participants simultaneously.
 1. **Number of selectable groups:**
 
-   One of the most powerful features of this module is the ability to place participants into groups. Just like participants, groups are referenceable and selectable. You can index into groups with variables to display their members. Buttons with these properties are automatically available in the Presets area under _Manage Selections and Groups_, where new buttons are generated based on the number of groups specified during setup.
+   One of the most powerful features of this module is the ability to place participants into groups. Just like participants, groups are referenceable and selectable. You can index into groups with variables to display their members. Buttons with these properties are automatically available in the Presets area under the _Groups_ section: _Manage Selections of Groups_ holds the group management buttons, and there is one _Select (group name) participants_ group per group. New buttons are generated based on the number of groups specified during setup.
 
    - **Default Groups**
 
@@ -56,9 +61,11 @@ There are a number of configuration options for the module that allow you to con
 
 1. **Sync iso configuration time in sections (only for ZoomISO):** How often to update the ZoomISO audioLevels, outputRouting, audioRouting, and engineState. The default is 1 second.
 
-1. _Participant Multi-State Feedback_
+1. _Participant Multi-State Feedback (Deprecated)_
 
-   This module supports various _dynamic feedback options_ to enhance your workflow and button functionality. One key feature is _multi-state feedback_ for participants, providing real-time status updates for their camera, mic, and hand raise. Each status has an icon with both "on" and "off" states for easy visualization.
+   **Deprecated.** Companion's graphics layers (layered buttons, Companion 5.0+) replace the multi-state feedbacks. The presets for participants, gallery, host, spotlights and groups have been updated to use layers (see **Layered participant presets** below). Update your buttons to use them: existing buttons aren't converted automatically, so add each one again from the presets. This setting only affects the four "(Deprecated) ... showing multi-state" feedbacks, which still work on existing buttons until then but will be removed in a future version.
+
+   The multi-state feedbacks show a participant's camera, mic and hand raise status as icons along the bottom of the button. Each status has an icon with both "on" and "off" states.
 
    1. **Disable (Not recommended unless you don’t need feedback indicators.)**
 
@@ -82,7 +89,47 @@ There are a number of configuration options for the module that allow you to con
       - Bright for active states (e.g., camera on).
       - Dim for inactive states (e.g., mic muted).
 
-   These configurations provide flexibility to tailor feedback based on your needs. The default presets use multi-state feedback to ensure a seamless experience, but advanced users can adjust settings as required.
+   **Layered participant presets (Companion 5.0+)**
+
+   The participant, gallery and group position presets are layered buttons. Each status is its own layer, driven by the regular boolean feedbacks (Mic Live / Mic Off, Camera On / Camera Off, Hand Raised, Active Speaker, Selected, Spotlight On / Off):
+
+   - The name is always shown in white, including when the participant is selected.
+   - Spotlighted participants get a red background, selected participants a gray background, and participants who are both get a gray background with a red circle in the top-left corner.
+   - The active speaker gets a blue **SPEAKER** bar across the top, and their name moves down a line. The bar and its label sit in one layer group, "Active Speaker Group", which the Active Speaker feedback turns on.
+   - The mic, camera and hand icons each change independently.
+
+   The "Select from Participants" and "Select from Gallery" sections, and the "Select <group> participants" section for each group, list positions 1 to 49 (the Spotlights group lists 1 to 9). Every button stores its position in a local variable called `position`. To use a button for a participant beyond 49, drag any of the presets onto a button and change its `position` local variable.
+
+   The **Select by name** preset (in "Manage Selections") is the same layered button for a participant chosen by name. Set the participant's name in the button's `name` local variable; the select action, all of its feedbacks and the button text use it. The button shows "Select by name" until a name is set.
+
+   The **Active Speaker** preset (also in "Manage Selections of Participants") is the same layered button for whoever is currently speaking. It uses the module's `$(zoomosc:activeSpeaker)` variable as the name, so pressing it toggles the active speaker in the selection, and its name, icons and highlights follow the active speaker. Its blue **SPEAKER** bar is always on.
+
+   **Preset icons**
+
+   Most action presets (selecting, pinning, spotlighting, muting, hands, roles, waiting room, sharing, recording, chat, join/leave, groups and ZoomISO outputs) come with an icon, so no images need to be added to Companion. Group presets use each group's own colour set (Host, Spotlights and groups 2 to 9) and show the group name in the space the icon leaves for it. The ZoomISO "Select output" and "Select audio channel" presets keep their plain style so their red "selected" feedback stays visible.
+
+   **Using your own icons**
+
+   You can replace any of the status icons for every layered participant, gallery and group button at once by adding an image to Companion's **Image Library** with one of these exact names:
+
+   | Icon         | Image library name  |
+   | ------------ | ------------------- |
+   | Mic On       | `zoom_mic_on`       |
+   | Mic Off      | `zoom_mic_off`      |
+   | Camera On    | `zoom_camera_on`    |
+   | Camera Off   | `zoom_camera_off`   |
+   | Hand Raised  | `zoom_hand_raised`  |
+   | Hand Lowered | `zoom_hand_lowered` |
+
+   Each icon is drawn over the whole button, so use a transparent PNG (72×72 works well) with the icon placed where it should appear, as in the built-in icons in the module's `assets/layers` folder. Delete the image from the library to go back to the built-in icon. Buttons added from presets before this version use the built-in icons only; re-add them from the presets to pick up your images.
+
+   The built-in icons are also available as module variables (`icon_mic_on`, `icon_mic_off`, `icon_camera_on`, `icon_camera_off`, `icon_hand_raised` and `icon_hand_lowered`). To build a button by hand, add an image element for each icon, then add the matching boolean feedback with a style override that sets the element's image to an expression such as `getVariable('image', 'zoom_mic_on') || $(zoomosc:icon_mic_on)`.
+
+   The layered presets always show mic on/off, camera on/off and hand raised. When the hand is lowered, the hand icon disappears. To show the hand-lowered icon on a button, add the participant's **Hand Lowered** feedback to it with a style override that sets the hand image to `getVariable('image', 'zoom_hand_lowered') || $(zoomosc:icon_hand_lowered)`. The setting above only affects the "(Deprecated) ... showing multi-state" feedbacks.
+
+   The "Select from Participants" presets read the participant position variables, so **Enable Variable For Participants** must be turned on in the module configuration for their names and feedbacks to work.
+
+   The "(Deprecated) ... showing multi-state" feedbacks still work on existing buttons, but they will be removed in a future version. Update your participant, gallery, host, spotlight and group buttons to the layered presets: existing buttons aren't converted automatically, so add each one again from the presets.
 
 1. **Send Zoom Chat to Social Stream Ninja**
 
@@ -127,6 +174,35 @@ There are a number of configuration options for the module that allow you to con
      - Height: 300
      - Shutdown source when not visible
 
+1. **OSC Forwarding**
+
+   ZoomOSC/ZoomISO can only send its messages to one place, which is this module. To let another application see the same messages, enable OSC Forwarding and enter that application's IP and port. The module sends a copy of every OSC message it receives to that address, exactly as it arrived. Nothing is filtered or changed, and the module keeps working as usual.
+
+   - Only the messages the module receives are forwarded, never the commands this module sends.
+   - The other application sends its own commands straight to ZoomOSC/ZoomISO's receiving port. ZoomOSC/ZoomISO replies to this module, which forwards those replies too and also acts on them as usual.
+   - Messages go to one IP and port. The module refuses an address that would loop, its own receiving port or ZoomOSC/ZoomISO's receiving port, logs why, and leaves forwarding off.
+   - When forwarding starts, the log says `Forwarding all OSC from ZoomOSC/ISO to <IP>:<port>`. Every failed send is logged as an error. A UDP send to an application that isn't running doesn't fail, so if the other application gets nothing, check that it's running and listening on that port.
+   - Changing only the OSC Forwarding settings doesn't reconnect to ZoomOSC/ZoomISO or reset the groups.
+
+   **Actions**
+
+   - **OSC Forwarding: On / Off / Toggle:** turns forwarding on or off.
+   - **Set OSC Forwarding Target:** sets the IP and port to forward to. Both accept variables. If forwarding is on, it switches right away. An IP or port that isn't valid is logged and nothing changes.
+
+   Both save the change, so it's remembered after a restart, and neither reconnects to ZoomOSC/ZoomISO.
+
+   **Feedback**
+
+   - **OSC Forwarding On:** lit while messages are being forwarded.
+
+   **Variables**
+
+   - `$(zoomosc:oscForwardHost)` and `$(zoomosc:oscForwardPort)`: the IP and port messages are forwarded to (shown even while forwarding is off).
+
+   **Presets**
+
+   The **Forward OSC Messages** section has a toggle button that shows the IP and port, On and Off buttons, and a Set Forward OSC Target button to edit.
+
 1. **Advanced - Optional Performance Tweaks**
 
    _IMPORTANT NOTE:_ The advanced optional performance tweaks is for power users that would like to tweak the module performance.
@@ -170,6 +246,7 @@ Select user(s), then apply action(s).
 ## ZoomISO Control
 
 - Route participants to video/audio outputs.
+- **Set ISO Output to None** puts a Participant output back to "Select Participant", on ZoomISO 2 and ZoomISO 3. So does **output ISO** with "If No User Selected, Set Output to None" ticked when no participant is selected.
 - Configure outputs and engine settings directly from the module.
 
 ## Selections
@@ -193,6 +270,5 @@ See more workflows at <a href="https://github.com/bitfocus/companion-module-zoom
 This is a community-driven project utilizing the open APIs of ZoomOSC/ISO. While Zoom (and formerly Liminal) have designed its behavior, they hold no liability for this module or its upkeep. Ultimately, it is managed by and the responsibility of the open-source Companion community, Bitfocus, and its users.
 
 - **Module Support:** <a href="https://github.com/Bitfocus/companion-module-zoom-osc-iso/issues" target="_blank">Known Issues</a>
-- **ZoomOSC/ISO Support:** `info@liminalet.com`
 
 Special thanks to contributors Jeffrey Davidsz, Andy Carluccio, Jonathan Kokotajlo, and the Companion community for their efforts in creating and improving this module.

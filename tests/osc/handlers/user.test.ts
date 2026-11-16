@@ -1,12 +1,8 @@
-import { describe, expect, it, jest, beforeEach } from '@jest/globals'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 import { handleUserMessage } from '../../../src/osc/handlers/user.js'
 import type { OSCHandlerContext, ZoomOSCResponse } from '../../../src/osc/types.js'
 import { createMockInstance } from '../../helpers/mock-instance.js'
 import { socialStreamApi } from '../../../src/socialstream.js'
-
-jest.mock('got-cjs', () => ({
-	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
-}))
 
 function createContext(): OSCHandlerContext {
 	const instance = createMockInstance()
@@ -17,30 +13,40 @@ function createContext(): OSCHandlerContext {
 
 	return {
 		instance,
-		createZoomUser: jest.fn(async () => undefined),
-		setUpdateLoop: jest.fn(),
-		setNeedToPingPong: jest.fn(),
-		isSpotlightGroupTrackingInitialized: jest.fn(() => false),
-		setSpotlightGroupTrackingInitialized: jest.fn(),
-		destroyTimers: jest.fn(),
-		createPingTimer: jest.fn(),
-		createUpdatePresetsTimer: jest.fn(),
-		createZoomIsoPullerTimer: jest.fn(),
-		destroyZoomIsoPullerTimer: jest.fn(),
-		hasZoomIsoPuller: jest.fn(() => false),
-		configureConnectedPingWatchdog: jest.fn(),
-		sendCommand: jest.fn(),
+		createZoomUser: vi.fn(async () => undefined),
+		setUpdateLoop: vi.fn(),
+		setNeedToPingPong: vi.fn(),
+		isSpotlightGroupTrackingInitialized: vi.fn(() => false),
+		setSpotlightGroupTrackingInitialized: vi.fn(),
+		destroyTimers: vi.fn(),
+		createPingTimer: vi.fn(),
+		createUpdatePresetsTimer: vi.fn(),
+		createZoomIsoPullerTimer: vi.fn(),
+		destroyZoomIsoPullerTimer: vi.fn(),
+		hasZoomIsoPuller: vi.fn(() => false),
+		isFirstPong: vi.fn(() => false),
+		configureConnectedPingWatchdog: vi.fn(),
+		sendCommand: vi.fn(),
 	}
 }
 
 describe('handleUserMessage chat handling', () => {
 	beforeEach(() => {
-		jest.restoreAllMocks()
+		vi.restoreAllMocks()
+		// Safety net: no real HTTP calls if postMessage is ever reached unmocked
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response('ok')),
+		)
+	})
+
+	afterEach(() => {
+		vi.unstubAllGlobals()
 	})
 
 	it('ignores short chat payloads without throwing or posting', async () => {
 		const context = createContext()
-		const postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		const postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
 		const data: ZoomOSCResponse = {
 			address: '/zoomosc/user/chat',
 			args: [
@@ -59,7 +65,7 @@ describe('handleUserMessage chat handling', () => {
 
 	it('posts valid chat payloads when the chat type is enabled', async () => {
 		const context = createContext()
-		const postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		const postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
 		const data: ZoomOSCResponse = {
 			address: '/zoomosc/user/chat',
 			args: [

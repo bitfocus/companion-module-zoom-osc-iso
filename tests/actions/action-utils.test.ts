@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
-import { createCommand, sendActionCommand } from '../../src/actions/action-utils.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
+import { createCommand, selectUser, sendActionCommand } from '../../src/actions/action-utils.js'
 
 describe('createCommand', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 
 	beforeEach(() => {
 		instance = createMockInstance()
@@ -130,10 +128,10 @@ describe('createCommand', () => {
 			expect(result.oscPath).toBe('/zoom/allExcept/users/zoomID/videoOn')
 		})
 
-		it('uses /zoom/allExcept/ZoomID for /Mute with multiple callers and allExcept=true', () => {
+		it('uses /zoom/allExcept/zoomID for /mute with multiple callers and allExcept=true', () => {
 			instance = createMockInstance({ selectedCallers: [1001, 1002] })
-			const result = createCommand(instance, '/Mute', '', false, true)
-			expect(result.oscPath).toBe('/zoom/allExcept/ZoomID/Mute')
+			const result = createCommand(instance, '/mute', '', false, true)
+			expect(result.oscPath).toBe('/zoom/allExcept/zoomID/mute')
 		})
 	})
 
@@ -169,7 +167,7 @@ describe('sendActionCommand', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -196,5 +194,15 @@ describe('sendActionCommand', () => {
 		const anyInstance = instance as any
 		anyInstance.OSC = null
 		expect(() => sendActionCommand(instance, { options: { command: '/zoom/test', args: [] } })).not.toThrow()
+	})
+})
+
+describe('selectUser', () => {
+	it.each(['toggle', 'select', 'remove'])('never adds a missing participant to the selection (%s)', (option) => {
+		const instance = createMockInstance({ selectedCallers: [1001] })
+		instance.ZoomClientDataObj.PreviousSelectedCallers = [1003]
+		selectUser(instance, undefined as unknown as number, option)
+		expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1001])
+		expect(instance.ZoomClientDataObj.PreviousSelectedCallers).toEqual([1003])
 	})
 })

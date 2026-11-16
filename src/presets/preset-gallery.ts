@@ -1,83 +1,31 @@
-import { FeedbackId, feedbackType } from '../feedback.js'
-import {
-	CompanionPresetExt,
-	PresetFeedbackDefinition,
-	getFeedbackStyleSelected,
-	getFeedbackStyleSpotlight,
-	getParticipantStyleActiveSpeaker,
-	getParticipantStyleDefault,
-} from './preset-utils.js'
-
-export type PresetIdListGallery = `Gallery_position_${number}`
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
+import { FeedbackId } from '../feedback.js'
+import { buildParticipantTemplateSection, positionVariableExpression } from './preset-utils.js'
 import { ActionIdGallery } from '../actions/action-gallery.js'
-import { InstanceBaseExt, padding } from '../utils.js'
-import { ZoomConfig } from '../config.js'
 
-export function GetPresetsListGallery(instance: InstanceBaseExt<ZoomConfig>): {
-	[id: PresetIdListGallery]: CompanionPresetExt | undefined
+export const galleryTemplatePresetId = 'Gallery_position'
+const galleryPositions = 49
+
+/**
+ * Select from Gallery: one layered template preset, expanded by Companion into a button per gallery position.
+ */
+export function GetPresetsListGallery(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id: PresetIdListGallery]: CompanionPresetExt | undefined } = {}
-
-	for (let index = 1; index < 50; index++) {
-		const galleryFeedbacks: PresetFeedbackDefinition = [
-			{
-				feedbackId: FeedbackId.galleryBased,
-				options: {
-					position: index,
-					type: feedbackType.spotlightOn,
-				},
-				style: getFeedbackStyleSpotlight(),
-			},
-			{
-				feedbackId: FeedbackId.galleryBased,
-				options: {
-					position: index,
-					type: feedbackType.selected,
-				},
-				style: getFeedbackStyleSelected(),
-			},
-		]
-
-		if (instance.config.feedbackImagesWithIcons !== 4) {
-			galleryFeedbacks.push({
-				feedbackId: FeedbackId.galleryBased,
-				options: {
-					position: index,
-					type: feedbackType.activeSpeaker,
-				},
-				style: getParticipantStyleActiveSpeaker(`$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
-			})
-		}
-
-		galleryFeedbacks.push({
-			feedbackId: FeedbackId.galleryBasedAdvanced,
-			options: {
-				position: index,
-			},
-		})
-
-		presets[`Gallery_position_${index}`] = {
-			type: 'button',
-			category: 'Select from Gallery',
-			name: `$(zoomosc:Gallery position ${index})`,
-			style: getParticipantStyleDefault(instance, `$(zoomosc:GalleryPosition${padding(index, 2)})`, index),
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdGallery.selectFromGalleryPosition,
-							options: {
-								position: index,
-								option: 'toggle',
-							},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: galleryFeedbacks,
-		}
-	}
-
-	return presets
+	return buildParticipantTemplateSection({
+		sectionId: 'gallery',
+		sectionName: 'Select from Gallery',
+		presetId: galleryTemplatePresetId,
+		presetName: 'Gallery position',
+		positions: galleryPositions,
+		positionName: (position) => `Gallery position ${position}`,
+		nameExpression: positionVariableExpression('GalleryPosition', 2),
+		target: (position) => ({ feedbackId: FeedbackId.galleryBased, options: { position } }),
+		action: (position) => ({
+			actionId: ActionIdGallery.selectFromGalleryPosition,
+			options: { position, option: 'toggle' },
+		}),
+	})
 }

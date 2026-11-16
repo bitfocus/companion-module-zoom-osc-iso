@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserHandRaised {
@@ -9,16 +9,22 @@ export enum ActionIdUserHandRaised {
 	toggleHand = 'toggleHand',
 }
 
-export function GetActionsUserHandRaised(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserHandRaised]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserHandRaised]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserHandRaised = {
+	[ActionIdUserHandRaised.raiseHand]: { options: { userName: string } }
+	[ActionIdUserHandRaised.lowerHand]: { options: { userName: string } }
+	[ActionIdUserHandRaised.toggleHand]: { options: { userName: string } }
+}
+
+export function GetActionsUserHandRaised(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserHandRaised> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserHandRaised> = {
 		[ActionIdUserHandRaised.raiseHand]: {
 			name: 'Raise Hand',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/raiseHand', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -35,9 +41,9 @@ export function GetActionsUserHandRaised(instance: InstanceBaseExt<ZoomConfig>):
 		[ActionIdUserHandRaised.lowerHand]: {
 			name: 'Lower Hand',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/lowerHand', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -54,9 +60,9 @@ export function GetActionsUserHandRaised(instance: InstanceBaseExt<ZoomConfig>):
 		[ActionIdUserHandRaised.toggleHand]: {
 			name: 'Toggle Hand (Windows Only)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/toggleHand', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

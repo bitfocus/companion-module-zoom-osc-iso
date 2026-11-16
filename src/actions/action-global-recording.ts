@@ -1,6 +1,5 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalRecording {
@@ -14,10 +13,21 @@ export enum ActionIdGlobalRecording {
 	stopCloudRecording = 'stopCloudRecording',
 }
 
-export function GetActionsGlobalRecording(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobalRecording]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobalRecording]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobalRecording = {
+	[ActionIdGlobalRecording.startLocalRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.pauseLocalRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.resumeLocalRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.stopLocalRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.startCloudRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.pauseCloudRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.resumeCloudRecording]: { options: Record<string, never> }
+	[ActionIdGlobalRecording.stopCloudRecording]: { options: Record<string, never> }
+}
+
+export function GetActionsGlobalRecording(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaGlobalRecording> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobalRecording> = {
 		[ActionIdGlobalRecording.startLocalRecording]: {
 			name: 'Start Local Recording',
 			options: [],

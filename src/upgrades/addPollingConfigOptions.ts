@@ -1,15 +1,15 @@
-import {
+import type {
 	CompanionUpgradeContext,
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
 
 export function addPollingConfigOptions(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	_props: CompanionStaticUpgradeProps<ZoomConfig>,
-): CompanionStaticUpgradeResult<ZoomConfig> {
-	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
+	_props: CompanionStaticUpgradeProps<ZoomConfig, undefined>,
+): CompanionStaticUpgradeResult<ZoomConfig, undefined> {
+	const result: CompanionStaticUpgradeResult<ZoomConfig, undefined> = {
 		updatedActions: [],
 		updatedConfig: {
 			..._context.currentConfig,

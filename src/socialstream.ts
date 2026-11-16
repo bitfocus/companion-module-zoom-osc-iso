@@ -1,9 +1,7 @@
-import got from 'got-cjs'
-import { InstanceBaseExt } from './utils.js'
-import { ZoomConfig } from './config.js'
+import type ModuleInstance from './index.js'
 
 export class socialStreamApi {
-	static postMessage = async (name: string, message: string, instance: InstanceBaseExt<ZoomConfig>): Promise<void> => {
+	static postMessage = async (name: string, message: string, instance: ModuleInstance): Promise<void> => {
 		if (
 			instance.config.enableSocialStream &&
 			instance.config.socialStreamId.length > 0 &&
@@ -32,13 +30,18 @@ export class socialStreamApi {
 				chatimg: null,
 				type: 'zoom',
 			}
-			const options = {
-				json: body,
+			const res = await fetch(url, {
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify(body),
+				signal: AbortSignal.timeout(15_000),
+			})
+			// fetch resolves on any HTTP status; throw on non-2xx like got did so callers still see failures
+			if (!res.ok) {
+				throw new Error(`Social Stream request failed: HTTP ${res.status} ${res.statusText}`.trim())
 			}
-			await got.post(url, options)
 		}
 	}
 }

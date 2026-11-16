@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserBreakoutRooms {
@@ -11,19 +11,27 @@ export enum ActionIdUserBreakoutRooms {
 	returnSelfToMainMeeting = 'returnSelfToMainMeeting',
 }
 
-export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserBreakoutRooms]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserBreakoutRooms]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserBreakoutRooms = {
+	[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom]: { options: { userName: string; breakoutName: string } }
+	[ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom]: { options: { userName: string } }
+	[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom]: { options: { userName: string; breakoutName: string } }
+	[ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom]: { options: { userName: string } }
+	[ActionIdUserBreakoutRooms.returnSelfToMainMeeting]: { options: { userName: string } }
+}
+
+export function GetActionsUserBreakoutRooms(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserBreakoutRooms> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserBreakoutRooms> = {
 		[ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom]: {
 			name: 'Send Participant To Breakout Room (PRO)',
 			options: [options.userName, options.breakoutName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/sendToBreakout', userName, select.multi)
 				if (command.isValidCommand) {
-					command.args.push({ type: 's', value: action.options.breakoutName as string })
+					command.args.push({ type: 's', value: action.options.breakoutName })
 					const sendToCommand = {
 						id: ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom,
 						options: {
@@ -38,9 +46,9 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 		[ActionIdUserBreakoutRooms.removeParticipantFromBreakoutRoom]: {
 			name: 'Remove Participant From Breakout Room (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/removeFromBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -57,10 +65,10 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 		[ActionIdUserBreakoutRooms.assignParticipantToBreakoutRoom]: {
 			name: 'Assign Participant To Breakout Room (PRO)',
 			options: [options.userName, options.breakoutName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
-				const breakoutName = await instance.parseVariablesInString(action.options.breakoutName as string)
+				const userName = action.options.userName
+				const breakoutName = action.options.breakoutName
 				const command = createCommand(instance, '/assignToBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					command.args.push({ type: 's', value: breakoutName })
@@ -78,9 +86,9 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 		[ActionIdUserBreakoutRooms.unassignParticipantFromBreakoutRoom]: {
 			name: 'Unassign Participant From Breakout Room (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/unassignFromBreakout', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -97,9 +105,9 @@ export function GetActionsUserBreakoutRooms(instance: InstanceBaseExt<ZoomConfig
 		[ActionIdUserBreakoutRooms.returnSelfToMainMeeting]: {
 			name: 'Return Self To Main Meeting',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/returnToMainMeeting', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

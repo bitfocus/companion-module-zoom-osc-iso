@@ -1,6 +1,5 @@
-import { CompanionActionDefinition, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
 import { FeedbackId } from '../feedback.js'
 import { sendActionCommand, PreviousSelectedCallersSave } from './action-utils.js'
 
@@ -14,10 +13,20 @@ export enum ActionIdZoomISOActions {
 	togglePollAudioLevels = 'toggle_poll_audio_levels',
 }
 
-export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdZoomISOActions]: CompanionActionDefinition | undefined
-} {
-	const CHOICES_OUTPUTS_AUDIO = []
+export type ActionsSchemaZoomISOActions = {
+	[ActionIdZoomISOActions.selectOutput]: { options: { output: number } }
+	[ActionIdZoomISOActions.clearSelectOutput]: { options: Record<string, never> }
+	[ActionIdZoomISOActions.selectAudioChannel]: { options: { output: number } }
+	[ActionIdZoomISOActions.applyOutput]: { options: Record<string, never> }
+	[ActionIdZoomISOActions.applyChannel]: { options: Record<string, never> }
+	[ActionIdZoomISOActions.applyOutputs]: { options: Record<string, never> }
+	[ActionIdZoomISOActions.togglePollAudioLevels]: { options: Record<string, never> }
+}
+
+export function GetActionsZoomISOActions(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaZoomISOActions> {
+	const CHOICES_OUTPUTS_AUDIO: { id: number; label: string }[] = []
 	const outputAudioDataLength = Object.keys(instance.ZoomAudioRoutingData).length
 
 	for (let index = 1; index < (outputAudioDataLength === 0 ? 9 : outputAudioDataLength + 1); index++) {
@@ -27,7 +36,7 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		CHOICES_OUTPUTS_AUDIO.push({ id: index, label: outputAudioName })
 	}
 
-	const outputAudioOption: SomeCompanionActionInputField = {
+	const outputAudioOption: CompanionInputFieldDropdown<'output', number> = {
 		type: 'dropdown',
 		label: 'Audio Output',
 		id: 'output',
@@ -35,7 +44,7 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		choices: CHOICES_OUTPUTS_AUDIO,
 	}
 
-	const CHOICES_OUTPUTS = []
+	const CHOICES_OUTPUTS: { id: number; label: string }[] = []
 	const outputDataLength = Object.keys(instance.ZoomOutputData).length
 
 	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
@@ -43,7 +52,7 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		CHOICES_OUTPUTS.push({ id: index, label: outputName })
 	}
 
-	const outputOption: SomeCompanionActionInputField = {
+	const outputOption: CompanionInputFieldDropdown<'output', number> = {
 		type: 'dropdown',
 		label: 'Output',
 		id: 'output',
@@ -51,13 +60,13 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		choices: CHOICES_OUTPUTS,
 	}
 
-	const actions: { [id in ActionIdZoomISOActions]: CompanionActionDefinition | undefined } = {
+	const actions: CompanionActionDefinitions<ActionsSchemaZoomISOActions> = {
 		// ISO Actions
 		[ActionIdZoomISOActions.selectOutput]: {
 			name: 'Select output',
 			options: [outputOption],
 			callback: (action) => {
-				const outputNumber: number = action.options.output as number
+				const outputNumber: number = action.options.output
 				const index = instance.ZoomClientDataObj.selectedOutputs.indexOf(outputNumber)
 				// instance.log('debug', `outputNumber: ${outputNumber} selectedOutputs: ${JSON.stringify(instance.ZoomClientDataObj.selectedOutputs)}`)
 				if (index > -1) {
@@ -82,11 +91,11 @@ export function GetActionsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			name: 'Select audio channel',
 			options: [outputAudioOption],
 			callback: (action) => {
-				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output as number)
+				const index = instance.ZoomClientDataObj.selectedAudioOutputs.indexOf(action.options.output)
 				if (index > -1) {
 					instance.ZoomClientDataObj.selectedAudioOutputs.splice(index, 1)
 				} else {
-					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output as number)
+					instance.ZoomClientDataObj.selectedAudioOutputs.push(action.options.output)
 				}
 				instance.checkFeedbacks(FeedbackId.audioOutput)
 			},

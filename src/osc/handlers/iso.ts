@@ -5,7 +5,7 @@ import {
 	updateZoomIsoOutputVariables,
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
 export function handleIsoMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {

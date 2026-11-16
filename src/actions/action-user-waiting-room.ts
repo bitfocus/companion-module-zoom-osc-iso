@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserWaitingRoom {
@@ -8,16 +8,21 @@ export enum ActionIdUserWaitingRoom {
 	sendSomeoneToWaitingRoom = 'sendSomeoneToWaitingRoom',
 }
 
-export function GetActionsUserWaitingRoom(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserWaitingRoom]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserWaitingRoom]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserWaitingRoom = {
+	[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom]: { options: { userName: string } }
+	[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom]: { options: { userName: string } }
+}
+
+export function GetActionsUserWaitingRoom(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserWaitingRoom> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserWaitingRoom> = {
 		[ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom]: {
 			name: 'Admit Participant (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/admit', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -34,9 +39,9 @@ export function GetActionsUserWaitingRoom(instance: InstanceBaseExt<ZoomConfig>)
 		[ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom]: {
 			name: 'Send To Waiting Room (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/sendToWaitingRoom', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

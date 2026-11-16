@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
+import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsGallery, ActionIdGallery } from '../../src/actions/action-gallery.js'
 
 describe('GetActionsGallery', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsGallery>
 
 	beforeAll(() => {
@@ -19,7 +17,7 @@ describe('GetActionsGallery', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -68,6 +66,19 @@ describe('GetActionsGallery', () => {
 			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
 			callback({ options: { position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.setVariableValues).toHaveBeenCalled()
+		})
+
+		it.each(['toggle', 'select', 'remove'])('does nothing for an empty gallery position (%s)', (option) => {
+			instance.ZoomClientDataObj.selectedCallers = [1002]
+			instance.ZoomClientDataObj.PreviousSelectedCallers = [1003]
+			;(instance.checkFeedbacks as Mock).mockClear()
+			;(instance.setVariableValues as Mock).mockClear()
+			const callback = (actions[ActionIdGallery.selectFromGalleryPosition] as any).callback
+			callback({ options: { position: '10', option } } as any, {} as any)
+			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1002])
+			expect(instance.ZoomClientDataObj.PreviousSelectedCallers).toEqual([1003])
+			expect(instance.checkFeedbacks).not.toHaveBeenCalled()
+			expect(instance.setVariableValues).not.toHaveBeenCalled()
 		})
 	})
 })

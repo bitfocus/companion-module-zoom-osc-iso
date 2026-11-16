@@ -1,5 +1,5 @@
 import { socialStreamApi } from '../../socialstream.js'
-import { arrayRemove, userExist, ZoomGroupDataInterface } from '../../utils.js'
+import { arrayRemove, keepParticipantPageInList, userExist, type ZoomGroupDataInterface } from '../../utils.js'
 import {
 	updateActiveSpeakerVariable,
 	updateAllGroupVariables,
@@ -15,7 +15,7 @@ import {
 	updateZoomUserVariables,
 } from '../../variables/variable-values.js'
 import { checkGroupFeedbacks, checkUserRelatedFeedbacks } from '../feedbacks.js'
-import { OSCHandlerContext, UserRole, ZoomOSCResponse } from '../types.js'
+import { type OSCHandlerContext, UserRole, type ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
 
 async function ensureZoomUser(context: OSCHandlerContext, data: ZoomOSCResponse, zoomId: number): Promise<void> {
@@ -118,6 +118,7 @@ function handleOffline(context: OSCHandlerContext, zoomId: number): void {
 	const index = context.instance.ZoomVariableLink.findIndex((id: { zoomId: number }) => id.zoomId === zoomId)
 	if (index > -1) {
 		context.instance.log('debug', `Removed ${JSON.stringify(context.instance.ZoomVariableLink.splice(index, 1))}`)
+		keepParticipantPageInList(context.instance)
 	}
 
 	setVariables(context.instance, (variables) => updateAllUserBasedVariables(context.instance, variables))
@@ -224,10 +225,25 @@ function handleIsSpeaking(context: OSCHandlerContext, data: ZoomOSCResponse): vo
 	setVariables(context.instance, (variables) => updateIsSpeakingVariable(context.instance, variables))
 }
 
+// for ZoomOSC/ISO v2
 function handleShareStatus(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 	const shareType = data.args[4].value
 	setVariables(context.instance, (variables) => {
 		variables.videoShareStatus = shareType === 'videoShareStarted' ? 'On' : 'Off'
+	})
+}
+
+// for ZoomOSC/ISO v3
+function handleVideoShareStarted(context: OSCHandlerContext): void {
+	setVariables(context.instance, (variables) => {
+		variables.videoShareStatus = 'On'
+	})
+}
+
+// for ZoomOSC/ISO v3
+function handleVideoShareStopped(context: OSCHandlerContext): void {
+	setVariables(context.instance, (variables) => {
+		variables.videoShareStatus = 'Off'
 	})
 }
 
@@ -302,8 +318,17 @@ export async function handleUserMessage(
 		case 'isSpeaking':
 			handleIsSpeaking(context, data)
 			break
+		// for ZoomOSC/ISO v2
 		case 'shareStatus':
 			handleShareStatus(context, data)
+			break
+		// for ZoomOSC/ISO v3
+		case 'videoShareStopped':
+			handleVideoShareStopped(context)
+			break
+		// for ZoomOSC/ISO v3
+		case 'videoShareStarted':
+			handleVideoShareStarted(context)
 			break
 		default:
 			break

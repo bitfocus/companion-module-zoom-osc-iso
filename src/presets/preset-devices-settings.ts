@@ -1,6 +1,7 @@
-import { ActionIdUserScreenshare } from '../actions/action-user-screenshare.js'
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
 
 export enum PresetIdDeviceSettings {
@@ -14,20 +15,20 @@ export enum PresetIdDeviceSettings {
 	disableMirror = 'Disable_Mirror',
 	enableHD = 'Enable_HD',
 	disableHD = 'Disable_HD',
-	setWindowXY = 'Set_Window_XY',
-	setWindowSize = 'Set_Window_Size',
 	hideSelfView = 'Hide_Self_View',
 	showSelfView = 'Show_Self_View',
 }
 
-export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdDeviceSettings]: CompanionPresetExt | undefined } = {
+export function GetPresetsDeviceSettings(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdDeviceSettings]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Devices & Settings Actions
 		 */
 		[PresetIdDeviceSettings.setCamera]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Set_Camera`,
 			style: {
 				text: `Set Camera`,
@@ -40,7 +41,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.setCameraDevice,
-							options: {},
+							options: { userName: '', id: 0 },
 						},
 					],
 					up: [],
@@ -49,8 +50,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.setMic]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Set_Mic`,
 			style: {
 				text: `Set Mic`,
@@ -63,7 +63,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.setMicDevice,
-							options: {},
+							options: { userName: '', id: 0 },
 						},
 					],
 					up: [],
@@ -72,8 +72,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.setMicLevel]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Set_Mic_Level`,
 			style: {
 				text: `Set Mic Level`,
@@ -86,7 +85,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.setMicLevel,
-							options: {},
+							options: { level: 0 },
 						},
 					],
 					up: [],
@@ -95,8 +94,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.setSpeakerLevel]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Set_Speaker_Level`,
 			style: {
 				text: `Set Speaker Level`,
@@ -109,7 +107,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.setSpeakerVolume,
-							options: {},
+							options: { userName: '', level: 0 },
 						},
 					],
 					up: [],
@@ -118,21 +116,21 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.enableOriginalSound]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Enable_Original_Sound`,
 			style: {
-				text: `Enable Original Sound`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.enableOriginalSound,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserSettings.enableOriginalSound,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -141,21 +139,21 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.disableOriginalSound]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Disable_Original_Sound`,
 			style: {
-				text: `Disable Original Sound`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disableOriginalSound,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserSettings.disableOriginalSound,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -164,8 +162,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.enableMirror]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Enable_Mirror`,
 			style: {
 				text: `Enable Mirror`,
@@ -178,7 +175,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.enableMirrorVideo,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -187,8 +184,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.disableMirror]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Disable_Mirror`,
 			style: {
 				text: `Disable Mirror`,
@@ -201,7 +197,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 					down: [
 						{
 							actionId: ActionIdUserSettings.disableMirrorVideo,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -210,8 +206,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.enableHD]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Enable_HD`,
 			style: {
 				text: `Enable HD`,
@@ -233,8 +228,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.disableHD]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Disable_HD`,
 			style: {
 				text: `Disable HD`,
@@ -255,55 +249,8 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			],
 			feedbacks: [],
 		},
-		[PresetIdDeviceSettings.setWindowXY]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
-			name: `Set_Window_XY`,
-			style: {
-				text: `Set Window XY`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorLightGray,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdUserScreenshare.SetWindowPosition,
-							options: {},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
-		[PresetIdDeviceSettings.setWindowSize]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
-			name: `Set_Window_Size`,
-			style: {
-				text: `Set Window Size`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorLightGray,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdUserScreenshare.SetWindowSize,
-							options: {},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
 		[PresetIdDeviceSettings.hideSelfView]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Hide_Self_View`,
 			style: {
 				text: `Hide Self View`,
@@ -325,8 +272,7 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 		[PresetIdDeviceSettings.showSelfView]: {
-			type: 'button',
-			category: 'Devices & Settings Actions',
+			type: 'simple',
 			name: `Show_Self_View`,
 			style: {
 				text: `Show Self View`,
@@ -348,5 +294,11 @@ export function GetPresetsDeviceSettings(): { [id in PresetIdDeviceSettings]: Co
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'devices_settings',
+		name: 'Devices & Settings Actions',
+		definitions: Object.values(PresetIdDeviceSettings),
+	}
+
+	return { section, presets }
 }

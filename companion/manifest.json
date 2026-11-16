@@ -1,4 +1,6 @@
 {
+	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+	"type": "connection",
 	"id": "zoom-osc-iso",
 	"name": "zoom-osc-iso",
 	"shortname": "Zoom OSC / ISO module",

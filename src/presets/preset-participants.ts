@@ -1,85 +1,33 @@
-import { FeedbackId, feedbackType } from '../feedback.js'
-import { InstanceBaseExt, padding } from '../utils.js'
-import {
-	CompanionPresetExt,
-	PresetFeedbackDefinition,
-	getFeedbackStyleSelected,
-	getFeedbackStyleSpotlight,
-	getParticipantStyleActiveSpeaker,
-	getParticipantStyleDefault,
-} from './preset-utils.js'
-
-export type PresetIdListParticipants = `Caller_${number}`
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
+import { FeedbackId } from '../feedback.js'
+import { buildParticipantTemplateSection, positionVariableExpression } from './preset-utils.js'
 import { ActionIdUsers } from '../actions/action-user.js'
-import { ZoomConfig } from '../config.js'
 
-export function GetPresetsListParticipants(instance: InstanceBaseExt<ZoomConfig>): {
-	[id: PresetIdListParticipants]: CompanionPresetExt | undefined
+export const participantTemplatePresetId = 'Caller'
+/** Positions listed in the section; further participants are reached by changing a button's position local variable */
+const participantPositions = 49
+
+/**
+ * Select from Participants: one layered template preset, expanded by Companion into a button per participant position.
+ * Needs "Enable Variable For Participants", as the names and feedbacks use the participant position variables.
+ */
+export function GetPresetsListParticipants(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id: PresetIdListParticipants]: CompanionPresetExt | undefined } = {}
-
-	/**
-	 * Select from Participants
-	 */
-	for (let index = 1; index <= 1000; index++) {
-		const indexFeedbacks: PresetFeedbackDefinition = [
-			{
-				feedbackId: FeedbackId.indexBased,
-				options: {
-					position: index,
-					type: feedbackType.spotlightOn,
-				},
-				style: getFeedbackStyleSpotlight(),
-			},
-			{
-				feedbackId: FeedbackId.indexBased,
-				options: {
-					position: index,
-					type: feedbackType.selected,
-				},
-				style: getFeedbackStyleSelected(),
-			},
-		]
-
-		if (instance.config.feedbackImagesWithIcons !== 4) {
-			indexFeedbacks.push({
-				feedbackId: FeedbackId.indexBased,
-				options: {
-					position: index,
-					type: feedbackType.activeSpeaker,
-				},
-				style: getParticipantStyleActiveSpeaker(`$(zoomosc:Participant${padding(index, 3)})`, index),
-			})
-		}
-
-		indexFeedbacks.push({
-			feedbackId: FeedbackId.indexBasedAdvanced,
-			options: {
-				position: index,
-			},
-		})
-		presets[`Caller_${index}`] = {
-			type: 'button',
-			category: 'Select from Participants',
-			name: `Caller${index}`,
-			style: getParticipantStyleDefault(instance, `$(zoomosc:Participant${padding(index, 3)})`, index),
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdUsers.selectFromIndexPosition,
-							options: {
-								position: index,
-								option: 'toggle',
-							},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: indexFeedbacks,
-		}
-	}
-
-	return presets
+	return buildParticipantTemplateSection({
+		sectionId: 'participants',
+		sectionName: 'Select from Participants',
+		presetId: participantTemplatePresetId,
+		presetName: 'Caller',
+		positions: participantPositions,
+		positionName: (position) => `Caller${position}`,
+		nameExpression: positionVariableExpression('Participant', 3),
+		target: (position) => ({ feedbackId: FeedbackId.indexBased, options: { position } }),
+		action: (position) => ({
+			actionId: ActionIdUsers.selectFromIndexPosition,
+			options: { position, option: 'toggle' },
+		}),
+	})
 }

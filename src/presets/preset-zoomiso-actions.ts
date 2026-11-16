@@ -1,9 +1,11 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
+import type ModuleInstance from '../index.js'
 import { ActionIdZoomISORouting } from '../actions/action-zoomiso-routing.js'
-import { colorBlack, colorGreenOlive, InstanceBaseExt } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { colorBlack, colorGreenOlive } from '../utils.js'
+import { presetImages, presetTextColors } from '../images-presets.js'
 import { ActionIdZoomISOEngine } from '../actions/action-zoomiso-engine.js'
 import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-settings.js'
-import { ZoomConfig } from '../config.js'
 
 export enum PresetIdZoomISOActions {
 	addOutput = 'add_Output',
@@ -13,7 +15,6 @@ export enum PresetIdZoomISOActions {
 	setOutputCount = 'set_output_count',
 	setOutputName = 'set_output_name',
 	setOutputMode = 'set_output_mode',
-	standbyIsoEngine = 'standby_iso_engine',
 	startIsoEngine = 'start_iso_engine',
 	stopIsoEngine = 'stop_iso_engine',
 	setVideoLossMode = 'set_video_loss_mode',
@@ -21,13 +22,14 @@ export enum PresetIdZoomISOActions {
 	setAudioMode = 'set_audio_mode',
 }
 
-export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in PresetIdZoomISOActions]: CompanionPresetExt | undefined
+export function GetPresetsZoomISOActions(instance: ModuleInstance): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id in PresetIdZoomISOActions]: CompanionPresetExt | undefined } = {
+	const presets: CompanionPresetDefinitions<ModuleSchema> &
+		Record<PresetIdZoomISOActions, CompanionPresetDefinitions<ModuleSchema>[string]> = {
 		[PresetIdZoomISOActions.addOutput]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `add_Output`,
 			style: {
 				text: `Add Output`,
@@ -49,8 +51,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.deleteOutput]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `delete_Output`,
 			style: {
 				text: `Delete Output`,
@@ -63,7 +64,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.deleteOutput,
-							options: {},
+							options: { output: 1 },
 						},
 					],
 					up: [],
@@ -72,8 +73,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.disableOutput]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `disable_Output`,
 			style: {
 				text: `Disable Output`,
@@ -86,7 +86,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.disableOutput,
-							options: {},
+							options: { output: 1 },
 						},
 					],
 					up: [],
@@ -95,8 +95,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.enableOutput]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `enable_Output`,
 			style: {
 				text: `Enable Output`,
@@ -109,7 +108,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.enableOutput,
-							options: {},
+							options: { output: 1 },
 						},
 					],
 					up: [],
@@ -118,8 +117,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setOutputCount]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_output_count`,
 			style: {
 				text: `set Output Count`,
@@ -132,7 +130,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.setOutputCount,
-							options: {},
+							options: { count: 1 },
 						},
 					],
 					up: [],
@@ -141,8 +139,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setOutputName]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_output_name`,
 			style: {
 				text: `Set Output Name`,
@@ -155,7 +152,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.setOutputName,
-							options: {},
+							options: { output: 1, name: '' },
 						},
 					],
 					up: [],
@@ -164,8 +161,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setOutputMode]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_output_mode`,
 			style: {
 				text: `Set Output Mode`,
@@ -178,30 +174,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.setOutputMode,
-							options: {},
-						},
-					],
-					up: [],
-				},
-			],
-			feedbacks: [],
-		},
-		[PresetIdZoomISOActions.standbyIsoEngine]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
-			name: `standby_iso_engine`,
-			style: {
-				text: `Standby ISO Engine`,
-				size: '14',
-				color: colorBlack,
-				bgcolor: colorGreenOlive,
-			},
-			steps: [
-				{
-					down: [
-						{
-							actionId: ActionIdZoomISOEngine.standbyISOEngine,
-							options: {},
+							options: { output: 1, outputMode: 'Spotlight' },
 						},
 					],
 					up: [],
@@ -210,8 +183,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.startIsoEngine]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `start_iso_engine`,
 			style: {
 				text: `Start ISO Engine`,
@@ -233,8 +205,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.stopIsoEngine]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `stop_iso_engine`,
 			style: {
 				text: `Stop ISO Engine`,
@@ -256,8 +227,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setVideoLossMode]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_video_loss_mode`,
 			style: {
 				text: `Set Video Loss Mode`,
@@ -270,7 +240,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.setVideoLossMode,
-							options: {},
+							options: { videoLossMode: 'Black' },
 						},
 					],
 					up: [],
@@ -279,21 +249,22 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setUserToAudioChannel]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_user_to_audio_channel`,
 			style: {
 				text: `Set User to Audio Channel`,
 				size: '14',
-				color: colorBlack,
+				color: presetTextColors.audioTemplate,
 				bgcolor: colorGreenOlive,
+				alignment: 'center:top',
+				png64: presetImages.audioTemplate,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdZoomISORouting.audioISO,
-							options: {},
+							options: { userName: '', output: 1 },
 						},
 					],
 					up: [],
@@ -302,8 +273,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 			feedbacks: [],
 		},
 		[PresetIdZoomISOActions.setAudioMode]: {
-			type: 'button',
-			category: 'ZoomISO Actions',
+			type: 'simple',
 			name: `set_audio_mode`,
 			style: {
 				text: `Set Audio Mode`,
@@ -316,7 +286,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 					down: [
 						{
 							actionId: ActionIdZoomISOOutputSettings.setAudioMode,
-							options: {},
+							options: { number: 1, audioChannelMode: 'Off' },
 						},
 					],
 					up: [],
@@ -329,18 +299,31 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 	/**
 	 * ZoomISO Actions — dynamic per-output entries
 	 */
+	const dynamicIds: string[] = []
 	const outputDataLength = Object.keys(instance.ZoomOutputData).length
 	for (let index = 1; index < (outputDataLength === 0 ? 9 : outputDataLength + 1); index++) {
 		const outputName = instance.ZoomOutputData[index] ? instance.ZoomOutputData[index].outputName : index
-		;(presets as any)[`set_user_to_output_${index}`] = {
-			type: 'button',
-			category: 'ZoomISO Actions',
+		const id = `set_user_to_output_${index}`
+		// the "OUTPUT n" icon leaves its top half for the text; there are icons for outputs 1 to 16
+		const icon = `output${String(index).padStart(2, '0')}`
+		const iconStyle =
+			icon in presetTextColors
+				? {
+						color: presetTextColors[icon as keyof typeof presetTextColors],
+						alignment: 'center:top',
+						png64: presetImages[icon as keyof typeof presetImages],
+					}
+				: {}
+		dynamicIds.push(id)
+		presets[id] = {
+			type: 'simple',
 			name: `set_user_to_output_${index}`,
 			style: {
 				text: `SetUser to\n${outputName}`,
 				size: '10',
 				color: colorBlack,
 				bgcolor: colorGreenOlive,
+				...iconStyle,
 			} as any,
 			steps: [
 				{
@@ -350,6 +333,7 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 							options: {
 								userName: '',
 								output: index,
+								setToNoneIfNotUserSelected: false,
 							},
 						},
 					],
@@ -360,5 +344,11 @@ export function GetPresetsZoomISOActions(instance: InstanceBaseExt<ZoomConfig>):
 		}
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'zoomiso_actions',
+		name: 'ZoomISO Actions',
+		definitions: [...Object.values(PresetIdZoomISOActions), ...dynamicIds],
+	}
+
+	return { section, presets }
 }

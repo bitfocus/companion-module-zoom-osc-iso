@@ -1,6 +1,9 @@
-import { FeedbackId, feedbackType } from '../feedback.js'
-import { CompanionPresetExt, alignmentTopLeft } from './preset-utils.js'
-import { colorBlack, colorDarkGray, colorLightGray, colorWhite } from '../utils.js'
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
+import { FeedbackId } from '../feedback.js'
+import { buildParticipantLayeredPreset } from './preset-utils.js'
+import { colorBlack, colorLightGray } from '../utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 
 export enum PresetIdManageSelections {
@@ -9,26 +12,35 @@ export enum PresetIdManageSelections {
 	toggleSelectionMethod = 'Toggle_Selection_Method',
 	singleSelection = 'Single_selection',
 	selectByName = 'Select_by_name',
+	activeSpeaker = 'Active_Speaker',
 	multipleSelection = 'Multiple_selection',
 	nextParticipants = 'Next_participants',
 	previousParticipants = 'Previous _participants',
 	saveParticipants = 'save_participants',
 }
 
-export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdManageSelections]: CompanionPresetExt | undefined } = {
+/** The Select by name button stores the participant name in this local variable */
+const localName = '$(local:name)'
+/** The name of whoever is currently speaking, kept up to date by the module */
+const activeSpeakerName = '$(zoomosc:activeSpeaker)'
+
+export function GetPresetsManageSelections(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdManageSelections]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Manage Selections & Groups
 		 */
 		[PresetIdManageSelections.restorePreviousSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Restore Previous Selection`,
 			style: {
-				text: `Restore Previous Selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.restorePreviousSelections,
 			},
 			steps: [
 				{
@@ -40,14 +52,14 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		//clear selection
 		[PresetIdManageSelections.clearParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Clear Selections`,
 			style: {
-				text: `Clear Selections ($(zoomosc:selectedNumberOfCallers))`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearSelections,
 			},
 			steps: [
 				{
@@ -59,14 +71,15 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Selection method
 		[PresetIdManageSelections.toggleSelectionMethod]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
-			name: `Selection Method`,
+			type: 'simple',
+			name: `Toggle Selection Method`,
+			// shows the icon of the selection method currently in use
 			style: {
-				text: `Toggle Selection Method`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectSingle,
 			},
 			steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 2 } }], up: [] }],
 			feedbacks: [
@@ -76,7 +89,8 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 						selectionMethod: 1,
 					},
 					style: {
-						text: 'Single selection',
+						text: '',
+						png64: presetImages.selectSingle,
 					},
 				},
 				{
@@ -85,72 +99,63 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 						selectionMethod: 0,
 					},
 					style: {
-						text: 'Multiple selection',
+						text: '',
+						png64: presetImages.selectMulti,
 					},
 				},
 			],
 		},
 		// Single selection
 		[PresetIdManageSelections.singleSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Single selection`,
 			style: {
-				text: `Single selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectSingle,
 			},
 			steps: [{ down: [{ actionId: ActionIdUsers.selectionMethod, options: { selectionMethod: 1 } }], up: [] }],
 			feedbacks: [],
 		},
-		// Select by name
-		[PresetIdManageSelections.selectByName]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
-			name: `Select by name`,
-			style: {
-				text: `Select by name`,
-				size: '7',
-				color: colorWhite,
-				bgcolor: colorBlack,
-				alignment: alignmentTopLeft,
-			},
-			steps: [{ down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle' } }], up: [] }],
-			feedbacks: [
+		// Select by name: a layered participant button for the participant named in the button's `name` local variable
+		[PresetIdManageSelections.selectByName]: buildParticipantLayeredPreset({
+			name: 'Select by name',
+			nameExpression: `${localName} || 'Select by name'`,
+			target: { feedbackId: FeedbackId.userNameBased, options: { name: localName } },
+			steps: [
 				{
-					feedbackId: FeedbackId.userNameBased,
-					options: {
-						name: '',
-						type: feedbackType.selected,
-					},
-					style: {
-						color: colorBlack,
-						bgcolor: colorDarkGray,
-					},
-				},
-				{
-					feedbackId: FeedbackId.userNameBasedAdvanced,
-					options: {
-						name: '',
-					},
-					style: {
-						color: colorBlack,
-						bgcolor: colorLightGray,
-					},
+					down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: localName } }],
+					up: [],
 				},
 			],
-		},
+			localVariables: [{ variableType: 'simple', variableName: 'name', startupValue: '' }],
+		}),
+		// Active Speaker: the same layered participant button for whoever is currently speaking, so its speaker bar is
+		// always on
+		[PresetIdManageSelections.activeSpeaker]: buildParticipantLayeredPreset({
+			name: 'Active Speaker',
+			nameExpression: activeSpeakerName,
+			target: { feedbackId: FeedbackId.userNameBased, options: { name: activeSpeakerName } },
+			alwaysSpeaking: true,
+			steps: [
+				{
+					down: [{ actionId: ActionIdUsers.selectUserByName, options: { option: 'toggle', name: activeSpeakerName } }],
+					up: [],
+				},
+			],
+		}),
 		// Multiple selection
 		[PresetIdManageSelections.multipleSelection]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Multiple selection`,
 			style: {
-				text: `Multiple selection`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.selectMulti,
 			},
 			steps: [
 				{
@@ -169,14 +174,14 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Next participants
 		[PresetIdManageSelections.nextParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Next participants`,
 			style: {
-				text: `Next participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.viewNext,
 			},
 			steps: [
 				{
@@ -195,14 +200,14 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 		// Previous participants
 		[PresetIdManageSelections.previousParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Previous participants`,
 			style: {
-				text: `Previous participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.viewPrevious,
 			},
 			steps: [
 				{
@@ -220,14 +225,14 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 			feedbacks: [],
 		},
 		[PresetIdManageSelections.saveParticipants]: {
-			type: 'button',
-			category: 'Manage Selections of Participants',
+			type: 'simple',
 			name: `Save Participant List`,
 			style: {
-				text: `Save Participants`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.saveNamesWithCameraStatus,
 			},
 			steps: [
 				{
@@ -247,5 +252,11 @@ export function GetPresetsManageSelections(): { [id in PresetIdManageSelections]
 		},
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'manage_selections',
+		name: 'Manage Selections of Participants',
+		definitions: Object.values(PresetIdManageSelections),
+	}
+
+	return { section, presets }
 }

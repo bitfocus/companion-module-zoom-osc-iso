@@ -1,12 +1,18 @@
-import type { ZoomConfig } from '../config.js'
-import type { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
 import { updateAllUserBasedVariables } from '../variables/variable-values.js'
-import { UserRole, ZoomOSCResponse } from './types.js'
+import { UserRole, type ZoomOSCResponse } from './types.js'
 import { setVariables } from './variables.js'
 
-export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data: ZoomOSCResponse): Promise<void> {
+export async function createZoomUser(instance: ModuleInstance, data: ZoomOSCResponse): Promise<void> {
 	const zoomId = parseInt(data.args[3].value)
 	const userName = data.args[1].value
+
+	// When a meeting ends, ZoomOSC/ISO lists every former participant with Zoom ID -1, named USER OFFLINE (seen on
+	// ZoomOSC 5.0.1, as /zoomosc/me/list, just before listCleared). Those aren't participants: one with the host role
+	// would otherwise land in the Hosts group and stay on the Host button.
+	if (!Number.isInteger(zoomId) || zoomId < 0) {
+		return
+	}
 
 	if (instance.ZoomUserOffline[zoomId]) {
 		return
@@ -23,6 +29,7 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 			targetIndex: data.args[0].value,
 			userName,
 			galleryIndex: data.args[2].value,
+			spotlighted: false,
 			users: [],
 		}
 	} else if (data.args.length >= 11) {
@@ -46,6 +53,7 @@ export async function createZoomUser(instance: InstanceBaseExt<ZoomConfig>, data
 			videoOn: data.args[8].value === 1,
 			mute: data.args[9].value === 0,
 			handRaised: data.args[10].value === 1,
+			spotlighted: false,
 			users: [],
 		}
 		if (data.args[6].value === UserRole.Host || data.args[6].value === UserRole.CoHost) {

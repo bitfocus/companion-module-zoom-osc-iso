@@ -1,6 +1,6 @@
-import { CompanionActionEvent, InputValue, SomeCompanionActionInputField } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, arrayAdd, arrayAddRemove, arrayRemove } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionEvent, CompanionInputFieldDropdown } from '@companion-module/base'
+import { arrayAdd, arrayAddRemove, arrayRemove, isZoomISO3OrLater } from '../utils.js'
 
 export const select = { single: true, multi: false }
 
@@ -18,7 +18,7 @@ const getChoicePositions = (): {
 
 export const CHOICES_POSITION = getChoicePositions()
 
-export const positionOrderOption: SomeCompanionActionInputField = {
+export const positionOrderOption: CompanionInputFieldDropdown<'position', string> = {
 	type: 'dropdown',
 	label: 'Position',
 	id: 'position',
@@ -32,22 +32,24 @@ export enum selectionMethod {
 	ToggleSelection = 2,
 }
 
-export const PreviousSelectedCallersSave = (instance: InstanceBaseExt<ZoomConfig>): void => {
+export const PreviousSelectedCallersSave = (instance: ModuleInstance): void => {
 	instance.ZoomClientDataObj.PreviousSelectedCallers = [...instance.ZoomClientDataObj.selectedCallers]
 }
 
-export const PreviousSelectedCallersRestore = (instance: InstanceBaseExt<ZoomConfig>): void => {
+export const PreviousSelectedCallersRestore = (instance: ModuleInstance): void => {
 	instance.ZoomClientDataObj.selectedCallers = [...instance.ZoomClientDataObj.PreviousSelectedCallers]
 }
 
-export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number, option: string): void => {
+export const selectUser = (instance: ModuleInstance, zoomId: number, option: string): void => {
 	const { ZoomClientDataObj, config } = instance
+	// a missing participant must never end up in the selection: it would be sent to Zoom as an invalid id
+	if (typeof zoomId !== 'number') return
 
 	PreviousSelectedCallersSave(instance)
 
 	switch (option) {
 		case 'toggle':
-			if (config.selectionMethod === (selectionMethod.SingleSelection as number)) {
+			if (config.selectionMethod === selectionMethod.SingleSelection) {
 				if (ZoomClientDataObj.selectedCallers.length !== 1 || !ZoomClientDataObj.selectedCallers.includes(zoomId)) {
 					ZoomClientDataObj.selectedCallers = [zoomId]
 				} else {
@@ -58,7 +60,7 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
 			}
 			break
 		case 'select':
-			if (config.selectionMethod == (selectionMethod.SingleSelection as number)) {
+			if (config.selectionMethod == selectionMethod.SingleSelection) {
 				ZoomClientDataObj.selectedCallers = [zoomId]
 			} else {
 				ZoomClientDataObj.selectedCallers = arrayAdd(ZoomClientDataObj.selectedCallers, zoomId)
@@ -77,9 +79,9 @@ export const selectUser = (instance: InstanceBaseExt<ZoomConfig>, zoomId: number
  * @returns object { argsCallers: { type: string; value: string | number }[]; oscPath: string }
  */
 export const createCommand = (
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	OSCAction: string,
-	name?: InputValue | string,
+	name?: string,
 	singleUser?: boolean | null,
 	allExcept?: boolean | null,
 	shouldSavePreviousSelectedCallers = true,
@@ -143,7 +145,10 @@ export const createCommand = (
 			// When command is for one user only send first caller
 			else if (singleUser) {
 				if ((isoAllowSetUserToNone && selectedCallers.length === 0) || isoForceSetToNone) {
-					command.args.push({ type: 'i', value: emptyUser }) // Set to none
+					// Set to none. ZoomISO 3+ no longer clears an output with -2: Zoom ID 1 puts it back to
+					// "Select Participant" (found by testing, not documented)
+					const noneValue = isZoomISO3OrLater(instance.ZoomClientDataObj.zoomOSCVersion) ? 1 : emptyUser
+					command.args.push({ type: 'i', value: noneValue })
 				} else {
 					command.args.push({ type: 'i', value: selectedCallers[0] })
 					if (selectedCallers.length > 1) {
@@ -159,8 +164,8 @@ export const createCommand = (
 			if (allExcept) {
 				command.oscPath =
 					(command.args.length > 1
-						? OSCAction === '/Mute'
-							? '/zoom/allExcept/ZoomID'
+						? OSCAction === '/mute'
+							? '/zoom/allExcept/zoomID'
 							: `/zoom/allExcept/users/zoomID`
 						: `/zoom/allExcept/zoomID`) + OSCAction
 			} else {
@@ -180,7 +185,7 @@ export const createCommand = (
  * @param _info
  */
 export const sendActionCommand = (
-	instance: InstanceBaseExt<ZoomConfig>,
+	instance: ModuleInstance,
 	action: { options: { command: any; args: any } },
 	_info?: CompanionActionEvent | null,
 ): void => {

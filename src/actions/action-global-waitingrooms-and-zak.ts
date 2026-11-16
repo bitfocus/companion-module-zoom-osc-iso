@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdGlobalWaitingRoomsAndZak {
@@ -12,10 +12,19 @@ export enum ActionIdGlobalWaitingRoomsAndZak {
 	ZAKJoinMeeting = 'ZAKJoinMeeting',
 }
 
-export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGlobalWaitingRoomsAndZak]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGlobalWaitingRoomsAndZak]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGlobalWaitingRoomsAndZak = {
+	[ActionIdGlobalWaitingRoomsAndZak.admitEveryoneFromWaitingRoom]: { options: Record<string, never> }
+	[ActionIdGlobalWaitingRoomsAndZak.enableWaitingRoom]: { options: Record<string, never> }
+	[ActionIdGlobalWaitingRoomsAndZak.disableWaitingRoom]: { options: Record<string, never> }
+	[ActionIdGlobalWaitingRoomsAndZak.sendMessageToWaitingRoom]: { options: { message: string } }
+	[ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting]: { options: { zak: string; meetingID: string; name: string } }
+	[ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting]: { options: { zak: string; meetingID: string; name: string } }
+}
+
+export function GetActionsGlobalWaitingRoomsAndZak(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaGlobalWaitingRoomsAndZak> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGlobalWaitingRoomsAndZak> = {
 		[ActionIdGlobalWaitingRoomsAndZak.admitEveryoneFromWaitingRoom]: {
 			name: 'Admit All (PRO)',
 			options: [],
@@ -84,12 +93,12 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 		[ActionIdGlobalWaitingRoomsAndZak.ZAKJoinMeeting]: {
 			name: 'ZAK Join Meeting (PRO)',
 			options: [options.zak, options.meetingID, options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Special'
 				const command = createCommand(instance, '/zakJoin')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				const zak = await instance.parseVariablesInString(action.options.zak as string)
-				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				const newName = action.options.name
+				const zak = action.options.zak
+				const meetingId = action.options.meetingID
 				command.args.push({ type: 's', value: zak })
 				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: newName })
@@ -106,12 +115,12 @@ export function GetActionsGlobalWaitingRoomsAndZak(instance: InstanceBaseExt<Zoo
 		[ActionIdGlobalWaitingRoomsAndZak.ZAKStartMeeting]: {
 			name: 'ZAK Start Meeting (PRO)',
 			options: [options.zak, options.meetingID, options.name],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'Special'
 				const command = createCommand(instance, '/zakStart')
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				const zak = await instance.parseVariablesInString(action.options.zak as string)
-				const meetingId = await instance.parseVariablesInString(action.options.meetingID as string)
+				const newName = action.options.name
+				const zak = action.options.zak
+				const meetingId = action.options.meetingID
 				command.args.push({ type: 's', value: zak })
 				command.args.push({ type: 's', value: meetingId })
 				command.args.push({ type: 's', value: newName })

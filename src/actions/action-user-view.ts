@@ -1,6 +1,5 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 import { ActionIdGlobalGalleryTrackingAndDataRequest } from './action-global-gallery-tracking-and-data-request.js'
 
@@ -11,10 +10,15 @@ export enum ActionIdUserView {
 	gotoPreviousGalleryPage = 'gotoPreviousGalleryPage',
 }
 
-export function GetActionsUserView(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserView]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserView]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserView = {
+	[ActionIdUserView.gotoNextGalleryPage]: { options: Record<string, never> }
+	[ActionIdUserView.gotoPreviousGalleryPage]: { options: Record<string, never> }
+	[ActionIdUserView.setSpeakerView]: { options: Record<string, never> }
+	[ActionIdUserView.setGalleryView]: { options: Record<string, never> }
+}
+
+export function GetActionsUserView(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaUserView> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserView> = {
 		[ActionIdUserView.gotoNextGalleryPage]: {
 			name: 'Goto Next Gallery Page',
 			options: [],

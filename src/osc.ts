@@ -1,43 +1,43 @@
-import { InstanceBaseExt, ZoomVersion } from './utils.js'
-import { InstanceStatus, OSCSomeArguments } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import type ModuleInstance from './index.js'
+import { ZoomVersion } from './utils.js'
+import { InstanceStatus, type OSCSomeArguments } from '@companion-module/base'
 import { FeedbackId } from './feedback.js'
-import { normalizeNodeOscMessage, sendOscCommand, sendZoomIsoPullingCommands } from './osc/commands.js'
+import { sendZoomIsoPullingCommands } from './osc/commands.js'
 import { dispatchOscMessage } from './osc/handlers/index.js'
-import { NodeOscMessage, OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
+import { closeOscPort, createOscPort, toOutgoingMessage, toZoomOSCResponse, type OscPort } from './osc/transport.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from './osc/types.js'
 import { createZoomUser } from './osc/users.js'
-type NodeOscClient = {
-	close(): Promise<void>
-	send(address: string, ...args: unknown[]): void
-}
-type NodeOscServer = {
-	close(): Promise<void>
-	on(event: 'message', listener: (message: NodeOscMessage) => void): NodeOscServer
-	on(event: 'error', listener: (error: { code?: string; message: string }) => void): NodeOscServer
-}
-type NodeOscModule = {
-	Client: new (host: string, port: number) => NodeOscClient
-	Server: new (port: number, host: string, cb?: () => void) => NodeOscServer
-}
-const nodeOsc = require('node-osc') as NodeOscModule // eslint-disable-line @typescript-eslint/no-require-imports
+import { checkForwardTarget, forwardTargetFromConfig, OscForwarder } from './osc/forwarder.js'
+import { setVariables } from './osc/variables.js'
+import { updateOscForwardingVariables } from './variables/variable-values.js'
+
+/** How often to ping while waiting for ZoomOSC/ISO to answer */
+const CONNECTION_CHECK_INTERVAL = 2000
+/** Once ZoomOSC/ISO has answered and is in a meeting: ping only when it has been quiet for this long */
+const CONNECTED_WATCHDOG_INTERVAL = 60000
 
 export class OSC {
-	private readonly instance: InstanceBaseExt<ZoomConfig>
+	private readonly instance: ModuleInstance
 	private oscHost = ''
 	private oscTXPort = 9090
 	private oscRXPort = 1234
-	private client: NodeOscClient | null = null
-	private server: NodeOscServer | null = null
+	/** Receives from ZoomOSC/ISO and sends commands to it, on the receiving port, as in 4.11 */
+	private udpPort: OscPort | null = null
+	/** Sends a copy of every packet from ZoomOSC/ISO to one other application, while OSC forwarding is on */
+	private forwarder: OscForwarder | null = null
+	/** Whether ZoomOSC/ISO has answered a ping since this connection started */
+	private hadFirstPong = false
 	private updateLoop = true
 	private firstLoop = true
 	private spotlightGroupTrackingInitalized = false
 	private needToPingPong = true
 	private pingInterval: NodeJS.Timeout | undefined | null = null
-	private pingIntervalTime = 2000
+	/** Changes to CONNECTED_WATCHDOG_INTERVAL on the first pong and stays there, for every ping timer after it */
+	private pingIntervalTime = CONNECTION_CHECK_INTERVAL
 	private updatePresetsLoop: NodeJS.Timeout | undefined | null = null
 	private zoomISOPuller: NodeJS.Timeout | undefined | null = null
 
-	constructor(instance: InstanceBaseExt<ZoomConfig>) {
+	constructor(instance: ModuleInstance) {
 		this.instance = instance
 		// Connect to ZoomOSC
 		this.Connect()
@@ -49,16 +49,14 @@ export class OSC {
 	public readonly destroy = async (): Promise<void> => {
 		this.destroyTimers()
 
-		if (this.server) {
-			await this.server.close()
+		const udpPort = this.udpPort
+		this.udpPort = null
+		if (udpPort) {
+			await closeOscPort(udpPort)
 		}
-
-		if (this.client) {
-			await this.client.close()
-		}
-
-		this.server = null
-		this.client = null
+		const forwarder = this.forwarder
+		this.forwarder = null
+		await forwarder?.close()
 	}
 
 	public readonly destroyTimers = (): void => {
@@ -93,7 +91,9 @@ export class OSC {
 	}
 
 	public readonly createZoomIsoPullerTimer = (): void => {
-		if (this.instance.config.version === (ZoomVersion.ZoomISO as number)) {
+		// a join can report Audio Ready and then In Meeting: replace the timer rather than leave one running untracked
+		this.destroyZoomIsoPullerTimer()
+		if (this.instance.config.version === ZoomVersion.ZoomISO) {
 			this.zoomISOPuller = setInterval(
 				() => {
 					if (this.instance.ZoomClientDataObj.engineState === -1) {
@@ -104,8 +104,6 @@ export class OSC {
 				},
 				this.instance.config.pulling < 1000 ? 5000 : this.instance.config.pulling,
 			)
-		} else {
-			this.destroyZoomIsoPullerTimer()
 		}
 	}
 
@@ -159,8 +157,31 @@ export class OSC {
 		this.oscRXPort = this.instance.config.rx_port || 1234
 
 		this.instance.updateStatus(InstanceStatus.Connecting)
-		this.client = new nodeOsc.Client(this.oscHost, this.oscTXPort)
-		this.server = new nodeOsc.Server(this.oscRXPort, '0.0.0.0', () => {
+		this.hadFirstPong = false
+		const udpPort = createOscPort(this.oscRXPort, this.oscHost, this.oscTXPort)
+		this.udpPort = udpPort
+		this.updateForwarding()
+
+		// each packet's bytes, before osc decodes them: forwarded exactly as they arrived, even one osc can't read.
+		// Only packets that arrive on the receiving port come in here, never the commands this module sends.
+		udpPort.on('raw', (data) => this.forwarder?.forward(data))
+
+		// every message, including each one inside a bundle
+		udpPort.on('message', (oscMsg) => {
+			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
+			this.processData(toZoomOSCResponse(oscMsg))
+		})
+
+		udpPort.on('error', (err) => {
+			if (err.code === 'EADDRINUSE') {
+				this.instance.log('error', 'Error: Selected port in use.' + err.message)
+				return
+			}
+			// anything else, such as a packet osc can't read: log every one, rather than drop it without a trace
+			this.instance.log('warn', `OSC error from ZoomOSC/ISO: ${err.message}`)
+		})
+
+		udpPort.on('ready', () => {
 			this.instance.log('info', `Listening to ZoomOSC on port: ${this.oscRXPort}`)
 			this.instance.updateStatus(InstanceStatus.Connecting, 'Listening for first response')
 			this.needToPingPong = true
@@ -168,19 +189,41 @@ export class OSC {
 			this.createUpdatePresetsTimer()
 		})
 
-		this.server.on('message', (oscMsg) => {
-			// eslint-disable-next-line  @typescript-eslint/no-floating-promises
-			this.processData(normalizeNodeOscMessage(oscMsg))
-		})
-
-		this.server.on('error', (err: { code?: string; message: string }) => {
-			if (err.code === 'EADDRINUSE') {
-				this.instance.log('error', 'Error: Selected port in use.' + err.message)
-			}
-		})
+		udpPort.open()
 
 		return
 	}
+
+	/**
+	 * Starts, stops or re-targets OSC forwarding to match the config, without touching the connection to ZoomOSC/ISO.
+	 * Runs when the connection starts, and when the forwarding actions or settings change.
+	 */
+	public readonly updateForwarding = (): void => {
+		const previous = this.forwarder
+		this.forwarder = null
+		void previous?.close()
+
+		const config = this.instance.config
+		// a connection that has stopped forwards nothing
+		if (this.udpPort && config.enableOscForwarding) {
+			const target = forwardTargetFromConfig(config)
+			const problem = checkForwardTarget(target, this.oscRXPort, this.oscHost, this.oscTXPort)
+			if (problem) {
+				this.instance.log('error', `OSC forwarding can't start: ${problem}`)
+			} else {
+				this.forwarder = new OscForwarder(target, (level, message) => this.instance.log(level, message))
+				this.instance.log('info', `Forwarding all OSC from ZoomOSC/ISO to ${target.host}:${target.port}`)
+			}
+		} else if (previous) {
+			this.instance.log('info', 'OSC forwarding is off')
+		}
+
+		setVariables(this.instance, (variables) => updateOscForwardingVariables(this.instance, variables))
+		this.instance.checkFeedbacks(FeedbackId.oscForwarding)
+	}
+
+	/** Whether every packet from ZoomOSC/ISO is being forwarded right now */
+	public readonly isForwarding = (): boolean => this.forwarder !== null
 
 	/**
 	 * Create a new user when none existing was found
@@ -211,14 +254,19 @@ export class OSC {
 		createZoomIsoPullerTimer: this.createZoomIsoPullerTimer,
 		destroyZoomIsoPullerTimer: this.destroyZoomIsoPullerTimer,
 		hasZoomIsoPuller: () => Boolean(this.zoomISOPuller),
+		isFirstPong: () => {
+			const first = !this.hadFirstPong
+			this.hadFirstPong = true
+			return first
+		},
 		configureConnectedPingWatchdog: (callStatus) => {
 			this.needToPingPong = false
 			if (this.pingInterval) {
 				this.destroyPingTimer()
-				this.pingIntervalTime = 60000
+				this.pingIntervalTime = CONNECTED_WATCHDOG_INTERVAL
 				if (callStatus === 1) {
 					this.pingInterval = setInterval(() => {
-						if (Date.now() - this.instance.ZoomClientDataObj.last_response > 60000) {
+						if (Date.now() - this.instance.ZoomClientDataObj.last_response > CONNECTED_WATCHDOG_INTERVAL) {
 							this.sendCommand('/zoom/ping')
 						}
 					}, this.pingIntervalTime)
@@ -235,7 +283,9 @@ export class OSC {
 		try {
 			await dispatchOscMessage(this.createHandlerContext(), data)
 		} catch (error) {
-			this.instance.log('error', `unable to process data for ${JSON.stringify(data)}. Error: ${JSON.stringify(error)}`)
+			// an Error has no enumerable fields: JSON.stringify gives {}, which hid the cause in the log
+			const reason = error instanceof Error ? error.message : JSON.stringify(error)
+			this.instance.log('error', `unable to process data for ${JSON.stringify(data)}. Error: ${reason}`)
 		}
 	}
 
@@ -245,16 +295,19 @@ export class OSC {
 	 */
 	public readonly sendCommand = (path: string, args?: OSCSomeArguments): void => {
 		// this.instance.log('debug', `sending ${JSON.stringify(path)} ${args ? JSON.stringify(args) : ''}`)
-		try {
-			if (!this.client) {
-				throw new Error('OSC client is not connected')
-			}
-			sendOscCommand(this.client, path, args)
-		} catch (error) {
+		const logError = (error: unknown) =>
 			this.instance.log(
 				'error',
-				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${JSON.stringify(error)}`,
+				`sendCommand error for path: ${path} and args: ${JSON.stringify(args)}. Error: ${error instanceof Error ? error.message : JSON.stringify(error)}`,
 			)
+		try {
+			if (!this.udpPort) {
+				throw new Error('OSC port is not open')
+			}
+			// to ZoomOSC/ISO's IP and receiving port; osc reports socket errors through 'error'
+			this.udpPort.send(toOutgoingMessage(path, args))
+		} catch (error) {
+			logError(error)
 		}
 	}
 

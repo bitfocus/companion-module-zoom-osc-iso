@@ -1,6 +1,5 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 
 export enum ActionIdPerformanceTweaks {
 	turnOnEnableVariablesForEachUser = 'EnableVariablesForEachUser',
@@ -11,10 +10,19 @@ export enum ActionIdPerformanceTweaks {
 	toggleEnableVariablesForParticipants = 'ToggleVariablesForParticipants',
 }
 
-export function GetActionsPerformanceTweaks(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdPerformanceTweaks]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdPerformanceTweaks]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaPerformanceTweaks = {
+	[ActionIdPerformanceTweaks.turnOnEnableVariablesForEachUser]: { options: Record<string, never> }
+	[ActionIdPerformanceTweaks.turnOffEnableVariablesForEachUser]: { options: Record<string, never> }
+	[ActionIdPerformanceTweaks.toggleEnableVariablesForEachUser]: { options: Record<string, never> }
+	[ActionIdPerformanceTweaks.turnOnEnableVariablesForParticipants]: { options: Record<string, never> }
+	[ActionIdPerformanceTweaks.turnOffEnableVariablesForParticipants]: { options: Record<string, never> }
+	[ActionIdPerformanceTweaks.toggleEnableVariablesForParticipants]: { options: Record<string, never> }
+}
+
+export function GetActionsPerformanceTweaks(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaPerformanceTweaks> {
+	const actions: CompanionActionDefinitions<ActionsSchemaPerformanceTweaks> = {
 		[ActionIdPerformanceTweaks.turnOnEnableVariablesForEachUser]: {
 			name: 'Performance Tweak - Turn On Variables For Each User',
 			options: [],

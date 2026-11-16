@@ -1,7 +1,8 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdGlobalGalleryTrackingAndDataRequest } from '../actions/action-global-gallery-tracking-and-data-request.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
 import { ActionIdGlobalMemoryManagement } from '../actions/action-global-memory-management.js'
@@ -12,18 +13,21 @@ export enum PresetIdDataCustom {
 	requestListOfBreakoutRooms = 'Request_List_of_Breakout_Rooms',
 	requestGalleryOrder = 'Request_Gallery_Order',
 	requestGalleryCount = 'Request_Gallery_Count',
+	requestSpotlightOrder = 'Request_Spotlight_Order',
 	customCommand = 'Custom_Command',
 	customCommandWithArguments = 'Custom_Command_with_Arguments',
 }
 
-export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdDataCustom]: CompanionPresetExt | undefined } = {
+export function GetPresetsDataCustom(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdDataCustom]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Data and Custom Actions
 		 */
 		[PresetIdDataCustom.ping]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Ping`,
 			style: {
 				text: `Ping`,
@@ -46,8 +50,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.requestListParticipants]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Request_List_Participants`,
 			style: {
 				text: `Request List of Participants`,
@@ -70,8 +73,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.requestListOfBreakoutRooms]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Request_List_of_Breakout_Rooms`,
 			style: {
 				text: `Request List of Breakout Rooms`,
@@ -94,8 +96,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.requestGalleryOrder]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Request_Gallery_Order`,
 			style: {
 				text: `Request Gallery Order`,
@@ -118,8 +119,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.requestGalleryCount]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Request_Gallery_Count`,
 			style: {
 				text: `Request Gallery Count`,
@@ -131,7 +131,30 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 				{
 					down: [
 						{
-							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount,
+							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew,
+							options: {},
+						},
+					],
+					up: [],
+				},
+			],
+			feedbacks: [],
+		},
+
+		[PresetIdDataCustom.requestSpotlightOrder]: {
+			type: 'simple',
+			name: `Request_Spotlight_Order`,
+			style: {
+				text: `Request Spotlight Order`,
+				size: '14',
+				color: colorBlack,
+				bgcolor: colorLightGray,
+			},
+			steps: [
+				{
+					down: [
+						{
+							actionId: ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights,
 							options: {},
 						},
 					],
@@ -142,8 +165,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.customCommand]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Custom_Command`,
 			style: {
 				text: `Custom Command`,
@@ -156,7 +178,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 					down: [
 						{
 							actionId: ActionIdCustom.customCommand,
-							options: {},
+							options: { path: '' },
 						},
 					],
 					up: [],
@@ -166,8 +188,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 
 		[PresetIdDataCustom.customCommandWithArguments]: {
-			type: 'button',
-			category: 'Data and Custom Actions',
+			type: 'simple',
 			name: `Custom_Command_with_Arguments`,
 			style: {
 				text: `Custom Command with Arguments`,
@@ -180,7 +201,7 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 					down: [
 						{
 							actionId: ActionIdCustom.customCommandWithArguments,
-							options: {},
+							options: { path: '', customArgs: '{type: "i", value: 0}' },
 						},
 					],
 					up: [],
@@ -190,5 +211,11 @@ export function GetPresetsDataCustom(): { [id in PresetIdDataCustom]: CompanionP
 		},
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'data_custom',
+		name: 'Data and Custom Actions',
+		definitions: Object.values(PresetIdDataCustom),
+	}
+
+	return { section, presets }
 }

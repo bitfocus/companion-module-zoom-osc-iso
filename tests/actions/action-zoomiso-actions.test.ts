@@ -1,12 +1,10 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, vi, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
-// jest.mock is hoisted before imports — feedback-state-machine is also
+// vi.mock is hoisted before imports — feedback-state-machine is also
 // stubbed via moduleNameMapper in jest.config.ts, but this mock provides
 // specific FeedbackId values needed by action-zoomiso-actions assertions.
-jest.mock('../../src/feedback.js', () => ({
+vi.mock('../../src/feedback.js', () => ({
 	FeedbackId: {
 		selectionMethod: 'selection_Method',
 		groupBased: 'group_Based',
@@ -28,7 +26,7 @@ jest.mock('../../src/feedback.js', () => ({
 import { GetActionsZoomISOActions, ActionIdZoomISOActions } from '../../src/actions/action-zoomiso-actions.js'
 
 describe('GetActionsZoomISOActions', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISOActions>
 
 	beforeAll(() => {
@@ -37,7 +35,7 @@ describe('GetActionsZoomISOActions', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

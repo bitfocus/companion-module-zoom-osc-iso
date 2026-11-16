@@ -1,10 +1,7 @@
-import {
-	CompanionActionDefinition,
-	CompanionVariableValues,
-	SomeCompanionActionInputField,
-} from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options, userExist } from '../utils.js'
+import type { VariableValues } from '../variables/variable-definitions.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
+import { options, participantAtPosition, userExist } from '../utils.js'
 import { FeedbackId } from '../feedback.js'
 import * as fs from 'fs'
 import * as os from 'os'
@@ -29,9 +26,19 @@ export enum ActionIdUsers {
 	saveParticipants = 'saveParticipants',
 }
 
-export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUsers]: CompanionActionDefinition | undefined
-} {
+export type ActionsSchemaUsers = {
+	[ActionIdUsers.selectionMethod]: { options: { selectionMethod: selectionMethod } }
+	[ActionIdUsers.selectUserByName]: { options: { name: string; option: string } }
+	[ActionIdUsers.selectFromIndexPosition]: { options: { position: string; option: string } }
+	[ActionIdUsers.clearParticipants]: { options: Record<string, never> }
+	[ActionIdUsers.restorePreviousSelection]: { options: Record<string, never> }
+	[ActionIdUsers.nextParticipants]: { options: { shift: number } }
+	[ActionIdUsers.previousParticipants]: { options: { shift: number } }
+	[ActionIdUsers.resetParticipants]: { options: Record<string, never> }
+	[ActionIdUsers.saveParticipants]: { options: { filepath: string; includeVideoState: boolean } }
+}
+
+export function GetActionsUsers(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaUsers> {
 	const CHOICES_PARTICIPANT: {
 		id: string
 		label: string
@@ -41,7 +48,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 		CHOICES_PARTICIPANT.push({ id: index.toString(), label: `Participant ${index}` })
 	}
 
-	const participantOption: SomeCompanionActionInputField = {
+	const participantOption: CompanionInputFieldDropdown<'position', string> = {
 		type: 'dropdown',
 		label: 'Position',
 		id: 'position',
@@ -49,7 +56,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 		choices: CHOICES_PARTICIPANT,
 	}
 
-	const actions: { [id in ActionIdUsers]: CompanionActionDefinition | undefined } = {
+	const actions: CompanionActionDefinitions<ActionsSchemaUsers> = {
 		// Select Actions
 		[ActionIdUsers.selectionMethod]: {
 			name: 'Selection method',
@@ -69,11 +76,11 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: (action) => {
 				if (action.options.selectionMethod === selectionMethod.ToggleSelection) {
 					instance.config.selectionMethod =
-						instance.config.selectionMethod === (selectionMethod.SingleSelection as number)
-							? (selectionMethod.MultiSelection as number)
-							: (selectionMethod.SingleSelection as number)
+						instance.config.selectionMethod === selectionMethod.SingleSelection
+							? selectionMethod.MultiSelection
+							: selectionMethod.SingleSelection
 				} else {
-					instance.config.selectionMethod = action.options.selectionMethod as number
+					instance.config.selectionMethod = action.options.selectionMethod
 				}
 				instance.saveConfig(instance.config)
 				instance.checkFeedbacks(FeedbackId.selectionMethod, FeedbackId.groupBased, FeedbackId.groupBasedAdvanced)
@@ -95,16 +102,16 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					],
 				},
 			],
-			callback: async (action): Promise<void> => {
-				const selectedName = await instance.parseVariablesInString(action.options.name as string)
+			callback: (action): void => {
+				const selectedName = action.options.name
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
 						if (user.userName === selectedName) {
-							selectUser(instance, user.zoomId, action.options.option as string)
+							selectUser(instance, user.zoomId, action.options.option)
 
 							// instance.UpdateVariablesValues()
-							const variables: CompanionVariableValues = {}
+							const variables: VariableValues = {}
 							updateSelectedCallersVariables(instance, variables)
 							instance.setVariableValues(variables)
 							instance.checkFeedbacks(
@@ -142,11 +149,12 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			],
 			callback: (action) => {
 				if (instance.config.enableVariablesForParticipants) {
-					const zoomId = instance.ZoomVariableLink[(action.options.position as number) - 1].zoomId
+					const participant = participantAtPosition(instance, Number(action.options.position))
+					if (!participant) return
 
-					selectUser(instance, zoomId, action.options.option as string)
+					selectUser(instance, participant.zoomId, action.options.option)
 
-					const variables: CompanionVariableValues = {}
+					const variables: VariableValues = {}
 					updateSelectedCallersVariables(instance, variables)
 					instance.setVariableValues(variables)
 					instance.checkFeedbacks(
@@ -168,7 +176,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			callback: () => {
 				PreviousSelectedCallersSave(instance)
 				instance.ZoomClientDataObj.selectedCallers.length = 0
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -189,7 +197,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [],
 			callback: () => {
 				PreviousSelectedCallersRestore(instance)
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -207,6 +215,8 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 		},
 		[ActionIdUsers.nextParticipants]: {
 			name: 'nextParticipants',
+			description:
+				'Show the next page of participants on the participant position buttons. Stops on the last page, where positions past the last participant are empty.',
 			options: [
 				{
 					type: 'number',
@@ -218,13 +228,12 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				// Grap the items you want to see
-				const numberToShift = action.options.shift as number
-				const itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(0, numberToShift)
-				instance.ZoomVariableLink.splice(0, numberToShift)
-				instance.ZoomVariableLink.push(...itemsToShift)
+				// Page forward through the participant list, stopping on the last page
+				const page = instance.ZoomParticipantPage
+				page.size = action.options.shift
+				if (page.start + page.size < instance.ZoomVariableLink.length) page.start += page.size
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -242,6 +251,8 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 		},
 		[ActionIdUsers.previousParticipants]: {
 			name: 'previousParticipants',
+			description:
+				'Show the previous page of participants on the participant position buttons. Stops on the first page.',
 			options: [
 				{
 					type: 'number',
@@ -253,15 +264,12 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				// Grap the items you want to see
-				const numberToShift = action.options.shift as number
-				// Be carefull for below/invallid index
-				const itemsToShift: { zoomId: number; userName: string }[] = instance.ZoomVariableLink.slice(-numberToShift)
+				// Page back through the participant list, stopping on the first page
+				const page = instance.ZoomParticipantPage
+				page.size = action.options.shift
+				page.start = Math.max(0, page.start - page.size)
 
-				instance.ZoomVariableLink.splice(instance.ZoomVariableLink.length - numberToShift, numberToShift)
-				instance.ZoomVariableLink.splice(0, 0, ...itemsToShift)
-
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -283,6 +291,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 			options: [],
 			callback: () => {
 				instance.ZoomVariableLink.length = 0
+				instance.ZoomParticipantPage.start = 0
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {
 						const user = instance.ZoomUserData[key]
@@ -290,7 +299,7 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					}
 				}
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateZoomParticipantVariables(instance, variables)
 				instance.setVariableValues(variables)
 				// instance.UpdateVariablesValues()
@@ -323,8 +332,8 @@ export function GetActionsUsers(instance: InstanceBaseExt<ZoomConfig>): {
 					default: false,
 				},
 			],
-			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
+			callback: (action): void => {
+				const filepath = action.options.filepath.trim()
 				let data = ''
 				for (const key in instance.ZoomUserData) {
 					if (userExist(Number(key), instance.ZoomUserData)) {

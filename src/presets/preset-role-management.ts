@@ -1,6 +1,8 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserWebinar } from '../actions/action-user-webinars.js'
 import { ActionIdUserWaitingRoom } from '../actions/action-user-waiting-room.js'
 import { ActionIdGlobal } from '../actions/action-global.js'
@@ -26,14 +28,16 @@ export enum PresetIdRoleManagement {
 	disableUsersUnmute = 'Disable_Users_Unmute',
 }
 
-export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdRoleManagement]: CompanionPresetExt | undefined } = {
+export function GetPresetsRoleManagement(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdRoleManagement]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Role & Management Actions
 		 */
 		[PresetIdRoleManagement.makeHost]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Make_Host`,
 			style: {
 				text: `Make Host`,
@@ -46,7 +50,7 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.makeHost,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -55,21 +59,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.makeCoHost]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Make_CoHost`,
 			style: {
-				text: `Make Co Host`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makeCoHost,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.makeCoHost,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -78,21 +82,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.revokeCoHost]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Revoke_CoHost`,
 			style: {
-				text: `Revoke CoHost`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.revokeCoHost,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.revokeCoHost,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -101,14 +105,14 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.reclaimHost]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Reclaim_Host`,
 			style: {
-				text: `Reclaim Host`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.reclaimHost,
 			},
 			steps: [
 				{
@@ -124,21 +128,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.makePanelist]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Make_Panelist`,
 			style: {
-				text: `Make Panelist`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makePanelist,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.makePanelist,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -147,21 +151,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.makeAttendee]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Make_Attendee`,
 			style: {
-				text: `Make Attendee`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.makeAttendee,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.makeAttendee,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -170,21 +174,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.ejectParticipant]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Eject_Participant`,
 			style: {
-				text: `Eject Participant`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.eject,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.ejectParticipant,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -193,8 +197,7 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.ejectAll]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Eject_All`,
 			style: {
 				text: `Eject All`,
@@ -216,21 +219,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.admitParticipant]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Admit_Participant`,
 			style: {
-				text: `Admit Participant`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.admitSelected,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserWaitingRoom.admitSomeoneFromWaitingRoom,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -239,14 +242,14 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.admitAllParticipant]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Admit_All_Participant`,
 			style: {
-				text: `Admit All`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.admitAll,
 			},
 			steps: [
 				{
@@ -262,21 +265,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.sendToWaitingRoom]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Send_to_Waiting_Room`,
 			style: {
-				text: `Send to Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.sendToWaitingRoom,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserWaitingRoom.sendSomeoneToWaitingRoom,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -285,14 +288,14 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.enableWaitingRoom]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Enable_Waiting_Room`,
 			style: {
-				text: `Enable Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.enableWaitingRoom,
 			},
 			steps: [
 				{
@@ -308,14 +311,14 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.disableWaitingRoom]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Disable_Waiting_Room`,
 			style: {
-				text: `Disable Waiting Room`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disableWaitingRoom,
 			},
 			steps: [
 				{
@@ -331,21 +334,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.allowToSpeak]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Allow_To_speak`,
 			style: {
-				text: `Allow to Speak`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.allowToSpeak,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserWebinar.allowWebinarAttendeeToSpeak,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -354,21 +357,21 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.disallowToSpeak]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Disallow_To_speak`,
 			style: {
-				text: `Disallow to Speak`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disallowToSpeak,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserWebinar.disallowToSpeak,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -377,8 +380,7 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.enableUsersUnmute]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Enable_Users_Unmute`,
 			style: {
 				text: `Enable Users Unmute`,
@@ -400,8 +402,7 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 		[PresetIdRoleManagement.disableUsersUnmute]: {
-			type: 'button',
-			category: 'Role & Management Actions',
+			type: 'simple',
 			name: `Disable_Users_Unmute`,
 			style: {
 				text: `Disable Users Unmute`,
@@ -423,5 +424,11 @@ export function GetPresetsRoleManagement(): { [id in PresetIdRoleManagement]: Co
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'role_management',
+		name: 'Role & Management Actions',
+		definitions: Object.values(PresetIdRoleManagement),
+	}
+
+	return { section, presets }
 }

@@ -26,25 +26,26 @@ import { ActionIdZoomISOOutputSettings } from '../actions/action-zoomiso-output-
 import { ActionIdZoomISOActions } from '../actions/action-zoomiso-actions.js'
 import { ActionIdUsers } from '../actions/action-user.js'
 import { ActionIdCustom } from '../actions/action-custom.js'
-import {
+import type {
 	oldActionToNewAction,
 	oldFeedbackToNewFeedback,
 	oldFeedbackTypeToNewFeedbackType,
 } from './upgradeInterfaces.js'
-import {
+import type {
 	CompanionUpgradeContext,
 	CompanionStaticUpgradeProps,
 	CompanionStaticUpgradeResult,
 	CompanionMigrationAction,
 	CompanionMigrationFeedback,
 } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
+import type { ZoomConfig } from '../config.js'
+import { getLiteralOption, setLiteralOption } from './option-helpers.js'
 
 export function UpgradeV2toV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	_props: CompanionStaticUpgradeProps<ZoomConfig>,
-): CompanionStaticUpgradeResult<ZoomConfig> {
-	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
+	_props: CompanionStaticUpgradeProps<ZoomConfig, undefined>,
+): CompanionStaticUpgradeResult<ZoomConfig, undefined> {
+	const result: CompanionStaticUpgradeResult<ZoomConfig, undefined> = {
 		updatedActions: [],
 		updatedConfig: null,
 		updatedFeedbacks: [],
@@ -53,30 +54,34 @@ export function UpgradeV2toV3(
 	return result
 }
 
+// Historical v1 script, retyped for v2: it still runs for users upgrading from old versions, and Companion
+// now hands it wrapped { isExpression, value } options, read and written through the helpers.
 export function UpgradeV2ToV3(
 	_context: CompanionUpgradeContext<ZoomConfig>,
-	props: CompanionStaticUpgradeProps<ZoomConfig>,
-): CompanionStaticUpgradeResult<ZoomConfig> {
+	props: CompanionStaticUpgradeProps<ZoomConfig, undefined>,
+): CompanionStaticUpgradeResult<ZoomConfig, undefined> {
 	// let config: ZoomConfig = props.config;
 	const actions: CompanionMigrationAction[] = props.actions
 	const feedbacks: CompanionMigrationFeedback[] = props.feedbacks
 
-	const result: CompanionStaticUpgradeResult<ZoomConfig> = {
+	const result: CompanionStaticUpgradeResult<ZoomConfig, undefined> = {
 		updatedActions: [],
 		updatedConfig: null,
 		updatedFeedbacks: [],
 	}
 
 	for (const action of actions) {
+		// v1: action.options.actionID as string
+		const oldActionID = getLiteralOption(action.options, 'actionID')
 		if (
 			(action.actionId === 'UserActions' ||
 				action.actionId === 'GlobalActions' ||
 				action.actionId === 'SpecialActions' ||
 				action.actionId === 'ISOActions') &&
-			action.options.actionID !== undefined &&
-			Object.prototype.hasOwnProperty.call(oldActionToNewActions, action.options.actionID as string)
+			typeof oldActionID === 'string' &&
+			Object.prototype.hasOwnProperty.call(oldActionToNewActions, oldActionID)
 		) {
-			const oldActionToNewAction = oldActionToNewActions[action.options.actionID as string]
+			const oldActionToNewAction = oldActionToNewActions[oldActionID]
 			action.actionId = oldActionToNewAction.newActionId
 			result.updatedActions.push(action)
 		} else if (Object.prototype.hasOwnProperty.call(oldActionToNewActions, action.actionId)) {
@@ -84,10 +89,13 @@ export function UpgradeV2ToV3(
 			action.actionId = oldActionToNewAction.newActionId
 
 			if (typeof oldActionToNewAction.isGroupBased !== 'undefined' && action.options.group !== undefined) {
-				action.options.group = (action.options.group as number) + 1
+				// v1: action.options.group = (action.options.group as number) + 1
+				const group = getLiteralOption(action.options, 'group')
+				if (typeof group === 'number') setLiteralOption(action.options, 'group', group + 1)
 
-				if (action.options.groupOption !== undefined && action.options.groupOption === 'set') {
-					action.options.groupOption = 'replace'
+				// v1: if (action.options.groupOption === 'set') action.options.groupOption = 'replace'
+				if (getLiteralOption(action.options, 'groupOption') === 'set') {
+					setLiteralOption(action.options, 'groupOption', 'replace')
 				}
 			}
 			result.updatedActions.push(action)
@@ -95,20 +103,25 @@ export function UpgradeV2ToV3(
 	}
 
 	for (const feedback of feedbacks) {
+		// v1: feedback.options.type as string
+		const oldType = getLiteralOption(feedback.options, 'type')
 		if (Object.prototype.hasOwnProperty.call(oldFeedbackToNewFeedbacks, feedback.feedbackId)) {
 			const oldFeedbackToNewFeedback = oldFeedbackToNewFeedbacks[feedback.feedbackId]
 			feedback.feedbackId = oldFeedbackToNewFeedback.newFeedbackId
 
 			if (typeof oldFeedbackToNewFeedback.isGroupBased !== 'undefined' && feedback.options.group !== undefined) {
-				feedback.options.group = (feedback.options.group as number) + 1
+				// v1: feedback.options.group = (feedback.options.group as number) + 1
+				const group = getLiteralOption(feedback.options, 'group')
+				if (typeof group === 'number') setLiteralOption(feedback.options, 'group', group + 1)
 			}
 
 			result.updatedFeedbacks.push(feedback)
 		} else if (
-			Object.prototype.hasOwnProperty.call(oldFeedbackTypeToNewFeedbackTypes, feedback.options.type as string)
+			typeof oldType === 'string' &&
+			Object.prototype.hasOwnProperty.call(oldFeedbackTypeToNewFeedbackTypes, oldType)
 		) {
-			const oldFeedbackTypeToNewFeedbackType = oldFeedbackTypeToNewFeedbackTypes[feedback.options.type as string]
-			feedback.options.type = oldFeedbackTypeToNewFeedbackType.newFeedbackId
+			const oldFeedbackTypeToNewFeedbackType = oldFeedbackTypeToNewFeedbackTypes[oldType]
+			setLiteralOption(feedback.options, 'type', oldFeedbackTypeToNewFeedbackType.newFeedbackId)
 			result.updatedFeedbacks.push(feedback)
 		}
 	}

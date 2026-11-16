@@ -1,6 +1,5 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { createCommand, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdZoomISOEngine {
@@ -11,10 +10,18 @@ export enum ActionIdZoomISOEngine {
 	togglePollEngineState = 'toggle_poll_engine_state',
 }
 
-export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdZoomISOEngine]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdZoomISOEngine]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaZoomISOEngine = {
+	[ActionIdZoomISOEngine.startISOEngine]: { options: Record<string, never> }
+	[ActionIdZoomISOEngine.stopISOEngine]: { options: Record<string, never> }
+	[ActionIdZoomISOEngine.standbyISOEngine]: { options: Record<string, never> }
+	[ActionIdZoomISOEngine.requestCapturePermission]: { options: Record<string, never> }
+	[ActionIdZoomISOEngine.togglePollEngineState]: { options: Record<string, never> }
+}
+
+export function GetActionsZoomISOEngine(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaZoomISOEngine> {
+	const actions: CompanionActionDefinitions<ActionsSchemaZoomISOEngine> = {
 		[ActionIdZoomISOEngine.startISOEngine]: {
 			name: 'Start ISO Engine',
 			options: [],
@@ -50,7 +57,7 @@ export function GetActionsZoomISOEngine(instance: InstanceBaseExt<ZoomConfig>): 
 			},
 		},
 		[ActionIdZoomISOEngine.standbyISOEngine]: {
-			name: 'Standby ISO Engine',
+			name: 'Standby ISO Engine (Deprecated)',
 			options: [],
 			callback: (): void => {
 				// type: 'ISO'

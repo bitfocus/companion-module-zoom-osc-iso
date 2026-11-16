@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsUserBreakoutRooms, ActionIdUserBreakoutRooms } from '../../src/actions/action-user-breakout-rooms.js'
 
@@ -15,7 +15,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -41,7 +41,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -67,7 +67,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -97,7 +97,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -122,7 +122,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -150,7 +150,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -176,7 +176,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -202,7 +202,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -232,7 +232,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -257,7 +257,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -285,7 +285,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -310,7 +310,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 
@@ -335,7 +335,7 @@ describe('GetActionsUserBreakoutRooms', () => {
 			})
 
 			afterEach(() => {
-				const sendCommand = instance.OSC.sendCommand as jest.Mock
+				const sendCommand = instance.OSC.sendCommand as Mock
 				sendCommand.mockClear()
 			})
 

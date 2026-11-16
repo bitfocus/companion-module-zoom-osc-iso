@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { socialStreamApi } from '../socialstream.js'
 
 export enum ActionIdSocialStream {
@@ -10,18 +10,23 @@ export enum ActionIdSocialStream {
 	toggleSocialStream = 'toggleSocialStream',
 }
 
-export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdSocialStream]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdSocialStream]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaSocialStream = {
+	[ActionIdSocialStream.sendAChatToSocialStream]: { options: { name: string; message: string } }
+	[ActionIdSocialStream.turnOnSocialStream]: { options: Record<string, never> }
+	[ActionIdSocialStream.turnOffSocialStream]: { options: Record<string, never> }
+	[ActionIdSocialStream.toggleSocialStream]: { options: Record<string, never> }
+}
+
+export function GetActionsSocalSteam(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaSocialStream> {
+	const actions: CompanionActionDefinitions<ActionsSchemaSocialStream> = {
 		[ActionIdSocialStream.sendAChatToSocialStream]: {
 			name: 'Send A Chat To Social Stream',
-			options: [options.name, options.message],
+			options: [options.name, options.messageWithVariables],
 			callback: async (action): Promise<void> => {
 				const socialStreamEnabled = instance.config.enableSocialStream
 				if (socialStreamEnabled) {
-					const message = await instance.parseVariablesInString(action.options.message as string)
-					const name = await instance.parseVariablesInString(action.options.name as string)
+					const message = action.options.message
+					const name = action.options.name
 					await socialStreamApi.postMessage(name, message, instance)
 				} else {
 					instance.log('warn', 'Social Stream is not enabled in config')
@@ -31,7 +36,7 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdSocialStream.turnOnSocialStream]: {
 			name: 'Turn On Social Stream',
 			options: [],
-			callback: async (): Promise<void> => {
+			callback: (): void => {
 				const socialStreamEnabled = instance.config.enableSocialStream
 				if (socialStreamEnabled == false) {
 					instance.config.enableSocialStream = true
@@ -42,7 +47,7 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdSocialStream.turnOffSocialStream]: {
 			name: 'Turn Off Social Stream',
 			options: [],
-			callback: async (): Promise<void> => {
+			callback: (): void => {
 				const socialStreamEnabled = instance.config.enableSocialStream
 				if (socialStreamEnabled == true) {
 					instance.config.enableSocialStream = false
@@ -53,7 +58,7 @@ export function GetActionsSocalSteam(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdSocialStream.toggleSocialStream]: {
 			name: 'Toggle Social Stream On/Off',
 			options: [],
-			callback: async (): Promise<void> => {
+			callback: (): void => {
 				const socialStreamEnabled = instance.config.enableSocialStream
 				if (socialStreamEnabled == true) {
 					instance.config.enableSocialStream = false

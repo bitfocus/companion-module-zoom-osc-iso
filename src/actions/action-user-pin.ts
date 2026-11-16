@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserPin {
@@ -14,16 +14,25 @@ export enum ActionIdUserPin {
 	clearPins = 'clearPin',
 }
 
-export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserPin]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserPin]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserPin = {
+	[ActionIdUserPin.pin]: { options: { userName: string } }
+	[ActionIdUserPin.addPin]: { options: { userName: string } }
+	[ActionIdUserPin.unpin]: { options: { userName: string } }
+	[ActionIdUserPin.pin2]: { options: { userName: string } }
+	[ActionIdUserPin.unPin2]: { options: { userName: string } }
+	[ActionIdUserPin.togglePin]: { options: { userName: string } }
+	[ActionIdUserPin.togglePin2]: { options: { userName: string } }
+	[ActionIdUserPin.clearPins]: { options: Record<string, never> }
+}
+
+export function GetActionsUserPin(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaUserPin> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserPin> = {
 		[ActionIdUserPin.pin]: {
 			name: 'Pin',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/pin', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -40,9 +49,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.addPin]: {
 			name: 'Add Pin (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/addPin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -59,9 +68,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.unpin]: {
 			name: 'Unpin',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/unPin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -78,9 +87,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.pin2]: {
 			name: 'Pin Screen2',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/pin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -97,9 +106,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.unPin2]: {
 			name: 'Unpin Screen2',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/unPin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -116,9 +125,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.togglePin]: {
 			name: 'Toggle Pin (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/togglePin', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -135,9 +144,9 @@ export function GetActionsUserPin(instance: InstanceBaseExt<ZoomConfig>): {
 		[ActionIdUserPin.togglePin2]: {
 			name: 'Toggle PinScreen2 (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/togglePin2', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {

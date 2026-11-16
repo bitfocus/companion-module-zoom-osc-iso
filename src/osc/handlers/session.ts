@@ -9,8 +9,15 @@ import {
 } from '../../variables/variable-values.js'
 import { FeedbackId } from '../../feedback.js'
 import { sendZoomSubscriptions } from '../commands.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import { checkGroupFeedbacks } from '../feedbacks.js'
+import { MeetingStatus, type OSCHandlerContext, type ZoomOSCResponse } from '../types.js'
 import { setVariables } from '../variables.js'
+
+/**
+ * Meeting statuses that mean ZoomOSC/ISO has joined the meeting. A join usually sends Connecting, Audio Ready, then
+ * In Meeting, but sometimes stops at Audio Ready.
+ */
+const JOINED_MEETING_STATUSES = new Set<number>([MeetingStatus.InMeeting, MeetingStatus.AudioReady])
 
 export function handleSessionMessage(context: OSCHandlerContext, data: ZoomOSCResponse, zoomPart2: string): void {
 	switch (zoomPart2) {
@@ -60,7 +67,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 				context.createZoomIsoPullerTimer()
 			}
 
-			if (context.instance.config.version !== (ZoomVersion.ZoomISO as number)) {
+			if (context.instance.config.version !== ZoomVersion.ZoomISO) {
 				context.instance.config.version = ZoomVersion.ZoomISO
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -69,7 +76,7 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 			if (context.hasZoomIsoPuller()) {
 				context.destroyZoomIsoPullerTimer()
 			}
-			if (context.instance.config.version !== (ZoomVersion.ZoomOSC as number)) {
+			if (context.instance.config.version !== ZoomVersion.ZoomOSC) {
 				context.instance.config.version = ZoomVersion.ZoomOSC
 				context.instance.saveConfig(context.instance.config)
 			}
@@ -79,8 +86,14 @@ function handlePong(context: OSCHandlerContext, data: ZoomOSCResponse): void {
 			break
 	}
 
+	const firstPong = context.isFirstPong()
 	context.configureConnectedPingWatchdog(data.args[4].value)
 	sendZoomSubscriptions((path, args) => context.sendCommand(path, args))
+	// ZoomOSC/ISO sends everyone in the meeting when it joins, and not again when asked to subscribe. A connection that
+	// starts while it's already in a meeting (Companion starting, the module restarting, a config change) has to ask.
+	if (firstPong && data.args[4].value === 1) {
+		context.sendCommand('/zoom/list', [])
+	}
 	context.setUpdateLoop(true)
 }
 
@@ -88,10 +101,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 	context.instance.log('info', `meetingStatus receiving: ${JSON.stringify(data.args[0].value)}`)
 	context.instance.ZoomClientDataObj.callStatus = data.args[0].value
 
-	// Meeting status ended
-	// 0 = Meeting Status Idle
-	// 7 = Meeting Status Ended
-	if (data.args[0].value === 0 || data.args[0].value === 7) {
+	if (data.args[0].value === MeetingStatus.Idle || data.args[0].value === MeetingStatus.Ended) {
 		context.destroyTimers()
 		context.instance.ZoomClientDataObj = {
 			last_response: context.instance.ZoomClientDataObj.last_response,
@@ -113,6 +123,7 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			isPro: context.instance.ZoomClientDataObj.isPro,
 		}
 		context.instance.ZoomVariableLink.length = 0
+		context.instance.ZoomParticipantPage.start = 0
 
 		context.instance.ZoomGroupData = Array.from(
 			{ length: context.instance.ZoomClientDataObj.numberOfGroups + 2 },
@@ -127,12 +138,11 @@ function handleMeetingStatus(context: OSCHandlerContext, data: ZoomOSCResponse):
 			updateCallStatusVariables(context.instance, variables)
 			updateAllUserBasedVariables(context.instance, variables)
 		})
-		context.instance.checkFeedbacks()
+		context.instance.checkAllFeedbacks()
 		return
 	}
 
-	// 3 = In Meeting
-	if (context.instance.ZoomClientDataObj.callStatus === 3) {
+	if (JOINED_MEETING_STATUSES.has(Number(data.args[0].value))) {
 		context.setNeedToPingPong(true)
 		context.createPingTimer()
 		context.createUpdatePresetsTimer()
@@ -147,8 +157,14 @@ function handleListCleared(context: OSCHandlerContext): void {
 	PreviousSelectedCallersSave(context.instance)
 	context.instance.ZoomClientDataObj.selectedCallers.length = 0
 	context.instance.ZoomVariableLink.length = 0
+	context.instance.ZoomParticipantPage.start = 0
 	context.instance.ZoomUserData = {}
+	// Hosts and Spotlights are rebuilt from the participant list and the spot order when they come again. The custom
+	// groups are left as they are: they're built by hand, and the end of a meeting already clears them.
+	context.instance.ZoomGroupData[0]?.users.splice(0)
+	context.instance.ZoomGroupData[1]?.users.splice(0)
 
 	setVariables(context.instance, (variables) => updateAllUserBasedVariables(context.instance, variables))
+	checkGroupFeedbacks(context.instance)
 	PreviousSelectedCallersRestore(context.instance)
 }

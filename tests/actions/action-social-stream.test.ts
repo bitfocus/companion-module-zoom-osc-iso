@@ -1,19 +1,12 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type Mock, type MockInstance } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsSocalSteam, ActionIdSocialStream } from '../../src/actions/action-social-stream.js'
 import { socialStreamApi } from '../../src/socialstream.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
-
-// Mock got-cjs to prevent real HTTP calls from socialstream internals
-jest.mock('got-cjs', () => ({
-	default: { post: jest.fn().mockResolvedValue({ body: 'ok' } as never) },
-}))
 
 describe('GetActionsSocalSteam', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsSocalSteam>
-	let postMessageSpy: ReturnType<typeof jest.spyOn>
+	let postMessageSpy: MockInstance<typeof socialStreamApi.postMessage>
 
 	beforeAll(() => {
 		instance = createMockInstance()
@@ -21,17 +14,23 @@ describe('GetActionsSocalSteam', () => {
 	})
 
 	beforeEach(() => {
+		// Safety net: no real HTTP calls if postMessage is ever reached unmocked
+		vi.stubGlobal(
+			'fetch',
+			vi.fn(async () => new Response('ok')),
+		)
 		const anyInstance = instance as any
-		anyInstance.saveConfig = jest.fn()
-		postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
-		jest.clearAllMocks()
+		anyInstance.saveConfig = vi.fn()
+		postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		vi.clearAllMocks()
 		// Re-spy after clearAllMocks since clearAllMocks resets mock state
-		postMessageSpy = jest.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
+		postMessageSpy = vi.spyOn(socialStreamApi, 'postMessage').mockResolvedValue(undefined as never)
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
+		vi.unstubAllGlobals()
 	})
 
 	// ── sendAChatToSocialStream ───────────────────────────────────────────────
@@ -56,13 +55,18 @@ describe('GetActionsSocalSteam', () => {
 			expect(instance.log).toHaveBeenCalledWith('warn', 'Social Stream is not enabled in config')
 		})
 
-		it('resolves variables in name and message before posting', async () => {
+		// v2: Companion parses variables before the callback runs, for fields with useVariables
+		it('lets Companion resolve variables in name and message', () => {
+			const definition = actions[ActionIdSocialStream.sendAChatToSocialStream] as any
+			const fields = definition.options.filter((o: any) => o.id === 'name' || o.id === 'message')
+			expect(fields).toHaveLength(2)
+			for (const field of fields) expect(field).toMatchObject({ type: 'textinput', useVariables: true })
+		})
+
+		it('posts the already-resolved name and message', async () => {
 			instance.config.enableSocialStream = true
-			// action resolves message first, then name
-			const parseVars = instance.parseVariablesInString as jest.Mock
-			parseVars.mockResolvedValueOnce('Resolved Message' as never).mockResolvedValueOnce('Resolved Name' as never)
 			await (actions[ActionIdSocialStream.sendAChatToSocialStream] as any).callback(
-				{ options: { name: '$(var:name)', message: '$(var:msg)' } } as any,
+				{ options: { name: 'Resolved Name', message: 'Resolved Message' } } as any,
 				{} as any,
 			)
 			expect(postMessageSpy).toHaveBeenCalledWith('Resolved Name', 'Resolved Message', instance)

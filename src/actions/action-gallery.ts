@@ -1,6 +1,6 @@
-import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt } from '../utils.js'
+import type { VariableValues } from '../variables/variable-definitions.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
 import { FeedbackId } from '../feedback.js'
 import { PreviousSelectedCallersSave, positionOrderOption, selectUser } from './action-utils.js'
 import { updateSelectedCallersVariables } from '../variables/variable-values.js'
@@ -9,10 +9,12 @@ export enum ActionIdGallery {
 	selectFromGalleryPosition = 'select_From_Gallery_Position',
 }
 
-export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdGallery]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdGallery]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaGallery = {
+	[ActionIdGallery.selectFromGalleryPosition]: { options: { position: string; option: string } }
+}
+
+export function GetActionsGallery(instance: ModuleInstance): CompanionActionDefinitions<ActionsSchemaGallery> {
+	const actions: CompanionActionDefinitions<ActionsSchemaGallery> = {
 		[ActionIdGallery.selectFromGalleryPosition]: {
 			name: 'Preselect user by Gallery Position',
 			options: [
@@ -30,12 +32,14 @@ export function GetActionsGallery(instance: InstanceBaseExt<ZoomConfig>): {
 				},
 			],
 			callback: (action) => {
-				PreviousSelectedCallersSave(instance)
-				const zoomId = instance.ZoomClientDataObj.galleryOrder[(action.options.position as number) - 1]
+				const zoomId = instance.ZoomClientDataObj.galleryOrder[Number(action.options.position) - 1]
+				// nobody in that gallery position
+				if (zoomId === undefined) return
 
-				selectUser(instance, zoomId, action.options.option as string)
+				PreviousSelectedCallersSave(instance)
+				selectUser(instance, zoomId, action.options.option)
 				// instance.UpdateVariablesValues()
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(

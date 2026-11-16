@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsZoomISORouting, ActionIdZoomISORouting } from '../../src/actions/action-zoomiso-routing.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISORouting', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISORouting>
 
 	beforeEach(() => {
@@ -14,7 +12,7 @@ describe('GetActionsZoomISORouting', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -119,6 +117,62 @@ describe('GetActionsZoomISORouting', () => {
 			expect(instance.OSC.sendCommand).toHaveBeenCalledWith('/zoom/zoomID/outputISO', [
 				{ type: 'i', value: -2 },
 				{ type: 'i', value: 1 },
+			])
+		})
+	})
+
+	// known issue 7: ZoomISO 3+ no longer clears an output with -2, Zoom ID 1 does
+	describe('setting an output to none, by the version the pong reports', () => {
+		const setToNone = async (version: string, selectedCallers: number[] = []) => {
+			const instance = createMockInstance({ selectedCallers })
+			instance.ZoomClientDataObj.zoomOSCVersion = version
+			const actions = GetActionsZoomISORouting(instance)
+			await (actions[ActionIdZoomISORouting.outputISO] as any).callback(
+				{ options: { userName: '', output: 3, setToNoneIfNotUserSelected: true } } as any,
+				{} as any,
+			)
+			await (actions[ActionIdZoomISORouting.outputISOSetToNone] as any).callback(
+				{ options: { output: 4 } } as any,
+				{} as any,
+			)
+			return (instance.OSC.sendCommand as Mock).mock.calls
+		}
+
+		it.each(['ZISO_3.0.7_MAC'])('sends Zoom ID 1 on %s', async (version) => {
+			expect(await setToNone(version)).toEqual([
+				[
+					'/zoom/zoomID/outputISO',
+					[
+						{ type: 'i', value: 1 },
+						{ type: 'i', value: 3 },
+					],
+				],
+				[
+					'/zoom/zoomID/outputISO',
+					[
+						{ type: 'i', value: 1 },
+						{ type: 'i', value: 4 },
+					],
+				],
+			])
+		})
+
+		it.each(['ZISO_2.4.1_pro_MAC', 'ZOSC_5.0.1_MAC', 'ZOSC_4.6.1_MAC', 'Not Connected'])(
+			'still sends -2 on %s',
+			async (version) => {
+				const calls = await setToNone(version)
+				expect(calls.map(([, args]) => args[0].value)).toEqual([-2, -2])
+			},
+		)
+
+		it('routes a selected participant as before, whatever the version', async () => {
+			const calls = await setToNone('ZISO_3.0.7_MAC', [1001])
+			expect(calls[0]).toEqual([
+				'/zoom/zoomID/outputISO',
+				[
+					{ type: 'i', value: 1001 },
+					{ type: 'i', value: 3 },
+				],
 			])
 		})
 	})

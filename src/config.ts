@@ -1,12 +1,15 @@
-import { Regex, SomeCompanionConfigField } from '@companion-module/base'
+import type { selectionMethod } from './actions/action-utils.js'
+import type { ZoomVersion } from './utils.js'
+import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
+import { DEFAULT_FORWARD_HOST, DEFAULT_FORWARD_PORT } from './osc/forwarder.js'
 
-export interface ZoomConfig {
+export type ZoomConfig = {
 	label: string
 	host: string
 	tx_port: number
 	rx_port: number
-	version: number
-	selectionMethod: number
+	version: ZoomVersion
+	selectionMethod: selectionMethod
 	numberOfGroups: number
 	pulling: number
 	pollEngineState: boolean
@@ -21,6 +24,9 @@ export interface ZoomConfig {
 	socialStreamId: string
 	socialStreamQuestionPrefix: string
 	socialStreamChatTypeToSend: number[]
+	enableOscForwarding: boolean
+	oscForwardHost: string
+	oscForwardPort: number
 }
 
 export const GetConfigFields = (): SomeCompanionConfigField[] => {
@@ -142,8 +148,9 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 		{
 			type: 'dropdown',
 			id: 'feedbackImagesWithIcons',
-			label: 'Participant Multi-State Feedback',
-			tooltip: 'If enabled, adds icons to bottom of button for camera, mic, and hand raised state',
+			label: 'Participant Multi-State Feedback (Deprecated)',
+			tooltip:
+				"Only for the deprecated multi-state feedbacks on existing buttons: adds icons to the bottom of the button for camera, mic, and hand raised state. Companion's graphics layers replace them: the participant, gallery, host, spotlight and group presets have been updated, so update your buttons to use them.",
 			choices: [
 				{ id: 0, label: 'Bottom (On and Off For Mic/Camera, Only on for Hand Raise) - Recommended' },
 				{ id: 2, label: 'Bottom (Only Active States)' },
@@ -181,7 +188,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Session Id for Social Stream',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
 		},
 		{
 			type: 'textinput',
@@ -189,7 +196,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			label: 'Prefix for Zoom Q&A Questions',
 			width: 5,
 			default: '',
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
 		},
 		{
 			type: 'static-text',
@@ -213,14 +220,48 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			],
 			minChoicesForSearch: 0,
 			width: 10,
-			isVisible: (options) => options['enableSocialStream'] === true,
+			isVisibleExpression: '$(options:enableSocialStream)',
+		},
+		{
+			type: 'static-text',
+			width: 12,
+			value:
+				'<hr />ZoomOSC/ZoomISO can only send its messages to one place. To let another application see them too, enable forwarding below: every OSC message received from ZoomOSC/ZoomISO is sent, unchanged, to that IP and port. The other application sends its own commands straight to ZoomOSC/ZoomISO. Forwarding can also be turned on and off, and pointed somewhere else, with actions.',
+			id: 'oscForwardingNote',
+			label: 'OSC Forwarding',
+		},
+		{
+			type: 'checkbox',
+			id: 'enableOscForwarding',
+			width: 2,
+			default: false,
+			label: 'Enable',
+		},
+		{
+			type: 'textinput',
+			id: 'oscForwardHost',
+			label: 'Forward to IP',
+			width: 5,
+			default: DEFAULT_FORWARD_HOST,
+			regex: Regex.IP,
+			isVisibleExpression: '$(options:enableOscForwarding)',
+		},
+		{
+			type: 'number',
+			id: 'oscForwardPort',
+			label: 'Forward to port',
+			width: 5,
+			default: DEFAULT_FORWARD_PORT,
+			min: 1,
+			max: 65535,
+			isVisibleExpression: '$(options:enableOscForwarding)',
 		},
 		{
 			type: 'static-text',
 			width: 12,
 			value:
 				'<hr />Advanced - Optional Performance Tweaks<br /><b>IMPORTANT NOTE: The section below is for power users that would like to tweak the module performance. </b><br /><br />Depending on your usage of ZoomOSC and ZoomISO, there may be things going on behind the scenes that you may not be using and can disable to try to get even better performance from this module.',
-			id: 'socialStreamNote',
+			id: 'performanceTweaksNote', // static text: was a duplicate 'socialStreamNote' id
 			label: '',
 		},
 		{
@@ -243,7 +284,7 @@ export const GetConfigFields = (): SomeCompanionConfigField[] => {
 			width: 12,
 			value:
 				'<hr /><b>Enable Variable For Participants (e.g. Participant001 to Participant999)</b><p>Enable Variable For Participants.  This impacts the participant presets, participant buttons, and participant variables. For many shows, these buttons are not used as it is the list of all participants in the order that they joined and for large meetings, it is typically quicker to find a person using the Zoom participant list and manually taking action on them.</p><p><b>Note:</b> Set to true keep the behavior of previous versions.</p>',
-			id: 'actionPresetAndFeedbackSyncNote',
+			id: 'enableVariablesForParticipantsNote', // static text: was a duplicate 'actionPresetAndFeedbackSyncNote' id
 			label: '',
 		},
 		{

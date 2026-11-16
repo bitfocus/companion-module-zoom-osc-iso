@@ -1,6 +1,8 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserRolesAndAction } from '../actions/action-user-roles-action.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdGlobalRecording } from '../actions/action-global-recording.js'
 
 export enum PresetIdRecording {
@@ -16,20 +18,23 @@ export enum PresetIdRecording {
 	disallowToLocalRecord = 'Disallow_to_Local_Record',
 }
 
-export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdRecording]: CompanionPresetExt | undefined } = {
+export function GetPresetsRecording(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdRecording]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Recording Actions
 		 */
 		[PresetIdRecording.startLocalRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Start_Local_Recording`,
 			style: {
-				text: `Start Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.startLocalRecording,
 			},
 			steps: [
 				{
@@ -46,14 +51,14 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.pauseLocalRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Pause_Local_Recording`,
 			style: {
-				text: `Pause Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pauseLocalRecording,
 			},
 			steps: [
 				{
@@ -70,8 +75,7 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.resumeLocalRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Resume_Local_Recording`,
 			style: {
 				text: `Resume Local Recording`,
@@ -94,14 +98,14 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.stopLocalRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Stop_Local_Recording`,
 			style: {
-				text: `Stop Local Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.stopLocalRecording,
 			},
 			steps: [
 				{
@@ -118,14 +122,14 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.startCloudRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Start_Cloud_Recording`,
 			style: {
-				text: `Start Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.startCloudRecording,
 			},
 			steps: [
 				{
@@ -142,14 +146,14 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.pauseCloudRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Pause_Cloud_Recording`,
 			style: {
-				text: `Pause Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pauseCloudRecording,
 			},
 			steps: [
 				{
@@ -166,8 +170,7 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.resumeCloudRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Resume_Cloud_Recording`,
 			style: {
 				text: `Resume Cloud Recording`,
@@ -190,14 +193,14 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.stopCloudRecording]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Stop_Cloud_Recording`,
 			style: {
-				text: `Stop Cloud Recording`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.stopCloudRecording,
 			},
 			steps: [
 				{
@@ -214,21 +217,21 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.allowToLocalRecord]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Allow_to_Local_Record`,
 			style: {
-				text: `Allow to Local Record`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.allowToRecord,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.allowToRecord,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -238,21 +241,21 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 
 		[PresetIdRecording.disallowToLocalRecord]: {
-			type: 'button',
-			category: 'Recording Actions',
+			type: 'simple',
 			name: `Disallow_to_Local_Record`,
 			style: {
-				text: `Disallow to Local Record`,
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.disallowToRecord,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserRolesAndAction.disallowToRecord,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -262,5 +265,11 @@ export function GetPresetsRecording(): { [id in PresetIdRecording]: CompanionPre
 		},
 	}
 
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'recording',
+		name: 'Recording Actions',
+		definitions: Object.values(PresetIdRecording),
+	}
+
+	return { section, presets }
 }

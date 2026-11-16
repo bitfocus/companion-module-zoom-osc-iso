@@ -1,10 +1,11 @@
-import { InstanceBase, runEntrypoint, SomeCompanionConfigField } from '@companion-module/base'
-import { GetConfigFields, ZoomConfig } from './config.js'
-import { GetActions } from './actions.js'
-import { GetFeedbacks } from './feedback.js'
-import { GetPresetList } from './presets.js'
+import { InstanceBase, type SomeCompanionConfigField } from '@companion-module/base'
+import { GetConfigFields, type ZoomConfig } from './config.js'
+import { UpdateActions, type ActionsSchema } from './actions.js'
+import { UpdateFeedbacks, type FeedbacksSchema } from './feedback.js'
+import { UpdatePresets } from './presets.js'
 import { OSC } from './osc.js'
-import {
+import { onlyForwardingSettingsChanged } from './osc/forwarder.js'
+import type {
 	ZoomAudioLevelDataInterface,
 	ZoomAudioRoutingDataInterface,
 	ZoomClientDataObjInterface,
@@ -13,21 +14,28 @@ import {
 	ZoomUserDataInterface,
 	ZoomUserOfflineInterface,
 	ZoomVariableLinkInterface,
+	ZoomParticipantPageInterface,
 	ZoomMeDataInterface,
 } from './utils.js'
 
 import { updateVariableValues } from './variables/variable-values.js'
-import { initVariableDefinitions } from './variables/variable-definitions.js'
-import { addNewConfigFieldsForSocialStreamAndPerformanceTweaks } from './upgrades/addNewConfigFieldsForSocialStreamAndPerformanceTweaks.js'
-import { UpgradeV2ToV3 } from './upgrades/v2CommandsToUpgradeTov3.js'
-import { fixWrongPinCommands } from './upgrades/fixWrongPinCommands.js'
-import { addNewConfigFieldsForSocialStreamChatMessagesToSend } from './upgrades/addNewConfigFieldsForSocialStreamChatMessagesToSend.js'
-import { addPollingConfigOptions } from './upgrades/addPollingConfigOptions.js'
+import { initVariableDefinitions, type VariablesSchema } from './variables/variable-definitions.js'
+import { UpgradeScripts } from './upgrades.js'
+
+export type ModuleSchema = {
+	config: ZoomConfig
+	secrets: undefined
+	actions: ActionsSchema
+	feedbacks: FeedbacksSchema
+	variables: VariablesSchema
+}
+
+export { UpgradeScripts }
 
 /**
  * @description Companion instance class for Zoom
  */
-class ZoomInstance extends InstanceBase<ZoomConfig> {
+export default class ZoomInstance extends InstanceBase<ModuleSchema> {
 	public config: ZoomConfig = {
 		label: '',
 		host: '',
@@ -49,6 +57,9 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		socialStreamId: '',
 		socialStreamQuestionPrefix: '',
 		socialStreamChatTypeToSend: [],
+		enableOscForwarding: false,
+		oscForwardHost: '',
+		oscForwardPort: 0,
 	}
 
 	// Global call settings
@@ -91,6 +102,8 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 
 	public ZoomVariableLink: ZoomVariableLinkInterface[] = []
 
+	public ZoomParticipantPage: ZoomParticipantPageInterface = { start: 0, size: 30 }
+
 	public OSC: OSC | null = null
 
 	/**
@@ -107,6 +120,15 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	 * @param config
 	 */
 	public async configUpdated(config: ZoomConfig): Promise<void> {
+		// only the OSC forwarding settings changed: apply them to the forwarder alone, without reconnecting to
+		// ZoomOSC/ISO or resetting the groups, so changing them mid-event disrupts nothing
+		if (this.OSC && onlyForwardingSettingsChanged(this.config, config)) {
+			this.config = config
+			this.saveConfig(config)
+			this.log('info', 'changing OSC forwarding settings')
+			this.OSC.updateForwarding()
+			return
+		}
 		this.config = config
 		this.saveConfig(config)
 		this.log('info', 'changing config!')
@@ -146,16 +168,20 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 	/**
 	 * @description close connections and stop timers/intervals
 	 */
-	async destroy() {
+	async destroy(): Promise<void> {
+		// stop everything that can still touch the data (timers, incoming OSC) before clearing it
+		await this.OSC?.destroy()
+
 		this.ZoomUserData = {}
 		this.ZoomVariableLink = []
-		this.ZoomGroupData = []
+		this.ZoomParticipantPage.start = 0
+		// keep the groups themselves: feedback checks can still arrive while Companion stops the connection
+		this.ZoomGroupData.forEach((group) => (group.users = []))
 		this.ZoomUserOffline = []
 		this.ZoomMeData = { zoomId: 0, userName: '' }
 		this.ZoomAudioLevelData = []
 		this.ZoomAudioRoutingData = []
 		this.log('debug', `Instance destroyed: ${this.id}`)
-		await this.OSC?.destroy()
 	}
 
 	/**
@@ -166,23 +192,14 @@ class ZoomInstance extends InstanceBase<ZoomConfig> {
 		initVariableDefinitions(this)
 		updateVariableValues(this)
 
-		this.setActionDefinitions(GetActions(this))
-		this.setFeedbackDefinitions(GetFeedbacks(this))
-		this.setPresetDefinitions(GetPresetList(this))
+		UpdateActions(this)
+		UpdateFeedbacks(this)
+		UpdatePresets(this)
 	}
 
 	public updateDefinitionsForActionsFeedbacksAndPresets(): void {
-		this.setActionDefinitions(GetActions(this))
-		this.setFeedbackDefinitions(GetFeedbacks(this))
-		this.setPresetDefinitions(GetPresetList(this))
+		UpdateActions(this)
+		UpdateFeedbacks(this)
+		UpdatePresets(this)
 	}
 }
-
-runEntrypoint(ZoomInstance, [
-	UpgradeV2ToV3,
-	UpgradeV2ToV3,
-	addNewConfigFieldsForSocialStreamAndPerformanceTweaks,
-	fixWrongPinCommands,
-	addNewConfigFieldsForSocialStreamChatMessagesToSend,
-	addPollingConfigOptions,
-])

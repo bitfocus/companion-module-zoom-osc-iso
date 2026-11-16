@@ -1,11 +1,9 @@
-import { describe, it, expect, jest, beforeAll, beforeEach, afterEach } from '@jest/globals'
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsPerformanceTweaks, ActionIdPerformanceTweaks } from '../../src/actions/action-performance-tweaks.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsPerformanceTweaks', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsPerformanceTweaks>
 
 	beforeAll(() => {
@@ -15,11 +13,11 @@ describe('GetActionsPerformanceTweaks', () => {
 
 	beforeEach(() => {
 		const anyInstance = instance as any
-		anyInstance.saveConfig = jest.fn()
+		anyInstance.saveConfig = vi.fn()
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

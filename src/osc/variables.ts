@@ -1,12 +1,8 @@
-import { CompanionVariableValues } from '@companion-module/base'
-import type { InstanceBaseExt } from '../utils.js'
-import type { ZoomConfig } from '../config.js'
+import type { VariableValues } from '../variables/variable-definitions.js'
+import type ModuleInstance from '../index.js'
 
-export function setVariables(
-	instance: InstanceBaseExt<ZoomConfig>,
-	updater: (variables: CompanionVariableValues) => void,
-): void {
-	const variables: CompanionVariableValues = {}
+export function setVariables(instance: ModuleInstance, updater: (variables: VariableValues) => void): void {
+	const variables: VariableValues = {}
 	updater(variables)
 	instance.setVariableValues(variables)
 }

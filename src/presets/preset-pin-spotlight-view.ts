@@ -1,6 +1,8 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserSpotlight } from '../actions/action-user-spotlight.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
+import { presetImages } from '../images-presets.js'
 import { ActionIdUserPin } from '../actions/action-user-pin.js'
 import { ActionIdUserView } from '../actions/action-user-view.js'
 import { ActionIdUserSettings } from '../actions/action-user-settings.js'
@@ -29,28 +31,29 @@ export enum PresetIdPinSpotlightViewActions {
 }
 
 export function GetPresetsPinSpotlightViewActions(): {
-	[id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
 } {
-	const presets: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetExt | undefined } = {
+	const presets: { [id in PresetIdPinSpotlightViewActions]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Pin/Spotlight & View Actions
 		 */
 		[PresetIdPinSpotlightViewActions.pin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Pin',
 			style: {
-				text: 'Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pin,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.pin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -59,21 +62,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.addPin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'add_Pin',
 			style: {
-				text: 'Add Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinAdd,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.addPin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -82,21 +85,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unPin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'un_Pin',
 			style: {
-				text: 'Un Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unPin,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.unpin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -105,21 +108,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.togglePin]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Pin',
 			style: {
-				text: 'Toggle Pin',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinToggle,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.togglePin,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -128,21 +131,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.pinScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Pin_Screen_2',
 			style: {
-				text: 'Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pin2ndScreen,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.pin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -151,21 +154,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unPinScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'UnPin_Screen_2',
 			style: {
-				text: 'Un Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unPin2ndScreen,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.unPin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -174,21 +177,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.toggleScreen2]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Screen_2',
 			style: {
-				text: 'Toggle Pin Screen 2',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.pinToggle2ndScreen,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserPin.togglePin2,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -197,14 +200,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.clearPins]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Clear_Pins',
 			style: {
-				text: 'Clear Pins',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearPins,
 			},
 			steps: [
 				{
@@ -220,21 +223,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.spotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Spotlight',
 			style: {
-				text: 'Single Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.spotSingle,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.spotLight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -243,21 +246,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.addSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Add_Spotlight',
 			style: {
-				text: 'Add to Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.spotAdd,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.addSpotlight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -266,21 +269,21 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.unSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Un_Spotlight',
 			style: {
-				text: 'Un Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.unSpot,
 			},
 			steps: [
 				{
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.unSpotLight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -289,8 +292,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.toggleSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Toggle_Spotlight',
 			style: {
 				text: 'Toggle Spotlight',
@@ -303,7 +305,7 @@ export function GetPresetsPinSpotlightViewActions(): {
 					down: [
 						{
 							actionId: ActionIdUserSpotlight.toggleSpotlight,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -312,14 +314,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.clearSpotlight]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Clear_Spotlight',
 			style: {
-				text: 'Clear Spotlight',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.clearSpotlights,
 			},
 			steps: [
 				{
@@ -335,14 +337,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.setGalleryView]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Set_Gallery_View',
 			style: {
-				text: 'Set Gallery View',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryView,
 			},
 			steps: [
 				{
@@ -358,14 +360,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.setSpeakerView]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Set_Speaker_View',
 			style: {
-				text: 'Set Speaker View',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.speakerView,
 			},
 			steps: [
 				{
@@ -381,14 +383,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.nextGalleryPage]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Next_Gallery_Page',
 			style: {
-				text: 'Next Gallery Page',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryNext,
 			},
 			steps: [
 				{
@@ -404,14 +406,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.previousGalleryPage]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Previous_Gallery_Page',
 			style: {
-				text: 'Previous Gallery Page',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.galleryPrevious,
 			},
 			steps: [
 				{
@@ -427,14 +429,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.showNonVideoParticipants]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Show_Non_Video_Participants',
 			style: {
-				text: 'Show Non Video Participants',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.showNonVideo,
 			},
 			steps: [
 				{
@@ -450,14 +452,14 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 		[PresetIdPinSpotlightViewActions.hideNonVideoParticipants]: {
-			type: 'button',
-			category: 'Pin/Spotlight & View Actions',
+			type: 'simple',
 			name: 'Hide_Non_Video_Participants',
 			style: {
-				text: 'Hide Non Video Participants',
+				text: '',
 				size: '14',
 				color: colorBlack,
 				bgcolor: colorLightGray,
+				png64: presetImages.hideNonVideo,
 			},
 			steps: [
 				{
@@ -473,5 +475,11 @@ export function GetPresetsPinSpotlightViewActions(): {
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'pin_spotlight_view',
+		name: 'Pin/Spotlight & View Actions',
+		definitions: Object.values(PresetIdPinSpotlightViewActions),
+	}
+
+	return { section, presets }
 }

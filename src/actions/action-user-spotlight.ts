@@ -1,6 +1,6 @@
-import { CompanionActionDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, options } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions } from '@companion-module/base'
+import { options } from '../utils.js'
 import { createCommand, select, sendActionCommand } from './action-utils.js'
 
 export enum ActionIdUserSpotlight {
@@ -10,16 +10,23 @@ export enum ActionIdUserSpotlight {
 	toggleSpotlight = 'toggleSpotlight',
 }
 
-export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserSpotlight]: CompanionActionDefinition | undefined
-} {
-	const actions: { [id in ActionIdUserSpotlight]: CompanionActionDefinition | undefined } = {
+export type ActionsSchemaUserSpotlight = {
+	[ActionIdUserSpotlight.spotLight]: { options: { userName: string } }
+	[ActionIdUserSpotlight.addSpotlight]: { options: { userName: string } }
+	[ActionIdUserSpotlight.unSpotLight]: { options: { userName: string } }
+	[ActionIdUserSpotlight.toggleSpotlight]: { options: { userName: string } }
+}
+
+export function GetActionsUserSpotlight(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserSpotlight> {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserSpotlight> = {
 		[ActionIdUserSpotlight.spotLight]: {
 			name: 'Single Spotlight',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/spot', userName, select.single)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -36,9 +43,9 @@ export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): 
 		[ActionIdUserSpotlight.addSpotlight]: {
 			name: 'Add Spotlight (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/addSpot', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -55,9 +62,9 @@ export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): 
 		[ActionIdUserSpotlight.unSpotLight]: {
 			name: 'Un Spotlight',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/unSpot', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -74,9 +81,9 @@ export function GetActionsUserSpotlight(instance: InstanceBaseExt<ZoomConfig>): 
 		[ActionIdUserSpotlight.toggleSpotlight]: {
 			name: 'Toggle Spotlight (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/toggleSpot', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

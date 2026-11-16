@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
+import { describe, it, expect, beforeAll, beforeEach, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsGroups, ActionIdGroups } from '../../src/actions/action-group.js'
 
 describe('GetActionsGroups', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsGroups>
 
 	beforeAll(() => {
@@ -29,7 +27,7 @@ describe('GetActionsGroups', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
@@ -185,6 +183,23 @@ describe('GetActionsGroups', () => {
 			const callback = (actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback
 			callback({ options: { group: 2, position: 1, option: 'select' } } as any, {} as any)
 			expect(instance.checkFeedbacks).toHaveBeenCalled()
+		})
+
+		it.each([
+			['a position past the end of the group', 2, '3'],
+			['an empty Spotlights group', 1, '1'],
+			['a group that does not exist', 9, '1'],
+		])('does nothing for %s', (_case, group, position) => {
+			instance.ZoomGroupData[2].users = [
+				{ zoomID: 1001, userName: 'Alice' },
+				{ zoomID: 1002, userName: 'Bob' },
+			]
+			instance.ZoomClientDataObj.selectedCallers = [1002]
+			;(instance.checkFeedbacks as Mock).mockClear()
+			const callback = (actions[ActionIdGroups.selectUserFromGroupPosition] as any).callback
+			expect(() => callback({ options: { group, position, option: 'toggle' } } as any, {} as any)).not.toThrow()
+			expect(instance.ZoomClientDataObj.selectedCallers).toEqual([1002])
+			expect(instance.checkFeedbacks).not.toHaveBeenCalled()
 		})
 	})
 })

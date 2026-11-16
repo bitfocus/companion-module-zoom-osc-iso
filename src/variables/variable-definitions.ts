@@ -1,70 +1,115 @@
-import { CompanionVariableDefinition } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, padding, userExist } from '../utils.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionVariableDefinitions } from '@companion-module/base'
+import { padding, userExist } from '../utils.js'
+import { participantIcons } from '../participant-icons.js'
 
-export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): void {
+/** One value type for every variable, because most writes go through computed (template-literal) ids */
+export type VariableValue = string | number | boolean | undefined
+
+/**
+ * Every variable id this module defines or writes.
+ * Static ids are optional so definitions and value bags can be built incrementally.
+ * Some families are written for more ids than are defined (e.g. Group positions 2..1000); that is
+ * existing behaviour and relies on instanceOptions.disableVariableValidation.
+ */
+export type VariablesSchema = {
+	zoomVersion?: VariableValue
+	callStatus?: VariableValue
+	callStatusNumber?: VariableValue
+	engineState?: VariableValue
+	engineStateNumber?: VariableValue
+	selectedCallers?: VariableValue
+	selectedNumberOfCallers?: VariableValue
+	numberOfGroups?: VariableValue
+	numberOfUsers?: VariableValue
+	isSpeaking?: VariableValue
+	activeSpeaker?: VariableValue
+	activeSpeakerZoomId?: VariableValue
+	videoOnCount?: VariableValue
+	handRaisedCount?: VariableValue
+	videoShareStatus?: VariableValue
+	spotlightGroupTrackingInitalized?: VariableValue
+	isPro?: VariableValue
+	galleryCount?: VariableValue
+	oscForwardHost?: VariableValue
+	oscForwardPort?: VariableValue
+	// participant status icons (data URIs) used by the layered participant presets
+	icon_mic_on?: VariableValue
+	icon_mic_off?: VariableValue
+	icon_camera_on?: VariableValue
+	icon_camera_off?: VariableValue
+	icon_hand_raised?: VariableValue
+	icon_hand_lowered?: VariableValue
+	// groups
+	[group: `Group${number}`]: VariableValue
+	[groupPosition: `Group${number}Position${number}`]: VariableValue
+	[callersInGroup: `CallersInGroup${number}`]: VariableValue
+	[insideGroup: `InsideGroup${number}`]: VariableValue
+	// one variable per participant, keyed by zoom id
+	[zoomId: `${number}`]: VariableValue
+	// ZoomISO outputs and audio
+	[outputName: `Output${number}name`]: VariableValue
+	[outputResolution: `Output${number}resolution`]: VariableValue
+	[outputMode: `Output${number}mode`]: VariableValue
+	[outputStatus: `Output${number}status`]: VariableValue
+	[outputSelection: `Output${number}selection`]: VariableValue
+	[outputZoomId: `Output${number}zoomId`]: VariableValue
+	[outputUserName: `Output${number}Name`]: VariableValue
+	[outputAudioName: `OutputAudio${number}name`]: VariableValue
+	[outputAudioMode: `OutputAudio${number}mode`]: VariableValue
+	[channelLevel: `Channel${string}`]: VariableValue
+	// gallery and participant positions (zero-padded)
+	[galleryPosition: `GalleryPosition${string}`]: VariableValue
+	[participant: `Participant${string}`]: VariableValue
+}
+
+/** A bag of variable values to pass to setVariableValues */
+export type VariableValues = Partial<VariablesSchema>
+
+export function initVariableDefinitions(instance: ModuleInstance): void {
 	// instance.log('debug', `initVariableDefinitions ${new Date()}`)
-	const globalSettings: Set<CompanionVariableDefinition> = new Set([
+	// The groups below are added in the same order as the v1 definitions list.
+	const outputVariables: CompanionVariableDefinitions<VariablesSchema> = {}
+	const audioLevelVariables: CompanionVariableDefinitions<VariablesSchema> = {}
+	const globalSettings: CompanionVariableDefinitions<VariablesSchema> = {
 		// Status
-		{ name: 'Zoom version', variableId: 'zoomVersion' },
-		{ name: 'Call Status', variableId: 'callStatus' },
-		{
+		zoomVersion: { name: 'Zoom version' },
+		callStatus: { name: 'Call Status' },
+		callStatusNumber: {
 			name: 'Call Status Number (only accurate when joining or leaving meeting.  See module help for details)',
-			variableId: 'callStatusNumber',
 		},
-		{ name: 'Engine Status', variableId: 'engineState' },
-		{ name: 'Selected callers/groups', variableId: 'selectedCallers' },
-		{ name: 'Selected number of callers/groups', variableId: 'selectedNumberOfCallers' },
-		{ name: 'Number of selectable groups', variableId: 'numberOfGroups' },
-		{ name: 'Number of users in call', variableId: 'numberOfUsers' },
-		{ name: 'Is speaking', variableId: 'isSpeaking' },
-		{ name: 'Active speaking', variableId: 'activeSpeaker' },
-		{ name: 'Video On Count', variableId: 'videoOnCount' },
-		{ name: 'Hands Raised Count', variableId: 'handRaisedCount' },
-		{ name: 'Share Screen On/Off', variableId: 'videoShareStatus' },
-		{ name: 'Spotlight Group Tracking Initalized', variableId: 'spotlightGroupTrackingInitalized' },
-		{ name: 'Is Pro License', variableId: 'isPro' },
-	])
+		engineState: { name: 'Engine Status' },
+		selectedCallers: { name: 'Selected callers/groups' },
+		selectedNumberOfCallers: { name: 'Selected number of callers/groups' },
+		numberOfGroups: { name: 'Number of selectable groups' },
+		numberOfUsers: { name: 'Number of users in call' },
+		isSpeaking: { name: 'Is speaking' },
+		activeSpeaker: { name: 'Active speaking' },
+		videoOnCount: { name: 'Video On Count' },
+		handRaisedCount: { name: 'Hands Raised Count' },
+		videoShareStatus: { name: 'Share Screen On/Off' },
+		spotlightGroupTrackingInitalized: { name: 'Spotlight Group Tracking Initalized' },
+		isPro: { name: 'Is Pro License' },
+		oscForwardHost: { name: 'OSC forwarding IP' },
+		oscForwardPort: { name: 'OSC forwarding port' },
+	}
 	// Groups
-	const groupPositionVariables = []
-	const userVariables = []
-	const outputVariables = []
-	const audioLevelVariables = []
-	groupPositionVariables.push({
-		name: `Group${0} Position ${1}`,
-		variableId: `Group${0}Position${1}`,
-	})
-	groupPositionVariables.push({
-		name: `Group${1} Position ${1}`,
-		variableId: `Group${1}Position${1}`,
-	})
-	userVariables.push({ name: `name`, variableId: `Group0` })
-	userVariables.push({
-		name: 'Callers In Host Group',
-		variableId: 'CallersInGroup0',
-	})
+	const groupPositionVariables: CompanionVariableDefinitions<VariablesSchema> = {}
+	const userVariables: CompanionVariableDefinitions<VariablesSchema> = {}
+	groupPositionVariables[`Group${0}Position${1}`] = { name: `Group${0} Position ${1}` }
+	groupPositionVariables[`Group${1}Position${1}`] = { name: `Group${1} Position ${1}` }
+	userVariables[`Group0`] = { name: `name` }
+	userVariables['CallersInGroup0'] = { name: 'Callers In Host Group' }
 
-	userVariables.push({ name: `name`, variableId: `Group1` })
-	userVariables.push({
-		name: 'Callers In Spotlight Group',
-		variableId: 'CallersInGroup1',
-	})
+	userVariables[`Group1`] = { name: `name` }
+	userVariables['CallersInGroup1'] = { name: 'Callers In Spotlight Group' }
 	for (let index = 2; index < instance.ZoomGroupData.length; index++) {
 		for (let position = 1; position < 2; position++) {
-			groupPositionVariables.push({
-				name: `Group${index} Position ${position}`,
-				variableId: `Group${index}Position${position}`,
-			})
+			groupPositionVariables[`Group${index}Position${position}`] = { name: `Group${index} Position ${position}` }
 		}
-		userVariables.push({
-			name: `Inside group`,
-			variableId: `InsideGroup${index}`,
-		})
-		userVariables.push({ name: `name`, variableId: `Group${index}` })
-		userVariables.push({
-			name: `Callers In Group ${index}`,
-			variableId: `CallersInGroup${index}`,
-		})
+		userVariables[`InsideGroup${index}`] = { name: `Inside group` }
+		userVariables[`Group${index}`] = { name: `name` }
+		userVariables[`CallersInGroup${index}`] = { name: `Callers In Group ${index}` }
 	}
 
 	if (instance.config.enableVariablesForEachUser) {
@@ -73,7 +118,7 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 
 			if (userExist(zoomId, instance.ZoomUserData)) {
 				//&& user.zoomId > instance.ZoomClientDataObj.numberOfGroups) {
-				userVariables.push({ name: `name`, variableId: user.zoomId.toString() })
+				userVariables[`${user.zoomId}`] = { name: `name` }
 			}
 		})
 	}
@@ -81,79 +126,60 @@ export function initVariableDefinitions(instance: InstanceBaseExt<ZoomConfig>): 
 	for (const key in instance.ZoomOutputData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomOutputData, key)) {
 			const output = instance.ZoomOutputData[key]
-			outputVariables.push({
-				name: `Output ${output.outputNumber} name`,
-				variableId: `Output${output.outputNumber}name`,
-			})
-			outputVariables.push({
-				name: `Output ${output.outputNumber} resolution`,
-				variableId: `Output${output.outputNumber}resolution`,
-			})
-			outputVariables.push({
-				name: `Output ${output.outputNumber} mode`,
-				variableId: `Output${output.outputNumber}mode`,
-			})
-			outputVariables.push({
-				name: `Output ${output.outputNumber} status`,
-				variableId: `Output${output.outputNumber}status`,
-			})
+			outputVariables[`Output${output.outputNumber}name`] = { name: `Output ${output.outputNumber} name` }
+			outputVariables[`Output${output.outputNumber}resolution`] = { name: `Output ${output.outputNumber} resolution` }
+			outputVariables[`Output${output.outputNumber}mode`] = { name: `Output ${output.outputNumber} mode` }
+			outputVariables[`Output${output.outputNumber}status`] = { name: `Output ${output.outputNumber} status` }
 		}
 	}
 
 	for (const key in instance.ZoomAudioRoutingData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioRoutingData, key)) {
 			const audioOutput = instance.ZoomAudioRoutingData[key]
-			outputVariables.push({
+			outputVariables[`OutputAudio${audioOutput.channel}name`] = {
 				name: `Output Audio Channel ${audioOutput.channel} name`,
-				variableId: `OutputAudio${audioOutput.channel}name`,
-			})
-			outputVariables.push({
+			}
+			outputVariables[`OutputAudio${audioOutput.channel}mode`] = {
 				name: `Output Audio Channel ${audioOutput.channel} mode`,
-				variableId: `OutputAudio${audioOutput.channel}mode`,
-			})
+			}
 		}
 	}
 
 	for (const key in instance.ZoomAudioLevelData) {
 		if (Object.prototype.hasOwnProperty.call(instance.ZoomAudioLevelData, key)) {
-			audioLevelVariables.push({
-				name: `Channel ${key} audiolevel`,
-				variableId: `Channel${key}`,
-			})
+			audioLevelVariables[`Channel${key}`] = { name: `Channel ${key} audiolevel` }
 		}
 	}
-	const galleryVariables = []
+	const galleryVariables: CompanionVariableDefinitions<VariablesSchema> = {}
+	galleryVariables[`GalleryPosition${padding(1, 2)}`] = { name: `Gallery Position ${1}` }
 
-	galleryVariables.push({
-		name: `Gallery Position ${1}`,
-		variableId: `GalleryPosition${padding(1, 2)}`,
-	})
-	const selectUsersVariables = []
-
+	const selectUsersVariables: CompanionVariableDefinitions<VariablesSchema> = {}
 	if (instance.config.enableVariablesForParticipants) {
-		selectUsersVariables.push({
-			name: `Participant ${1}`,
-			variableId: `Participant${padding(1, 3)}`,
-		})
+		selectUsersVariables[`Participant${padding(1, 3)}`] = { name: `Participant ${1}` }
 	}
 
-	const galleryVariablesDef: Set<CompanionVariableDefinition> = new Set(galleryVariables)
-	const userVariablesDef: Set<CompanionVariableDefinition> = new Set(userVariables)
-	const outputVariablesDef: Set<CompanionVariableDefinition> = new Set(outputVariables)
-	const audioLevelVariablesDef: Set<CompanionVariableDefinition> = new Set(audioLevelVariables)
-	const groupPositionVariablesDef: Set<CompanionVariableDefinition> = new Set(groupPositionVariables)
-	const gallery: Set<CompanionVariableDefinition> = new Set([{ name: 'gallery count', variableId: 'galleryCount' }])
+	const gallery: CompanionVariableDefinitions<VariablesSchema> = { galleryCount: { name: 'gallery count' } }
 
-	const filteredVariables = [
-		...outputVariablesDef,
-		...audioLevelVariablesDef,
+	const iconVariables: CompanionVariableDefinitions<VariablesSchema> = Object.fromEntries(
+		Object.values(participantIcons).map((icon) => [
+			icon.variable,
+			{
+				name: `Default icon: ${icon.label} (override by adding a "${icon.libraryImage}" image to the image library)`,
+			},
+		]),
+	)
+
+	const definitions: CompanionVariableDefinitions<VariablesSchema> = {
+		...outputVariables,
+		...audioLevelVariables,
 		...globalSettings,
-		...userVariablesDef,
+		...userVariables,
 		...gallery,
-		...galleryVariablesDef,
+		...galleryVariables,
 		...selectUsersVariables,
-		...groupPositionVariablesDef,
-	]
+		...groupPositionVariables,
+		...iconVariables,
+	}
 
-	instance.setVariableDefinitions(filteredVariables)
+	instance.setVariableDefinitions(definitions)
 }

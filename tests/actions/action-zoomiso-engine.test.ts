@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeAll, afterEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, afterEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import { GetActionsZoomISOEngine, ActionIdZoomISOEngine } from '../../src/actions/action-zoomiso-engine.js'
-import type { InstanceBaseExt } from '../../src/utils.js'
-import type { ZoomConfig } from '../../src/config.js'
 
 describe('GetActionsZoomISOEngine', () => {
-	let instance: InstanceBaseExt<ZoomConfig>
+	let instance: ReturnType<typeof createMockInstance>
 	let actions: ReturnType<typeof GetActionsZoomISOEngine>
 
 	beforeAll(() => {
@@ -14,7 +12,7 @@ describe('GetActionsZoomISOEngine', () => {
 	})
 
 	afterEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 

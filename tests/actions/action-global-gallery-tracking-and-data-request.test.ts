@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals'
+import { describe, it, expect, beforeAll, beforeEach, type Mock } from 'vitest'
 import { createMockInstance } from '../helpers/mock-instance.js'
 import {
 	GetActionsGlobalGalleryTrackingAndDataRequest,
@@ -15,13 +15,14 @@ describe('GetActionsGlobalGalleryTrackingAndDataRequest', () => {
 	})
 
 	beforeEach(() => {
-		const sendCommand = instance.OSC.sendCommand as jest.Mock
+		const sendCommand = instance.OSC.sendCommand as Mock
 		sendCommand.mockClear()
 	})
 
 	const cases: [ActionIdGlobalGalleryTrackingAndDataRequest, string][] = [
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfGalleryView, '/zoom/getGalleryOrder'],
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCount, '/zoom/galCount'],
+		[ActionIdGlobalGalleryTrackingAndDataRequest.requestGalleryCountNew, '/zoom/galleryCount'],
 		[ActionIdGlobalGalleryTrackingAndDataRequest.requestOrderOfSpotlights, '/zoom/getSpotOrder'],
 	]
 

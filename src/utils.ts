@@ -1,15 +1,11 @@
 import {
-	CompanionInputFieldDropdown,
-	CompanionInputFieldNumber,
-	CompanionInputFieldTextInput,
-	InstanceBase,
 	combineRgb,
+	type CompanionInputFieldDropdown,
+	type CompanionInputFieldNumber,
+	type CompanionInputFieldTextInput,
 } from '@companion-module/base'
 
 type TimeFormat = 'hh:mm:ss' | 'hh:mm:ss.ms' | 'mm:ss' | 'mm:ss.ms'
-
-// Force options to have a default to prevent sending undefined values
-type EnforceDefault<T, U> = Omit<T, 'default'> & { default: U }
 
 export const colorDarkGray = combineRgb(72, 72, 72)
 export const colorLightGray = combineRgb(230, 230, 230)
@@ -19,6 +15,7 @@ export const colorRed = combineRgb(255, 0, 0)
 export const colorDarkRed = combineRgb(102, 25, 25)
 export const colorGreenOlive = combineRgb(141, 218, 77)
 export const colorTeal = combineRgb(111, 222, 222)
+export const colorSpeakerBlue = combineRgb(0, 0, 204)
 
 export enum SubscribeMode {
 	None = 0,
@@ -31,6 +28,15 @@ export enum SubscribeMode {
 export enum ZoomVersion {
 	ZoomOSC = 0,
 	ZoomISO = 1,
+}
+
+/**
+ * Whether the version a pong reports is ZoomISO 3 or later (ZISO_3.0.7_MAC), rather than ZoomISO 2
+ * (ZISO_2.4.1_pro_MAC). False before the first pong.
+ */
+export function isZoomISO3OrLater(version: unknown): boolean {
+	const match = /^ZISO_(\d+)\./.exec(String(version))
+	return match !== null && Number(match[1]) >= 3
 }
 
 export interface ZoomClientDataObjInterface {
@@ -128,39 +134,29 @@ export interface ZoomVariableLinkInterface {
 	zoomId: number
 	userName: string
 }
-export interface Options {
-	message: EnforceDefault<CompanionInputFieldTextInput, string>
-	name: EnforceDefault<CompanionInputFieldTextInput, string>
-	newName: EnforceDefault<CompanionInputFieldTextInput, string>
-	audioChannelMode: EnforceDefault<CompanionInputFieldDropdown, string>
-	breakoutName: EnforceDefault<CompanionInputFieldTextInput, string>
-	channel: EnforceDefault<CompanionInputFieldNumber, number>
-	outputSelectionIndex: EnforceDefault<CompanionInputFieldNumber, number>
-	reductionAmount: EnforceDefault<CompanionInputFieldDropdown, string>
-	userName: EnforceDefault<CompanionInputFieldTextInput, string>
-	meetingID: EnforceDefault<CompanionInputFieldTextInput, string>
-	path: EnforceDefault<CompanionInputFieldTextInput, string>
-	customArgs: EnforceDefault<CompanionInputFieldTextInput, string>
-	videoLossMode: EnforceDefault<CompanionInputFieldDropdown, string>
-	intX: EnforceDefault<CompanionInputFieldNumber, number>
-	intY: EnforceDefault<CompanionInputFieldNumber, number>
-	level: EnforceDefault<CompanionInputFieldNumber, number>
-	output: EnforceDefault<CompanionInputFieldNumber, number>
-	count: EnforceDefault<CompanionInputFieldNumber, number>
-	mode: EnforceDefault<CompanionInputFieldNumber, number>
-	id: EnforceDefault<CompanionInputFieldNumber, number>
-	password: EnforceDefault<CompanionInputFieldTextInput, string>
-	zak: EnforceDefault<CompanionInputFieldTextInput, string>
-	video: EnforceDefault<CompanionInputFieldDropdown, number>
-	allowChooseBreakout: EnforceDefault<CompanionInputFieldDropdown, number>
-	postCloseSeconds: EnforceDefault<CompanionInputFieldNumber, number>
-	allowReturnAtWill: EnforceDefault<CompanionInputFieldDropdown, number>
-	autoMoveParticipants: EnforceDefault<CompanionInputFieldDropdown, number>
-	useTimer: EnforceDefault<CompanionInputFieldDropdown, number>
-	closeWithTimer: EnforceDefault<CompanionInputFieldDropdown, number>
-	breakoutDurrationSeconds: EnforceDefault<CompanionInputFieldNumber, number>
+
+/** The page of the participant list the Participant variables show: where it starts, and the last page size asked for */
+export interface ZoomParticipantPageInterface {
+	start: number
+	size: number
 }
 
+/** The participant at a (1-based) position of the current participant page */
+export const participantAtPosition = (
+	instance: { ZoomVariableLink: ZoomVariableLinkInterface[]; ZoomParticipantPage: ZoomParticipantPageInterface },
+	position: number,
+): ZoomVariableLinkInterface | undefined => instance.ZoomVariableLink[instance.ZoomParticipantPage.start + position - 1]
+
+/** After participants leave, steps back a page at a time until the current page shows someone again */
+export const keepParticipantPageInList = (instance: {
+	ZoomVariableLink: ZoomVariableLinkInterface[]
+	ZoomParticipantPage: ZoomParticipantPageInterface
+}): void => {
+	const page = instance.ZoomParticipantPage
+	while (page.start > 0 && page.start >= instance.ZoomVariableLink.length) {
+		page.start = Math.max(0, page.start - page.size)
+	}
+}
 /**
  * @param red 0-255
  * @param green 0-255
@@ -185,27 +181,36 @@ export const getUserFromName = (
 ): ZoomVariableLinkInterface | undefined => {
 	return zoomUserData.find((iterator: ZoomVariableLinkInterface) => iterator.userName === name)
 }
-export const options: Options = {
+// Shared option fields. Each one carries its literal id type so it fits any schema that declares that key.
+export const options = {
 	message: {
 		type: 'textinput',
 		label: 'Message',
 		id: 'message',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'message'>,
+	// Same saved id as `message`; for the actions that parsed variables in v1
+	messageWithVariables: {
+		type: 'textinput',
+		label: 'Message',
+		id: 'message',
+		default: '',
+		useVariables: true,
+	} satisfies CompanionInputFieldTextInput<'message'>,
 	name: {
 		type: 'textinput',
 		useVariables: true,
 		label: 'Name',
 		id: 'name',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'name'>,
 	newName: {
 		type: 'textinput',
 		useVariables: true,
 		label: 'New Name',
 		id: 'newName',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'newName'>,
 	audioChannelMode: {
 		type: 'dropdown',
 		label: 'Audio Channel Mode',
@@ -220,15 +225,16 @@ export const options: Options = {
 			{ id: 'Mix of all unassigned participants', label: 'Mix of all unassigned participants' },
 			{ id: 'Active Share', label: 'Active Share' },
 			{ id: 'Unique Speaker', label: 'Unique Speaker' },
+			{ id: 'Interpretation', label: 'Interpretation' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'audioChannelMode', string>,
 	breakoutName: {
 		type: 'textinput',
 		useVariables: true,
 		label: 'Name of breakout room',
 		id: 'breakoutName',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'breakoutName'>,
 	channel: {
 		type: 'number',
 		label: 'Audio Channel Number',
@@ -236,7 +242,7 @@ export const options: Options = {
 		default: 1,
 		min: 1,
 		max: 256,
-	},
+	} satisfies CompanionInputFieldNumber<'number'>,
 	outputSelectionIndex: {
 		type: 'number',
 		label: 'Selection Number for Output Selection (start at 1)',
@@ -244,7 +250,7 @@ export const options: Options = {
 		default: 1,
 		min: 0,
 		max: 49,
-	},
+	} satisfies CompanionInputFieldNumber<'outputSelectionIndex'>,
 	reductionAmount: {
 		type: 'dropdown',
 		label: 'Reduction Amount',
@@ -259,33 +265,41 @@ export const options: Options = {
 			{ id: '5', label: '-24' },
 			{ id: '6', label: '-48' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'reductionAmount', string>,
 	userName: {
 		type: 'textinput',
 		label: 'single username (keep blank when you pre-select)',
 		id: 'userName',
 		useVariables: true,
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'userName'>,
 	meetingID: {
 		type: 'textinput',
 		useVariables: true,
 		label: 'Meeting ID',
 		id: 'meetingID',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'meetingID'>,
 	path: {
 		type: 'textinput',
 		label: 'absolute path',
 		id: 'path',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'path'>,
+	// Same saved id as `path`; for the action that parsed variables in v1
+	pathWithVariables: {
+		type: 'textinput',
+		label: 'absolute path',
+		id: 'path',
+		default: '',
+		useVariables: true,
+	} satisfies CompanionInputFieldTextInput<'path'>,
 	customArgs: {
 		type: 'textinput',
 		label: 'Arguments JSON style',
 		id: 'customArgs',
 		default: '{type: "i", value: 0}',
-	},
+	} satisfies CompanionInputFieldTextInput<'customArgs'>,
 	videoLossMode: {
 		type: 'dropdown',
 		label: 'Video Loss Mode',
@@ -296,9 +310,11 @@ export const options: Options = {
 			{ id: 'Transparent', label: 'Transparent' },
 			{ id: 'Image', label: 'Image' },
 			{ id: 'Testcard', label: 'Testcard' },
+			{ id: 'Color Bars', label: 'Color Bars' },
+			{ id: 'Profile Picture', label: 'Profile Picture' },
 		],
 		default: 'Black',
-	},
+	} satisfies CompanionInputFieldDropdown<'videoLossMode', string>,
 	intX: {
 		type: 'number',
 		label: 'int X',
@@ -306,7 +322,7 @@ export const options: Options = {
 		min: 0,
 		max: 5000,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'intX'>,
 	intY: {
 		type: 'number',
 		label: 'int Y',
@@ -314,7 +330,7 @@ export const options: Options = {
 		min: 0,
 		max: 5000,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'intY'>,
 	level: {
 		type: 'number',
 		label: 'Level',
@@ -322,7 +338,7 @@ export const options: Options = {
 		min: 0,
 		max: 5,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'level'>,
 	output: {
 		type: 'number',
 		label: 'Output',
@@ -330,15 +346,15 @@ export const options: Options = {
 		min: 0,
 		max: 512,
 		default: 1,
-	},
+	} satisfies CompanionInputFieldNumber<'output'>,
 	count: {
 		type: 'number',
 		label: 'count',
 		id: 'count',
-		min: 0,
-		max: 512,
+		min: 1,
+		max: 16,
 		default: 1,
-	},
+	} satisfies CompanionInputFieldNumber<'count'>,
 	mode: {
 		type: 'number',
 		label: 'Mode',
@@ -346,7 +362,7 @@ export const options: Options = {
 		min: 0,
 		max: 5,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'mode'>,
 	id: {
 		type: 'number',
 		label: 'ID',
@@ -354,21 +370,21 @@ export const options: Options = {
 		min: 0,
 		max: 99999999,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'id'>,
 	password: {
 		type: 'textinput',
 		label: 'Password(optional)',
 		id: 'password',
 		useVariables: true,
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'password'>,
 	zak: {
 		type: 'textinput',
 		useVariables: true,
 		label: 'Zak',
 		id: 'zak',
 		default: '',
-	},
+	} satisfies CompanionInputFieldTextInput<'zak'>,
 	video: {
 		type: 'dropdown',
 		label: 'Camera on/of',
@@ -378,7 +394,7 @@ export const options: Options = {
 			{ id: 0, label: 'off' },
 			{ id: 1, label: 'on' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'video', number>,
 	allowChooseBreakout: {
 		type: 'dropdown',
 		label: 'Allow Choose Breakout',
@@ -388,7 +404,7 @@ export const options: Options = {
 			{ id: 0, label: 'false' },
 			{ id: 1, label: 'true' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'allowChooseBreakout', number>,
 	postCloseSeconds: {
 		type: 'number',
 		label: 'postCloseSeconds',
@@ -396,7 +412,7 @@ export const options: Options = {
 		min: 0,
 		max: 99999,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'postCloseSeconds'>,
 	allowReturnAtWill: {
 		type: 'dropdown',
 		label: 'Allow Return At Will',
@@ -406,7 +422,7 @@ export const options: Options = {
 			{ id: 0, label: 'false' },
 			{ id: 1, label: 'true' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'allowReturnAtWill', number>,
 	autoMoveParticipants: {
 		type: 'dropdown',
 		label: 'Auto Move Participants',
@@ -416,7 +432,7 @@ export const options: Options = {
 			{ id: 0, label: 'false' },
 			{ id: 1, label: 'true' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'autoMoveParticipants', number>,
 	useTimer: {
 		type: 'dropdown',
 		label: 'Use Timer',
@@ -426,7 +442,7 @@ export const options: Options = {
 			{ id: 0, label: 'false' },
 			{ id: 1, label: 'true' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'useTimer', number>,
 	closeWithTimer: {
 		type: 'dropdown',
 		label: 'Close With Timer',
@@ -436,7 +452,7 @@ export const options: Options = {
 			{ id: 0, label: 'false' },
 			{ id: 1, label: 'true' },
 		],
-	},
+	} satisfies CompanionInputFieldDropdown<'closeWithTimer', number>,
 	breakoutDurrationSeconds: {
 		type: 'number',
 		label: 'Breakout Durration Seconds',
@@ -444,7 +460,7 @@ export const options: Options = {
 		min: 0,
 		max: 99999,
 		default: 0,
-	},
+	} satisfies CompanionInputFieldNumber<'breakoutDurrationSeconds'>,
 }
 
 /**
@@ -505,19 +521,4 @@ export const padding = (num: number, size: number): string => {
 	let converted = num.toString()
 	while (converted.length < size) converted = '0' + converted
 	return converted
-}
-
-export interface InstanceBaseExt<TConfig> extends InstanceBase<TConfig> {
-	[x: string]: any
-	ZoomVariableLink: ZoomVariableLinkInterface[]
-	ZoomClientDataObj: ZoomClientDataObjInterface
-	OSC: any
-	ZoomGroupData: ZoomGroupDataInterface[]
-	ZoomUserData: ZoomUserDataInterface
-	ZoomMeData: ZoomMeDataInterface
-	ZoomOutputData: ZoomOutputDataInterface
-	ZoomAudioLevelData: ZoomAudioLevelDataInterface
-	ZoomAudioRoutingData: ZoomAudioRoutingDataInterface
-	ZoomUserOffline: ZoomUserOfflineInterface
-	config: TConfig
 }

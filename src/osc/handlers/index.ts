@@ -2,7 +2,8 @@ import { handleGalleryMessage } from './gallery.js'
 import { handleIsoMessage } from './iso.js'
 import { handleSessionMessage } from './session.js'
 import { handleUserMessage } from './user.js'
-import { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import type { OSCHandlerContext, ZoomOSCResponse } from '../types.js'
+import { handleSpotOrder } from './spotlight.js'
 
 export async function dispatchOscMessage(context: OSCHandlerContext, data: ZoomOSCResponse): Promise<void> {
 	const recvMsg = data.address.toString().split('/')
@@ -24,8 +25,10 @@ export async function dispatchOscMessage(context: OSCHandlerContext, data: ZoomO
 		case 'galleryShape':
 		case 'galleryOrder':
 		case 'galleryCount':
-		case 'spotOrder':
 			handleGalleryMessage(context, data, zoomPart2)
+			return
+		case 'spotOrder':
+			handleSpotOrder(context, data)
 			return
 		case 'pong':
 		case 'meetingStatusChanged':

@@ -1,7 +1,8 @@
-import { CompanionFeedbackDefinitions, CompanionFeedbackDefinition, InputValue } from '@companion-module/base'
-import { ZoomConfig } from './config.js'
+import type ModuleInstance from './index.js'
+import type { CompanionFeedbackDefinitions } from '@companion-module/base'
+import type { selectionMethod } from './actions/action-utils.js'
 import { feedbackResultsMultiState } from './feedback-state-machine.js'
-import { InstanceBaseExt, userExist, colorRed, getUserFromName } from './utils.js'
+import { userExist, colorRed, getUserFromName, participantAtPosition, colorBlack, colorGreenOlive } from './utils.js'
 
 export enum FeedbackId {
 	selectionMethod = 'selection_Method',
@@ -18,6 +19,7 @@ export enum FeedbackId {
 	engineState = 'engine_State',
 	capturePermissionGranted = 'capture_permission_granted',
 	isPro = 'is_pro',
+	oscForwarding = 'osc_forwarding',
 }
 enum engineState {
 	disabled = 0,
@@ -40,13 +42,35 @@ export enum feedbackType {
 	offline,
 }
 
-export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFeedbackDefinitions {
+/** Every feedback id maps to its kind and typed options */
+export type FeedbacksSchema = {
+	[FeedbackId.selectionMethod]: { type: 'boolean'; options: { selectionMethod: selectionMethod } }
+	[FeedbackId.groupBased]: { type: 'boolean'; options: { group: string; position: number; type: feedbackType } }
+	[FeedbackId.groupBasedAdvanced]: { type: 'advanced'; options: { group: string; position: number } }
+	[FeedbackId.indexBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
+	[FeedbackId.indexBasedAdvanced]: { type: 'advanced'; options: { position: number } }
+	[FeedbackId.userNameBased]: { type: 'boolean'; options: { name: string; type: feedbackType } }
+	[FeedbackId.userNameBasedAdvanced]: { type: 'advanced'; options: { name: string } }
+	[FeedbackId.galleryBased]: { type: 'boolean'; options: { position: number; type: feedbackType } }
+	[FeedbackId.galleryBasedAdvanced]: { type: 'advanced'; options: { position: number } }
+	[FeedbackId.engineState]: { type: 'boolean'; options: { state: number } }
+	[FeedbackId.capturePermissionGranted]: { type: 'boolean'; options: { state: number } }
+	[FeedbackId.isPro]: { type: 'boolean'; options: { isPro: number } }
+	[FeedbackId.output]: { type: 'boolean'; options: { output: number } }
+	[FeedbackId.audioOutput]: { type: 'boolean'; options: { output: number } }
+	[FeedbackId.oscForwarding]: { type: 'boolean'; options: Record<string, never> }
+}
+
+/** Union of every feedback id, for code that collects ids to re-check at runtime */
+export type AnyFeedbackId = FeedbackId
+
+export function GetFeedbacks(instance: ModuleInstance): CompanionFeedbackDefinitions<FeedbacksSchema> {
 	const CHOICES_GROUPS = instance.ZoomGroupData.length === 0 ? [{ id: '0', label: 'no position' }] : []
 	for (let index = 0; index < instance.ZoomGroupData.length; index++) {
 		CHOICES_GROUPS.push({ id: index.toString(), label: instance.ZoomGroupData[index].groupName })
 	}
 
-	function feedbackResults(type: InputValue | undefined, zoomID: number) {
+	function feedbackResults(type: feedbackType | undefined, zoomID: number): boolean {
 		if (type === undefined) {
 			return false
 		}
@@ -60,7 +84,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				return false
 			case feedbackType.spotlightOff:
 				if (userExist(zoomID, instance.ZoomUserData)) {
-					return instance.ZoomUserData[zoomID].spotlighted === false
+					// not yet reported as spotlighted counts as off
+					return instance.ZoomUserData[zoomID].spotlighted !== true
 				}
 
 				return false
@@ -128,7 +153,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		}
 	}
 
-	const feedbacks: { [id in FeedbackId]: CompanionFeedbackDefinition | undefined } = {
+	const feedbacks: CompanionFeedbackDefinitions<FeedbacksSchema> = {
 		[FeedbackId.selectionMethod]: {
 			type: 'boolean',
 			name: 'selection method',
@@ -200,19 +225,18 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
-					const zoomID =
-						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
-							.zoomID
-					return feedbackResults(feedback.options.type, zoomID)
-				}
-				return false
+				// the group may not exist (removed, or the connection is stopping)
+				const user = instance.ZoomGroupData[Number(feedback.options.group)]?.users[feedback.options.position - 1]
+				return user ? feedbackResults(feedback.options.type, user.zoomID) : false
 			},
 		},
 		[FeedbackId.groupBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Position 1 - 999',
+			name: '(Deprecated) Group based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Group based feedback showing multi-state',
+			description:
+				"Position 1 - 999. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'dropdown',
@@ -231,15 +255,15 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]) {
-					const zoomID =
-						instance.ZoomGroupData[feedback.options.group as number].users[(feedback.options.position as number) - 1]
-							.zoomID
+				// the group may not exist (removed, or the connection is stopping)
+				const user = instance.ZoomGroupData[Number(feedback.options.group)]?.users[feedback.options.position - 1]
+				if (!user) return {}
 
-					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
-				}
-
-				return {}
+				return feedbackResultsMultiState(
+					instance,
+					user.zoomID,
+					feedback.image === undefined ? 72 : feedback.image.height,
+				)
 			},
 		},
 		[FeedbackId.indexBased]: {
@@ -280,9 +304,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+					participantAtPosition(instance, feedback.options.position)
 				) {
-					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
+					const zoomID = participantAtPosition(instance, feedback.options.position)!.zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
 				}
@@ -291,8 +315,11 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.indexBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Feedback based on index of the participant',
+			name: '(Deprecated) Participant position based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Participant position based feedback showing multi-state',
+			description:
+				"Feedback based on index of the participant. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'number',
@@ -306,9 +333,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 			callback: (feedback) => {
 				if (
 					instance.config.enableVariablesForParticipants &&
-					instance.ZoomVariableLink[(feedback.options.position as number) - 1]
+					participantAtPosition(instance, feedback.options.position)
 				) {
-					const zoomID = instance.ZoomVariableLink[(feedback.options.position as number) - 1].zoomId
+					const zoomID = participantAtPosition(instance, feedback.options.position)!.zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
@@ -352,8 +379,8 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					],
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
+			callback: (feedback) => {
+				const name = feedback.options.name
 				if (name === '') {
 					return false
 				}
@@ -374,8 +401,11 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.userNameBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'type in username',
+			name: '(Deprecated) Username based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Username based feedback showing multi-state',
+			description:
+				"type in username. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'textinput',
@@ -386,9 +416,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					tooltip: 'Type in the username of the participant you want to get feedback for. Use "me" for yourself.',
 				},
 			],
-			callback: async (feedback, context) => {
-				const name = await context.parseVariablesInString(feedback.options.name as string)
-				let zoomID = 0
+			callback: (feedback) => {
+				const name = feedback.options.name
+				let zoomID: number
 				if (name === 'me') {
 					zoomID = instance.ZoomMeData.zoomId
 					if (zoomID !== 0) {
@@ -453,10 +483,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]) {
 					const zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
-							.zoomId
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
 
 					return feedbackResults(feedback.options.type, zoomID)
 				}
@@ -465,8 +494,11 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 		},
 		[FeedbackId.galleryBasedAdvanced]: {
 			type: 'advanced',
-			name: 'Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
-			description: 'Position 1 - 49',
+			name: '(Deprecated) Gallery based feedback showing multi-state (Mic, Camera, Hand Raised, and Active Speaker)',
+			sortName: 'zz Deprecated Gallery based feedback showing multi-state',
+			description:
+				"Position 1 - 49. Deprecated: Companion's graphics layers replace it. The participant, gallery, host, spotlight and group presets have been updated to use layers, so update your buttons to use them. Kept so existing buttons keep working until then.",
+			affectedProperties: ['png64'],
 			options: [
 				{
 					type: 'number',
@@ -478,10 +510,9 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]) {
+				if (instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]]) {
 					const zoomID =
-						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[(feedback.options.position as number) - 1]]
-							.zoomId
+						instance.ZoomUserData[instance.ZoomClientDataObj.galleryOrder[feedback.options.position - 1]].zoomId
 
 					return feedbackResultsMultiState(instance, zoomID, feedback.image === undefined ? 72 : feedback.image.height)
 				}
@@ -505,7 +536,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 					choices: [
 						{ id: engineState.disabled, label: 'Disabled' },
 						{ id: engineState.enabled, label: 'Enabled' },
-						{ id: engineState.standby, label: 'Standby' },
+						{ id: engineState.standby, label: 'Standby (Deprecated)' },
 					],
 				},
 			],
@@ -538,7 +569,10 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.capturePermissionGranted === feedback.options.state) {
+				// capturePermissionGranted is a boolean and the option an engineState number, so this never matched in
+				// v1 either; the comparison is kept unchanged so the migration does not alter behaviour.
+				const granted = instance.ZoomClientDataObj.capturePermissionGranted as boolean | number
+				if (granted === feedback.options.state) {
 					return true
 				} else {
 					return false
@@ -591,7 +625,7 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output as number)) {
+				if (instance.ZoomClientDataObj.selectedOutputs.includes(feedback.options.output)) {
 					return true
 				} else {
 					return false
@@ -616,14 +650,33 @@ export function GetFeedbacks(instance: InstanceBaseExt<ZoomConfig>): CompanionFe
 				},
 			],
 			callback: (feedback) => {
-				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output as number)) {
+				if (instance.ZoomClientDataObj.selectedAudioOutputs.includes(feedback.options.output)) {
 					return true
 				} else {
 					return false
 				}
 			},
 		},
+		[FeedbackId.oscForwarding]: {
+			type: 'boolean',
+			name: 'OSC Forwarding On',
+			description: 'On while every OSC message from ZoomOSC/ISO is being forwarded',
+			defaultStyle: {
+				color: colorBlack,
+				bgcolor: colorGreenOlive,
+			},
+			options: [],
+			callback: () => instance.OSC?.isForwarding() ?? false,
+		},
 	}
 
 	return feedbacks
+}
+
+/**
+ * Registers every feedback with Companion
+ * @param instance Give the instance so we can extract data
+ */
+export function UpdateFeedbacks(instance: ModuleInstance): void {
+	instance.setFeedbackDefinitions(GetFeedbacks(instance))
 }

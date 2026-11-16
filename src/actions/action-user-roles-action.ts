@@ -1,6 +1,7 @@
-import { CompanionActionDefinition, CompanionVariableValues } from '@companion-module/base'
-import { ZoomConfig } from '../config.js'
-import { InstanceBaseExt, ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
+import type { VariableValues } from '../variables/variable-definitions.js'
+import type ModuleInstance from '../index.js'
+import type { CompanionActionDefinitions, CompanionInputFieldDropdown } from '@companion-module/base'
+import { type ZoomGroupDataInterface, getUserFromName, options, userExist } from '../utils.js'
 import { sendActionCommand, createCommand, select, selectUser } from './action-utils.js'
 import { FeedbackId } from '../feedback.js'
 import {
@@ -13,7 +14,7 @@ import {
 import * as csv from '@fast-csv/parse'
 
 // Helper function to update local data after renaming a user
-function updateLocalUserData(instance: InstanceBaseExt<ZoomConfig>, name: string, newName: string): void {
+function updateLocalUserData(instance: ModuleInstance, name: string, newName: string): void {
 	const user = getUserFromName(name, instance.ZoomVariableLink)
 	if (user !== undefined) {
 		const oscPath = `/zoom/userName/rename`
@@ -61,9 +62,25 @@ export enum ActionIdUserRolesAndAction {
 	bulkRename = 'bulk_Rename',
 }
 
-export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfig>): {
-	[id in ActionIdUserRolesAndAction]: CompanionActionDefinition | undefined
-} {
+export type ActionsSchemaUserRolesAndAction = {
+	[ActionIdUserRolesAndAction.selectUser]: { options: { user: string; option: string } }
+	[ActionIdUserRolesAndAction.rename]: { options: { user: string; name: string } }
+	[ActionIdUserRolesAndAction.renameByName]: { options: { name: string; newName: string } }
+	[ActionIdUserRolesAndAction.bulkRename]: { options: { filepath: string; hasHeader: boolean } }
+	[ActionIdUserRolesAndAction.makeHost]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.makeCoHost]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.revokeCoHost]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.reclaimHost]: { options: Record<string, never> }
+	[ActionIdUserRolesAndAction.makePanelist]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.makeAttendee]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.ejectParticipant]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.allowToRecord]: { options: { userName: string } }
+	[ActionIdUserRolesAndAction.disallowToRecord]: { options: { userName: string } }
+}
+
+export function GetActionsUserRolesAndAction(
+	instance: ModuleInstance,
+): CompanionActionDefinitions<ActionsSchemaUserRolesAndAction> {
 	let CHOICES_USERS_DEFAULT = '0'
 	const CHOICES_USERS: {
 		id: string
@@ -81,7 +98,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		}
 	}
 
-	const userOption: any = {
+	const userOption: CompanionInputFieldDropdown<'user', string> = {
 		type: 'dropdown',
 		label: 'User',
 		id: 'user',
@@ -89,7 +106,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		choices: CHOICES_USERS,
 	}
 
-	const actions: { [id in ActionIdUserRolesAndAction]: CompanionActionDefinition | undefined } = {
+	const actions: CompanionActionDefinitions<ActionsSchemaUserRolesAndAction> = {
 		[ActionIdUserRolesAndAction.selectUser]: {
 			name: 'Preselect user',
 			options: [
@@ -107,11 +124,13 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 				},
 			],
 			callback: (action) => {
-				const zoomId = action.options.user as number
+				// v1 passed the dropdown's string id through unchanged (the `as number` cast did not convert it);
+				// kept as-is so selection behaviour does not change in this migration.
+				const zoomId = action.options.user as unknown as number
 
-				selectUser(instance, zoomId, action.options.option as string)
+				selectUser(instance, zoomId, action.options.option)
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateSelectedCallersVariables(instance, variables)
 				instance.setVariableValues(variables)
 				instance.checkFeedbacks(
@@ -130,9 +149,11 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.rename]: {
 			name: 'Rename (PRO)',
 			options: [userOption, options.name],
-			callback: async (action) => {
-				const newName = await instance.parseVariablesInString(action.options.name as string)
-				const ZoomID = action.options.user as number
+			callback: (action) => {
+				const newName = action.options.name
+				// v1 passed the dropdown's string id through unchanged (the `as number` cast did not convert it);
+				// kept as-is so the OSC argument and local updates do not change in this migration.
+				const ZoomID = action.options.user as unknown as number
 				const oscPath = `/zoom/zoomID/rename`
 				const sendToCommand: any = {
 					id: 'rename',
@@ -162,7 +183,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 					})
 				})
 
-				const variables: CompanionVariableValues = {}
+				const variables: VariableValues = {}
 				updateAllGroupVariables(instance, variables)
 				updateZoomParticipantVariables(instance, variables)
 				updateSelectedCallersVariables(instance, variables)
@@ -175,9 +196,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.renameByName]: {
 			name: 'Rename By Name(PRO)',
 			options: [options.name, options.newName],
-			callback: async (action) => {
-				const name = await instance.parseVariablesInString(action.options.name as string)
-				const newName = await instance.parseVariablesInString(action.options.newName as string)
+			callback: (action) => {
+				const name = action.options.name
+				const newName = action.options.newName
 				updateLocalUserData(instance, name, newName)
 			},
 		},
@@ -198,9 +219,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 					default: false,
 				},
 			],
-			callback: async (action): Promise<void> => {
-				const filepath = await instance.parseVariablesInString((action.options.filepath as string).trim())
-				const hasHeader = action.options.hasHeader as boolean
+			callback: (action): void => {
+				const filepath = action.options.filepath.trim()
+				const hasHeader = action.options.hasHeader
 				try {
 					let rowIndex = 0
 					csv
@@ -227,7 +248,7 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 						})
 						.on('end', (rowCount: number) => {
 							if (rowCount > 0) {
-								const variables: CompanionVariableValues = {}
+								const variables: VariableValues = {}
 								updateAllGroupVariables(instance, variables)
 								updateZoomParticipantVariables(instance, variables)
 								updateSelectedCallersVariables(instance, variables)
@@ -244,9 +265,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.makeHost]: {
 			name: 'Make Host',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/makeHost', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -263,9 +284,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.makeCoHost]: {
 			name: 'Make CoHost',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/makeCoHost', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -282,9 +303,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.revokeCoHost]: {
 			name: 'Revoke CoHost',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				if (userName === undefined || userName === '') {
 					const selectedCallers: number[] | string = instance.ZoomClientDataObj.selectedCallers
 
@@ -337,9 +358,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.makePanelist]: {
 			name: 'Make Panelist',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/makePanelist', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -356,9 +377,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.makeAttendee]: {
 			name: 'Make Attendee',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/makeAttendee', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -375,9 +396,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.ejectParticipant]: {
 			name: 'Eject Participant',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/eject', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -394,9 +415,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.allowToRecord]: {
 			name: 'Allow To Record (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/allowToRecord', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {
@@ -413,9 +434,9 @@ export function GetActionsUserRolesAndAction(instance: InstanceBaseExt<ZoomConfi
 		[ActionIdUserRolesAndAction.disallowToRecord]: {
 			name: 'Disallow To Record (PRO)',
 			options: [options.userName],
-			callback: async (action): Promise<void> => {
+			callback: (action): void => {
 				// type: 'User'
-				const userName = await instance.parseVariablesInString(action.options.userName as string)
+				const userName = action.options.userName
 				const command = createCommand(instance, '/disallowToRecord', userName, select.multi)
 				if (command.isValidCommand) {
 					const sendToCommand = {

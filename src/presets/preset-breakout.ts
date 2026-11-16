@@ -1,6 +1,7 @@
+import type { CompanionPresetDefinitions, CompanionPresetSection } from '@companion-module/base'
+import type { ModuleSchema } from '../index.js'
 import { ActionIdUserBreakoutRooms } from '../actions/action-user-breakout-rooms.js'
 import { colorBlack, colorLightGray } from '../utils.js'
-import { CompanionPresetExt } from './preset-utils.js'
 import { ActionIdGlobalBreakoutRooms } from '../actions/action-global-breakout-rooms.js'
 
 export enum PresetIdBreakout {
@@ -15,14 +16,16 @@ export enum PresetIdBreakout {
 	broadcastMessageToBreakouts = 'Broadcast_Message_to_Breakouts',
 }
 
-export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPresetExt | undefined } {
-	const presets: { [id in PresetIdBreakout]: CompanionPresetExt | undefined } = {
+export function GetPresetsBreakout(): {
+	section: CompanionPresetSection<ModuleSchema>
+	presets: CompanionPresetDefinitions<ModuleSchema>
+} {
+	const presets: { [id in PresetIdBreakout]: CompanionPresetDefinitions<ModuleSchema>[string] } = {
 		/**
 		 * Breakout Actions
 		 */
 		[PresetIdBreakout.sendParticipantToBreakoutRoom]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Send_Participant_To_BreakoutRoom`,
 			style: {
 				text: `Send To Breakout Room`,
@@ -35,7 +38,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdUserBreakoutRooms.sendParticipantToBreakoutRoom,
-							options: {},
+							options: { userName: '', breakoutName: '' },
 						},
 					],
 					up: [],
@@ -44,8 +47,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.createBreakoutRoom]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Create_Breakout_Room`,
 			style: {
 				text: `Create Breakout Room`,
@@ -58,7 +60,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdGlobalBreakoutRooms.createBreakoutRoom,
-							options: {},
+							options: { name: '' },
 						},
 					],
 					up: [],
@@ -67,8 +69,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.configureBreakouts]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Configure_Breakouts`,
 			style: {
 				text: `Configure Breakouts`,
@@ -81,7 +82,15 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdGlobalBreakoutRooms.configureBreakoutRooms,
-							options: {},
+							options: {
+								postCloseSeconds: 0,
+								allowChooseBreakout: 0,
+								allowReturnAtWill: 0,
+								autoMoveParticipants: 0,
+								useTimer: 0,
+								closeWithTimer: 0,
+								breakoutDurrationSeconds: 0,
+							},
 						},
 					],
 					up: [],
@@ -90,8 +99,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.deleteBreakoutRoom]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Delete_Breakout_Room`,
 			style: {
 				text: `Delete Breakout Room`,
@@ -104,7 +112,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdGlobalBreakoutRooms.deleteBreakoutRoom,
-							options: {},
+							options: { name: '' },
 						},
 					],
 					up: [],
@@ -113,8 +121,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.openBreakouts]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Open_Breakouts`,
 			style: {
 				text: `Open Breakouts`,
@@ -136,8 +143,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.closeBreakouts]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Close_Breakouts`,
 			style: {
 				text: `Close Breakouts`,
@@ -159,8 +165,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.deleteAllBreakouts]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Delete_All_Breakouts`,
 			style: {
 				text: `Delete All Breakouts`,
@@ -182,8 +187,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.returnSelfToMainRoom]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Return_Self_to_Main_Room`,
 			style: {
 				text: `Return Self to Main Room`,
@@ -196,7 +200,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdUserBreakoutRooms.returnSelfToMainMeeting,
-							options: {},
+							options: { userName: '' },
 						},
 					],
 					up: [],
@@ -205,8 +209,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 		[PresetIdBreakout.broadcastMessageToBreakouts]: {
-			type: 'button',
-			category: 'Breakout Actions',
+			type: 'simple',
 			name: `Broadcast_Message_to_Breakouts`,
 			style: {
 				text: `Broadcast Message to Breakouts`,
@@ -219,7 +222,7 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 					down: [
 						{
 							actionId: ActionIdGlobalBreakoutRooms.broadcastMessageToBreakoutRooms,
-							options: {},
+							options: { message: '' },
 						},
 					],
 					up: [],
@@ -228,5 +231,11 @@ export function GetPresetsBreakout(): { [id in PresetIdBreakout]: CompanionPrese
 			feedbacks: [],
 		},
 	}
-	return presets
+	const section: CompanionPresetSection<ModuleSchema> = {
+		id: 'breakout',
+		name: 'Breakout Actions',
+		definitions: Object.values(PresetIdBreakout),
+	}
+
+	return { section, presets }
 }
