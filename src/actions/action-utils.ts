@@ -146,7 +146,7 @@ export const createCommand = (
 			else if (singleUser) {
 				if ((isoAllowSetUserToNone && selectedCallers.length === 0) || isoForceSetToNone) {
 					// Set to none. ZoomISO 3+ no longer clears an output with -2: Zoom ID 1 puts it back to
-					// "Select Participant" (found by testing, not documented; known issue 7)
+					// "Select Participant" (found by testing, not documented)
 					const noneValue = isZoomISO3OrLater(instance.ZoomClientDataObj.zoomOSCVersion) ? 1 : emptyUser
 					command.args.push({ type: 'i', value: noneValue })
 				} else {
