@@ -5,12 +5,12 @@ Known issues in ZoomOSC, ZoomISO and the Zoom SDK they use that affect this modu
 | #   | Issue                                                                                                                                         | Affected                                 | Module status                |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------- |
 | 1   | [getSpotOrder returns no one after joining a meeting](#1-getspotorder-returns-no-one-after-joining-a-meeting-with-people-already-spotlighted) | ZoomOSC 5, 5.0.1; ZoomISO 3              | No workaround                |
-| 2   | [galCount renamed to galleryCount](#2-galcount-renamed-to-gallerycount)                                                                       | ZoomOSC 5; ZoomISO 3                     | Handled                      |
-| 3   | [64-bit Zoom IDs in gallery and spot order](#3-gallery-and-spot-order-send-zoom-ids-as-64-bit-integers)                                       | ZoomOSC 5.0.1; ZoomISO 3.0.7             | Worked around                |
+| 2   | [(solved) galCount renamed to galleryCount](#2-solved-galcount-renamed-to-gallerycount)                                                       | ZoomOSC 5; ZoomISO 3                     | Handled                      |
+| 3   | [(solved) 64-bit Zoom IDs in gallery and spot order](#3-solved-gallery-and-spot-order-send-zoom-ids-as-64-bit-integers)                       | ZoomOSC 5.0.1; ZoomISO 3.0.7             | Worked around                |
 | 4   | [No chat emojis or threaded replies](#4-chat-has-no-emojis-or-threaded-replies)                                                               | The Zoom SDK used by ZoomOSC and ZoomISO | Can't be fixed in the module |
-| 5   | [NDI stops capturing after video off and on](#5-ndi-stops-capturing-after-a-participant-turns-their-video-off-and-on)                         | ZoomISO 3                                | Can't be fixed in the module |
+| 5   | [NDI stops capturing after video off and on](#5-ndi-stops-capturing-after-a-participant-turns-their-video-off-and-on)                         | ZoomISO 3.0.6                            | Can't be fixed in the module |
 | 6   | [Duplicated participants](#6-duplicated-participants)                                                                                         | ZoomISO 3.0.6                            | Can't be fixed in the module |
-| 7   | [Clearing an output selection no longer uses -2](#7-clearing-an-output-selection-no-longer-uses--2)                                           | ZoomISO 3                                | Handled                      |
+| 7   | [(solved) Clearing an output selection no longer uses -2](#7-solved-clearing-an-output-selection-no-longer-uses--2)                           | ZoomISO 3                                | Handled                      |
 | 8   | [Emojis in participant names arrive as ??](#8-emojis-in-participant-names-arrive-as-)                                                         | ZoomOSC 5; ZoomISO 3                     | No workaround                |
 
 ## 1. getSpotOrder returns no one after joining a meeting with people already spotlighted
@@ -22,7 +22,7 @@ When ZoomOSC or ZoomISO joins a meeting where participants are already spotlight
 
 **Module status:** no workaround. The module asks for the spot order, but gets an empty answer, so the Spotlights group and the spotlight feedbacks stay empty for anyone spotlighted before ZoomOSC/ZoomISO joined, until their spotlight changes.
 
-## 2. galCount renamed to galleryCount
+## 2. (solved) galCount renamed to galleryCount
 
 - **Affected:** ZoomOSC 5 and ZoomISO 3.
 
@@ -30,7 +30,7 @@ The gallery count command was renamed from `galCount` to `galleryCount`.
 
 **Module status:** handled. The **Request GalleryCount (New for OSC v5+ and ISO v3+)** action sends `/zoom/galleryCount`. The old **Request GalleryCount** action still sends `/zoom/galCount` for older versions and is marked deprecated ([src/actions/action-global-gallery-tracking-and-data-request.ts](src/actions/action-global-gallery-tracking-and-data-request.ts)). Receiving `/zoomosc/galleryCount` was already handled.
 
-## 3. Gallery and spot order send Zoom IDs as 64-bit integers
+## 3. (solved) Gallery and spot order send Zoom IDs as 64-bit integers
 
 - **Affected:** ZoomOSC 5.0.1 and ZoomISO 3.0.7.
 - **Earlier versions:** ZoomOSC 4 and ZoomISO 3.0.6 send 32-bit integers.
@@ -44,7 +44,7 @@ The gallery count command was renamed from `galCount` to `galleryCount`.
 
 **Module status:** worked around (commit `6caa77a`). The module reads each argument by its own type: a 64-bit integer becomes a plain number, and a 32-bit integer is used as it is. The gallery and the Spotlights group populate with both old and new versions, and no version check is needed. See `toZoomOSCResponse` in [src/osc/transport.ts](src/osc/transport.ts).
 
-Before this, the module used node-osc, which can't read 64-bit integers at all: it rejected every gallery order and spot order packet from these versions without logging anything.
+Before this, the module passed on the 64-bit integers as osc reads them: an object holding the two 32-bit halves, not a number. That object couldn't be used as a Zoom ID, so with these versions the gallery and the Spotlights group didn't fill in.
 
 ## 4. Chat has no emojis or threaded replies
 
@@ -56,9 +56,9 @@ The SDK doesn't render or support chat emojis, and gives no information about th
 
 ## 5. NDI stops capturing after a participant turns their video off and on
 
-- **Affected:** ZoomISO 3.
+- **Affected:** ZoomISO 3.0.6. Not reproduced with ZoomISO 3.0.7.
 
-If a participant turns their video off and back on, the NDI video for that participant appears to stop capturing.
+If a participant turns their video off and back on, the NDI video for that participant appears to stop capturing. This was seen with ZoomISO 3.0.6 during an event, and hasn't been reproduced in testing with ZoomISO 3.0.7.
 
 **Workaround:** change the NDI source to another participant, then back to the participant. Capturing starts again.
 
@@ -66,13 +66,13 @@ If a participant turns their video off and back on, the NDI video for that parti
 
 ## 6. Duplicated participants
 
-- **Affected:** ZoomISO 3.0.6.
+- **Affected:** ZoomISO 3.0.6. ZoomISO 3.0.7 is meant to fix it, which hasn't been verified yet.
 
 At one event, ZoomISO duplicated many of the people in the meeting, and only some of the duplicates had valid information to take action against.
 
 **Module status:** can't be fixed in the module.
 
-## 7. Clearing an output selection no longer uses -2
+## 7. (solved) Clearing an output selection no longer uses -2
 
 - **Affected:** ZoomISO 3.
 
