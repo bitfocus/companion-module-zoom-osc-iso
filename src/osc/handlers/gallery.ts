@@ -23,7 +23,7 @@ function handleGalleryOrder(context: OSCHandlerContext, data: ZoomOSCResponse): 
 		return
 	}
 
-	context.instance.log('debug', `Handling gallery order: ${JSON.stringify(data)}`)
+	// context.instance.log('debug', `Handling gallery order: ${JSON.stringify(data)}`)
 
 	context.instance.ZoomClientDataObj.galleryOrder = data.args.map(
 		(order: { type: string; value: number }) => order.value,
