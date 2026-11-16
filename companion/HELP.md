@@ -270,6 +270,5 @@ See more workflows at <a href="https://github.com/bitfocus/companion-module-zoom
 This is a community-driven project utilizing the open APIs of ZoomOSC/ISO. While Zoom (and formerly Liminal) have designed its behavior, they hold no liability for this module or its upkeep. Ultimately, it is managed by and the responsibility of the open-source Companion community, Bitfocus, and its users.
 
 - **Module Support:** <a href="https://github.com/Bitfocus/companion-module-zoom-osc-iso/issues" target="_blank">Known Issues</a>
-- **ZoomOSC/ISO Support:** `info@liminalet.com`
 
 Special thanks to contributors Jeffrey Davidsz, Andy Carluccio, Jonathan Kokotajlo, and the Companion community for their efforts in creating and improving this module.
